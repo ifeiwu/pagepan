@@ -1,0 +1,68 @@
+pre code[theme="androidstudio"].hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code[theme="androidstudio"].hljs {
+    padding: 3px 5px
+}
+
+[theme="androidstudio"].hljs {
+    color: #a9b7c6;
+    background: #282b2e
+}
+
+[theme="androidstudio"] .hljs-bullet,
+[theme="androidstudio"] .hljs-literal,
+[theme="androidstudio"] .hljs-number,
+[theme="androidstudio"] .hljs-symbol {
+    color: #6897bb
+}
+
+[theme="androidstudio"] .hljs-deletion,
+[theme="androidstudio"] .hljs-keyword,
+[theme="androidstudio"] .hljs-selector-tag {
+    color: #cc7832
+}
+
+[theme="androidstudio"] .hljs-link,
+[theme="androidstudio"] .hljs-template-variable,
+[theme="androidstudio"] .hljs-variable {
+    color: #629755
+}
+
+[theme="androidstudio"] .hljs-comment,
+[theme="androidstudio"] .hljs-quote {
+    color: grey
+}
+
+[theme="androidstudio"] .hljs-meta {
+    color: #bbb529
+}
+
+[theme="androidstudio"] .hljs-addition,
+[theme="androidstudio"] .hljs-attribute,
+[theme="androidstudio"] .hljs-string {
+    color: #6a8759
+}
+
+[theme="androidstudio"] .hljs-section,
+[theme="androidstudio"] .hljs-title,
+[theme="androidstudio"] .hljs-type {
+    color: #ffc66d
+}
+
+[theme="androidstudio"] .hljs-name,
+[theme="androidstudio"] .hljs-selector-class,
+[theme="androidstudio"] .hljs-selector-id {
+    color: #e8bf6a
+}
+
+[theme="androidstudio"] .hljs-emphasis {
+    font-style: italic
+}
+
+[theme="androidstudio"] .hljs-strong {
+    font-weight: 700
+}

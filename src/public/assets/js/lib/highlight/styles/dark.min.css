@@ -1,0 +1,60 @@
+pre code[theme="dark"].hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code[theme="dark"].hljs {
+    padding: 3px 5px
+}
+
+[theme="dark"].hljs {
+    color: #ddd;
+    background: #303030
+}
+
+[theme="dark"] .hljs-keyword,
+[theme="dark"] .hljs-link,
+[theme="dark"] .hljs-literal,
+[theme="dark"] .hljs-section,
+[theme="dark"] .hljs-selector-tag {
+    color: #fff
+}
+
+[theme="dark"] .hljs-addition,
+[theme="dark"] .hljs-attribute,
+[theme="dark"] .hljs-built_in,
+[theme="dark"] .hljs-bullet,
+[theme="dark"] .hljs-name,
+[theme="dark"] .hljs-string,
+[theme="dark"] .hljs-symbol,
+[theme="dark"] .hljs-template-tag,
+[theme="dark"] .hljs-template-variable,
+[theme="dark"] .hljs-title,
+[theme="dark"] .hljs-type,
+[theme="dark"] .hljs-variable {
+    color: #d88
+}
+
+[theme="dark"] .hljs-comment,
+[theme="dark"] .hljs-deletion,
+[theme="dark"] .hljs-meta,
+[theme="dark"] .hljs-quote {
+    color: #979797
+}
+
+[theme="dark"] .hljs-doctag,
+[theme="dark"] .hljs-keyword,
+[theme="dark"] .hljs-literal,
+[theme="dark"] .hljs-name,
+[theme="dark"] .hljs-section,
+[theme="dark"] .hljs-selector-tag,
+[theme="dark"] .hljs-strong,
+[theme="dark"] .hljs-title,
+[theme="dark"] .hljs-type {
+    font-weight: 700
+}
+
+[theme="dark"] .hljs-emphasis {
+    font-style: italic
+}

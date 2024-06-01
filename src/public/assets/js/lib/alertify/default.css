@@ -1,0 +1,91 @@
+.alertify {
+    font-size: 14px;
+}
+
+.alertify .ajs-dialog {
+    border-radius: 4px;
+}
+
+.alertify .ajs-button {
+    outline: none;
+    border-radius: 4px;
+}
+
+.alertify .ajs-ok {
+    background: var(--secondary-1);
+    color: var(--secondary-20);
+}
+
+.alertify .ajs-ok:hover {
+    background: var(--secondary);
+}
+
+.alertify .ajs-cancel {
+    background: var(--mix-37);
+}
+
+.alertify .ajs-cancel:hover {
+    background: var(--mix-35);
+}
+
+.alertify.ajs-resizable .ajs-header,
+.alertify.ajs-maximized .ajs-header {
+    padding: 26px;
+}
+
+.alertify .ajs-header {
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.alertify .ajs-footer {
+    padding: 15px 14px;
+    border-radius: 4px;
+}
+
+.alertify .ajs-content {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.alertify .ajs-input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border-radius: 2px;
+    border: 1px solid var(--mix-30);
+}
+
+.alertify .ajs-input:hover,
+.alertify .ajs-input:focus {
+    border-color: var(--secondary-3);
+}
+
+.alertify-notifier .ajs-message {
+    width: 300px;
+    border-radius: 4px;
+    background: #868e96;
+    color: #fff;
+}
+
+.alertify-notifier .ajs-message.ajs-warning {
+    background: #fab005;
+}
+
+.alertify-notifier .ajs-message.ajs-error {
+    background: #fa5252;
+}
+
+.alertify-notifier .ajs-message.ajs-notify {
+    background: #228be6;
+}
+
+.alertify-notifier .ajs-message.ajs-success {
+    background: #12b886;
+}
+
+.alertify.ajs-resizable .ajs-body .ajs-content,
+.alertify.ajs-maximized .ajs-body .ajs-content {
+    top: 52px;
+    bottom: 73px;
+}

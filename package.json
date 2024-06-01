@@ -1,0 +1,25 @@
+{
+  "name": "pagepan",
+  "version": "0.0.1",
+  "description": "",
+  "author": "M",
+  "license": "BSD 3-Clause",
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "cssnano": "^7.0.1",
+    "del": "^6.1.1",
+    "gulp": "^4.0.2",
+    "gulp-exec": "^5.0.0",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-if": "^3.0.0",
+    "gulp-postcss": "^10.0.0",
+    "gulp-uglify-es": "^3.0.0",
+    "gulp-zip": "^5.1.0",
+    "postcss": "^8.4.38"
+  },
+  "browserslist": [
+    "last 10 version",
+    "> 1%",
+    "not dead"
+  ]
+}

@@ -1,0 +1,119 @@
+/*!
+  Theme: Zenburn
+  Author: elnawe
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+pre code[theme="base16/zenburn"].hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code[theme="base16/zenburn"].hljs {
+    padding: 3px 5px
+}
+
+[theme="base16/zenburn"].hljs {
+    color: #dcdccc;
+    background: #383838
+}
+
+[theme="base16/zenburn"] .hljs::selection {
+    background-color: #606060;
+    color: #dcdccc
+}
+
+[theme="base16/zenburn"] .hljs-comment {
+    color: #6f6f6f
+}
+
+[theme="base16/zenburn"] .hljs-tag {
+    color: grey
+}
+
+[theme="base16/zenburn"] .hljs-operator,
+[theme="base16/zenburn"] .hljs-punctuation,
+[theme="base16/zenburn"] .hljs-subst {
+    color: #dcdccc
+}
+
+[theme="base16/zenburn"] .hljs-operator {
+    opacity: .7
+}
+
+[theme="base16/zenburn"] .hljs-bullet,
+[theme="base16/zenburn"] .hljs-deletion,
+[theme="base16/zenburn"] .hljs-name,
+[theme="base16/zenburn"] .hljs-selector-tag,
+[theme="base16/zenburn"] .hljs-template-variable,
+[theme="base16/zenburn"] .hljs-variable {
+    color: #dca3a3
+}
+
+[theme="base16/zenburn"] .hljs-attr,
+[theme="base16/zenburn"] .hljs-link,
+[theme="base16/zenburn"] .hljs-literal,
+[theme="base16/zenburn"] .hljs-number,
+[theme="base16/zenburn"] .hljs-symbol,
+[theme="base16/zenburn"] .hljs-variable.constant_ {
+    color: #dfaf8f
+}
+
+[theme="base16/zenburn"] .hljs-class .hljs-title,
+[theme="base16/zenburn"] .hljs-title,
+[theme="base16/zenburn"] .hljs-title.class_ {
+    color: #e0cf9f
+}
+
+[theme="base16/zenburn"] .hljs-strong {
+    font-weight: 700;
+    color: #e0cf9f
+}
+
+[theme="base16/zenburn"] .hljs-addition,
+[theme="base16/zenburn"] .hljs-code,
+[theme="base16/zenburn"] .hljs-string,
+[theme="base16/zenburn"] .hljs-title.class_.inherited__ {
+    color: #5f7f5f
+}
+
+[theme="base16/zenburn"] .hljs-built_in,
+[theme="base16/zenburn"] .hljs-doctag,
+[theme="base16/zenburn"] .hljs-keyword.hljs-atrule,
+[theme="base16/zenburn"] .hljs-quote,
+[theme="base16/zenburn"] .hljs-regexp {
+    color: #93e0e3
+}
+
+[theme="base16/zenburn"] .hljs-attribute,
+[theme="base16/zenburn"] .hljs-function .hljs-title,
+[theme="base16/zenburn"] .hljs-section,
+[theme="base16/zenburn"] .hljs-title.function_,
+[theme="base16/zenburn"] .ruby .hljs-property {
+    color: #7cb8bb
+}
+
+[theme="base16/zenburn"] .diff .hljs-meta,
+[theme="base16/zenburn"] .hljs-keyword,
+[theme="base16/zenburn"] .hljs-template-tag,
+[theme="base16/zenburn"] .hljs-type {
+    color: #dc8cc3
+}
+
+[theme="base16/zenburn"] .hljs-emphasis {
+    color: #dc8cc3;
+    font-style: italic
+}
+
+[theme="base16/zenburn"] .hljs-meta,
+[theme="base16/zenburn"] .hljs-meta .hljs-keyword,
+[theme="base16/zenburn"] .hljs-meta .hljs-string {
+    color: #000
+}
+
+[theme="base16/zenburn"] .hljs-meta .hljs-keyword,
+[theme="base16/zenburn"] .hljs-meta-keyword {
+    font-weight: 700
+}

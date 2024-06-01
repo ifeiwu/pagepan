@@ -1,0 +1,29 @@
+<?php
+// http://192.168.31.5:8088/dev/uikit?isbuilder=0&theme=0&path=number/d1/43-01
+$theme = Request::get('theme');
+$path = Request::get('path');
+
+//$res = file_get_contents('http://192.168.31.5:8087/_uikit_db.php?path=' . $path);
+
+$setting = helper('curl/content', ["http://192.168.31.5:8087/{$path}/setting.json"]);
+
+if ($setting) {
+    $setting['isdemo'] = true;
+    $iswrite = true;
+} else {
+    $setting = [];
+    $iswrite = false;
+}
+
+if (Request::get('isbuilder')) {
+    $setting['isbuilder'] = true;
+    echo '<script>pagepan.isBuilder = true; $("body").addClass("_component_");</script>';
+}
+
+echo $this->uikit->getContent($path, ['setting' => $setting], $iswrite);
+
+if ($theme == '1') {
+    echo "<script>$(function() { $('body>[uk]').addClass('theme-invert'); });</script>";
+}
+
+//echo '<script src="http://192.168.31.5:8087/build/script.js"></script>';

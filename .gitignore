@@ -1,0 +1,10 @@
+/dist/
+/pack/
+/node_modules/
+/src/data/logs/
+/src/data/cache/
+/src/public/file/
+/src/public/pack/
+/src/data/backup/
+/src/vendor/
+/togit.bat

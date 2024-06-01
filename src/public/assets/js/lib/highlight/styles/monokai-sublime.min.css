@@ -1,0 +1,84 @@
+pre code[theme="monokai-sublime"].hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code[theme="monokai-sublime"].hljs {
+    padding: 3px 5px
+}
+
+[theme="monokai-sublime"].hljs {
+    background: #23241f;
+    color: #f8f8f2
+}
+
+[theme="monokai-sublime"] .hljs-subst,
+[theme="monokai-sublime"] .hljs-tag {
+    color: #f8f8f2
+}
+
+[theme="monokai-sublime"] .hljs-emphasis,
+[theme="monokai-sublime"] .hljs-strong {
+    color: #a8a8a2
+}
+
+[theme="monokai-sublime"] .hljs-bullet,
+[theme="monokai-sublime"] .hljs-link,
+[theme="monokai-sublime"] .hljs-literal,
+[theme="monokai-sublime"] .hljs-number,
+[theme="monokai-sublime"] .hljs-quote,
+[theme="monokai-sublime"] .hljs-regexp {
+    color: #ae81ff
+}
+
+[theme="monokai-sublime"] .hljs-code,
+[theme="monokai-sublime"] .hljs-section,
+[theme="monokai-sublime"] .hljs-selector-class,
+[theme="monokai-sublime"] .hljs-title {
+    color: #a6e22e
+}
+
+[theme="monokai-sublime"] .hljs-strong {
+    font-weight: 700
+}
+
+[theme="monokai-sublime"] .hljs-emphasis {
+    font-style: italic
+}
+
+[theme="monokai-sublime"] .hljs-attr,
+[theme="monokai-sublime"] .hljs-keyword,
+[theme="monokai-sublime"] .hljs-name,
+[theme="monokai-sublime"] .hljs-selector-tag {
+    color: #f92672
+}
+
+[theme="monokai-sublime"] .hljs-attribute,
+[theme="monokai-sublime"] .hljs-symbol {
+    color: #66d9ef
+}
+
+[theme="monokai-sublime"] .hljs-class .hljs-title,
+[theme="monokai-sublime"] .hljs-params,
+[theme="monokai-sublime"] .hljs-title.class_ {
+    color: #f8f8f2
+}
+
+[theme="monokai-sublime"] .hljs-addition,
+[theme="monokai-sublime"] .hljs-built_in,
+[theme="monokai-sublime"] .hljs-selector-attr,
+[theme="monokai-sublime"] .hljs-selector-id,
+[theme="monokai-sublime"] .hljs-selector-pseudo,
+[theme="monokai-sublime"] .hljs-string,
+[theme="monokai-sublime"] .hljs-template-variable,
+[theme="monokai-sublime"] .hljs-type,
+[theme="monokai-sublime"] .hljs-variable {
+    color: #e6db74
+}
+
+[theme="monokai-sublime"] .hljs-comment,
+[theme="monokai-sublime"] .hljs-deletion,
+[theme="monokai-sublime"] .hljs-meta {
+    color: #75715e
+}

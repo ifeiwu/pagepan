@@ -1,0 +1,101 @@
+/*!
+  Theme: Default
+  Description: Original highlight.js style
+  Author: (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
+  Maintainer: @highlightjs/core-team
+  Website: https://highlightjs.org/
+  License: see project LICENSE
+  Touched: 2021
+*/
+pre code[theme="default"].hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code[theme="default"].hljs {
+    padding: 3px 5px
+}
+
+[theme="default"].hljs {
+    background: #f3f3f3;
+    color: #444
+}
+
+[theme="default"] .hljs-comment {
+    color: #697070
+}
+
+[theme="default"] .hljs-punctuation,
+[theme="default"] .hljs-tag {
+    color: #444a
+}
+
+[theme="default"] .hljs-tag .hljs-attr,
+[theme="default"] .hljs-tag .hljs-name {
+    color: #444
+}
+
+[theme="default"] .hljs-attribute,
+[theme="default"] .hljs-doctag,
+[theme="default"] .hljs-keyword,
+[theme="default"] .hljs-meta .hljs-keyword,
+[theme="default"] .hljs-name,
+[theme="default"] .hljs-selector-tag {
+    font-weight: 700
+}
+
+[theme="default"] .hljs-deletion,
+[theme="default"] .hljs-number,
+[theme="default"] .hljs-quote,
+[theme="default"] .hljs-selector-class,
+[theme="default"] .hljs-selector-id,
+[theme="default"] .hljs-string,
+[theme="default"] .hljs-template-tag,
+[theme="default"] .hljs-type {
+    color: #800
+}
+
+[theme="default"] .hljs-section,
+[theme="default"] .hljs-title {
+    color: #800;
+    font-weight: 700
+}
+
+[theme="default"] .hljs-link,
+[theme="default"] .hljs-operator,
+[theme="default"] .hljs-regexp,
+[theme="default"] .hljs-selector-attr,
+[theme="default"] .hljs-selector-pseudo,
+[theme="default"] .hljs-symbol,
+[theme="default"] .hljs-template-variable,
+[theme="default"] .hljs-variable {
+    color: #ab5656
+}
+
+[theme="default"] .hljs-literal {
+    color: #695
+}
+
+[theme="default"] .hljs-addition,
+[theme="default"] .hljs-built_in,
+[theme="default"] .hljs-bullet,
+[theme="default"] .hljs-code {
+    color: #397300
+}
+
+[theme="default"] .hljs-meta {
+    color: #1f7199
+}
+
+[theme="default"] .hljs-meta .hljs-string {
+    color: #38a
+}
+
+[theme="default"] .hljs-emphasis {
+    font-style: italic
+}
+
+[theme="default"] .hljs-strong {
+    font-weight: 700
+}

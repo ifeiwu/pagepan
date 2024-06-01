@@ -1,0 +1,89 @@
+<?php
+$theme = json_decode($site['theme'], true);
+$theme_screen = $theme['screen'];
+?>
+<!DOCTYPE html>
+<html lang="<?=$theme['base']['lang']; ?>" class="-<?=str_replace('/', '-', $page['page_alias'] ?: 'index'); ?>">
+    <head>
+        <base href="<?=ROOT_URL; ?>">
+        <meta charset="utf-8">
+        <meta name="renderer" content="webkit">
+        <meta name="force-rendering" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
+        <?php if ( ! $theme_screen ): ?>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <meta name="applicable-device" content="pc,mobile">
+        <?php elseif ( $theme_screen == 'pc'): ?>
+        <meta name="applicable-device" content="pc">
+        <?php elseif ( $theme_screen == 'mobile'): ?>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <meta name="applicable-device" content="mobile">
+        <?php endif;?>
+        <title><?=$seo['title']; ?></title>
+        <meta name="keywords" content="<?=$seo['keywords']; ?>">
+        <meta name="description" content="<?=$seo['description']; ?>">
+
+        <script>
+            if ( !! window.ActiveXObject || "ActiveXObject" in window ) {
+                if ( confirm('您正在使用不兼容的浏览器，是否下载最新现代浏览器？') ) {
+                    window.location.href = "//www.pagepan.com/browser-upgrade.html?ref=" + encodeURIComponent(window.location.href);
+                }
+            }
+        </script>
+        
+        <?php
+        // 全局页头
+        if ( $site['open_header_php'] ) { include ROOT_PATH . 'data/php/header.inc'; }
+        // 网站图标
+        if ( $site['favicon'] ) { echo '<link rel="icon" href="' . $this->url($site['favicon']) . '">'; }
+        // 应用图标
+        if ( $site['touchicon'] ) { echo '<link rel="apple-touch-icon" href="' . $this->url($site['touchicon']) . '">'; }
+        
+        echo '<link href="' . $this->url('assets/css/pagepan.css', true) . '" rel="stylesheet">';
+		echo '<link href="' . $this->url('assets/css/theme.css', true) . '" rel="stylesheet">';
+        echo '<link href="' . $this->url('assets/css/animate.css', true) . '" rel="stylesheet">';
+        
+        $site_fonts_list = $site['fonts_list'];
+
+        if ( $site_fonts_list )
+        {
+            $site_fonts_list = json_decode($site_fonts_list, true);
+
+            foreach ($site_fonts_list as $font)
+            {
+                $fontid = $font['id'];
+                $site_fonts_css = "assets/font/$fontid/$fontid.css";
+                
+                echo '<link href="' . $site_fonts_css . '" rel="preload" as="style" onload="this.rel=\'stylesheet\'">';
+            }
+        }
+        
+        if ( $site['open_article_css'] ) { echo '<link href="' . $this->url('assets/css/article.css', true) . '" rel="stylesheet">'; }
+        if ( $site['open_graphic_css'] ) { echo '<link href="' . $this->url('assets/css/graphic.css', true) . '" rel="stylesheet">'; }
+        if ( $site['open_global_css'] ) { echo '<link href="' . $this->url('assets/css/global.css', true) . '" rel="stylesheet">'; }
+        
+        echo '<script>var pagepan = ' . json_encode($page, JSON_UNESCAPED_UNICODE) . ';</script>';
+        echo '<script src="' . $this->url('assets/js/require.js', true) . '" type="text/javascript"></script>';
+        echo '<script src="' . $this->url('assets/js/config.js', true) . '" type="text/javascript"></script>';
+        echo '<script src="' . $this->url('assets/js/lib/jquery.js', true) . '" type="text/javascript"></script>';
+        ?>
+    </head>
+    <body <?=$page_body_attrs; ?>>
+
+        <?=$this->section('content')?>
+
+        <?php
+        echo '<script src="' . $this->url('assets/js/app/main.js', true) . '" type="text/javascript"></script>';
+        // 全局脚本
+        if ( $site['open_global_js'] ) { echo '<script src="' . $this->url('assets/js/global.js', true) . '" type="text/javascript"></script>'; }
+        // 全局页脚
+        if ( $site['open_footer_php'] ) { include ROOT_PATH . 'data/php/footer.inc'; }
+        // 在线客服
+        if ( $site['service3_open'] == 1 ) { echo html_decode(base64_decode($site['service3_code'])); }
+        // 社交分享
+        if ( $site['share3_open'] == 1 ) { echo html_decode(base64_decode($site['share3_code'])); }
+        // 流量统计
+        if ( $site['stats3_open'] == 1 ) { echo html_decode(base64_decode($site['stats3_code'])); }
+        ?>
+    </body>
+</html>

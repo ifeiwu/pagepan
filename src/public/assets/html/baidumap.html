@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Baidu Map</title>
+        
+        <style>html, body {width:100%;height:100%;margin:0;font-size:14px;letter-spacing:0.5px;}</style>
+        
+        <!-- ak 获取地址 http://lbsyun.baidu.com/apiconsole/key?application=key -->
+        <script src="//api.map.baidu.com/api?v=3.0&ak=sY18CyU0zEAQQ8X4GpXgsU142tYxN3yc"></script>
+</head>
+
+<body>
+    <div id="map" style="height:100%;width:100%;"></div>
+
+    <script>
+        const search = new URLSearchParams(window.location.search);
+
+        let _title = search.get('title');
+        let _title_color = search.get('tcolor') || '#0072BB';
+        let _content = search.get('content') || '信息窗口内容';
+        let _point = search.get('point') || '104.084225,30.661537';
+        let _width = search.get('width') || 0;
+        let _height = search.get('height') || 0;
+
+        if ( _point )
+        {
+            _point = _point.split(',');
+            
+            if ( _point.length != 2)
+            {
+                alert('请输入正确中心点坐标！');
+            }
+        }
+        
+        // 拾取坐标系统 http://api.map.baidu.com/lbsapi/getpoint/index.html
+        const map = new BMap.Map('map');
+        const point = new BMap.Point(_point[0], _point[1]);
+        const info = new BMap.InfoWindow();
+        
+        map.centerAndZoom(point, 19);
+        map.addControl(new BMap.NavigationControl());
+
+        if ( _width ) { info.setWidth(parseInt(_width)); }
+        if ( _height ) { info.setHeight(parseInt(_height)); }
+        if ( _title ) { info.setTitle('<div style="color:' + _title_color + ';font-weight:bold;font-size:15px;margin-top:10px;margin-bottom:10px">' + _title + '</div>'); }
+        if ( _content ) { info.setContent('<div style="margin-bottom:10px">' + _content + '</div>'); }
+        
+        map.openInfoWindow(info, point);
+    </script>
+</body>
+</html>
