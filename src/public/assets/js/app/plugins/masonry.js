@@ -1,6 +1,6 @@
 define(function (require) {
     // 网格瀑布流
-    const display = function (ukid, setting, callback = null) {
+    const macy = function (ukid, setting, callback = null) {
 
         require(['macy'], function (Macy) {
             const $component = $('[' + ukid + ']');
@@ -18,10 +18,10 @@ define(function (require) {
             }
 
             let options = {
-                container: '[' + ukid + '] .dataview',
+                container: '[' + ukid + '] [data-macy]',
                 useContainerForBreakpoints: true, // 使用容器查询
                 mobileFirst: true,
-                waitForImages: false,
+                waitForImages: true,
                 cancelLegacy: true,
                 margin: {x: 0, y: 0},
                 columns: 1,
@@ -48,6 +48,11 @@ define(function (require) {
 
             const macy = Macy(options);
 
+            // 所有图像都加载完毕时重新计算位置
+            macy.runOnImageLoad(function () {
+                macy.recalculate(true, true);
+            });
+
             if ( callback != null ) {
                 callback(macy);
             }
@@ -55,6 +60,6 @@ define(function (require) {
     };
 
     return {
-        'display': display
+        'macy': macy
     }
 });

@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: pagepan.domain3 +  'assets/js/lib',
+    baseUrl: pagevar.domain3 +  'assets/js/lib',
     paths: {
         app: '../app',
         util: '../util',
@@ -32,7 +32,7 @@ require.config({
     },
 	skipDataMain: true,
     waitSeconds: 0,
-    urlArgs: pagepan.timestamp
+    urlArgs: pagevar.timestamp
 });
 
 

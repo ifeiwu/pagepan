@@ -11,7 +11,7 @@ $router->addMatchTypes(['a+' => '[\w-]+', '+' => '[^\.]*(?:\.html)?', 'i+' => '[
 $router->map('GET|POST', '/api/v1/[*]', 'app/api/v1/main');
 $router->map('GET|POST', '/api/[:version]/[:module]/[:action]', 'app/api');
 $router->map('GET|POST', '/[!|act]/[:action]?', 'app/act');
-$router->map('GET|POST', '/m/[:module]/a/[:action]', 'app/m-a');
+$router->map('GET|POST', '/m/[:module]/[:action]', 'app/module');
 $router->map('GET', '/admin', 'app/admin');
 $router->map('GET', '/img/[**:name]', 'app/act/thumb');
 $router->map('GET', '/[:alias]/id/[i+:id]', 'app/page/detail');

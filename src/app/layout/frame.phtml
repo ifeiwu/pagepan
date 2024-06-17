@@ -62,7 +62,7 @@ $theme_screen = $theme['screen'];
         if ( $site['open_graphic_css'] ) { echo '<link href="' . $this->url('assets/css/graphic.css', true) . '" rel="stylesheet">'; }
         if ( $site['open_global_css'] ) { echo '<link href="' . $this->url('assets/css/global.css', true) . '" rel="stylesheet">'; }
         
-        echo '<script>var pagepan = ' . json_encode($page, JSON_UNESCAPED_UNICODE) . ';</script>';
+        echo '<script>var pagevar = ' . json_encode($page, JSON_UNESCAPED_UNICODE) . ';</script>';
         echo '<script src="' . $this->url('assets/js/require.js', true) . '" type="text/javascript"></script>';
         echo '<script src="' . $this->url('assets/js/config.js', true) . '" type="text/javascript"></script>';
         echo '<script src="' . $this->url('assets/js/lib/jquery.js', true) . '" type="text/javascript"></script>';

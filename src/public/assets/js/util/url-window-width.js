@@ -5,7 +5,7 @@ define(['device'], function () {
     // 如果宽度是数字，那么只有在大于或小于的宽度更新参数加载页面。
     return function (fixed_width = false) {
 		
-		if ( ! pagepan.isBuilder )
+		if ( ! pagevar.isBuilder )
 		{
             let timeout_id = null;
             

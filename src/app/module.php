@@ -1,5 +1,5 @@
 <?php
-// /m/[:module]/a/[:action]
+// /m/[:module]/[:action]
 return function ($module, $action) {
     $route_file = APP_PATH . "{$module}/{$action}.php";
 

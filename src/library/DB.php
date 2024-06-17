@@ -2,8 +2,8 @@
 /**
  * 数据库操作类
  */
-class DB {
-
+class DB
+{
     public $pdo;
 
     public $dbtype;
@@ -28,8 +28,7 @@ class DB {
 
     public static function new($config = [])
     {
-        if ( ! (self::$_instance instanceof self) )
-        {
+        if (!(self::$_instance instanceof self)) {
             self::$_instance = new self($config);
         }
 
@@ -44,7 +43,7 @@ class DB {
      */
     public function __call($name, $args)
     {
-        if ( ! isset(self::$_funs[$name]) ) {
+        if (!isset(self::$_funs[$name])) {
             self::$_funs[$name] = require LIB_PATH . "db/{$name}.php";
         }
 
@@ -66,14 +65,11 @@ class DB {
         $this->dbtype = $config['type'];
 
         try {
-            if ( $this->dbtype == 'sqlite' )
-            {
+            if ($this->dbtype == 'sqlite') {
                 $this->pdo = new \PDO('sqlite:' . ROOT_PATH . $config['file']);
                 $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
                 $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            }
-            else
-            {
+            } else {
                 $option = [
                     \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4',
                     \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
@@ -101,15 +97,14 @@ class DB {
     {
         $columns = array_keys($params);
         $values = array_values($params);
-
         $lastId = false;
         $sql = $this->getInsertSQL($table, $columns, $values);
 
-        if ( $this->pdo->prepare($sql)->execute($values) ) {
+        if ($this->pdo->prepare($sql)->execute($values)) {
             $lastId = $this->pdo->lastInsertId();
         }
 
-        if ( $this->debug == true ) {
+        if ($this->debug == true) {
             Log::sql(['sql' => $this->buildRunSQL($sql, $values), 'lastId' => $lastId]);
         }
 
@@ -130,12 +125,12 @@ class DB {
         $statement = $this->pdo->prepare($sql);
 
         foreach ($values as $value) {
-            if ( $statement->execute($value) ) {
+            if ($statement->execute($value)) {
                 $lastIds[] = $this->pdo->lastInsertId();
             }
         }
 
-        if ( $this->debug == true ) {
+        if ($this->debug == true) {
             Log::sql(['sql' => $sql, 'values' => $values, 'lastIds' => $lastIds]);
         }
 
@@ -173,10 +168,9 @@ class DB {
         }
 
         list($sql, $values) = $this->where(rtrim($sql, ','), $wheres, $values);
-
         $result = $this->pdo->prepare($sql)->execute($values);
 
-        if ( $this->debug == true ) {
+        if ($this->debug == true) {
             Log::sql(['sql' => $this->buildRunSQL($sql, $values), 'result' => $result]);
         }
 
@@ -189,7 +183,6 @@ class DB {
         foreach ($values as $value) {
             $sql = preg_replace('/\?/', "'$value'", $sql, 1);
         }
-
         return $sql;
     }
 
@@ -203,28 +196,24 @@ class DB {
      */
     public function updates($table, $params, $wheres)
     {
-        if ( ! is_array($params[0]) && ! is_array($wheres[0]) ) {
+        if (!is_array($params[0]) && !is_array($wheres[0])) {
             throw new \Exception('Invalid parameter');
         }
 
         $results = [];
         $columns = array_keys($params[0]);
         $sql = 'UPDATE ' . $this->getTableName($table) . ' SET ';
-
         foreach ($columns as $name) {
             $sql .= $this->quoteColumn($name) . ' = ?,';
         }
 
         $sql = rtrim($sql, ',');
-
-        for ($i = 0; $i < count($params); $i++)
-        {
+        for ($i = 0; $i < count($params); $i++) {
             list($sql2, $values) = $this->where($sql, $wheres[$i], array_values($params[$i]));
-
             $results[] = $this->pdo->prepare($sql2)->execute($values);
         }
 
-        if ( $this->debug == true ) {
+        if ($this->debug == true) {
             Log::sql(['sql' => $sql2, 'values' => array_map(fn($item) => array_values($item), $params), 'results' => $results]);
         }
 
@@ -241,12 +230,10 @@ class DB {
     {
         $values = [];
         $sql = 'DELETE FROM ' . $this->getTableName($table);
-
         list($sql, $values) = $this->where($sql, $wheres);
-
         $result = $this->pdo->prepare($sql)->execute($values);
 
-        if ( $this->debug == true ) {
+        if ($this->debug == true) {
             Log::sql(['sql' => $this->buildRunSQL($sql, $values), 'result' => $result]);
         }
 
@@ -263,7 +250,7 @@ class DB {
      */
     public function save($table, $params = [], $wheres = [])
     {
-        if ( $this->has($table, $wheres) ) {
+        if ($this->has($table, $wheres)) {
             return $this->update($table, $params, $wheres);
         } else {
             return $this->insert($table, $params);
@@ -282,13 +269,13 @@ class DB {
         $statement = $this->pdo->prepare($sql);
         $statement->execute($values);
 
-        if ( ! is_null($number) ) {
+        if (!is_null($number)) {
             $result = $statement->fetchColumn($number);
         } else {
             $result = $statement->fetch(\PDO::FETCH_NAMED);
         }
 
-        if ( $this->debug == true ) {
+        if ($this->debug == true) {
             Log::sql(['sql' => $this->buildRunSQL($sql, $values)]);
         }
 
@@ -307,13 +294,13 @@ class DB {
         $statement = $this->pdo->prepare($sql);
         $statement->execute($values);
 
-        if ( ! is_null($number) ) {
+        if (!is_null($number)) {
             $result = $statement->fetchAll(\PDO::FETCH_COLUMN, $number);
         } else {
             $result = $statement->fetchAll();
         }
 
-        if ( $this->debug == true ) {
+        if ($this->debug == true) {
             Log::sql(['sql' => $this->buildRunSQL($sql, $values)]);
         }
 
@@ -333,30 +320,22 @@ class DB {
     public function select($table, $columns = '*', $wheres = [], $order = null, $limit = null, $column_number = null)
     {
         $params = [];
-
         $sql = 'SELECT ' . $this->quoteSelectColumns($columns) . ' FROM ' . $this->getTableName($table);
 
-        if ( ! empty($wheres) )
-        {
+        if (!empty($wheres)) {
             list($sql, $values) = $this->where($sql, $wheres);
         }
 
-        if ( ! empty($order) )
-        {
+        if (!empty($order)) {
             $sql = $this->buildSqlOrderby($sql, $order);
         }
 
-        if ( is_array($limit) )
-        {
-            if ( count($limit) == 2 )
-            {
+        if (is_array($limit)) {
+            if (count($limit) == 2) {
                 $sql .= ' LIMIT ?,?';
-            }
-            else
-            {
+            } else {
                 $sql .= ' LIMIT ?';
             }
-
             $values = array_merge($values, $limit);
         }
 
@@ -375,16 +354,13 @@ class DB {
     public function find($table, $columns = '*', $wheres = [], $order = null, $column_number = null)
     {
         $values = [];
-
         $sql = 'SELECT ' . $this->quoteSelectColumns($columns) . ' FROM ' . $this->getTableName($table);
 
-        if ( ! empty($wheres) )
-        {
+        if (!empty($wheres)) {
             list($sql, $values) = $this->where($sql, $wheres);
         }
 
-        if ( ! empty($order) )
-        {
+        if (!empty($order)) {
             $sql = $this->buildSqlOrderby($sql, $order);
         }
 
@@ -401,11 +377,9 @@ class DB {
     public function column($table, $column = '*', $wheres = [])
     {
         $values = [];
-
         $sql = 'SELECT ' . $this->quoteSelectColumn($column) . ' FROM ' . $this->getTableName($table);
 
-        if ( ! empty($wheres) )
-        {
+        if (!empty($wheres)) {
             list($sql, $values) = $this->where($sql, $wheres);
         }
 
@@ -422,17 +396,12 @@ class DB {
     {
         $sql .= ' ORDER BY ';
 
-        if ( is_string($order) )
-        {
+        if (is_string($order)) {
             $sql .= $order;
-        }
-        elseif ( is_array($order) )
-        {
-            foreach ($order as $k => $v)
-            {
+        } elseif (is_array($order)) {
+            foreach ($order as $k => $v) {
                 $sql .= $this->quote($k) . ' ' . $this->quote($v) . ', ';
             }
-
             $sql = rtrim($sql, ', ');
         }
 
@@ -450,8 +419,7 @@ class DB {
         $values = [];
         $sql = 'SELECT COUNT(*) FROM ' . $this->getTableName($table);
 
-        if ( ! empty($wheres) )
-        {
+        if (!empty($wheres)) {
             list($sql, $values) = $this->where($sql, $wheres);
         }
 
@@ -479,11 +447,9 @@ class DB {
     public function getTableName($name, $backtick = true)
     {
         $table = $this->quote($this->prefix . $name);
-
-        if ( $backtick == true ) {
+        if ($backtick == true) {
             $table = '`' . $table . '`';
         }
-
         return $table;
     }
 
@@ -497,67 +463,44 @@ class DB {
     public function where($sql, $wheres = [], $values = [])
     {
         $sql .= ' WHERE ';
-
         // 一维数组
-        if ( count($wheres) == count($wheres, 1) ) {
+        if (count($wheres) == count($wheres, 1)) {
             $wheres = [[$wheres]];
         } else {
             $wheres = [$wheres];
         }
 
-        foreach ($wheres as $condition)
-        {
-            foreach ($condition as $compose)
-            {
-                if ( is_array($compose) )
-                {
+        foreach ($wheres as $condition) {
+            foreach ($condition as $compose) {
+                if (is_array($compose)) {
                     list($name, $symbol, $value) = $compose;
-
                     $symbol = strtoupper($symbol);
-
                     $sql .= $this->quoteColumn($name) . ' ' . $symbol;
-
-                    switch ($symbol)
-                    {
+                    switch ($symbol) {
                         case 'IN':
                             $value = is_array($value) ? $value : explode(',', $value);
-
                             $sql .= ' (' . rtrim(str_repeat('?,', count($value)), ',') . ')';
-
                             $values = array_merge($values, $value);
-
                             break;
-
                         case 'IS NULL':
                             break;
-
                         case 'IS NOT NULL':
                             break;
-
                         default:
                             $sql .= ' ?';
-
                             $values[] = $value;
-
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     $compose = strtoupper($compose);
-
-                    if ( $compose == 'OR' || $compose == 'AND' )
-                    {
+                    if ($compose == 'OR' || $compose == 'AND') {
                         $sql .= ' ' . $compose . ' ';
-                    }
-                    else
-                    {
+                    } else {
                         $sql .= $compose;
                     }
                 }
             }
         }
-
         return [$sql, $values];
     }
 
@@ -569,12 +512,9 @@ class DB {
     public function quote($str)
     {
         $str = trim($str);
-
-        if ( ! preg_match('/^[a-zA-Z0-9_]+$/', $str) )
-        {
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $str)) {
             throw new InvalidArgumentException("Incorrect string name \"$str\"");
         }
-
         return $str;
     }
 
@@ -586,25 +526,17 @@ class DB {
     public function quoteSelectColumn($name)
     {
         $name = trim($name);
-
         // AS 字段指定别名处理，支持函数。例如：id AS user_id
-        if ( preg_match('/\s+AS\s+/i', $name) )
-        {
+        if (preg_match('/\s+AS\s+/i', $name)) {
             preg_match('/(.*)\s+AS\s+(.*)/i', $name, $matches);
-
             $field = trim($matches[1]);
             $field = preg_match('/\w+\(.*?\)/i', $field) ? $field : $this->quoteColumn($field);
             $alias = $this->quote($matches[2]);
-
             return $field . ' AS ' . $this->quoteColumn($alias);
-        }
-        // /\w+\(.*?\)/ 匹配任意函数。例如：COUNT(id)
-        elseif ( preg_match('/\w+\(.*?\)/i', $name) || $name == '*' )
-        {
+        } // /\w+\(.*?\)/ 匹配任意函数。例如：COUNT(id)
+        elseif (preg_match('/\w+\(.*?\)/i', $name) || $name == '*') {
             return $name;
-        }
-        else
-        {
+        } else {
             return $this->quoteColumn($name);
         }
     }
@@ -617,32 +549,14 @@ class DB {
     public function quoteSelectColumns($columns)
     {
         $_columns = [];
-
-        if ( is_array($columns) )
-        {
-            foreach ($columns as $column)
-            {
+        if (is_array($columns)) {
+            foreach ($columns as $column) {
                 $_columns[] = $this->quoteSelectColumn($column);
             }
-
             return implode(',', $_columns);
-        }
-        else
-        {
+        } else {
             return $columns;
         }
-        /*else
-        {
-            // 在逗号后面查找，但不匹配括号内的逗号
-            $columns = preg_split('/,(?![^\(]*\))/', $columns);
-
-            foreach ($columns as $column)
-            {
-                $_columns[] = $this->quoteSelectColumn($column);
-            }
-
-            return implode(',', $_columns);
-        }*/
     }
 
     /**
@@ -662,15 +576,11 @@ class DB {
      */
     public function quoteColumns($columns)
     {
-        if ( is_array($columns) )
-        {
+        if (is_array($columns)) {
             $_columns = [];
-
-            foreach ($columns as $column)
-            {
+            foreach ($columns as $column) {
                 $_columns[] = $this->quoteColumn($column);
             }
-
             return implode(',', $_columns);
         }
 
@@ -686,5 +596,4 @@ class DB {
     {
         return rtrim(str_repeat('?,', count($columns)), ',');
     }
-
 }

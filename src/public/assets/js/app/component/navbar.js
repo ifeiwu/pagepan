@@ -5,23 +5,23 @@ define([], function () {
 		
         let $component = $(component_selector);
         
-        if ( ! pagepan.isBuilder )
+        if ( ! pagevar.isBuilder )
         {
-            let $link = $component.find('a[href="' + pagepan.page_alias + '"]').addClass('active');
+            let $link = $component.find('a[href="' + pagevar.page_alias + '"]').addClass('active');
 
-            if ( pagepan.get_alias )
+            if ( pagevar.get_alias )
             {
-                $link = $component.find('a[href*="' + pagepan.get_alias + '/category/"]').addClass('active');
+                $link = $component.find('a[href*="' + pagevar.get_alias + '/category/"]').addClass('active');
 
-                if ( pagepan.get_cid )
+                if ( pagevar.get_cid )
                 {
-                    $link = $component.find('a[href*="' + pagepan.get_alias + '/category/' + pagepan.get_cid + '"]').addClass('active');
+                    $link = $component.find('a[href*="' + pagevar.get_alias + '/category/' + pagevar.get_cid + '"]').addClass('active');
                 }
             }
             
             if ( ! $link.is('.active') )
             {
-                let alias = pagepan.palias ? pagepan.palias : pagepan.page_alias ? pagepan.page_alias : '';
+                let alias = pagevar.palias ? pagevar.palias : pagevar.page_alias ? pagevar.page_alias : '';
                 
                 alias = alias.indexOf('/') > 0 ? alias.split('/')[0] : alias;
                 
@@ -30,7 +30,7 @@ define([], function () {
             
             if ( ! $link.is('.active') )
             {
-                $link = $component.find('a[active~="' + pagepan.page_alias + '"],a[active~="' + pagepan.palias + '"]').addClass('active');
+                $link = $component.find('a[active~="' + pagevar.page_alias + '"],a[active~="' + pagevar.palias + '"]').addClass('active');
             }
             
             if ( ! $link.is('.active') )
@@ -63,17 +63,17 @@ define([], function () {
     	
         let $component = $(component_selector);
         
-        if ( ! pagepan.isBuilder )
+        if ( ! pagevar.isBuilder )
         {
-            let $link = $component.find('a[href="' + pagepan.page_alias + '"]').parent('li').addClass('active');
+            let $link = $component.find('a[href="' + pagevar.page_alias + '"]').parent('li').addClass('active');
 
-            if ( pagepan.get_alias )
+            if ( pagevar.get_alias )
             {
-                $link = $component.find('a[href*="' + pagepan.get_alias + '/category/"]').parent('li').addClass('active');
+                $link = $component.find('a[href*="' + pagevar.get_alias + '/category/"]').parent('li').addClass('active');
 
-                if ( pagepan.get_cid )
+                if ( pagevar.get_cid )
                 {
-                    $link = $component.find('a[href*="' + pagepan.get_alias + '/category/' + pagepan.get_cid + '"]').parent('li').addClass('active');
+                    $link = $component.find('a[href*="' + pagevar.get_alias + '/category/' + pagevar.get_cid + '"]').parent('li').addClass('active');
                 }
             }
 
@@ -84,7 +84,7 @@ define([], function () {
 
             if ( ! $link.is('.active') )
             {
-                let alias = pagepan.palias ? pagepan.palias : pagepan.page_alias ? pagepan.page_alias : '';
+                let alias = pagevar.palias ? pagevar.palias : pagevar.page_alias ? pagevar.page_alias : '';
                 
                 alias = alias.indexOf('/') > 0 ? alias.split('/')[0] : alias;
                 
@@ -93,7 +93,7 @@ define([], function () {
             
             if ( ! $link.is('.active') )
             {
-                $link = $component.find('a[active~="' + pagepan.page_alias + '"],a[active~="' + pagepan.palias + '"],a[active="' + pagepan.get_cid + '"]').parent('li').addClass('active');
+                $link = $component.find('a[active~="' + pagevar.page_alias + '"],a[active~="' + pagevar.palias + '"],a[active="' + pagevar.get_cid + '"]').parent('li').addClass('active');
             }
             
             if ( ! $link.is('.active') )

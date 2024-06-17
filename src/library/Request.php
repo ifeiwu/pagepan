@@ -92,7 +92,7 @@ class Request
                 case 'filepath': // 文件和路径：替换字符串中的尖括号、冒号、竖线、问号和星号，并将其替换为空字符串。
                     $value = preg_replace('/[<>:"|?*]+/', '', $value);
                     break;
-                case 'keywords': // 关键字：替换非Unicode字母(不包括特殊字符或标点符号)、数字、下划线、横线和空格的字符。
+                case 'keywords': // 关键字：替换非字母和非数字的 Unicode 字符(不包括特殊字符或标点符号)、下划线、横线和空格的字符。
                     $value = preg_replace('/[^\p{L}\p{N}_\-\s]/u', '', $value);
                     break;
                 case '*':

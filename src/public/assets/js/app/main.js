@@ -21,7 +21,7 @@ require(['jquery', 'device', 'smoothscroll', 'picturefill'], function () {
     $(window).trigger('resize');
 
     // 在 PBuilder 里不加载的插件
-    if ( ! pagepan.isBuilder ) {
+    if ( ! pagevar.isBuilder ) {
         // 分类滚动定位
         if ( $('[data-scroll-category]').length ) {
             require(['app/plugins/scroll-category']);

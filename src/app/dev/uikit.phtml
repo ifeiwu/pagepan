@@ -17,7 +17,7 @@ if ($setting) {
 
 if (Request::get('isbuilder')) {
     $setting['isbuilder'] = true;
-    echo '<script>pagepan.isBuilder = true; $("body").addClass("_component_");</script>';
+    echo '<script>pagevar.isBuilder = true; $("body").addClass("_component_");</script>';
 }
 
 echo $this->uikit->getContent($path, ['setting' => $setting], $iswrite);

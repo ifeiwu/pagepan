@@ -402,7 +402,7 @@ define(['swiper/8/swiper', 'mousewheel', 'mobile-events'], function (Swiper) {
         }
 
         // 在编辑器里不添加效果，否则会报错错误。
-        if ( ! pagepan.isBuilder )
+        if ( ! pagevar.isBuilder )
         {
             if ( setting.effect == 'parallax' )
             {
@@ -463,7 +463,7 @@ define(['swiper/8/swiper', 'mousewheel', 'mobile-events'], function (Swiper) {
             swiper.init();
         }
         
-        if ( pagepan.isBuilder )
+        if ( pagevar.isBuilder )
         {
             // swiper.detachEvents();
             swiper.autoplay.stop();
