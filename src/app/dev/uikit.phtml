@@ -3,7 +3,7 @@
 $theme = Request::get('theme');
 $path = Request::get('path');
 
-//$res = file_get_contents('http://192.168.31.5:8087/_uikit_db.php?path=' . $path);
+$res = file_get_contents('http://192.168.31.5:8087/_uikit_db.php?path=' . $path);
 
 $setting = helper('curl/content', ["http://192.168.31.5:8087/{$path}/setting.json"]);
 

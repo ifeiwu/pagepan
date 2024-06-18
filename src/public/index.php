@@ -14,12 +14,12 @@ $router->map('GET|POST', '/[!|act]/[:action]?', 'app/act');
 $router->map('GET|POST', '/m/[:module]/[:action]', 'app/module');
 $router->map('GET', '/admin', 'app/admin');
 $router->map('GET', '/img/[**:name]', 'app/act/thumb');
-$router->map('GET', '/[:alias]/id/[i+:id]', 'app/page/detail');
-$router->map('GET', '/[:alias]/category/[i+:cid]', 'app/page/category');
-$router->map('GET', '/[:alias]/category/[i+:cid]/page/[i+:pagenum]', 'app/page/category-p');
-$router->map('GET', '/[:alias]/tag/[:tag]', 'app/page/tag');
-$router->map('GET|POST', '/[a:alias]/search', 'app/page/search');
-$router->map('GET|POST', '/[+:alias]', 'app/page/name');
+$router->map('GET', '/[:alias]/id/[i+:id]', 'app/pager/detail');
+$router->map('GET', '/[:alias]/category/[i+:cid]', 'app/pager/category');
+$router->map('GET', '/[:alias]/category/[i+:cid]/page/[i+:pagenum]', 'app/pager/category-page');
+$router->map('GET', '/[:alias]/tag/[:tag]', 'app/pager/tag');
+$router->map('GET|POST', '/[a:alias]/search', 'app/pager/search');
+$router->map('GET|POST', '/[+:alias]', 'app/pager/name');
 //$router->map('GET|POST', '@(?:/(?P<alias>.*))(?:\.html)?', 'app/page/name');
 
 // 匹配当前请求参数

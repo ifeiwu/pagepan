@@ -14,8 +14,8 @@ return function () {
     // 拼接网站访问根域名
     $domain = str_replace('www.', '', dirname($host . $_SERVER['PHP_SELF']));
     // 网站后台管理域名
-    $yun_domain = '192.168.31.5:8090';
-    $yun_domain = $scheme == 'https' ? "https://s$yun_domain" : "http://$yun_domain";
+    $admin_domain = Config::load('admin', 'domain');
+    $admin_domain = $scheme == 'https' ? "https://s$admin_domain" : "http://$admin_domain";
 
-    Response::redirect("$yun_domain/main/login.verify?d=$domain&h=$scheme&s=$server");
+    Response::redirect("$admin_domain/main/login.verify?d=$domain&h=$scheme&s=$server");
 };
