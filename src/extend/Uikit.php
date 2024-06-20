@@ -171,7 +171,18 @@ class Uikit {
             $url = "{$this->config['uri']}{$this->view->path}/image";
         } // 当前组件图片
         else if (preg_match('/^[^\/]*\.(jpg|svg|png|webp|gif|mp4|mp3)$/i', $name)) {
-            $url = "{$this->config['uri']}{$this->view->path}/image/$name";
+            $uikit_url = "{$this->config['uri']}{$this->view->path}/image/$name";
+            $base_path = "data/file/uikit/{$this->view->path}";
+            $full_path = WEB_ROOT . $base_path;
+            if ( ! is_dir($full_path) ) {
+                mkdir($full_path, 0755, true);
+            }
+            $filename = $full_path . "/$name";
+            if ( ! is_file($filename) ) {
+                $content = file_get_contents($uikit_url);
+                file_put_contents($filename, $content);
+            }
+            $url = $base_path . "/$name";
         } // 指定组件图片
         elseif (strpos($name, 'number/') === 0 || strpos($name, 'domain/') === 0) {
             // 指定图片名称，否则返回路径
