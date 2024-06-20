@@ -156,7 +156,6 @@ class Uikit {
         ];
 
         $res = helper('curl/api', [$url, $data, $token]);
-
         if ( $res['code'] != 0 ) {
             throw new Exception($res['message']);
         }
@@ -168,25 +167,21 @@ class Uikit {
     public function image($name = '')
     {
         // 返回组件当前路径
-        if ( $name == '') {
+        if ($name == '') {
             $url = "{$this->config['uri']}{$this->view->path}/image";
-        }
-        // 当前组件图片
-        else if ( preg_match('/^[^\/]*\.(jpg|svg|png|webp|gif|mp4|mp3)$/i', $name) ) {
+        } // 当前组件图片
+        else if (preg_match('/^[^\/]*\.(jpg|svg|png|webp|gif|mp4|mp3)$/i', $name)) {
             $url = "{$this->config['uri']}{$this->view->path}/image/$name";
-        }
-        // 指定组件图片
-        elseif ( strpos($name, 'number/') === 0 || strpos($name, 'domain/') === 0 )
-        {
+        } // 指定组件图片
+        elseif (strpos($name, 'number/') === 0 || strpos($name, 'domain/') === 0) {
             // 指定图片名称，否则返回路径
-            if ( preg_match('/\.(jpg|svg|png|webp|gif|mp4|mp3)$/i', $name) ) {
+            if (preg_match('/\.(jpg|svg|png|webp|gif|mp4|mp3)$/i', $name)) {
                 $url = "{$this->config['uri']}{$name}";
             } else {
                 $url = "{$this->config['uri']}{$name}/image";
             }
-        }
-        // 动态生成图片：bgc.png&w=500&h=500&fit=crop-center
-        elseif ( preg_match('/[&]+/', $name) ) {
+        } // 动态生成图片：bgc.png&w=500&h=500&fit=crop-center
+        elseif (preg_match('/[&]+/', $name)) {
             $url = "{$this->config['cdn.uri']}glide?path=$name";
         } else {
             $url = "{$this->config['cdn.uri']}{$name}";
@@ -199,9 +194,7 @@ class Uikit {
     public function getSettingClass($prefix, $default_class = '')
     {
         $user_class = $this->view->setting[$prefix . '.class'];
-
-        if ( $user_class && ! is_string($user_class) )
-        {
+        if ( $user_class && ! is_string($user_class) ) {
             $user_class = helper('arr/toclass', [$user_class]);
             // 2023/3/3 前的网站用户需要给 dataview 合并默认样式代码
             if ( strpos($default_class, 'dataview') !== false &&
@@ -209,7 +202,6 @@ class Uikit {
                 $user_class = 'dataview row ' . $user_class;
             }
         }
-
         return $user_class ?: $default_class;
     }
 
@@ -217,11 +209,9 @@ class Uikit {
     public function getSettingStyle($prefix, $default_style = '')
     {
         $user_style = $this->view->setting[$prefix . '.style'];
-
         if ( $user_style && ! is_string($user_style) ) {
             $user_style = helper('arr/tostyle', [$user_style]);
         }
-
         return $user_style ?: $default_style;
     }
 
@@ -231,76 +221,72 @@ class Uikit {
         $attrs = '';
         $setting = $this->view->setting;
 
-        if ( $prefix == 'component' )
-        {
+        if ($prefix == 'component') {
             $attrs .= 'uk="' . $this->view->path . '" ';
             $attrs .= $this->view->ukid . ' ';
-        }
-        elseif ( isset($setting[$prefix . '.alias']) )
-        {
+        } elseif (isset($setting[$prefix . '.alias'])) {
             $attrs .= 'number="' . $setting[$prefix . '.alias'] . '" ';
         }
 
-        if ( ! isset($values['data']) ) { $values['data'] = ''; }
-        if ( ! isset($values['class']) ) { $values['class'] = ''; }
-        if ( ! isset($values['style']) ) { $values['style'] = ''; }
+        if (!isset($values['data'])) {
+            $values['data'] = '';
+        }
+        if (!isset($values['class'])) {
+            $values['class'] = '';
+        }
+        if (!isset($values['style'])) {
+            $values['style'] = '';
+        }
 
-        foreach ($values as $attr => $value)
-        {
-            if ( $attr === 'class' )
-            {
-                $_class = $this->getSettingClass($prefix, $value);
-
-                if ( $_class ) {
-                    $attrs .= 'class="' . $_class . '" ';
+        foreach ($values as $attr => $value) {
+            if ($attr === 'class') {
+                // '-'可替换的样式, '+'必需的样式
+                if (is_array($value)) {
+                    $_class = $this->getSettingClass($prefix, $value['-']);
+                    $attrs .= 'class="' . $_class . ' ' . $value['+'] . '" ';
+                } else {
+                    // 可替换的样式
+                    $_class = $this->getSettingClass($prefix, $value);
+                    if ($_class) {
+                        $attrs .= 'class="' . $_class . '" ';
+                    }
                 }
-            }
-            elseif ( $attr === 'style' )
-            {
-                $_style = $this->getSettingStyle($prefix, $value);
-
-                if ( $_style ) {
-                    $attrs .= 'style="' . $_style . '" ';
+            } elseif ($attr === 'style') {
+                // '-'可替换的样式, '+'必需的样式
+                if (is_array($value)) {
+                    $_style = $this->getSettingStyle($prefix, $value['-']);
+                    $attrs .= 'style="' . $_style . ' ' . $value['+'] . '" ';
+                } else {
+                    // 可替换的样式
+                    $_style = $this->getSettingStyle($prefix, $value);
+                    if ($_style) {
+                        $attrs .= 'style="' . $_style . '" ';
+                    }
                 }
-            }
-            elseif ( $attr === 'data' )
-            {
+            } elseif ($attr === 'data') {
                 $setting_data = $setting[$prefix . '.data'] ?: $value;
-
-                if ( is_array($setting_data) )
-                {
-                    foreach ($setting_data as $k => $v)
-                    {
+                if (is_array($setting_data)) {
+                    foreach ($setting_data as $k => $v) {
                         $v = is_array($v) ? htmlentities(json_encode($v), ENT_QUOTES) : $v;
                         $attrs .= 'data-' . $k . '="' . $v . '" ';
                     }
                 }
-            }
-            elseif ( is_bool($value) && $value == true )
-            {
+            } elseif (is_bool($value) && $value == true) {
                 $attrs .= $attr . ' ';
-            }
-            elseif ( is_string($attr) )
-            {
+            } elseif (is_string($attr)) {
                 $attr_value = $setting[$prefix . '.' . $attr] ?: $value;
-
-                if ( $attr_value ) {
+                if ($attr_value) {
                     $attrs .= $attr . '="' . $attr_value . '" ';
                 }
-            }
-            elseif ( is_int($attr) )
-            {
+            } elseif (is_int($attr)) {
                 $attrs .= $value . ' ';
             }
         }
 
-        if ( ! isset($setting['isbuilder']) )
-        {
+        if (!isset($setting['isbuilder'])) {
             return $attrs;
-        }
-        else
-        {
-            if ( $prefix == 'component' || $prefix == 'container' ) {
+        } else {
+            if ($prefix == 'component' || $prefix == 'container') {
                 return $attrs;
             } else {
                 return $attrs . 'data-setting-prefix="' . $prefix . '"';
@@ -312,11 +298,9 @@ class Uikit {
     public function getSettingBeforeCode()
     {
         $beforecode = $this->view->setting['component.beforecode'];
-
         if ( $beforecode ) {
             $beforecode = base64_decode($beforecode);
         }
-
         return $beforecode;
     }
 
@@ -324,11 +308,9 @@ class Uikit {
     public function getSettingAfterCode()
     {
         $aftercode = $this->view->setting['component.aftercode'];
-
         if ( $aftercode ) {
             $aftercode = base64_decode($aftercode);
         }
-
         return $aftercode;
     }
 }
