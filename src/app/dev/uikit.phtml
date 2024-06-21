@@ -3,9 +3,16 @@
 $theme = Request::get('theme');
 $path = Request::get('path');
 
-$res = file_get_contents('http://192.168.31.5:8087/_uikit_db.php?path=' . $path);
-
-$setting = helper('curl/content', ["http://192.168.31.5:8087/{$path}/setting.json"]);
+file_get_contents('http://192.168.31.5:8087/_uikit_db.php?path=' . $path);
+$content = file_get_contents("http://192.168.31.5:8087/file-data?path={$path}&name=setting");dump($res);
+$res = json_decode($content, true);
+//$setting = helper('curl/content', ["http://192.168.31.5:8087/{$path}/setting.php"]);
+if ($res['code'] == 0) {
+    $setting = $res['data'];
+}
+dump($res['data']);
+exit;
+$setting = helper('curl/content', ["http://192.168.31.5:8087/{$path}/setting.php"]);
 
 if ($setting) {
     $setting['isdemo'] = true;

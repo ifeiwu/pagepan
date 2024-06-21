@@ -43,7 +43,7 @@ class Uikit {
 
         $fun = Closure::bind(self::$_funs[$name], $this);
 
-        return call_user_func($fun, ...$args);
+        return call_user_func_array($fun, $args);
     }
 
     // 加载组件输出内容
@@ -163,42 +163,82 @@ class Uikit {
         return $res['data'];
     }
 
-    // 返回组件图片、视频或音频等链接
-    public function image($name = '')
+    // 返回组件资源链接
+    public function image($name = '', $path = '')
     {
-        // 返回组件当前路径
-        if ($name == '') {
-            $url = "{$this->config['uri']}{$this->view->path}/image";
-        } // 当前组件图片
-        else if (preg_match('/^[^\/]*\.(jpg|svg|png|webp|gif|mp4|mp3)$/i', $name)) {
-            $uikit_url = "{$this->config['uri']}{$this->view->path}/image/$name";
-            $base_path = "data/file/uikit/{$this->view->path}";
-            $full_path = WEB_ROOT . $base_path;
-            if ( ! is_dir($full_path) ) {
-                mkdir($full_path, 0755, true);
+        // 返回站外资源链接
+        if ( preg_match('/^(https?:\/\/|\/\/)/i', $name) ) {
+            return $name;
+        }
+        // 返回当前组件资源目录路径
+        if ($name == '' && $path == '') {
+            return "{$this->config['uri']}{$this->view->path}/image";
+        }
+        // 返回指定组件资源目录路径
+        if ($name == '' && $path != '') {
+            return "{$this->config['uri']}{$path}";
+        }
+//        // 返回指定 cdn 资源文件
+//        if ($name != '' && $uri == 'cdn') {
+//            return "{$this->config['cdn.uri']}/{$name}";
+//        }
+//        // 返回当前组件远程资源文件
+//        if ($name != '' && $uri == 'uk') {
+//            return "{$this->config['uri']}{$path}/image/{$name}";
+//        }
+        // 返回多种类型资源文件
+       if ($name != '' && $path == '') {
+            // 动态生成占位图片：bgc.png&w=500&h=500&fit=crop-center
+            if (strpos($name, '&w=') !== false) {
+                $uikit_file_url = "{$this->config['uri']}glide?path=$name";
+                $local_file_path = 'data/file/uikit/glide/' . base64_encode($name) . '.png';
+                $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
+                return $local_file_path;
             }
-            $filename = $full_path . "/$name";
-            if ( ! is_file($filename) ) {
-                $content = file_get_contents($uikit_url);
-                file_put_contents($filename, $content);
+            // $name 只有文件名，加载当前组件资源文件
+            if (preg_match('/^[^\/]*$/', $name) === 1) {
+                $uikit_file_url = "{$this->config['uri']}{$this->view->path}/image/$name";
+                $local_file_path = "data/file/uikit/{$this->view->path}/$name";
+                $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
+                return ROOT_URL . $local_file_path;
             }
-            $url = $base_path . "/$name";
-        } // 指定组件图片
-        elseif (strpos($name, 'number/') === 0 || strpos($name, 'domain/') === 0) {
-            // 指定图片名称，否则返回路径
-            if (preg_match('/\.(jpg|svg|png|webp|gif|mp4|mp3)$/i', $name)) {
-                $url = "{$this->config['uri']}{$name}";
-            } else {
-                $url = "{$this->config['uri']}{$name}/image";
+            // $name 包含目录和文件名，加载 cdn 提供的资源文件
+            if (preg_match('/^.+\/[^\/]+\.[^\/]+$/', $name)) {
+                $uikit_file_url = "{$this->config['uri']}/assets/{$name}";
+                $local_file_path = "data/file/uikit/assets/$name";
+                $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
+                return ROOT_URL . $local_file_path;
             }
-        } // 动态生成图片：bgc.png&w=500&h=500&fit=crop-center
-        elseif (preg_match('/[&]+/', $name)) {
-            $url = "{$this->config['cdn.uri']}glide?path=$name";
-        } else {
-            $url = "{$this->config['cdn.uri']}{$name}";
+            // $name 只有目录路径
+//            if ( ! preg_match('/\.[^\/]+$/', $path)) {
+//                return "{$this->config['uri']}{$name}/image";
+//            }
+        }
+        // 指定组件路径资源文件
+        if ($name != '' && $path != '') {
+            $uikit_file_url = "{$this->config['uri']}/{$path}/image/{$name}";
+            $local_file_path = "data/file/uikit/{$path}/$name";
+            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
+            return ROOT_URL . $local_file_path;
+        }
+    }
+
+    // 保存远程资源文件到本地目录
+    public function saveAssets($local_file_path, $remote_file_url) {
+        $path_info = pathinfo($local_file_path);
+        $path = $path_info['dirname'];
+        $name = $path_info['basename'];
+
+        if ( ! is_dir($path) ) {
+            mkdir($path, 0755, true);
         }
 
-        return $url;
+        if ( ! is_file($local_file_path) ) {
+            $content = file_get_contents($remote_file_url);
+            return file_put_contents($local_file_path, $content);
+        }
+
+        return true;
     }
 
     // 外联样式输出

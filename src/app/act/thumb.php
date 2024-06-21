@@ -13,10 +13,10 @@ return function ($name)
 {
 	try {
 		$server = League\Glide\ServerFactory::create([
-		    'source' => ROOT_PATH,
-		    'cache' => ROOT_PATH . 'data/cache',
+		    'source' => WEB_ROOT,
+		    'cache' => CACHE_PATH,
 		]);
-		
+
 		$server->outputImage($name, $_GET);
 	}
     catch (Exception $ex) {

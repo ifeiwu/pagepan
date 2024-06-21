@@ -335,6 +335,7 @@ class View
     // 超链接构建输出
     public function url($url = null, $time = false, $isfull = false)
     {
+        $url = ltrim($url, '/');
         // 站外链接
         if ( preg_match('/^(https?:\/\/|\/\/)/i', $url) ) {
             return $url;
