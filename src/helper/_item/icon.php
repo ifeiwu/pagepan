@@ -13,7 +13,7 @@ return function ($path, $image, $title = '', $utime = false) {
     // 站内上传的图片
     if ( ! preg_match('/^(https?:\/\/|\/\/)/i', $image) )
     {
-        $image = view()->url($path . '/' . $image, $utime, true);
+        $image = view()->url(ltrim("$path/$image", '/'), $utime, true);
     }
 
     // 如是是svg图片，则返回源代码

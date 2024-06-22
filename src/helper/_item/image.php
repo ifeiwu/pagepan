@@ -6,7 +6,7 @@ return function ($path, $image, $utime = false, $isfull = false) {
         // 站内上传的图片
         if ( ! preg_match('/^(https?:\/\/|\/\/)/i', $image) )
         {
-            $image = view()->url($path . '/' . $image, $utime, $isfull);
+            $image = view()->url(ltrim("$path/$image", '/'), $utime, $isfull);
         }
     } else {
         // 1像素透明图片，防止有些浏览器没有图片显示交叉图片占位符。

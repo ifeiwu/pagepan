@@ -6,7 +6,7 @@ return function ($path, $name, $utime = false, $isfull = false) {
         // 站内上传的文件
         if ( ! preg_match('/^(https?:\/\/|\/\/)/i', $name) )
         {
-            $name = view()->url($path . '/' . $name, $utime, $isfull);
+            $name = view()->url(ltrim("$path/$name", '/'), $utime, $isfull);
         }
     }
 

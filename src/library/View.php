@@ -335,22 +335,20 @@ class View
     // 超链接构建输出
     public function url($url = null, $time = false, $isfull = false)
     {
-        $url = ltrim($url, '/');
         // 站外链接
         if ( preg_match('/^(https?:\/\/|\/\/)/i', $url) ) {
             return $url;
         }
         // 静态加速域名或原网站域名
         $domain = $this->site['domain3'];
-
         if ( $isfull == false ) {
             $domain =  $domain ?: ROOT_URL;
         } else {
             $domain = $domain ?: $this->site['domain']; // 添加域名
         }
 
+        $url = ltrim($url, '/');
         $time = strpos($url, '?') === false ? $time : false;
-
         if ( $time === false ) {
             return $domain . $url;
         } elseif ( $time === true ) {

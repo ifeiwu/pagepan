@@ -3,17 +3,10 @@
 $theme = Request::get('theme');
 $path = Request::get('path');
 
-file_get_contents('http://192.168.31.5:8087/_uikit_db.php?path=' . $path);
-$content = file_get_contents("http://192.168.31.5:8087/file-data?path={$path}&name=setting");dump($res);
-$res = json_decode($content, true);
-//$setting = helper('curl/content', ["http://192.168.31.5:8087/{$path}/setting.php"]);
-if ($res['code'] == 0) {
-    $setting = $res['data'];
-}
-dump($res['data']);
-exit;
-$setting = helper('curl/content', ["http://192.168.31.5:8087/{$path}/setting.php"]);
+$info = file_get_contents('http://192.168.31.5:8087/import-uikit-db?path=' . $path);
+$info = json_decode($info, true);
 
+$setting = json_decode($info['setting'], true);
 if ($setting) {
     $setting['isdemo'] = true;
     $iswrite = true;
@@ -33,4 +26,4 @@ if ($theme == '1') {
     echo "<script>$(function() { $('body>[uk]').addClass('theme-invert'); });</script>";
 }
 
-//echo '<script src="http://192.168.31.5:8087/build/script.js"></script>';
+//echo '<script src="http://192.168.31.5:8087/build/skeleton.js"></script>';

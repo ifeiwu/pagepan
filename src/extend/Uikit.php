@@ -164,62 +164,46 @@ class Uikit {
     }
 
     // 返回组件资源链接
-    public function image($name = '', $path = '')
+    public function assets($name = '')
     {
         // 返回站外资源链接
         if ( preg_match('/^(https?:\/\/|\/\/)/i', $name) ) {
             return $name;
         }
         // 返回当前组件资源目录路径
-        if ($name == '' && $path == '') {
+        if ( $name == '' ) {
             return "{$this->config['uri']}{$this->view->path}/image";
         }
-        // 返回指定组件资源目录路径
-        if ($name == '' && $path != '') {
-            return "{$this->config['uri']}{$path}";
+        // 动态生成占位图片：bgc.png&w=500&h=500&fit=crop-center
+        if ( strpos($name, '&w=') !== false ) {
+            $uikit_file_url = "{$this->config['uri']}glide?path=$name";
+            $local_file_path = 'data/file/uikit/glide/' . base64_encode($name) . '.png';
+            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
+            return $local_file_path;
         }
-//        // 返回指定 cdn 资源文件
-//        if ($name != '' && $uri == 'cdn') {
-//            return "{$this->config['cdn.uri']}/{$name}";
-//        }
-//        // 返回当前组件远程资源文件
-//        if ($name != '' && $uri == 'uk') {
-//            return "{$this->config['uri']}{$path}/image/{$name}";
-//        }
-        // 返回多种类型资源文件
-       if ($name != '' && $path == '') {
-            // 动态生成占位图片：bgc.png&w=500&h=500&fit=crop-center
-            if (strpos($name, '&w=') !== false) {
-                $uikit_file_url = "{$this->config['uri']}glide?path=$name";
-                $local_file_path = 'data/file/uikit/glide/' . base64_encode($name) . '.png';
-                $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
-                return $local_file_path;
-            }
-            // $name 只有文件名，加载当前组件资源文件
-            if (preg_match('/^[^\/]*$/', $name) === 1) {
-                $uikit_file_url = "{$this->config['uri']}{$this->view->path}/image/$name";
-                $local_file_path = "data/file/uikit/{$this->view->path}/$name";
-                $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
-                return ROOT_URL . $local_file_path;
-            }
-            // $name 包含目录和文件名，加载 cdn 提供的资源文件
-            if (preg_match('/^.+\/[^\/]+\.[^\/]+$/', $name)) {
-                $uikit_file_url = "{$this->config['uri']}/assets/{$name}";
-                $local_file_path = "data/file/uikit/assets/$name";
-                $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
-                return ROOT_URL . $local_file_path;
-            }
-            // $name 只有目录路径
-//            if ( ! preg_match('/\.[^\/]+$/', $path)) {
-//                return "{$this->config['uri']}{$name}/image";
-//            }
-        }
-        // 指定组件路径资源文件
-        if ($name != '' && $path != '') {
-            $uikit_file_url = "{$this->config['uri']}/{$path}/image/{$name}";
-            $local_file_path = "data/file/uikit/{$path}/$name";
+        // $name 只有文件名，加载当前组件资源文件
+        if ( preg_match('/^[^\/]*$/', $name) === 1 ) {
+            $uikit_file_url = "{$this->config['uri']}{$this->view->path}/image/$name";
+            $local_file_path = "data/file/uikit/{$this->view->path}/$name";
             $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
             return ROOT_URL . $local_file_path;
+        }
+        // $name 包含目录和文件名
+        if ( preg_match('/^.+\/[^\/]+\.[^\/]+$/', $name) ) {
+            // 加载公共资源文件
+            $uikit_file_url = "{$this->config['uri']}/assets/{$name}";
+            $local_file_path = "data/file/uikit/assets/$name";
+            // 如果路径前是 number或domain加载组件资源文件
+            if ( strpos($name, 'number/') === 0 || strpos($name, 'domain/') === 0 ) {
+                $uikit_file_url = "{$this->config['uri']}/{$name}";
+                $local_file_path = "data/file/uikit/$name";
+            }
+            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
+            return ROOT_URL . $local_file_path;
+        }
+        // $name 只有目录路径，返回指定组件资源目录路径
+        if ( ! preg_match('/\.[^\/]+$/', $name)) {
+            return "{$this->config['uri']}{$name}/image";
         }
     }
 
@@ -363,5 +347,117 @@ class Uikit {
             $aftercode = base64_decode($aftercode);
         }
         return $aftercode;
+    }
+
+    // item 返回图片链接
+    public function item_image($path, $image, $utime = false, $isfull = false)
+    {
+        if ( $image = trim($image) ) {
+            $image = $this->view->url(ltrim("$path/$image", '/'), $utime, $isfull);
+        } else {
+            // 1像素透明图片，防止有些浏览器没有图片显示交叉图片占位符。
+            $image = base64_decode('ZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFBRUFBQUFCQ0FRQUFBQzFIQXdDQUFBQUMwbEVRVlI0QVdQNHp3QUFBZ0VCQUFidktNc0FBQUFBU1VWT1JLNUNZSUk9');
+        }
+        return $image;
+    }
+
+    // 输出完整文件链接
+    public function item_file($path, $name, $utime = false, $isfull = false) {
+        if ( $name = trim($name) ) {
+            $name = $this->view->url(ltrim("$path/$name", '/'), $utime, $isfull);
+        }
+        return $name;
+    }
+
+    // item 返回图标图片，支持返回svg源代码
+    public function item_icon($path, $image, $title = '', $utime = false) {
+        // 如果没有图片，则返回标题名称。
+        if ( ! $image = trim($image) ) return $title;
+        // 如果是svg源代码，则直接返回。
+        if ( preg_match('/\<svg.*?\>.*/i', $image) ) {
+            return urldecode($image);
+        }
+        $image = $this->view->url(ltrim("$path/$image", '/'), $utime, true);
+        // 如是是svg图片，则返回源代码
+        if ( preg_match('/.+?\.svg/i', $image) ) {
+//            return file_get_contents($image, false, stream_context_create(['ssl'=>['verify_peer'=>false, 'verify_peer_name'=>false]])); // 图标很多的时间，速度会很慢。
+            return '<img src="'.$image.'" alt="" onload="fetch(\''.$image.'\').then(response => response.text()).then(data => {this.parentNode.innerHTML=data})">';
+        }
+        // 其它图片格式，返回图片标签。
+        else {
+            return '<img src="' . $image . '" alt="' . $title . '" loading="lazy">';
+        }
+    }
+
+    // item 返回链接数组
+    public function item_link($item, $url = null, $target = null) {
+        $link = $item['link'];
+        $link_url = $link;
+        $link_title = '';
+        $link_target = '';
+        // json 格式的链接
+        if ( $link && ! is_null(json_decode($link)) ) {
+            $link = json_decode($link, true);
+            $link_title = $link['title'];
+            $link_url = $link['url'];
+            $link_target = $link['target'];
+        } else {
+            $link_url = $item['link_url'];
+            $link_title = $item['link_title'];
+            $link_target = $item['link_target'];
+        }
+        // 站内详情链接
+        if ( ! $link_url ) {
+            if ( empty($url) ) {
+                $join_alias = $this->view->setting['join.alias'];
+                $url = $join_alias ? $join_alias . '/id/[item.id].html' : 'javascript:;';
+            }
+            // URL模板 $item 参数替换
+            preg_match_all("/\[item\.(\w*?)]/i", $url, $matches, PREG_SET_ORDER);
+            if ( ! empty($matches) ) {
+                foreach ($matches as $value) {
+                    $name = $value[1];
+                    $url = str_replace('[item.' . $name . ']', $item[$name], $url);
+                }
+            }
+        }
+        // 站外链接
+        else {
+            $url = $link_url;
+            $target = $link_target;
+        }
+
+        return [
+            'url' => $url,
+            'target' => $target,
+            'link_title' => $link_title,
+            'link_url' => $link_url,
+            'link_target' => $link_target
+        ];
+    }
+
+    // item 返回分类链接
+    public function item_category_url($category) {
+        $link_url = $this->view->setting['category.link.url'];
+        if ( $link_url !== false ) {
+            if ( is_string($link_url) ) {
+                return helper('url/parseStrGet', [$link_url]);
+            } else {
+                return helper('db/getPageAlias') . '/category/' . $category['id'] . '.html';
+            }
+        } else {
+            return 'javascript:;';
+        }
+    }
+
+    // item 返回转换的内容
+    public function item_content($content, $content_type = 'md') {
+        if ( $content_type == 'md' ) {
+            $content = (new Parsedown())->text(html_decode($content));
+            $content = preg_replace('/<a(.*?)>(.*?)<\/a>/i', "<a $1 target=\"_blank\">$2</a>", $content);
+        } else {
+            $content = html_decode($content);
+        }
+        return preg_replace('/<img.+?src=[\'"](.+?\.(jpg|jpge|gif|svg|apng|png|webp))[\'"](.*?)>/i', "<img class=\"lazyload zooming\" data-src=\"$1\" src=\"assets/image/loading.svg\" data-expand=\"-20\" $3>", $content);
     }
 }

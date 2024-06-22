@@ -1,7 +1,7 @@
 /**
  * 视频播放组件
- * <video class="video-js" data-theme="<?=$setting['userdata.video.theme']; ?>" data-poster="<?=helper('item/image', [$path, $image]); ?>" width="100%" controls>
- *     <source src="<?=helper('item/video', [$path, $item['video']]); ?>"></source>
+ * <video class="video-js" data-theme="<?=$setting['userdata.video.theme']; ?>" data-poster="<?=$uikit->item_image($path, $image); ?>" width="100%" controls>
+ *     <source src="$uikit->item_file($path, $item['video']); ?>"></source>
  * </video>
  **/
 define(function (require) {
