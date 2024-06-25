@@ -172,58 +172,56 @@ class Uikit {
         }
         // 返回当前组件资源目录路径
         if ( $name == '' ) {
-            return "{$this->config['uri']}{$this->view->path}/image";
+            return "{$this->config['uri']}assets/{$this->view->path}";
         }
         // 动态生成占位图片：bgc.png&w=500&h=500&fit=crop-center
         if ( strpos($name, '&w=') !== false ) {
-            $uikit_file_url = "{$this->config['uri']}glide?path=$name";
-            $local_file_path = 'data/file/uikit/glide/' . base64_encode($name) . '.png';
-            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
-            return $local_file_path;
+            return "{$this->config['uri']}glide?path=$name";
+//            $uikit_file_url = "{$this->config['uri']}glide?path=$name";
+//            $local_file_path = 'data/cache/uikit/glide/' . base64_encode($name) . '.png';
+//            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
+//            return $local_file_path;
         }
         // $name 只有文件名，加载当前组件资源文件
         if ( preg_match('/^[^\/]*$/', $name) === 1 ) {
-            $uikit_file_url = "{$this->config['uri']}{$this->view->path}/image/$name";
-            $local_file_path = "data/file/uikit/{$this->view->path}/$name";
-            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
-            return ROOT_URL . $local_file_path;
+            return "{$this->config['uri']}assets/{$this->view->path}/$name";
+//            $uikit_file_url = "{$this->config['uri']}assets/{$this->view->path}/$name";
+//            $local_file_path = "data/cache/uikit/assets/{$this->view->path}/$name";
+//            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
+//            return ROOT_URL . $local_file_path;
         }
         // $name 包含目录和文件名
         if ( preg_match('/^.+\/[^\/]+\.[^\/]+$/', $name) ) {
-            // 加载公共资源文件
-            $uikit_file_url = "{$this->config['uri']}/assets/{$name}";
-            $local_file_path = "data/file/uikit/assets/$name";
-            // 如果路径前是 number或domain加载组件资源文件
-            if ( strpos($name, 'number/') === 0 || strpos($name, 'domain/') === 0 ) {
-                $uikit_file_url = "{$this->config['uri']}/{$name}";
-                $local_file_path = "data/file/uikit/$name";
-            }
-            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
-            return ROOT_URL . $local_file_path;
+            // 加载组件资源文件
+            return "{$this->config['uri']}/assets/{$name}";
+//            $uikit_file_url = "{$this->config['uri']}/assets/{$name}";
+//            $local_file_path = "data/cache/uikit/assets/$name";
+//            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
+//            return ROOT_URL . $local_file_path;
         }
         // $name 只有目录路径，返回指定组件资源目录路径
         if ( ! preg_match('/\.[^\/]+$/', $name)) {
-            return "{$this->config['uri']}{$name}/image";
+            return "{$this->config['uri']}assets/{$name}";
         }
     }
 
     // 保存远程资源文件到本地目录
-    public function saveAssets($local_file_path, $remote_file_url) {
-        $path_info = pathinfo($local_file_path);
-        $path = $path_info['dirname'];
-        $name = $path_info['basename'];
-
-        if ( ! is_dir($path) ) {
-            mkdir($path, 0755, true);
-        }
-
-        if ( ! is_file($local_file_path) ) {
-            $content = file_get_contents($remote_file_url);
-            return file_put_contents($local_file_path, $content);
-        }
-
-        return true;
-    }
+//    public function saveAssets($local_file_path, $remote_file_url) {
+//        $path_info = pathinfo($local_file_path);
+//        $path = $path_info['dirname'];
+//        $name = $path_info['basename'];
+//
+//        if ( ! is_dir($path) ) {
+//            mkdir($path, 0755, true);
+//        }
+//
+//        if ( ! is_file($local_file_path) ) {
+//            $content = file_get_contents($remote_file_url);
+//            return file_put_contents($local_file_path, $content);
+//        }
+//
+//        return true;
+//    }
 
     // 外联样式输出
     public function getSettingClass($prefix, $default_class = '')

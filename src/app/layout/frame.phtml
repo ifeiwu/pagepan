@@ -42,18 +42,13 @@ $theme_screen = $theme['screen'];
         echo '<link href="' . $this->url('assets/css/pagepan.css', true) . '" rel="stylesheet">';
 		echo '<link href="' . $this->url('assets/css/theme.css', true) . '" rel="stylesheet">';
         echo '<link href="' . $this->url('assets/css/animate.css', true) . '" rel="stylesheet">';
-        
+        // 加载自定义字体
         $site_fonts_list = $site['fonts_list'];
-
-        if ( $site_fonts_list )
-        {
+        if ( $site_fonts_list ) {
             $site_fonts_list = json_decode($site_fonts_list, true);
-
-            foreach ($site_fonts_list as $font)
-            {
+            foreach ($site_fonts_list as $font) {
                 $fontid = $font['id'];
                 $site_fonts_css = "assets/font/$fontid/$fontid.css";
-                
                 echo '<link href="' . $site_fonts_css . '" rel="preload" as="style" onload="this.rel=\'stylesheet\'">';
             }
         }

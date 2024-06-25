@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Shanghai');
 
-define('RUN_MODE', 'dev'); // 开发（dev）或生产（prod）环境
+define('RUN_MODE', gethostname()); // 开发（dev）或生产（prod）环境
 define('APP_PATH', ROOT_PATH . 'app/');
 define('LIB_PATH', ROOT_PATH . 'library/');
 define('EXT_PATH', ROOT_PATH . 'extend/');

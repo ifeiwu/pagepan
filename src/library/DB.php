@@ -88,6 +88,16 @@ class DB
     }
 
     /**
+     * 执行 SQL 语句
+     * @param $sql
+     * @return false|int
+     */
+    public function exec($sql)
+    {
+        return $this->pdo->exec($sql);
+    }
+
+    /**
      * 插入一条数据
      * @param $table
      * @param $params
