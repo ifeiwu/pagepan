@@ -248,25 +248,14 @@ class Pager {
     // 缓存页面内容
     function cachePage($cache_path, $cache_file, $html)
     {
-        if ( ! is_dir($cache_path) )
-        {
-            if ( ! mkdir($cache_path, 0755, true) )
-            {
+        if ( ! is_dir($cache_path) ) {
+            if ( ! mkdir($cache_path, 0755, true) ) {
                 echo 'Permission denied: ' . $cache_path;
             }
         }
 
-        $search = [
-            '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
-            '/[^\S ]+\</s',     // strip whitespaces before tags, except space
-            '/(\s)+/s',         // shorten multiple whitespace sequences
-            '/<!--(.|\s)*?-->/' // Remove HTML comments
-        ];
-
-        $replace = ['>', '<', '\\1', ''];
-
-        $html = preg_replace($search, $replace, $html);
-
-        file_put_contents($cache_file, $html);
+        loader_vendor();
+        $parser = WyriHaximus\HtmlCompress\Factory::constructSmallest();
+        file_put_contents($cache_file, $parser->compress($html));
     }
 }

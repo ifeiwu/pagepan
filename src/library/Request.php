@@ -141,6 +141,10 @@ class Request
         return $isfull === true ? self::domain() . $root : $root;
     }
 
+    public static function routeUrl($isfull = false)
+    {
+        return '/' . trim(substr(self::baseUrl($isfull), strlen(self::rootUrl($isfull))), '/');
+    }
 
     public static function method()
     {

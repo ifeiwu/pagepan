@@ -193,8 +193,8 @@ class Uikit {
         // $name 包含目录和文件名
         if ( preg_match('/^.+\/[^\/]+\.[^\/]+$/', $name) ) {
             // 加载组件资源文件
-            return "{$this->config['uri']}/assets/{$name}";
-//            $uikit_file_url = "{$this->config['uri']}/assets/{$name}";
+            return "{$this->config['uri']}assets/{$name}";
+//            $uikit_file_url = "{$this->config['uri']}assets/{$name}";
 //            $local_file_path = "data/cache/uikit/assets/$name";
 //            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
 //            return ROOT_URL . $local_file_path;

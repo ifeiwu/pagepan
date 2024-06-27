@@ -3,7 +3,7 @@
 $theme = Request::get('theme');
 $path = Request::get('path');
 
-$info = file_get_contents('http://192.168.31.5:8087/import-uikit-db?path=' . $path);
+$info = file_get_contents('http://192.168.31.5:8087/dev/import-uikit-db?path=' . $path);
 $info = json_decode($info, true);
 
 $setting = json_decode($info['setting'], true);
