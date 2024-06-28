@@ -7,7 +7,7 @@ return function ($version, $module, $action) {
         $token = substr($authorization, 7);
     }
     // 令牌验证
-    $apikey = require ROOT_PATH . 'config/apikey.php';
+    $apikey = require CONF_PATH . 'apikey.php';
     if ( $apikey != $token ) {
         header($_SERVER["SERVER_PROTOCOL"] . ' 401 Unauthorized');
         exit;

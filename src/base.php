@@ -57,9 +57,10 @@ spl_autoload_register(function ($class) {
 
 define('BASE_URL', Request::baseUrl());
 define('ROOT_URL', Request::rootUrl());
+define('ROUTE_URL', Request::routeUrl());
 
 // API 允许前端跨域请求
-if ( strpos(BASE_URL, '/api/') === 0 )
+if ( strpos(ROUTE_URL, '/api/') === 0 )
 {
     if ( isset($_SERVER['HTTP_ORIGIN']) )
     {

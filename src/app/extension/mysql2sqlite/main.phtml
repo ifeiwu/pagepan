@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="<?=ROOT_URL?>">
+    <meta charset="utf-8">
+    <title><?=get('headtitle');?></title>
+
+    <link href="<?=$this->url('assets/css/pagepan.css', true);?>" rel="stylesheet">
+    <script src="<?=$this->url('assets/js/lib/jquery.js', true);?>"></script>
+</head>
+<body class="h-screen">
+
+    <div class="container container-sm py-8 h-full">
+        <div class="flex flex-col justify-center gap-5 center w-full h-full">
+            <div>
+                <button id="conversion" class="btn f-7 py-8 px-12 r-full btn-primary">MySQL -> SQLite</button>
+            </div>
+            <div>
+                <span id="result" class="mt-10 mb-5 f-7">&nbsp;</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $('#conversion').click(function () {
+                $.post('extension/mysql2sqlite/conversion?token=<?=get('token')?>', {}, function (res) {
+                    if ( res.code == 0 ) {
+                        $('#result').text(res.message);
+                    }
+                }, 'JSON');
+            });
+        });
+    </script>
+
+</body>
+</html>

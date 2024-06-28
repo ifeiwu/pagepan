@@ -3,20 +3,21 @@
 class Log {
 
     /**
-     * 生成其它前缀文件日志
-     * 例如：Log:sql('select * from table'); // data/logs/sql_202403.log
+     * 生成自定义函数名前缀文件日志
+     * 例如：Log:sql('select * from table');
+     * 输出：data/logs/sql_202403.log
      * @param $name
      * @param $args
      * @return void
      */
     private static function __callStatic($name, $args)
     {
-        self::write($args, $name);
+        return self::write($args, $name);
     }
 
     public static function debug()
     {
-        self::write(func_get_args(), 'debug');
+        return self::write(func_get_args(), 'debug');
     }
 
     public static function write($data, $prefix = '')
@@ -26,9 +27,16 @@ class Log {
 
         $message = date('[Y-m-d H:i:s] ') . $caller['file']. ' (' . $caller['line'] . ')' . PHP_EOL;
         $message.= implode(PHP_EOL, self::getMessages($data)) . PHP_EOL;
-        $filename = ROOT_PATH . "data/logs/{$prefix}_" . date('Ym') . '.log';
 
+        $basepath = ROOT_PATH . 'data/logs';
+        if ( ! is_dir($basepath) ) {
+            mkdir($basepath, 0755, true);
+        }
+
+        $filename = "{$basepath}/{$prefix}_" . date('Ym') . '.log';
         file_put_contents($filename, $message, FILE_APPEND);
+
+        return $filename;
     }
 
     public static function getMessages($data)
