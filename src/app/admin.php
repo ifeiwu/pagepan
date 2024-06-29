@@ -16,6 +16,8 @@ return function () {
     $admin = Config::file('admin');
     $admin_domain = $admin['domain'];
     $admin_version = $admin['version'];
+    $admin_url = $admin_version ? "$admin_domain/$admin_version" : $admin_domain;
+    $admin_url = Request::scheme() . "://$admin_url";
 
-    Response::redirect("https://$admin_domain/$admin_version/main/login.verify?d=$domain&s=$server");
+    Response::redirect("$admin_url/main/login.verify?d=$domain&s=$server");
 };
