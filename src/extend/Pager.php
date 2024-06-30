@@ -59,7 +59,7 @@ class Pager {
     {
         $page = $this->getPageInfo($alias);
         // 页面数据
-        $this->view->assign('page', [
+        $this->view->assign('pagevar', [
             'domain' => Request::domain(),
             'domain3' => $this->view->site['domain3'] ?: '',
             'rooturl' => ROOT_URL,

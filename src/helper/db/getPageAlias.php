@@ -3,7 +3,7 @@
 return function ($jid = null) {
     // 当前页面别名
     if ( ! $jid ) {
-        $page_alias = view()->page['page_alias'];
+        $page_alias = view()->pagevar['page_alias'];
     }
     // 引用关联数据的页面别名
     else

@@ -5,6 +5,12 @@
 class View
 {
     /**
+     * 关联 Uikit 对象
+     * @var Uikit
+     */
+    public $uikit;
+
+    /**
      * 模板基本路径
      * @var string
      */

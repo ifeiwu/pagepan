@@ -8,7 +8,7 @@ return function ($id, $columns = []) {
 
     if ( $page_id && $table )
     {
-        $page_alias = view()->page['page_alias'];
+        $page_alias = view()->pagevar['page_alias'];
         $columns = $columns ?: 'id,title';
         $category = db()->find($table, $columns, [['page_id', '=', $page_id], 'AND', ['id', '=', $id]]);
 

@@ -1,10 +1,28 @@
 <?php
 class Uikit {
 
+    /**
+     * 关联 View 对象
+     * @var View
+     */
+    public $view;
+
+    /**
+     * 缓存基本路径
+     * @var string
+     */
     public $basePath;
 
+    /**
+     * 配置数组
+     * @var array
+     */
     public $config;
 
+    /**
+     * 扩展函数数组
+     * @var array
+     */
     private static $_funs = [];
 
     /**
@@ -60,22 +78,18 @@ class Uikit {
         // 针对复用组件创建不同的配置，共用 code.php 文件。
         $number_path = $setting['component.path'];
         $number_path = $number_path ?: $path;
-
         $ukid = $setting['ukid'] ?: uniqid('uk');
-
         $config['path'] = $path;
         $config['ukid'] = $ukid;
 
         // 动态组件写入文件
-        if ( $iswrite == true )
-        {
+        if ( $iswrite == true ) {
             $content = $this->getWriteCache($number_path, 'code');
             $default = $this->view->parse($content, $config);
             $content = $this->view->section($ukid, $default);
         }
         // 静态组件输出内容
-        else
-        {
+        else {
             $content = $this->getRemoteCode($number_path, 'code');
             $default = $this->view->parse($content, $config);
             $content = $this->view->section($ukid, $default);

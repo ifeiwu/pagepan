@@ -21,7 +21,7 @@ return function ($columns = [], $where = []) {
 
         if ( $dataset_perpage > 0 )
         {
-            $pagenum = view()->page['get_pagenum'] ?: 1;
+            $pagenum = view()->pagevar['get_pagenum'] ?: 1;
 
             return db()->select($dataset_table, $columns, $where, $dataset_orderby, [($pagenum - 1) * $dataset_perpage, $dataset_perpage]);
         }

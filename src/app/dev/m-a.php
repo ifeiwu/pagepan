@@ -8,7 +8,7 @@ return function ($module, $action) {
 
     $view = view();
     $view->assign('site', $site);
-    $view->assign('page', [
+    $view->assign('pagevar', [
         'domain' => Request::domain(),
         'domain3' => $site['domain3'] ?: '',
         'rooturl' => ROOT_URL,

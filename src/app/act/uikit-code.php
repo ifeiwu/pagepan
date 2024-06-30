@@ -51,7 +51,7 @@ function __uikit_list($view, $config) {
 	$page_id = $config['page_id'];
 	$page = db()->find('page', 'id, alias, title', array('id', '=', $page_id));
 	// 模拟页面参数
-    $view->assign('page', [
+    $view->assign('pagevar', [
         'page_id' => $page['id'],
         'page_alias' => $page['alias'],
         'page_title' => $page['title']
@@ -93,7 +93,7 @@ function __uikit_article($view, $config) {
 	
 	$item_id = db()->find($dataset_table, 'id', $where, ['sortby' => 'DESC', 'ctime' => 'DESC'], 0);
 	// 模拟页面参数
-    $view->assign('page', [
+    $view->assign('pagevar', [
         'get_id' => $item_id,
         'page_id' => $join_page['id'],
         'page_alias' => $join_page['alias'],

@@ -1,7 +1,7 @@
 /**
  * 视音频播放组件
- * <video class="plyr" width="100%" poster="<?=$uikit->item_image($path, $image); ?>" preload="none" controls="" playsInline="">
- *     <source src="<?=$uikit->item_image($path, $item['video']); ?>"></source>
+ * <video class="plyr" width="100%" poster="<?=$this->uikit->item_image($path, $image); ?>" preload="none" controls="" playsInline="">
+ *     <source src="<?=$this->uikit->item_image($path, $item['video']); ?>"></source>
  * </video>
  **/
 define(function (require) {

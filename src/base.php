@@ -10,7 +10,6 @@ define('VIEW_PATH', APP_PATH . 'view/');
 define('CONF_PATH', ROOT_PATH . 'config/');
 define('DATA_PATH', ROOT_PATH . 'data/');
 define('CACHE_PATH', DATA_PATH . 'cache/');
-define('WEB_DATA', WEB_ROOT . 'data/');
 define('ASSETS_PATH', WEB_ROOT . 'assets/');
 
 // 所有错误和异常记录
