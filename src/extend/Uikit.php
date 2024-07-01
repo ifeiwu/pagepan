@@ -23,7 +23,7 @@ class Uikit {
      * 扩展函数数组
      * @var array
      */
-    private static $_funs = [];
+    private static $funcs = [];
 
     /**
      * 单例设计模式
@@ -55,13 +55,13 @@ class Uikit {
      */
     public function __call($name, $args)
     {
-        if ( ! isset(self::$_funs[$name]) ) {
-            self::$_funs[$name] = require EXT_PATH . "uikit/{$name}.php";
+        if ( ! isset(self::$funcs[$name]) ) {
+            self::$funcs[$name] = require EXT_PATH . "uikit/{$name}.php";
         }
 
-        $fun = Closure::bind(self::$_funs[$name], $this);
+        $func = Closure::bind(self::$funcs[$name], $this);
 
-        return call_user_func_array($fun, $args);
+        return call_user_func_array($func, $args);
     }
 
     // 加载组件输出内容
@@ -365,7 +365,7 @@ class Uikit {
     public function item_image($path, $image, $utime = false, $isfull = false)
     {
         if ( $image = trim($image) ) {
-            $image = $this->view->url(ltrim("$path/$image", '/'), $utime, $isfull);
+            $image = $this->view->asset(trim("$path/$image", '/'), $utime, $isfull);
         } else {
             // 1像素透明图片，防止有些浏览器没有图片显示交叉图片占位符。
             $image = base64_decode('ZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFBRUFBQUFCQ0FRQUFBQzFIQXdDQUFBQUMwbEVRVlI0QVdQNHp3QUFBZ0VCQUFidktNc0FBQUFBU1VWT1JLNUNZSUk9');
@@ -376,7 +376,7 @@ class Uikit {
     // 输出完整文件链接
     public function item_file($path, $name, $utime = false, $isfull = false) {
         if ( $name = trim($name) ) {
-            $name = $this->view->url(ltrim("$path/$name", '/'), $utime, $isfull);
+            $name = $this->view->asset(trim("$path/$name", '/'), $utime, $isfull);
         }
         return $name;
     }
@@ -389,7 +389,7 @@ class Uikit {
         if ( preg_match('/\<svg.*?\>.*/i', $image) ) {
             return urldecode($image);
         }
-        $image = $this->view->url(ltrim("$path/$image", '/'), $utime, true);
+        $image = $this->view->asset(trim("$path/$image", '/'), $utime, true);
         // 如是是svg图片，则返回源代码
         if ( preg_match('/.+?\.svg/i', $image) ) {
 //            return file_get_contents($image, false, stream_context_create(['ssl'=>['verify_peer'=>false, 'verify_peer_name'=>false]])); // 图标很多的时间，速度会很慢。

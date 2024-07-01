@@ -35,13 +35,13 @@ $theme_screen = $theme['screen'];
         // 全局页头
         if ( $this->site['open_header_php'] ) { include ROOT_PATH . 'data/php/header.inc'; }
         // 网站图标
-        if ( $this->site['favicon'] ) { echo '<link rel="icon" href="' . $this->url($this->site['favicon']) . '">'; }
+        if ( $this->site['favicon'] ) { echo '<link rel="icon" href="' . $this->asset($this->site['favicon']) . '">'; }
         // 应用图标
-        if ( $this->site['touchicon'] ) { echo '<link rel="apple-touch-icon" href="' . $this->url($this->site['touchicon']) . '">'; }
+        if ( $this->site['touchicon'] ) { echo '<link rel="apple-touch-icon" href="' . $this->asset($this->site['touchicon']) . '">'; }
         
-        echo '<link href="' . $this->url('assets/css/pagepan.css', true) . '" rel="stylesheet">';
-		echo '<link href="' . $this->url('assets/css/theme.css', true) . '" rel="stylesheet">';
-        echo '<link href="' . $this->url('assets/css/animate.css', true) . '" rel="stylesheet">';
+        echo '<link href="' . $this->asset('assets/css/pagepan.css') . '" rel="stylesheet">';
+		echo '<link href="' . $this->asset('assets/css/theme.css') . '" rel="stylesheet">';
+        echo '<link href="' . $this->asset('assets/css/animate.css') . '" rel="stylesheet">';
         // 加载自定义字体
         $site_fonts_list = $this->site['fonts_list'];
         if ( $site_fonts_list ) {
@@ -53,14 +53,14 @@ $theme_screen = $theme['screen'];
             }
         }
         
-        if ( $this->site['open_article_css'] ) { echo '<link href="' . $this->url('assets/css/article.css', true) . '" rel="stylesheet">'; }
-        if ( $this->site['open_graphic_css'] ) { echo '<link href="' . $this->url('assets/css/graphic.css', true) . '" rel="stylesheet">'; }
-        if ( $this->site['open_global_css'] ) { echo '<link href="' . $this->url('assets/css/global.css', true) . '" rel="stylesheet">'; }
+        if ( $this->site['open_article_css'] ) { echo '<link href="' . $this->asset('assets/css/article.css') . '" rel="stylesheet">'; }
+        if ( $this->site['open_graphic_css'] ) { echo '<link href="' . $this->asset('assets/css/graphic.css') . '" rel="stylesheet">'; }
+        if ( $this->site['open_global_css'] ) { echo '<link href="' . $this->asset('assets/css/global.css') . '" rel="stylesheet">'; }
         
         echo '<script>var pagevar = ' . json_encode($this->pagevar, JSON_UNESCAPED_UNICODE) . ';</script>';
-        echo '<script src="' . $this->url('assets/js/require.js', true) . '" type="text/javascript"></script>';
-        echo '<script src="' . $this->url('assets/js/config.js', true) . '" type="text/javascript"></script>';
-        echo '<script src="' . $this->url('assets/js/lib/jquery.js', true) . '" type="text/javascript"></script>';
+        echo '<script src="' . $this->asset('assets/js/require.js') . '" type="text/javascript"></script>';
+        echo '<script src="' . $this->asset('assets/js/config.js') . '" type="text/javascript"></script>';
+        echo '<script src="' . $this->asset('assets/js/lib/jquery.js') . '" type="text/javascript"></script>';
         ?>
     </head>
     <body <?=$page_body_attrs; ?>>
@@ -68,9 +68,9 @@ $theme_screen = $theme['screen'];
         <?=$this->section('content')?>
 
         <?php
-        echo '<script src="' . $this->url('assets/js/app/main.js', true) . '" type="text/javascript"></script>';
+        echo '<script src="' . $this->asset('assets/js/app/main.js') . '" type="text/javascript"></script>';
         // 全局脚本
-        if ( $this->site['open_global_js'] ) { echo '<script src="' . $this->url('assets/js/global.js', true) . '" type="text/javascript"></script>'; }
+        if ( $this->site['open_global_js'] ) { echo '<script src="' . $this->asset('assets/js/global.js') . '" type="text/javascript"></script>'; }
         // 全局页脚
         if ( $this->site['open_footer_php'] ) { include ROOT_PATH . 'data/php/footer.inc'; }
         // 在线客服

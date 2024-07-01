@@ -5,7 +5,7 @@ class Request
      * 扩展函数数组
      * @var array
      */
-    private static $_funs = [];
+    private static $funcs = [];
 
     /**
      * 调用扩展函数
@@ -15,13 +15,13 @@ class Request
      */
     public static function __callStatic($name, $args)
     {
-        if ( ! isset(self::$_funs[$name]) ) {
-            self::$_funs[$name] = require LIB_PATH . "request/{$name}.php";
+        if ( ! isset(self::$funcs[$name]) ) {
+            self::$funcs[$name] = require LIB_PATH . "request/{$name}.php";
         }
 
-        $fun = Closure::bind(self::$_funs[$name], new self());
+        $func = Closure::bind(self::$funcs[$name], new self());
 
-        return call_user_func_array($fun, $args);
+        return call_user_func_array($func, $args);
     }
 
     // GET 请求

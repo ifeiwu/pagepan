@@ -18,7 +18,7 @@ class DB
      * 扩展函数数组
      * @var array
      */
-    private static $_funs = [];
+    private static $funcs = [];
 
     /**
      * 单例设计模式
@@ -43,13 +43,13 @@ class DB
      */
     public function __call($name, $args)
     {
-        if (!isset(self::$_funs[$name])) {
-            self::$_funs[$name] = require LIB_PATH . "db/{$name}.php";
+        if (!isset(self::$funcs[$name])) {
+            self::$funcs[$name] = require LIB_PATH . "db/{$name}.php";
         }
 
-        $fun = Closure::bind(self::$_funs[$name], $this);
+        $func = Closure::bind(self::$funcs[$name], $this);
 
-        return call_user_func_array($fun, $args);
+        return call_user_func_array($func, $args);
     }
 
     /**

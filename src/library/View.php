@@ -56,7 +56,7 @@ class View
      * 扩展函数数组
      * @var array
      */
-    private static $_funs = [];
+    private static $funcs = [];
 
     /**
      * 单例设计模式
@@ -82,13 +82,13 @@ class View
      */
     public function __call($name, $args)
     {
-        if ( ! isset(self::$_funs[$name]) ) {
-            self::$_funs[$name] = require LIB_PATH . "view/{$name}.php";
+        if ( ! isset(self::$funcs[$name]) ) {
+            self::$funcs[$name] = require LIB_PATH . "view/{$name}.php";
         }
 
-        $fun = Closure::bind(self::$_funs[$name], $this);
+        $func = Closure::bind(self::$funcs[$name], $this);
 
-        return call_user_func_array($fun, $args);
+        return call_user_func_array($func, $args);
     }
 
     private function __construct($path)
@@ -139,8 +139,6 @@ class View
      */
     public function render($name, $data = null)
     {
-//        $name = rtrim($name, $this->extname);
-
         if ( is_array($data) ) {
             $this->data = array_merge($this->data, $data);
         }
@@ -339,7 +337,7 @@ class View
     }
 
     // 超链接构建输出
-    public function url($url = null, $time = false, $isfull = false)
+    /*public function url($url = null, $time = false, $isfull = false)
     {
         // 站外链接
         if ( preg_match('/^(https?:\/\/|\/\/)/i', $url) ) {
@@ -364,9 +362,9 @@ class View
         }
 
         return $url;
-    }
+    }*/
 
-    // SEO 设置输出
+    /*// SEO 设置输出
     public function seo($title = '', $subtitle = '', $keywords = '', $description = '', $divider = ' - ')
     {
         $seo = [];
@@ -391,5 +389,5 @@ class View
         }
 
         $this->assign('seo', $seo);
-    }
+    }*/
 }
