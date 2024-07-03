@@ -59,7 +59,8 @@ gulp.task('html', function () {
 
 gulp.task('config', function (done) {
 	var base = fs.readFileSync('dist/base.php', 'utf8');
-	base = base.replace("'RUN_MODE', gethostname()", "'RUN_MODE', 'prod'");
+	base = base.replace("define('RUN_MODE', 'dev');", "define('RUN_MODE', 'prod');");
+	base = base.replace("define('BUILD_TIME', '');", "define('BUILD_TIME', '" + (new Date().getTime()) + "');");
 	fs.writeFile('dist/base.php', Buffer.from(base), {flag: 'w'}, function(error, data) {});
 
 	done();

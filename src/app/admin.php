@@ -1,17 +1,23 @@
 <?php
 return function () {
     $server = Request::get('s');
-    $host = $_SERVER['HTTP_HOST'] ?: $_SERVER['SERVER_NAME'];
-    // host未指定端口号，尝试是否需要添加端口号。
-    if ( strpos($host, ':') === false ) {
-        $port = $_SERVER['SERVER_PORT'];
-        if ( $port == '80' || $port == '443' ) {
-        } else {
-            $host = "{$host}:{$port}";
+    $domain = $_SERVER['HTTP_HOST'] ?: $_SERVER['SERVER_NAME'];
+
+    if ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) || isset($_SERVER['HTTP_X_REAL_IP']) ) {
+        // 请求通过反向代理发送
+    } else {
+        // host未指定端口号，尝试是否需要添加端口号。
+        if ( strpos($domain, ':') === false ) {
+            $port = $_SERVER['SERVER_PORT'];
+            if ( $port == '80' || $port == '443' ) {
+            } else {
+                $domain = "{$domain}:{$port}";
+            }
         }
     }
     // 拼接网站访问根域名
-    $domain = str_replace('www.', '', dirname($host . $_SERVER['PHP_SELF']));
+    $rooturl = $_SERVER['SCRIPT_NAME'] ? : $_SERVER['PHP_SELF'];
+    $domain = str_replace('www.', '', dirname($domain . $rooturl));
     // 网站后台管理域名
     $admin = Config::file('admin');
     $admin_domain = $admin['domain'];

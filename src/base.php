@@ -1,12 +1,12 @@
 <?php
 date_default_timezone_set('Asia/Shanghai');
 
-define('RUN_MODE', gethostname()); // 开发（dev）或生产（prod）环境
+define('BUILD_TIME', ''); // 项目构建时间
+define('RUN_MODE', 'dev'); // 开发环境
 define('APP_PATH', ROOT_PATH . 'app/');
 define('LIB_PATH', ROOT_PATH . 'library/');
 define('EXT_PATH', ROOT_PATH . 'extend/');
 define('VEN_PATH', ROOT_PATH . 'vendor/');
-define('VIEW_PATH', APP_PATH . 'view/');
 define('CONF_PATH', ROOT_PATH . 'config/');
 define('DATA_PATH', ROOT_PATH . 'data/');
 define('CACHE_PATH', DATA_PATH . 'cache/');

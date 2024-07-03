@@ -1,5 +1,5 @@
 <?php
 return [
     'cache' => true,
-    'uri' => 'https://v8-uikit.pagepan.com/'
+    'uri' => 'https://uikit8.pagepan.com/'
 ];

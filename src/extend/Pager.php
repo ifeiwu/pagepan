@@ -118,7 +118,7 @@ class Pager {
 
         // 页面内容添加到页面框架
         if ( $page_content ) {
-            $this->view->addSection('frame-content', $page_content);
+            $this->view->addSection('content', $page_content);
         }
 
         return $this->view->render('layout/frame');
