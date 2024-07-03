@@ -65,7 +65,7 @@ class Pager {
         // 缓存配置
         if ( $page['cache'] == 1 ) {
             $cache_path = CACHE_PATH . "page/$alias"; // 缓存路径
-            $cache_file = $cache_path . '/' . md5(BASE_URL); // 缓存文件
+            $cache_file = $cache_path . '/' . md5(Request::url()); // 缓存文件
             if ( is_file($cache_file) ) {
                 echo file_get_contents($cache_file);
             } else {
@@ -234,12 +234,16 @@ class Pager {
     function cachePage($cache_path, $cache_file, $html) {
         if ( ! is_dir($cache_path) ) {
             if ( ! mkdir($cache_path, 0755, true) ) {
-                echo 'Permission denied: ' . $cache_path;
+                exit("Permission denied: {$cache_path}");
             }
         }
 
-        loader_vendor();
-        $parser = WyriHaximus\HtmlCompress\Factory::constructSmallest();
-        file_put_contents($cache_file, $parser->compress($html));
+        try {
+            loader_vendor();
+            $parser = WyriHaximus\HtmlCompress\Factory::constructSmallest();
+            file_put_contents($cache_file, $parser->compress($html));
+        } catch (Throwable $e) {
+            file_put_contents($cache_file, $html);
+        }
     }
 }
