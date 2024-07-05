@@ -197,7 +197,7 @@ class Uikit {
 //            return $local_file_path;
         }
         // $name 只有文件名，加载当前组件资源文件
-        if ( preg_match('/^[^\/]*$/', $name) === 1 ) {
+        if ( preg_match('/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9]+$/', $name) === 1 ) {
             return "{$this->config['uri']}assets/{$this->view->path}/$name";
 //            $uikit_file_url = "{$this->config['uri']}assets/{$this->view->path}/$name";
 //            $local_file_path = "data/cache/uikit/assets/{$this->view->path}/$name";
@@ -214,9 +214,10 @@ class Uikit {
 //            return ROOT_URL . $local_file_path;
         }
         // $name 只有目录路径，返回指定组件资源目录路径
-        if ( ! preg_match('/\.[^\/]+$/', $name)) {
-            return "{$this->config['uri']}assets/{$name}";
-        }
+        return "{$this->config['uri']}assets/" . trim($name);
+        /*if ( ! preg_match('/\.[^\/]+$/', $name)) {
+            return "{$this->config['uri']}assets/" . trim($name);
+        }*/
     }
 
     // 保存远程资源文件到本地目录
@@ -404,7 +405,7 @@ class Uikit {
     // item 返回链接数组
     public function item_link($item, $url = null, $target = null) {
         $link = $item['link'];
-        $link_url = $link;
+        $link_url = '';
         $link_title = '';
         $link_target = '';
         // json 格式的链接
@@ -414,7 +415,7 @@ class Uikit {
             $link_url = $link['url'];
             $link_target = $link['target'];
         } else {
-            $link_url = $item['link_url'];
+            $link_url = $link ?: $item['link_url'];
             $link_title = $item['link_title'];
             $link_target = $item['link_target'];
         }
@@ -432,8 +433,7 @@ class Uikit {
                     $url = str_replace('[item.' . $name . ']', $item[$name], $url);
                 }
             }
-        }
-        // 站外链接
+        } // 站外链接
         else {
             $url = $link_url;
             $target = $link_target;
