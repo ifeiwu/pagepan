@@ -1,5 +1,5 @@
 <?php
-// http://192.168.31.5:8087/dev/import-demo-db
+// http://192.168.31.5:8087/dev/json-to-demo-db
 return function ($request_data) {
     echo '更新演示数据库<br>-----------------------<br><br>';
 
@@ -40,10 +40,10 @@ return function ($request_data) {
 ]';
 
     $db = DB::new(['debug' => false, 'type' => 'sqlite', 'file' => 'data/sqlite/demo.db', 'prefix' => '']);
-    $table = 'url_nav';
+    $table = 'url_nav'; // 注意：指定不同的表名
     $items = json_decode($json, true);
     foreach ($items as $item) {
-        $page_id = 6;
+        $page_id = 10001; // 注意：指定表名 page_id
         $category_id = 0;
         $category_title = $item['category'];
         $title = $item['title'];

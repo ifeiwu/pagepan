@@ -9,6 +9,7 @@ return function () {
     $mysql = DB::new($config);
     $sqlite = new PDO('sqlite:' . DATA_PATH . 'sqlite/pagepan.db');
 
+
     $fail_sqls = [];
     $ok_sqls = [];
     $tables = $mysql->getTables();
@@ -17,6 +18,23 @@ return function () {
         $talbe = str_replace('pagepan_', '', $talbe);
         if ( ! in_array($talbe, ['admin', 'site', 'item', 'page', 'message', 'log', 'trash']) ) {
             continue;
+        }
+
+        // sqlite表所有字段
+        $sqlite_columns = [];
+        $fields = $sqlite->query("PRAGMA table_info({$talbe})")->fetchAll();
+        foreach ($fields as $field) {
+            $sqlite_columns[] = $field['name'];
+        }
+
+        // mysql表所有字段
+        $mysql_columns = $mysql->getTableColumns($talbe);
+        // 两个数据库字段是否相同
+        if ( $mysql_columns != $sqlite_columns ) {
+            echo "数据表的结构不一致：<br>";
+            echo "MySql({$table}): [" . implode(',', $mysql_columns) . ']<br>';
+            echo "Sqlite({$table}): [" . implode(',', $sqlite_columns) . ']<br>';
+            exit;
         }
 
         // 查找表数据
@@ -30,15 +48,11 @@ return function () {
             Response::success("清空表出错：{$talbe}");
         }
 
-        // 提取表所有字段
-        $columns = $mysql->getTableColumns($talbe);
-        $columns = '`' . implode('`,`', $columns) . '`';
-
         // 导入数据
+        $columns = '`' . implode('`,`', $sqlite_columns) . '`';
         foreach ($items as $item) {
             $values = array_values($item);
             $values = "'" . implode("','", $values) . "'";
-
             $insert_sql = "INSERT INTO `{$talbe}` ({$columns}) VALUES ({$values})";
             if ( $sqlite->exec($insert_sql) === false ) {
                 $fail_sqls[] = $insert_sql;

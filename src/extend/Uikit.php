@@ -403,45 +403,43 @@ class Uikit {
     }
 
     // item 返回链接数组
-    public function item_link($item, $url = null, $target = null) {
+    public function item_link($item, $default_url = null, $default_target = null) {
         $link = $item['link'];
         $link_url = '';
         $link_title = '';
         $link_target = '';
-        // json 格式的链接
-        if ( $link && ! is_null(json_decode($link)) ) {
-            $link = json_decode($link, true);
-            $link_title = $link['title'];
-            $link_url = $link['url'];
-            $link_target = $link['target'];
-        } else {
-            $link_url = $link ?: $item['link_url'];
-            $link_title = $item['link_title'];
-            $link_target = $item['link_target'];
-        }
-        // 站内详情链接
-        if ( ! $link_url ) {
-            if ( empty($url) ) {
+
+        // 未设置链接，自动添加关联的详情页面链接
+        if ( empty($link) ) {
+            if ( empty($default_url) ) {
                 $join_alias = $this->view->setting['join.alias'];
-                $url = $join_alias ? $join_alias . '/id/[item.id].html' : 'javascript:;';
+                $link_url = $join_alias ? $this->parseUrlItemParams($join_alias . '/id/[item.id].html', $item) : 'javascript:;';
             }
-            // URL模板 $item 参数替换
-            preg_match_all("/\[item\.(\w*?)]/i", $url, $matches, PREG_SET_ORDER);
-            if ( ! empty($matches) ) {
-                foreach ($matches as $value) {
-                    $name = $value[1];
-                    $url = str_replace('[item.' . $name . ']', $item[$name], $url);
-                }
+        } else {
+            // 外部链接
+            if ( preg_match('/^(https?:\/\/|\/\/)/i', $link) ) {
+                $link_url = $link;
             }
-        } // 站外链接
-        else {
-            $url = $link_url;
-            $target = $link_target;
+            // 数组链接
+            elseif ( isset($item['link_url']) ) {
+                $link_url = $item['link_url'];
+                $link_title = $item['link_title'];
+                $link_target = $item['link_target'];
+            }
+            // JSON链接
+            else {
+                $link = json_decode($link, true);
+                $link_title = $link['title'];
+                $link_url = $link['url'];
+                $link_target = $link['target'];
+            }
         }
 
+        $link_url = $this->parseUrlGetParams($link_url ?: $default_url);
+
         return [
-            'url' => $url,
-            'target' => $target,
+            'url' => $link_url,
+            'target' => $link_target ?: $default_target,
             'link_title' => $link_title,
             'link_url' => $link_url,
             'link_target' => $link_target
@@ -453,7 +451,7 @@ class Uikit {
         $link_url = $this->view->setting['category.link.url'];
         if ( $link_url !== false ) {
             if ( is_string($link_url) ) {
-                return helper('url/parseStrGet', [$link_url]);
+                return $this->parseUrlGetParams($link_url);
             } else {
                 return helper('db/getPageAlias') . '/category/' . $category['id'] . '.html';
             }
@@ -471,5 +469,44 @@ class Uikit {
             $content = html_decode($content);
         }
         return preg_replace('/<img.+?src=[\'"](.+?\.(jpg|jpge|gif|svg|apng|png|webp))[\'"](.*?)>/i', "<img class=\"lazyload zooming\" data-src=\"$1\" src=\"assets/image/loading.svg\" data-expand=\"-20\" $3>", $content);
+    }
+
+    /**
+     * URL模板 $_GET 参数替换。
+     * 格式：products?cid=[get.cid]&title=[get.title]
+     * @param $url
+     * @return string
+     */
+    public function parseUrlGetParams($url) {
+        if ( ! empty($url) ) {
+            preg_match_all("/\[get\.(\w*?)]/i", $url, $matches, PREG_SET_ORDER);
+            if ( ! empty($matches) ) {
+                foreach ($matches as $matche) {
+                    $name = $matche[1];
+                    $url = str_replace('[get.' . $name . ']', $_GET[$name], $url);
+                }
+            }
+        }
+        return $url;
+    }
+
+    /**
+     * URL 字符串模板 $item 参数替换。
+     * 格式：product/id/[item.id].html
+     * @param $url
+     * @param $item
+     * @return string
+     */
+    public function parseUrlItemParams($url, $item) {
+        if ( ! empty($url) ) {
+            preg_match_all("/\[item\.(\w*?)]/i", $url, $matches, PREG_SET_ORDER);
+            if ( ! empty($matches) ) {
+                foreach ($matches as $value) {
+                    $name = $value[1];
+                    $url = str_replace("[item.{$name}]", $item[$name], $url);
+                }
+            }
+        }
+        return $url;
     }
 }
