@@ -8,11 +8,15 @@ return function ($name = '', $isfull = false) {
         return $name;
     }
     // 加速域名或网站域名
-    $domain = $this->site['domain3'];
-    if ( $isfull == false ) {
-        $domain =  $domain ?: ROOT_URL;
+    $domain3 = $this->site['domain3'];
+    if ( $domain3 ) {
+        $domain = $domain3;
     } else {
-        $domain = $domain ?: $this->site['domain'];
+        if ( $isfull == false ) {
+            $domain = ROOT_URL;
+        } else {
+            $domain = $this->site['domain'];
+        }
     }
 
     $name = ltrim($name, '/');

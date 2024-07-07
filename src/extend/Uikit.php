@@ -363,10 +363,10 @@ class Uikit {
     }
 
     // item 返回图片链接
-    public function item_image($path, $image, $utime = false, $isfull = false)
+    public function item_image($path, $image, $utime = '', $isfull = false)
     {
         if ( $image = trim($image) ) {
-            $image = $this->view->asset(trim("$path/$image", '/'), $utime, $isfull);
+            $image = $this->view->asset(trim("$path/$image" . rtrim("?$utime", '?'), '/'), $isfull);
         } else {
             // 1像素透明图片，防止有些浏览器没有图片显示交叉图片占位符。
             $image = base64_decode('ZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFBRUFBQUFCQ0FRQUFBQzFIQXdDQUFBQUMwbEVRVlI0QVdQNHp3QUFBZ0VCQUFidktNc0FBQUFBU1VWT1JLNUNZSUk9');
@@ -375,22 +375,22 @@ class Uikit {
     }
 
     // 输出完整文件链接
-    public function item_file($path, $name, $utime = false, $isfull = false) {
+    public function item_file($path, $name, $utime = '', $isfull = false) {
         if ( $name = trim($name) ) {
-            $name = $this->view->asset(trim("$path/$name", '/'), $utime, $isfull);
+            $name = $this->view->asset(trim("$path/$name" . rtrim("?$utime", '?'), '/'), $isfull);
         }
         return $name;
     }
 
     // item 返回图标图片，支持返回svg源代码
-    public function item_icon($path, $image, $title = '', $utime = false) {
+    public function item_icon($path, $image, $title = '', $utime = '', $isfull = false) {
         // 如果没有图片，则返回标题名称。
         if ( ! $image = trim($image) ) return $title;
         // 如果是svg源代码，则直接返回。
         if ( preg_match('/\<svg.*?\>.*/i', $image) ) {
             return urldecode($image);
         }
-        $image = $this->view->asset(trim("$path/$image", '/'), $utime, true);
+        $image = $this->view->asset(trim("$path/$image" . rtrim("?$utime", '?'), '/'), $isfull);
         // 如是是svg图片，则返回源代码
         if ( preg_match('/.+?\.svg/i', $image) ) {
 //            return file_get_contents($image, false, stream_context_create(['ssl'=>['verify_peer'=>false, 'verify_peer_name'=>false]])); // 图标很多的时间，速度会很慢。
