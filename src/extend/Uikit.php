@@ -188,9 +188,9 @@ class Uikit {
         if ( $name == '' ) {
             return "{$this->config['uri']}assets/{$this->view->path}";
         }
-        // 动态生成占位图片：bgc.png&w=500&h=500&fit=crop-center
-        if ( strpos($name, '&w=') !== false ) {
-            return "{$this->config['uri']}glide?path=$name";
+        // 动态生成占位图片：img?w=500&h=500
+        if ( strpos($name, 'img?') !== false ) {
+            return "{$this->config['uri']}{$name}";
 //            $uikit_file_url = "{$this->config['uri']}glide?path=$name";
 //            $local_file_path = 'data/cache/uikit/glide/' . base64_encode($name) . '.png';
 //            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
@@ -198,7 +198,7 @@ class Uikit {
         }
         // $name 只有文件名，加载当前组件资源文件
         if ( preg_match('/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9]+$/', $name) === 1 ) {
-            return "{$this->config['uri']}assets/{$this->view->path}/$name";
+            return "{$this->config['uri']}assets/{$this->view->path}/{$name}";
 //            $uikit_file_url = "{$this->config['uri']}assets/{$this->view->path}/$name";
 //            $local_file_path = "data/cache/uikit/assets/{$this->view->path}/$name";
 //            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
@@ -363,34 +363,47 @@ class Uikit {
     }
 
     // item 返回图片链接
-    public function item_image($path, $image, $utime = '', $isfull = false)
-    {
-        if ( $image = trim($image) ) {
-            $image = $this->view->asset(trim("$path/$image" . rtrim("?$utime", '?'), '/'), $isfull);
+    public function item_image($path, $name, $utime = '', $isfull = false) {
+        if ( $name ) {
+            $image = $path ? trim($path, '/') . "/$name" : $name;
+            if ( ! preg_match('/^(https?:\/\/|\/\/)/i', $image) ) {
+                $image = $this->view->asset(trim($image . rtrim("?$utime", '?'), '/'), $isfull);
+            }
         } else {
             // 1像素透明图片，防止有些浏览器没有图片显示交叉图片占位符。
             $image = base64_decode('ZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFBRUFBQUFCQ0FRQUFBQzFIQXdDQUFBQUMwbEVRVlI0QVdQNHp3QUFBZ0VCQUFidktNc0FBQUFBU1VWT1JLNUNZSUk9');
         }
+
         return $image;
     }
 
     // 输出完整文件链接
     public function item_file($path, $name, $utime = '', $isfull = false) {
-        if ( $name = trim($name) ) {
-            $name = $this->view->asset(trim("$path/$name" . rtrim("?$utime", '?'), '/'), $isfull);
+        if ( $name ) {
+            $file = $path ? trim($path, '/') . "/$name" : $name;
+            if ( ! preg_match('/^(https?:\/\/|\/\/)/i', $name) ) {
+                $file = $this->view->asset(trim("$path/$name" . rtrim("?$utime", '?'), '/'), $isfull);
+            }
+        } else {
+            $file = '';
         }
-        return $name;
+
+        return $file;
     }
 
     // item 返回图标图片，支持返回svg源代码
-    public function item_icon($path, $image, $title = '', $utime = '', $isfull = false) {
+    public function item_icon($path, $name, $title = '', $utime = '', $isfull = false) {
         // 如果没有图片，则返回标题名称。
-        if ( ! $image = trim($image) ) return $title;
+        if ( ! $name = trim($name) ) return $title;
         // 如果是svg源代码，则直接返回。
-        if ( preg_match('/\<svg.*?\>.*/i', $image) ) {
-            return urldecode($image);
+        if ( preg_match('/\<svg.*?\>.*/i', $name) ) {
+            return urldecode($name);
         }
-        $image = $this->view->asset(trim("$path/$image" . rtrim("?$utime", '?'), '/'), $isfull);
+        // 站外或站内图标
+        $image = $path ? trim($path, '/') . "/$name" : $name;
+        if ( ! preg_match('/^(https?:\/\/|\/\/)/i', $image) ) {
+            $image = $this->view->asset(trim($image . rtrim("?$utime", '?'), '/'), $isfull);
+        }
         // 如是是svg图片，则返回源代码
         if ( preg_match('/.+?\.svg/i', $image) ) {
 //            return file_get_contents($image, false, stream_context_create(['ssl'=>['verify_peer'=>false, 'verify_peer_name'=>false]])); // 图标很多的时间，速度会很慢。
@@ -404,34 +417,34 @@ class Uikit {
 
     // item 返回链接数组
     public function item_link($item, $default_url = null, $default_target = null) {
-        $link = $item['link'];
         $link_url = '';
         $link_title = '';
         $link_target = '';
-
-        // 未设置链接，自动添加关联的详情页面链接
-        if ( empty($link) ) {
-            if ( empty($default_url) ) {
-                $join_alias = $this->view->setting['join.alias'];
-                $link_url = $join_alias ? $this->parseUrlItemParams($join_alias . '/id/[item.id].html', $item) : 'javascript:;';
-            }
+        // 数组链接
+        if ( isset($item['link_url']) ) {
+            $link_url = $item['link_url'];
+            $link_title = $item['link_title'];
+            $link_target = $item['link_target'];
         } else {
+            // 未设置链接，自动添加关联的详情页面链接
+            $link = $item['link'];
             // 外部链接
             if ( preg_match('/^(https?:\/\/|\/\/)/i', $link) ) {
                 $link_url = $link;
             }
-            // 数组链接
-            elseif ( isset($item['link_url']) ) {
-                $link_url = $item['link_url'];
-                $link_title = $item['link_title'];
-                $link_target = $item['link_target'];
-            }
             // JSON链接
             else {
                 $link = json_decode($link, true);
-                $link_title = $link['title'];
-                $link_url = $link['url'];
-                $link_target = $link['target'];
+                if ( empty($link['url']) ) {
+                    if ( empty($default_url) ) {
+                        $join_alias = $this->view->setting['join.alias'];
+                        $link_url = $join_alias ? $this->parseUrlItemParams($join_alias . '/id/[item.id].html', $item) : 'javascript:;';
+                    }
+                } else {
+                    $link_title = $link['title'];
+                    $link_url = $link['url'];
+                    $link_target = $link['target'];
+                }
             }
         }
 
