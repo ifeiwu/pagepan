@@ -17,11 +17,12 @@ return function () {
 
 	$config = file_get_contents('php://input');
 	$config = $config ? json_decode($config, true) : [];
-    $config['setting']['isbuilder'] = true; // 组件在编辑器里
+    $_GET['isbuilder'] = true; // 组件在编辑器里
+    $_GET['isplacehold'] = true; // 组件使用占位符图片
 
 	// 第一次加载动态组件
 	if ( $type == null ) {
-		$config['setting']['isdemo'] = true; // 显示演示数据
+        $_GET['isdemo'] = true; // 显示演示数据
 	}
 
     $view = view();
@@ -36,7 +37,6 @@ return function () {
 
 	$content = ob_get_clean();
 
-//	header('content-type:application/json');
     Response::json(['content' => $content, 'path' => "{$config['path']}"]);
 };
 
@@ -67,17 +67,12 @@ function __uikit_article($view, $config) {
 	// 获关联页面信息
 	$join_page = db()->find('page', 'id, alias, title, setting', array('id', '=', $config['setting']['join.id']));
 	// 获取关联数据源
-	if ( $join_page['setting'] )
-	{
+	if ( $join_page['setting'] ) {
 		$settings = json_decode($join_page['setting'], true);
-
-		foreach ($settings as $setting)
-		{
-			if ( $setting['join.id'] == $page_id )
-			{
+		foreach ($settings as $setting) {
+			if ( $setting['join.id'] == $page_id ) {
 				$dataset_id = $setting['dataset.id'];
 				$dataset_table = $setting['dataset.table'];
-
 				break;
 			}
 		}
