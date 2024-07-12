@@ -3,13 +3,12 @@
  * PBuilder 获取组件代码
  */
 return function () {
-	$source = false; // 组件源码
-	$type = $_GET['type']; // 组件类型
-
+    // 组件类型
+	$type = $_GET['type'];
 	if ( stripos($type, '-') !== false ) {
 		$type = explode('-', $type)[0];
 	}
-
+    // 不同类型组件调用对应函数进行处理
 	$method = '__uikit_' . $type;
 	if ( ! function_exists($method) ) {
 		$method = '__uikit_default';
@@ -19,11 +18,6 @@ return function () {
 	$config = $config ? json_decode($config, true) : [];
     $_GET['isbuilder'] = true; // 组件在编辑器里
     $_GET['isplacehold'] = true; // 组件使用占位符图片
-
-	// 第一次加载动态组件
-	if ( $type == null ) {
-        $_GET['isdemo'] = true; // 显示演示数据
-	}
 
     $view = view();
     $site = db()->select('site', ['name', 'value'], ['state', '=', 1]);

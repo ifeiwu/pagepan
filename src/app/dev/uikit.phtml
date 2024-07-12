@@ -8,7 +8,7 @@ $info = json_decode($info, true);
 
 $setting = json_decode($info['setting'], true);
 if ($setting) {
-    $_GET['isdemo'] = true; // 动态组件开启演示数据填充组件
+//    $_GET['isdemo'] = true; // 动态组件开启演示数据填充组件
     $iswrite = true; // 开启每次刷新组件重新写入缓存
 } else {
     $setting = [];
@@ -16,10 +16,10 @@ if ($setting) {
 }
 // 模拟组件拖到 PBuilder 的效果
 if ($_GET['isbuilder']) {
-//    $_GET['isbuilder'] = true;
     echo '<script>pagevar.isBuilder = true; $("body").addClass("_component_");</script>';
 }
 
+// 输出组件内容
 echo $this->uikit->getContent($path, ['setting' => $setting], $iswrite);
 
 // 开启背景和前景色反转的主题

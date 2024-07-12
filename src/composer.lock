@@ -2461,16 +2461,16 @@
         },
         {
             "name": "qcloud/cos-sdk-v5",
-            "version": "v2.6.10",
+            "version": "v2.6.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tencentyun/cos-php-sdk-v5.git",
-                "reference": "ab37936e870459d662281e5a3e9756ce97f8a4d3"
+                "reference": "9d15abf21840c0418e197afd5c6c6ff1891009b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tencentyun/cos-php-sdk-v5/zipball/ab37936e870459d662281e5a3e9756ce97f8a4d3",
-                "reference": "ab37936e870459d662281e5a3e9756ce97f8a4d3",
+                "url": "https://api.github.com/repos/tencentyun/cos-php-sdk-v5/zipball/9d15abf21840c0418e197afd5c6c6ff1891009b0",
+                "reference": "9d15abf21840c0418e197afd5c6c6ff1891009b0",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2530,9 +2530,9 @@
             ],
             "support": {
                 "issues": "https://github.com/tencentyun/cos-php-sdk-v5/issues",
-                "source": "https://github.com/tencentyun/cos-php-sdk-v5/tree/v2.6.10"
+                "source": "https://github.com/tencentyun/cos-php-sdk-v5/tree/v2.6.12"
             },
-            "time": "2024-05-17T07:44:52+00:00"
+            "time": "2024-07-10T09:20:08+00:00"
         },
         {
             "name": "ralouphie/getallheaders",

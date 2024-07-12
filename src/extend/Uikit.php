@@ -178,8 +178,12 @@ class Uikit {
     }
 
     // 返回组件资源链接
-    public function assets($name = '')
+    public function assets($name = '', $placehold = null)
     {
+        // 开启图片占位符
+        if ($_GET['isplacehold'] && !empty($placehold)) {
+            return "{$this->config['uri']}{$placehold}";
+        }
         // 返回站外资源链接
         if ( preg_match('/^(https?:\/\/|\/\/)/i', $name) ) {
             return $name;
@@ -191,18 +195,10 @@ class Uikit {
         // 动态生成占位图片：img?w=500&h=500
         if ( strpos($name, 'img?') !== false ) {
             return "{$this->config['uri']}{$name}";
-//            $uikit_file_url = "{$this->config['uri']}glide?path=$name";
-//            $local_file_path = 'data/cache/uikit/glide/' . base64_encode($name) . '.png';
-//            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
-//            return $local_file_path;
         }
         // $name 只有文件名，加载当前组件资源文件
         if ( preg_match('/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9]+$/', $name) === 1 ) {
             return "{$this->config['uri']}assets/{$this->view->path}/{$name}";
-//            $uikit_file_url = "{$this->config['uri']}assets/{$this->view->path}/$name";
-//            $local_file_path = "data/cache/uikit/assets/{$this->view->path}/$name";
-//            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
-//            return ROOT_URL . $local_file_path;
         }
         // $name 包含目录和文件名
         if ( preg_match('/^.+\/[^\/]+\.[^\/]+$/', $name) ) {
@@ -215,9 +211,6 @@ class Uikit {
         }
         // $name 只有目录路径，返回指定组件资源目录路径
         return "{$this->config['uri']}assets/" . trim($name);
-        /*if ( ! preg_match('/\.[^\/]+$/', $name)) {
-            return "{$this->config['uri']}assets/" . trim($name);
-        }*/
     }
 
     // 保存远程资源文件到本地目录
