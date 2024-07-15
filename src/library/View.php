@@ -127,7 +127,12 @@ class View
         if ( is_array($name) ) {
             $this->data = array_merge($this->data, $name);
         } else {
-            $this->data[$name] = $value;
+            if ( strpos($name, '.') ) {
+                list($name1, $name2) = explode('.', $name);
+                $this->data[$name1][$name2] = $value;
+            } else {
+                $this->data[$name] = $value;
+            }
         }
     }
 

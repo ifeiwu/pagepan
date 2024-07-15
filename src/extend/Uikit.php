@@ -324,7 +324,7 @@ class Uikit {
             }
         }
 
-        if (!isset($_GET['isbuilder'])) {
+        if (!$_GET['isbuilder']) {
             return $attrs;
         } else {
             if ($prefix == 'component' || $prefix == 'container') {

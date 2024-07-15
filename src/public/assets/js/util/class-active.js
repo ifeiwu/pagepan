@@ -10,7 +10,7 @@ define(function () {
             
             if ( ! $li.is('.active') )
             {
-                let alias = pagevar.palias ? pagevar.palias : pagevar.page_alias ? pagevar.page_alias : '';
+                let alias = pagevar.join_alias ? pagevar.join_alias : pagevar.page_alias ? pagevar.page_alias : '';
                 
                 alias = alias.indexOf('/') > 0 ? alias.split('/')[0] : alias;
                 
@@ -19,7 +19,7 @@ define(function () {
             
             if ( ! $li.is('.active') )
             {
-                $component.find('a[active~="' + pagevar.page_alias + '"],a[active~="' + pagevar.palias + '"],a[active="' + pagevar.get_pid + '"]').parent('li').addClass('active');
+                $component.find('a[active~="' + pagevar.page_alias + '"],a[active~="' + pagevar.join_alias + '"],a[active="' + pagevar.get_pid + '"]').parent('li').addClass('active');
             }
             
             $component.find('a[href="#"],a[href="/"],a[href="./"]').parent('li').addClass('active');
