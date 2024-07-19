@@ -25,7 +25,3 @@
 html, body {
     height: 100%;
 }
-
-a {
-	transition: color .25s, background-color .25s;
-}
