@@ -5,23 +5,23 @@ $theme_screen = $theme['screen'];
 <!DOCTYPE html>
 <html lang="<?=$theme['base']['lang']; ?>" class="-<?=str_replace('/', '-', $page['page_alias'] ?: 'index'); ?>">
     <head>
-        <base href="<?=ROOT_URL; ?>">
+        <base href="<?=ROOT_URL?>">
         <meta charset="utf-8">
         <meta name="renderer" content="webkit">
         <meta name="force-rendering" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
-        <?php if ( ! $theme_screen ): ?>
+        <?php if (! $theme_screen):?>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
         <meta name="applicable-device" content="pc,mobile">
-        <?php elseif ( $theme_screen == 'pc'): ?>
+        <?php elseif ($theme_screen == 'pc'):?>
         <meta name="applicable-device" content="pc">
-        <?php elseif ( $theme_screen == 'mobile'): ?>
+        <?php elseif ($theme_screen == 'mobile'):?>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
         <meta name="applicable-device" content="mobile">
         <?php endif;?>
-        <title><?=$this->seo['title']; ?></title>
-        <meta name="keywords" content="<?=$this->seo['keywords']; ?>">
-        <meta name="description" content="<?=$this->seo['description']; ?>">
+        <title><?=$this->seo['title']?></title>
+        <meta name="keywords" content="<?=$this->seo['keywords']?>">
+        <meta name="description" content="<?=$this->seo['description']?>">
 
         <script>
             if ( "ActiveXObject" in window || ! CSS.supports('container-type', 'inline-size') ) {
@@ -70,15 +70,15 @@ $theme_screen = $theme['screen'];
         <?php
         echo '<script src="' . $this->asset('assets/js/app/main.js') . '" type="text/javascript"></script>';
         // 全局脚本
-        if ( $this->site['open_global_js'] ) { echo '<script src="' . $this->asset('assets/js/global.js') . '" type="text/javascript"></script>'; }
+        if ($this->site['open_global_js']) { echo '<script src="' . $this->asset('assets/js/global.js') . '" type="text/javascript"></script>'; }
         // 全局页脚
-        if ( $this->site['open_footer_php'] ) { include ROOT_PATH . 'data/php/footer.inc'; }
+        if ($this->site['open_footer_php']) { include ROOT_PATH . 'data/php/footer.inc'; }
         // 在线客服
-        if ( $this->site['service3_open'] == 1 ) { echo html_decode(base64_decode($this->site['service3_code'])); }
+        if ($this->site['service3_open'] == 1) { echo html_decode(base64_decode($this->site['service3_code'])); }
         // 社交分享
-        if ( $this->site['share3_open'] == 1 ) { echo html_decode(base64_decode($this->site['share3_code'])); }
+        if ($this->site['share3_open'] == 1) { echo html_decode(base64_decode($this->site['share3_code'])); }
         // 流量统计
-        if ( $this->site['stats3_open'] == 1 ) { echo html_decode(base64_decode($this->site['stats3_code'])); }
+        if ($this->site['stats3_open'] == 1) { echo html_decode(base64_decode($this->site['stats3_code'])); }
         ?>
     </body>
 </html>
