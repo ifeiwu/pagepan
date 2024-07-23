@@ -1,5 +1,5 @@
 <?php
 return [
-    'domain' => 'yun.pagepan.com',
-    'version' => '8.0'
+    'domain' => 'yun8.pagepan.com',
+    'version' => ''
 ];

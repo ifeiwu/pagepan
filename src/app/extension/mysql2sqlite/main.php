@@ -1,5 +1,5 @@
 <?php
 return function () {
-
-    view()->display('extension/mysql2sqlite/main');
+    $view = view();
+    $view->display('extension/mysql2sqlite/main');
 };

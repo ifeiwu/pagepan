@@ -25,34 +25,37 @@ gulp.task('copy', function () {
 		'!src/config/*.dev.php',
 		'!src/data/cache/**/*',
 		'!src/data/logs/**/*',
-		'!src/data/sqlite/pagepan-dev.db',
-		'!src/data/sqlite/pagepan-test.db',
+		'!src/data/sqlite/**/*',
+		'src/data/sqlite/pagepan.db',
+		'src/data/sqlite/demo.db',
 		'!src/public/*',
 		'src/public/index.php',
-		'src/public/.htaccess',
 		'src/public/robots.txt',
-		'!src/public/data/**/*',
+		'src/public/.htaccess',
+		'!src/public/data/file/**/*',
+		'!src/public/data/json/**/*',
+		'!src/public/data/pack/**/*',
 		'!src/public/assets/fonts/**/*',
 		'!src/public/assets/i18n/**/*',
 		'!src/public/assets/**/*.{css,js,html,md}',
-    ], {base: 'src'})
+    ], { base: 'src', dot: true })
         .pipe(gulp.dest('dist'));
 });
 
 gulp.task('js', function () {
-	return gulp.src(['src/public/assets/**/*.js'], {base: 'src'})
+	return gulp.src(['src/public/assets/**/*.js'], { base: 'src' })
 		.pipe(uglify({compress: true, mangle: {reserved: ['require', 'exports', 'module', '$']}}))
 		.pipe(gulp.dest('dist'));
 });
 
 gulp.task('css', function () {
-	return gulp.src(['src/public/assets/**/*.css', '!src/public/assets/fonts/**'], {base: 'src'})
+	return gulp.src(['src/public/assets/**/*.css', '!src/public/assets/fonts/**'], { base: 'src' })
 		.pipe(postcss([autoprefixer(), cssnano()]))
 		.pipe(gulp.dest('dist'));
 });
 
 gulp.task('html', function () {
-	return gulp.src(['src/public/assets/**/*.html'], {base: 'src'})
+	return gulp.src(['src/public/assets/**/*.html'], { base: 'src' })
 		.pipe(htmlmin({collapseWhitespace: true}))
 		.pipe(gulp.dest('dist'));
 });
@@ -61,13 +64,13 @@ gulp.task('config', function (done) {
 	var base = fs.readFileSync('dist/base.php', 'utf8');
 	base = base.replace("define('RUN_MODE', 'dev');", "define('RUN_MODE', 'prod');");
 	base = base.replace("define('BUILD_TIME', '');", "define('BUILD_TIME', '" + (new Date().getTime()) + "');");
-	fs.writeFile('dist/base.php', Buffer.from(base), {flag: 'w'}, function(error, data) {});
+	fs.writeFile('dist/base.php', Buffer.from(base), { flag: 'w' }, function(error, data) {});
 
 	done();
 });
 
 gulp.task('install.zip', function () {
-    return gulp.src('dist/**')
+    return gulp.src('dist/**', { dot: true })
 		.pipe(zip('install.zip'))
 		.pipe(gulp.dest('pack'));
 });
@@ -75,14 +78,15 @@ gulp.task('install.zip', function () {
 gulp.task('upgrade.zip', function () {
 	return gulp.src([
 		'dist/**',
-		'!dist/data/**/*',
+		'!dist/data/**',
 		'!dist/config/cache.php',
 		'!dist/config/session.php',
 		'!dist/config/smtp.php',
+		'!dist/public/data/**',
 		'!dist/public/assets/css/pagepan.css',
 		'!dist/public/assets/css/theme.css',
 		'!dist/robots.txt'
-	])
+	], { dot: true })
 		.pipe(zip('upgrade.zip'))
 		.pipe(gulp.dest('pack'));
 });

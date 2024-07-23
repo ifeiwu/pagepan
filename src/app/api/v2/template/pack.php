@@ -19,7 +19,8 @@ return function ($request_data) {
             ->exclude('data/cache')
             ->exclude('public/data/pack')
             ->notPath('install.lock')
-            ->notPath('config/apikey.php')
+            ->notPath('app/api/token.php')
+            ->notPath('app/extension/token.php')
             ->in(ROOT_PATH);
 
         $zipFile->addFromFinder($finder);

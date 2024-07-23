@@ -1,7 +1,6 @@
 <?php
 return function () {
-    if ( isset($_SERVER) )
-    {
+    if ( isset($_SERVER) ) {
         if ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
             $realip = $_SERVER['HTTP_X_FORWARDED_FOR'];
             $realip = explode(',', $realip);
@@ -12,9 +11,7 @@ return function () {
         } else {
             $realip = $_SERVER['REMOTE_ADDR'];
         }
-    }
-    else
-    {
+    } else {
         if ( getenv('HTTP_X_FORWARDED_FOR') ) {
             $realip = getenv('HTTP_X_FORWARDED_FOR');
             $realip = explode(',', $realip);

@@ -16,6 +16,6 @@ class TokenAuth implements iAuthenticate {
     }
 
     function key() {
-        return require ROOT_PATH . 'config/apikey.php';
+        return require APP_PATH . 'api/token.php';
     }
 }

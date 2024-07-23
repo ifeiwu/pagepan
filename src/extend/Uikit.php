@@ -158,22 +158,13 @@ class Uikit {
     // 查询演示数据
     public function demodb($table, $columns = '*', $wheres = [], $order = null, $limit = null, $number = null)
     {
-        $token = require CONF_PATH . 'apikey.php';
+        $token = require APP_PATH . 'api/token.php';
         $url = Request::rootUrl(true) . 'api/v2/demo/select';
-        $data = [
-            'table' => $table,
-            'columns' => $columns,
-            'wheres' => $wheres,
-            'order' => $order,
-            'limit' => $limit,
-            'number' => $number
-        ];
-
+        $data = ['table' => $table, 'columns' => $columns, 'wheres' => $wheres, 'order' => $order, 'limit' => $limit, 'number' => $number];
         $res = helper('curl/api', [$url, $data, $token]);
         if ( $res['code'] != 0 ) {
             throw new Exception($res['message']);
         }
-
         return $res['data'];
     }
 
