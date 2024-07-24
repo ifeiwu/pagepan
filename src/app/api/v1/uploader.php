@@ -49,8 +49,8 @@ class Uploader extends Base {
                 }
                 
                 $handle->png_compression = 9;
-                $handle->jpeg_quality = 100;
-                $handle->webp_quality = 100;
+                $handle->jpeg_quality = 95;
+                $handle->webp_quality = 95;
                 $handle->file_overwrite = true;
                 
                 $handle->Process($this->upload_root . $file_save_path);

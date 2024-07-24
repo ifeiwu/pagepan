@@ -3,27 +3,18 @@ class Config
 {
 	private static $config = [];
 
-    public static function file($name)
+    public static function file($name, $key = null)
     {
-        if ( ! isset(self::$config[$name]) )
-        {
+        if ( ! isset(self::$config[$name]) ) {
             $filename = RUN_MODE != 'dev' ? $name : "{$name}.dev";
-
             self::$config[$name] = require CONF_PATH . "{$filename}.php";
         }
 
-        return self::$config[$name];
-    }
-
-    public static function load($name, $key = null)
-    {
-        self::file($name);
-
-        if ( is_string($key) ) {
-            return self::$config[$name][$key];
+        if ( is_null($key) ) {
+            return self::$config[$name];
         }
 
-        return self::$config[$name];
+        return self::$config[$name][$key];
     }
 
 	public static function get($name)

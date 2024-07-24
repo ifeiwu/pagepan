@@ -2,7 +2,7 @@
 date_default_timezone_set('Asia/Shanghai');
 
 define('BUILD_TIME', ''); // 项目构建时间
-define('RUN_MODE', 'dev'); // 开发环境
+define('RUN_MODE', gethostname()); // 开发环境
 define('APP_PATH', ROOT_PATH . 'app/');
 define('LIB_PATH', ROOT_PATH . 'library/');
 define('EXT_PATH', ROOT_PATH . 'extend/');

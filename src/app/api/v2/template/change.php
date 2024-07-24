@@ -3,7 +3,7 @@
 return function ($request_data) {
     $version = $request_data['version'];
 
-    if ( Config::load('db', 'type') != 'sqlite' ) {
+    if ( Config::file('db', 'type') != 'sqlite' ) {
         Response::error('目录只支持 SQLite 数据库更换网站模板！');
     }
 

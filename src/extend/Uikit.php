@@ -162,10 +162,19 @@ class Uikit {
         $url = Request::rootUrl(true) . 'api/v2/demo/select';
         $data = ['table' => $table, 'columns' => $columns, 'wheres' => $wheres, 'order' => $order, 'limit' => $limit, 'number' => $number];
         $res = helper('curl/api', [$url, $data, $token]);
+
         if ( $res['code'] != 0 ) {
             throw new Exception($res['message']);
         }
-        return $res['data'];
+
+        // 图片路径添加 uikit 链接地址
+        $uikit_uri = Config::file('uikit', 'uri');
+        $items = $res['data'];
+        foreach ($items as $i => $item) {
+            $items[$i]['path'] = $uikit_uri . $item['path'];
+        }
+
+        return $items;
     }
 
     // 返回组件资源链接
