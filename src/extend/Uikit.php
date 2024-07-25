@@ -361,6 +361,8 @@ class Uikit {
             $image = $path ? trim($path, '/') . "/$name" : $name;
             if ( ! preg_match('/^(https?:\/\/|\/\/)/i', $image) ) {
                 $image = $this->view->asset(trim($image . rtrim("?$utime", '?'), '/'), $isfull);
+            } else {
+                $image = $name;
             }
         } else {
             // 1像素透明图片，防止有些浏览器没有图片显示交叉图片占位符。
