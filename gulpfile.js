@@ -78,7 +78,10 @@ gulp.task('install.zip', function () {
 gulp.task('upgrade.zip', function () {
 	return gulp.src([
 		'dist/**',
-		'!dist/data/**',
+		'!dist/data/css/**',
+		'!dist/data/js/**',
+		'!dist/data/php/**',
+		'!dist/data/sqlite/pagepan.db',
 		'!dist/config/cache.php',
 		'!dist/config/session.php',
 		'!dist/config/smtp.php',
