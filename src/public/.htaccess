@@ -1,16 +1,14 @@
 RewriteEngine On
-
-# 允许 Ajax 跨域请求
+# CORS 跨域设置
 Header add Access-Control-Allow-Origin "*"
-Header add Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
+Header add Access-Control-Allow-Methods "GET, PUT, POST, DELETE"
 Header add Access-Control-Allow-Headers "Content-Type, Authorization"
-
-# 允许 iframe 跨域嵌套页面
+# iframe 跨域设置
 Header always unset X-Frame-Options
-
+# URL 重写规则
 RewriteRule ^$ index.php [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
-
+# PHP 访问认证信息
 SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0

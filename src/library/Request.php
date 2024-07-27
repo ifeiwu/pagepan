@@ -45,16 +45,16 @@ class Request
     // Body 请求
     public static function body($name = null, $type = '*', $default = null)
     {
-        $json = file_get_contents('php://input');
-        $data = $json ? json_decode($json, true) : [];
-
+        $input = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        $data = !is_null($data) ? $data : [];
         return self::input($data, $name, $type, $default);
     }
 
     // 请求处理
     public static function input($data, $name = null, $type = '*', $default = null)
     {
-        if ($name !== null) {
+        if (!is_null($name)) {
             $value = isset($data[$name]) ? $data[$name] : $default;
             $type = !is_callable($type) ? $type : 'object';
 

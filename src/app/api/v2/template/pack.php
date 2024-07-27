@@ -4,7 +4,6 @@ return function ($request_data) {
     $zip_path = WEB_ROOT . 'data/pack/';
     $zip_name = 'template.zip';
     $zip_file = $zip_path . $zip_name;
-
     if ( ! FS::rmkdir($zip_path) ) {
         Response::error('创建目录失败：' . $zip_path);
     }
@@ -14,6 +13,7 @@ return function ($request_data) {
         $zipFile = new \PhpZip\ZipFile();
         $finder = (new \Symfony\Component\Finder\Finder())
             ->exclude('.git')
+            ->exclude('data/!backup')
             ->exclude('data/backup')
             ->exclude('data/logs')
             ->exclude('data/cache')

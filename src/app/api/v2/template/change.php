@@ -10,7 +10,6 @@ return function ($request_data) {
     $zip_path = DATA_PATH . 'backup/';
     $zip_name = 'template-' . date('Ymdhi') . '.zip';
     $zip_file = $zip_path . $zip_name;
-
     if ( ! FS::rmkdir($zip_path) ) {
         Response::error('创建目录失败：' . $zip_path);
     }
@@ -22,6 +21,7 @@ return function ($request_data) {
         $finder = (new \Symfony\Component\Finder\Finder())
             ->exclude('.git')
             ->exclude('vendor')
+            ->exclude('data/!backup')
             ->exclude('data/backup')
             ->exclude('data/cache')
             ->exclude('data/pack')
@@ -51,7 +51,6 @@ return function ($request_data) {
     // 执行更新文件
     $url = $request_data['domain'] . '/template.php';
     $data = ['demo' => $request_data['demo'], 'version' => $version]; // 更换模板的URL
-
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -64,9 +63,7 @@ return function ($request_data) {
     curl_close($ch);
 
     $res = json_decode($res, true);
-
-    if ( $res['code'] == 1 )
-    {
+    if ( $res['code'] == 1 ) {
         Response::error($res['message']);
     }
 

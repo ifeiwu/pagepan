@@ -1,5 +1,4 @@
 <?php
-
 use utils\FS;
 use utils\Log;
 
@@ -17,45 +16,31 @@ class Base {
 
     protected $site;
 
-
     public function __construct()
     {
         $this->admin = $_REQUEST['admin'];
-        
-        if ( ! $this->admin )
-        {
+        if (!$this->admin) {
             $data = json_decode(file_get_contents('php://input'), true);
-            
             $this->admin = $data['admin'];
-
-            if ( ! $this->admin )
-            {
+            if (!$this->admin) {
                 $this->admin = db_get('admin', 'id,name,rbac', ['id', '=', 1]);
             }
         }
 
         $site = db_all('site');
-
-        foreach ($site as $v)
-        {
+        foreach ($site as $v) {
             $this->site[$v['name']] = $v['value'];
         }
 
-        if ( $this->table )
-        {
+        if ($this->table) {
             // 当前数据表所有字段名称
             $this->fields = db_table_columns($this->table);
-
             // 默认数据的排序方式
             $this->order = array();
-
-            if ( in_array('sortby', $this->fields) )
-            {
+            if (in_array('sortby', $this->fields)) {
                 $this->order['sortby'] = 'DESC';
             }
-
-            if ( in_array('ctime', $this->fields) )
-            {
+            if (in_array('ctime', $this->fields)) {
                 $this->order['ctime'] = 'DESC';
             }
         }
@@ -81,17 +66,13 @@ class Base {
         return $this->_result(0, $message, $data);
     }
 
-    // 返回数据格式    
+    // 返回数据格式
     protected function _result($code = 0, $message = '', $data = null)
     {
         $res = ['code' => $code, 'message' => '', 'data' => $data];
-    
-        if ( is_array($message) )
-        {
+        if (is_array($message)) {
             $res['data'] = $message;
-        }
-        else
-        {
+        } else {
             $res['message'] = $message;
         }
 
@@ -102,31 +83,22 @@ class Base {
     protected function _bulidData($request_data)
     {
         $data = array();
-
-        foreach ($this->fields as $field)
-        {
+        foreach ($this->fields as $field) {
             $value = $request_data[$field];
-			
-            if ( !is_null($value) )
-            {
+            if (!is_null($value)) {
                 $data[$field] = is_array($value) ? json_encode($value, JSON_UNESCAPED_UNICODE) : $this->_encode($value);
             }
         }
-
         // 创建时间，时分秒自动获取
-        if ( isset($request_data['ctime']) )
-        {
+        if (isset($request_data['ctime'])) {
             $data['ctime'] = strtotime($request_data['ctime']);
         }
-
         // 防止有些数据库字段整型（int），空字符串不能转0导致异常。
-        if ( $data['state'] === '' )
-        {
+        if ($data['state'] === '') {
             unset($data['state']);
         }
-        
-        if ( $data['pid'] === '' )
-        {
+
+        if ($data['pid'] === '') {
             unset($data['pid']);
         }
 
@@ -136,20 +108,17 @@ class Base {
     // 数据安全编码
     protected function _encode($data)
     {
-        if ( is_array($data) )
-        {
+        if (is_array($data)) {
             return array_map(array($this, '_encode'), $data);
         }
 
-        if ( is_object($data) )
-        {
+        if (is_object($data)) {
             $tmp = clone $data; // 避免修改原始对象
-            
-            foreach ($data as $k => $v)
-            {
+
+            foreach ($data as $k => $v) {
                 $tmp->{$k} = $this->_encode($v);
             }
-            
+
             return $tmp;
         }
 
@@ -162,20 +131,17 @@ class Base {
     // 数据安全解码
     protected function _decode($data)
     {
-        if ( is_array($data) )
-        {
+        if (is_array($data)) {
             return array_map(array($this, '_decode'), $data);
         }
 
-        if ( is_object($data) )
-        {
+        if (is_object($data)) {
             $tmp = clone $data; // 避免修改原始对象
-            
-            foreach ($data as $k => $v)
-            {
+
+            foreach ($data as $k => $v) {
                 $tmp->{$k} = $this->_decode($v);
             }
-            
+
             return $tmp;
         }
 
@@ -205,8 +171,7 @@ class Base {
     // 回调对象函数
     protected function _callback($method, $params)
     {
-        if ( is_callable(array($this, $method)) !== false )
-        {
+        if (is_callable(array($this, $method)) !== false) {
             call_user_func_array(array($this, $method), $params);
         }
     }
@@ -216,29 +181,21 @@ class Base {
     {
         static $list = array();
 
-        if ( $pid === '' )
-        {
+        if ($pid === '') {
             $pid = db_get($this->table, 'pid', array('id', '=', $id), null, 0);
         }
 
-        if ( $pid != 0 )
-        {
+        if ($pid != 0) {
             $list[] = $pid;
             $this->_getLevel('', $pid);
         }
 
-        if ( count($list) == 0 )
-        {
+        if (count($list) == 0) {
             return ',' . $id . ',';
-        }
-        else
-        {
-            if ( $id )
-            {
+        } else {
+            if ($id) {
                 return ',' . implode(',', array_reverse($list)) . ',' . $id . ',';
-            }
-            else
-            {
+            } else {
                 return ',' . implode(',', array_reverse($list)) . ',';
             }
         }
@@ -247,12 +204,9 @@ class Base {
     //保存数据（添加/更新）
     protected function _saveData($table, $data, $where)
     {
-		if ( db_has($table, $where) )
-        {
+        if (db_has($table, $where)) {
             return db_update($table, $data, $where);
-        }
-        else
-        {
+        } else {
             return db_insert($table, $data);
         }
     }
@@ -261,11 +215,8 @@ class Base {
     protected function _getSite($where = [])
     {
         $site = [];
-        
         $datas = db_all('site', ['name', 'value'], $where);
-
-        foreach ($datas as $data)
-        {
+        foreach ($datas as $data) {
             $site[$data['name']] = $data['value'];
         }
 
@@ -286,23 +237,19 @@ class Base {
         $data['pid'] = $pid;
         $data['ctime'] = time();
 
-        foreach ($images_id as $i => $id)
-        {
+        foreach ($images_id as $i => $id) {
             $data['title'] = $images_title[$i];
             $data['orderby'] = $images_order[$i];
             $data['state'] = $images_state[$i];
 
-            if ( empty($id) )
-            {
+            if (empty($id)) {
                 $data['image'] = $images_name[$i];
                 $data['image_path'] = $images_path[$i];
 
                 db_insert($this->table, $data);
 
                 unset($data['image'], $data['image_path']);
-            }
-            else
-            {
+            } else {
                 db_update($this->table, $data, array('id', '=', $id));
             }
         }
@@ -312,53 +259,41 @@ class Base {
     protected function _removeFiles2($files)
     {
         $remove_files = [];
-        
-        if ( ! empty($files) && ! is_array($files) )
-        {
+
+        if (!empty($files) && !is_array($files)) {
             $files = json_decode($files, true);
         }
 
-        if ( empty($files) )
-        {
+        if (empty($files)) {
             return $remove_files;
         }
-        
-        foreach ($files as $key => $value)
-        {
-            $name = $value['name'];
 
-            if ( ! $name )
-            {
+        foreach ($files as $key => $value) {
+            $name = $value['name'];
+            if (!$name) {
                 continue;
             }
 
             $path = WEB_ROOT . $value['path'];
-
             $filename = $path . '/' . $name;
-
-            if ( file_exists($filename) && unlink($filename) )
-            {
+            if (file_exists($filename) && unlink($filename)) {
                 $remove_files[] = $filename;
             }
 
             $prefix = $value['prefix'] ?: 's_,m_,l_,';
-
-            if ( $prefix )
-            {
+            if ($prefix) {
                 $prefixs = explode(',', $prefix);
 
-                foreach ($prefixs as $prefix)
-                {
+                foreach ($prefixs as $prefix) {
                     $filename = "{$path}/{$prefix}{$name}";
 
-                    if ( file_exists($filename) && unlink($filename) )
-                    {
+                    if (file_exists($filename) && unlink($filename)) {
                         $remove_files[] = $filename;
                     }
                 }
             }
         }
-        
+
         return $remove_files;
     }
 
@@ -371,22 +306,18 @@ class Base {
         $path_last = end($temp_dirs);
 
         //如果上传路径是ID，不做重命名处理
-        if ( $path_last == $id )
-        {
+        if ($path_last == $id) {
             return $temp_path;
         }
 
-        if ( strpos($path_last, '!=') !== false )
-        {
+        if (strpos($path_last, '!=') !== false) {
             $vardir = current(explode('!=', $path_last));
-			
+
             $true_path = str_replace($path_last, $data[$vardir], $temp_path);
         }
 
-        if ( is_dir(WEB_ROOT . $temp_path) )
-        {
-            if ( FS::rcopy(WEB_ROOT . $temp_path, WEB_ROOT . $true_path) )
-            {
+        if (is_dir(WEB_ROOT . $temp_path)) {
+            if (FS::rcopy(WEB_ROOT . $temp_path, WEB_ROOT . $true_path)) {
                 FS::rrmdir(WEB_ROOT . $temp_path);
             }
         }
@@ -398,28 +329,19 @@ class Base {
     protected function _toTree($list, $pk = 'id', $pid = 'pid', $child = '_child', $root = 0)
     {
         $tree = array();
-
-        if (is_array($list))
-        {
+        if (is_array($list)) {
             $refer = array();
-
-            foreach ($list as $key => $data)
-            {
+            foreach ($list as $key => $data) {
                 $refer[$data[$pk]] = &$list[$key];
             }
 
-            foreach ($list as $key => $data)
-            {
+            foreach ($list as $key => $data) {
                 $parentId = $data[$pid];
 
-                if ($root == $parentId)
-                {
+                if ($root == $parentId) {
                     $tree[] = &$list[$key];
-                }
-                else
-                {
-                    if (isset($refer[$parentId]))
-                    {
+                } else {
+                    if (isset($refer[$parentId])) {
                         $parent = &$refer[$parentId];
                         $parent[$child][] = &$list[$key];
                     }
@@ -433,30 +355,25 @@ class Base {
     // 生成随机字符串
     protected function _rand($length, $islowercase = true, $isuppercase = true, $isnumber = true, $isspecial = false)
     {
-        if ($islowercase)
-        {
+        if ($islowercase) {
             $chars .= 'abcdefghijklmnopqrstuvwxyz';
         }
 
-        if ($isuppercase)
-        {
+        if ($isuppercase) {
             $chars .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         }
 
-        if ($isnumber)
-        {
+        if ($isnumber) {
             $chars .= '0123456789';
         }
 
-        if ($isspecial)
-        {
+        if ($isspecial) {
             $chars .= '!@#$%^&*()';
         }
 
         $result = '';
         $max = strlen($chars) - 1;
-        for ($i = 0; $i < $length; $i++)
-        {
+        for ($i = 0; $i < $length; $i++) {
             $result .= $chars[rand(0, $max)];
         }
         return $result;
@@ -465,14 +382,10 @@ class Base {
     // 字符串编码转换
     protected function _GBK2UTF8($str)
     {
-        $e = mb_detect_encoding($str, array('UTF-8', 'GBK','GB2312'));
-
-        if ($e == 'UTF-8')
-        {
+        $e = mb_detect_encoding($str, array('UTF-8', 'GBK', 'GB2312'));
+        if ($e == 'UTF-8') {
             return $str;
-        }
-        elseif ($e == 'GBK')
-        {
+        } elseif ($e == 'GBK') {
             return iconv('GBK', 'UTF-8', $str);
         }
 
@@ -494,39 +407,26 @@ class Base {
     //获取客户端IP地址
     protected function _getIP()
     {
-        if (isset($_SERVER))
-        {
-            if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
-            {
+        if (isset($_SERVER)) {
+            if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
                 $realip = $_SERVER["HTTP_X_FORWARDED_FOR"];
                 $realip = explode(",", $realip);
                 $realip = $realip[0];
                 $realip = empty($realip) ? ($_SERVER["REMOTE_ADDR"]) : ($realip);
-            }
-            elseif (isset($_SERVER["HTTP_CLIENT_IP"]))
-            {
+            } elseif (isset($_SERVER["HTTP_CLIENT_IP"])) {
                 $realip = $_SERVER["HTTP_CLIENT_IP"];
-            }
-            else
-            {
+            } else {
                 $realip = $_SERVER["REMOTE_ADDR"];
             }
-        }
-        else
-        {
-            if (getenv("HTTP_X_FORWARDED_FOR"))
-            {
+        } else {
+            if (getenv("HTTP_X_FORWARDED_FOR")) {
                 $realip = getenv("HTTP_X_FORWARDED_FOR");
                 $realip = explode(",", $realip);
                 $realip = $realip[0];
                 $realip = empty($realip) ? ($_SERVER["REMOTE_ADDR"]) : ($realip);
-            }
-            elseif (getenv("HTTP_CLIENT_IP"))
-            {
+            } elseif (getenv("HTTP_CLIENT_IP")) {
                 $realip = getenv("HTTP_CLIENT_IP");
-            }
-            else
-            {
+            } else {
                 $realip = getenv("REMOTE_ADDR");
             }
         }
@@ -555,22 +455,19 @@ class Base {
     protected function _backupsql($sqlname = null)
     {
         $dbconf = config('db');
-        
-        if ( $dbconf['type'] == 'sqlite' ) { return true; }
-        
-        $sqlname = $sqlname ?: date('Ymdhis');
+        if ($dbconf['type'] == 'sqlite') {
+            return true;
+        }
 
+        $sqlname = $sqlname ?: date('Ymdhis');
         $mb = new MySQLBackup($dbconf['host'], $dbconf['user'], $dbconf['pass'], $dbconf['name'], $dbconf['port']);
         $mb->addCreateDatabaseIfNotExists(false);
         $mb->setFilename(DATA_PATH . 'sql/' . $sqlname);
         $mb->dump();
 
-        if ( is_file(DATA_PATH . 'sql/' . $sqlname . '.sql') )
-        {
+        if (is_file(DATA_PATH . 'sql/' . $sqlname . '.sql')) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -579,36 +476,26 @@ class Base {
     // 添加需要同步的文件到 json 文件
     protected function _add_sync_files($files, $dirs = [])
     {
-        if ( $this->site['cdn_type'] )
-        {
+        if ($this->site['cdn_type']) {
             // 获取目录下所有文件
-            if ( is_array($dirs) )
-            {
-                foreach ($dirs as $dir)
-                {
+            if (is_array($dirs)) {
+                foreach ($dirs as $dir) {
                     FS::toFiles($dir, $files, true);
                 }
             }
 
             $json_path = WEB_ROOT . 'data/json/';
-            
             FS::rmkdir($json_path);
-            
             $json_file = $json_path . 'sync-files.json';
-
             $_files = FS::jsonp($json_file);
-
             $files = array_merge($files, $_files);
-
             FS::jsonp($json_file, $files);
         }
     }
 
 
     // 操作日志
-    protected function _log($type, $data = array())
-    {
-
+    protected function _log($type, $data = array()) {
         return true;
 
         /* if ($type != 'login')
@@ -625,5 +512,4 @@ class Base {
 
         return db_insert('log', $data); */
     }
-
 }

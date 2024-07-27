@@ -59,14 +59,11 @@ define('ROOT_URL', Request::rootUrl());
 define('ROUTE_URL', Request::routeUrl());
 
 // API 允许前端跨域请求
-if ( strpos(ROUTE_URL, '/api/') === 0 )
-{
-    if ( isset($_SERVER['HTTP_ORIGIN']) )
-    {
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Headers: *');
-        header('Access-Control-Allow-Methods: *');
-
+if ( strpos(ROUTE_URL, '/api/') === 0 ) {
+    if ( isset($_SERVER['HTTP_ORIGIN']) ) {
+//        header('Access-Control-Allow-Origin: *');
+//        header("Access-Control-Allow-Methods: GET, PUT, POST, DELETE");
+//        header("Access-Control-Allow-Headers: Content-Type, Authorization");
         if ( $_SERVER['REQUEST_METHOD'] == 'OPTIONS' ) {
             exit;
         }

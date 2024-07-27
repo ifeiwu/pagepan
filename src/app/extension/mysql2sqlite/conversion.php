@@ -19,7 +19,7 @@ return function () {
 
     foreach ($tables as $table) {
         // 指定表名
-        $table = ltrim($table, $config['prefix']);
+        $table = str_replace($config['prefix'], '', $table);
         if ( ! in_array($table, ['admin', 'site', 'item', 'page', 'message', 'log', 'trash']) ) {
             continue;
         }
@@ -32,13 +32,13 @@ return function () {
         }
 
         // mysql表所有字段
-        $mysql_columns = $mysql->getTableColumns($table);
-        // 两个数据库字段是否相同
-        if ( $mysql_columns != $sqlite_columns ) {
-            $message = "MySQL: [" . implode(',', $mysql_columns) . ']<br>';
-            $message .= "SQLite: [" . implode(',', $sqlite_columns) . ']<br>';
-            Response::error("【{$table}】数据表的结构或字段顺序不一致：<br>" . $message);
-        }
+//        $mysql_columns = $mysql->getTableColumns($table);
+//        // 两个数据库字段是否相同
+//        if ( $mysql_columns != $sqlite_columns ) {
+//            $message = "MySQL: [" . implode(',', $mysql_columns) . ']<br>';
+//            $message .= "SQLite: [" . implode(',', $sqlite_columns) . ']<br>';
+//            Response::error("【{$table}】数据表的结构或字段顺序不一致：<br>" . $message);
+//        }
 
         // 查找表数据
         $items = $mysql->select($table);
@@ -48,13 +48,19 @@ return function () {
 
         // 清空表内容再插入新数据
         if ( $sqlite->exec("DELETE FROM {$table}") === false ) {
-            Response::success("清空表出错：{$table}");
+            Response::error("清空表出错：{$table}");
         }
 
         // 导入数据
         $columns = '`' . implode('`,`', $sqlite_columns) . '`';
         foreach ($items as $item) {
-            $values = array_values($item);
+            // mysql表结构字段顺序转换成sqlite字段顺序
+            $sqlite_item = [];
+            foreach ($sqlite_columns as $sqlite_column) {
+                $sqlite_item[$sqlite_column] = $item[$sqlite_column];
+            }
+
+            $values = array_values($sqlite_item);
             $values = "'" . implode("','", $values) . "'";
             $insert_sql = "INSERT INTO `{$table}` ({$columns}) VALUES ({$values})";
             if ( $sqlite->exec($insert_sql) === false ) {
