@@ -10,7 +10,7 @@
 </head>
 <body class="h-screen">
 
-    <div class="container container-sm py-8 h-full">
+    <div class="container container-fluid py-8 h-full">
         <div class="flex flex-col justify-center gap-5 center w-full h-full">
             <div>
                 <button id="conversion" class="btn f-7 py-8 px-12 r-full btn-primary">MySQL 转 SQLite</button>
@@ -24,10 +24,10 @@
     <script>
         $(function () {
             $('#conversion').click(function () {
+                $(this).attr('disabled', true);
                 $.post('extension/mysql2sqlite/conversion?token=<?=get('token')?>', {}, function (res) {
-                    if ( res.code == 0 ) {
-                        $('#result').text(res.message);
-                    }
+                    $('#result').html(res.message);
+                    $(this).attr('disabled', false);
                 }, 'JSON');
             });
         });
