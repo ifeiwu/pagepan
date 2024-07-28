@@ -13,10 +13,12 @@ return function ($request_data) {
         $zipFile = new \PhpZip\ZipFile();
         $finder = (new \Symfony\Component\Finder\Finder())
             ->exclude('.git')
-            ->exclude('data/!backup')
+            ->exclude('!backup')
             ->exclude('data/backup')
             ->exclude('data/logs')
             ->exclude('data/cache')
+            ->exclude('data/sql')
+            ->exclude('data/pack')
             ->exclude('public/data/pack')
             ->notPath('install.lock')
             ->notPath('app/api/token.php')

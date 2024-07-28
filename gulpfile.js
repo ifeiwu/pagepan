@@ -18,7 +18,6 @@ gulp.task('copy', function () {
     return gulp.src([
 		'src/**',
 		'!src/composer.*',
-		'!src/config/apikey.php',
 		'!src/app/api/v1/routes.php',
 		'!src/app/dev/**',
 		'!src/config/db.php',
@@ -35,7 +34,7 @@ gulp.task('copy', function () {
 		'!src/public/data/file/**/*',
 		'!src/public/data/json/**/*',
 		'!src/public/data/pack/**/*',
-		'!src/public/assets/fonts/**/*',
+		'!src/public/assets/font/**/*',
 		'!src/public/assets/i18n/**/*',
 		'!src/public/assets/**/*.{css,js,html,md}',
     ], { base: 'src', dot: true })

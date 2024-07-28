@@ -58,12 +58,17 @@ define('BASE_URL', Request::baseUrl());
 define('ROOT_URL', Request::rootUrl());
 define('ROUTE_URL', Request::routeUrl());
 
-// API 允许前端跨域请求
+// 允许前端跨域请求接口
 if ( strpos(ROUTE_URL, '/api/') === 0 ) {
     if ( isset($_SERVER['HTTP_ORIGIN']) ) {
-//        header('Access-Control-Allow-Origin: *');
-//        header("Access-Control-Allow-Methods: GET, PUT, POST, DELETE");
-//        header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        // 如果已经在Web服务器上配置CORS，请添加以下代码以避免重复设置问题。
+        // Apache: RequestHeader set X-Custom-Access-Control "Ignore PHP CORS settings"
+        // Nginx: more_set_headers "X-Custom-Access-Control: Ignore PHP CORS settings";
+        if ( !isset($_SERVER['HTTP_X_CUSTOM_ACCESS_CONTROL']) ) {
+            header('Access-Control-Allow-Origin: *');
+            header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE');
+            header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        }
         if ( $_SERVER['REQUEST_METHOD'] == 'OPTIONS' ) {
             exit;
         }

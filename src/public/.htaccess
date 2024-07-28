@@ -1,10 +1,14 @@
 RewriteEngine On
 # CORS 跨域设置
-Header add Access-Control-Allow-Origin "*"
-Header add Access-Control-Allow-Methods "GET, PUT, POST, DELETE"
-Header add Access-Control-Allow-Headers "Content-Type, Authorization"
+<FilesMatch "\.(ttf|otf|eot|woff|woff2)$">
+    Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
 # iframe 跨域设置
-Header always unset X-Frame-Options
+#Header always unset X-Frame-Options
+# 禁止访问目录
+RewriteRule ^(app|config|helper|extend|library|vendor)/ - [F]
+# 禁止访问目录下指定的文件扩展名
+RewriteRule (data|assets)/(.*).(php|db|sql|inc|src)$ – [F]
 # URL 重写规则
 RewriteRule ^$ index.php [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f

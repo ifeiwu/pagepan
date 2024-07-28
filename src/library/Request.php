@@ -46,8 +46,8 @@ class Request
     public static function body($name = null, $type = '*', $default = null)
     {
         $input = file_get_contents('php://input');
-        $data = json_decode($json, true);
-        $data = !is_null($data) ? $data : [];
+        $data = json_decode($input, true);
+        $data = is_array($data) ? $data : [];
         return self::input($data, $name, $type, $default);
     }
 
