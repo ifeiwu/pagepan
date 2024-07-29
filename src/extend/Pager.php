@@ -97,7 +97,7 @@ class Pager {
             $layout_content = gzuncompr($layout_content);
 
             // 兼容之前网站布局
-            if ( strpos($layout_content, '{__CONTENT__}') ) {
+            if ( strpos($layout_content, '{__CONTENT__}') !== false ) {
                 $layout_content = str_replace('{__CONTENT__}', '<?=$this->section(\'content\')?>', $layout_content);
             }
 
