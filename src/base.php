@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set('Asia/Shanghai');
+date_default_timezone_set('PRC');
 
 define('BUILD_TIME', ''); // 项目构建时间
 define('RUN_MODE', gethostname()); // 开发环境

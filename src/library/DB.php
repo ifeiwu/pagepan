@@ -76,11 +76,8 @@ class DB
                     \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                     \PDO::ATTR_EMULATE_PREPARES => false
                 ];
-
                 $dsn = 'mysql:host=' . $config['host'] . ';port=' . $config['port'] . ';dbname=' . $this->dbname . ';charset=utf8mb4';
-
                 $this->pdo = new \PDO($dsn, $config['user'], $config['pass'], $option);
-                $this->pdo->exec("SET time_zone = 'Asia/Shanghai'");
             }
         } catch (\PDOException $e) {
             throw new \Exception($e);

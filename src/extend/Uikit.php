@@ -358,9 +358,14 @@ class Uikit {
     // item 返回图片链接
     public function item_image($path, $name, $utime = '', $isfull = false) {
         if ( $name ) {
-            $image = $path ? trim($path, '/') . "/$name" : $name;
-            if ( ! preg_match('/^(https?:\/\/|\/\/)/i', $image) ) {
-                $image = $this->view->asset(trim($image . rtrim("?$utime", '?'), '/'), $isfull);
+            $pattern = '/^(https?:\/\/|\/\/)/i';
+            if ( preg_match($pattern, $name) ) {
+                $image = $name;
+            } else {
+                $image = trim($path, '/') . "/$name";
+                if ( ! preg_match($pattern, $image) ) {
+                    $image = $this->view->asset(trim($image . rtrim("?$utime", '?'), '/'), $isfull);
+                }
             }
         } else {
             // 1像素透明图片，防止有些浏览器没有图片显示交叉图片占位符。
@@ -372,9 +377,14 @@ class Uikit {
     // 输出完整文件链接
     public function item_file($path, $name, $utime = '', $isfull = false) {
         if ( $name ) {
-            $file = $path ? trim($path, '/') . "/$name" : $name;
-            if ( ! preg_match('/^(https?:\/\/|\/\/)/i', $file) ) {
-                $file = $this->view->asset(trim("$path/$name" . rtrim("?$utime", '?'), '/'), $isfull);
+            $pattern = '/^(https?:\/\/|\/\/)/i';
+            if ( preg_match($pattern, $name) ) {
+                $file = $name;
+            } else {
+                $file = trim($path, '/') . "/$name";
+                if ( ! preg_match($pattern, $file) ) {
+                    $file = $this->view->asset(trim($file . rtrim("?$utime", '?'), '/'), $isfull);
+                }
             }
         } else {
             $file = '';
@@ -392,9 +402,14 @@ class Uikit {
             return urldecode($name);
         }
         // 站外或站内图标
-        $image = $path ? trim($path, '/') . "/$name" : $name;
-        if ( ! preg_match('/^(https?:\/\/|\/\/)/i', $image) ) {
-            $image = $this->view->asset(trim($image . rtrim("?$utime", '?'), '/'), $isfull);
+        $pattern = '/^(https?:\/\/|\/\/)/i';
+        if ( preg_match($pattern, $name) ) {
+            $image = $name;
+        } else {
+            $image = trim($path, '/') . "/$name";
+            if ( ! preg_match($pattern, $image) ) {
+                $image = $this->view->asset(trim($image . rtrim("?$utime", '?'), '/'), $isfull);
+            }
         }
         // 如是是svg图片，则返回源代码
         if ( preg_match('/.+?\.svg/i', $image) ) {
