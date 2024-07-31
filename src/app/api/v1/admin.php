@@ -172,6 +172,7 @@ class Admin extends CRUD {
             $zipFile = new \PhpZip\ZipFile();
             try {
                 $finder = (new \Symfony\Component\Finder\Finder())
+                    ->exclude('data/backup')
                     ->exclude('data/cache')
                     ->exclude('data/logs')
                     ->exclude('data/file')

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="<?=ROOT_URL?>">
+    <meta charset="utf-8">
+    <title><?=get('headtitle');?></title>
+
+    <link href="<?=$this->asset('assets/css/pagepan.css');?>" rel="stylesheet">
+    <script src="<?=$this->asset('assets/js/lib/jquery.js');?>"></script>
+</head>
+<body class="h-screen">
+
+    <div class="container container-fluid py-8 h-full">
+        <div class="flex flex-col justify-center gap-5 center w-full h-full">
+            <div>
+                <button id="conversion" class="btn f-7 py-8 px-12 r-full btn-primary">WEB根目录设置为Public</button>
+            </div>
+            <div>
+                <span id="result" class="mt-10 mb-5 f-7">&nbsp;</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $('#conversion').click(function () {
+                $(this).attr('disabled', true);
+                $.post('extension/webroot2public/conversion?token=<?=get('token')?>', {}, function (res) {
+                    $('#result').html(res.message);
+                    $(this).attr('disabled', false);
+                }, 'JSON');
+            });
+        });
+    </script>
+
+</body>
+</html>

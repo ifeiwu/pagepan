@@ -2,8 +2,8 @@
 use utils\FS;
 use utils\Log;
 
-class Backup extends Base
-{
+class Backup extends Base {
+
     private $backup_path;
 
     private $sql_path;
@@ -30,10 +30,9 @@ class Backup extends Base
         }
 
         $zipFile = new \PhpZip\ZipFile();
-
         try {
             $finder = (new \Symfony\Component\Finder\Finder())
-                ->exclude('!backup/')
+                ->exclude('data/backup')
                 // ->exclude('data/')
                 // ->exclude('vendor/')
                 ->exclude('.git')
@@ -47,9 +46,9 @@ class Backup extends Base
         }
 
         if (is_file($zipfile)) {
-            return $this->_success(['filename' => $filename, 'base_uri' => $_SERVER['HTTP_BASEURI'] . '!backup/']);
+            return $this->_success(['filename' => $filename, 'base_uri' => $_SERVER['HTTP_BASEURI'] . 'data/backup/']);
         } else {
-            return $this->_error(['filename' => $filename, 'base_uri' => $_SERVER['HTTP_BASEURI'] . '!backup/']);
+            return $this->_error(['filename' => $filename, 'base_uri' => $_SERVER['HTTP_BASEURI'] . 'data/backup/']);
         }
     }
 

@@ -48,14 +48,14 @@ $theme_screen = $theme['screen'];
             $site_fonts_list = json_decode($site_fonts_list, true);
             foreach ($site_fonts_list as $font) {
                 $fontid = $font['id'];
-                $site_fonts_css = "assets/font/$fontid/$fontid.css";
+                $site_fonts_css = "data/font/$fontid/$fontid.css";
                 echo '<link href="' . $site_fonts_css . '" rel="preload" as="style" onload="this.rel=\'stylesheet\'">';
             }
         }
         
-        if ( $this->site['open_article_css'] ) { echo '<link href="' . $this->asset('assets/css/article.css') . '" rel="stylesheet">'; }
-        if ( $this->site['open_graphic_css'] ) { echo '<link href="' . $this->asset('assets/css/graphic.css') . '" rel="stylesheet">'; }
-        if ( $this->site['open_global_css'] ) { echo '<link href="' . $this->asset('assets/css/global.css') . '" rel="stylesheet">'; }
+        if ( $this->site['open_article_css'] ) { echo '<link href="' . $this->asset('data/css/article.min.css') . '" rel="stylesheet">'; }
+        if ( $this->site['open_graphic_css'] ) { echo '<link href="' . $this->asset('data/css/graphic.min.css') . '" rel="stylesheet">'; }
+        if ( $this->site['open_global_css'] ) { echo '<link href="' . $this->asset('data/css/global.min.css') . '" rel="stylesheet">'; }
         
         echo '<script>var pagevar = ' . json_encode($this->pagevar, JSON_UNESCAPED_UNICODE) . ';</script>';
         echo '<script src="' . $this->asset('assets/js/require.js') . '" type="text/javascript"></script>';
@@ -70,7 +70,7 @@ $theme_screen = $theme['screen'];
         <?php
         echo '<script src="' . $this->asset('assets/js/app/main.js') . '" type="text/javascript"></script>';
         // 全局脚本
-        if ($this->site['open_global_js']) { echo '<script src="' . $this->asset('assets/js/global.js') . '" type="text/javascript"></script>'; }
+        if ($this->site['open_global_js']) { echo '<script src="' . $this->asset('data/js/global.min.js') . '" type="text/javascript"></script>'; }
         // 全局页脚
         if ($this->site['open_footer_php']) { include ROOT_PATH . 'data/php/footer.inc'; }
         // 在线客服

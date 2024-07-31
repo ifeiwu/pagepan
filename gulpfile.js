@@ -32,6 +32,7 @@ gulp.task('copy', function () {
 		'src/public/robots.txt',
 		'src/public/.htaccess',
 		'!src/public/data/file/**/*',
+		'!src/public/data/font/**/*',
 		'!src/public/data/json/**/*',
 		'!src/public/data/pack/**/*',
 		'!src/public/assets/font/**/*',

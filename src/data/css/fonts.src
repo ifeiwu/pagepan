@@ -1,3 +1,0 @@
-@font-face{font-family:'AZhuPaoPao';src:url('AZhuPaoPao.woff2') format('woff2');font-weight:100;font-style:normal;font-display:swap;}
-@font-face{font-family:'HanaMin';src:url('HanaMin.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
-@font-face{font-family:'HanZiPinYin';src:url('HanZiPinYin.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}

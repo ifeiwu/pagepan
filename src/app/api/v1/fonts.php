@@ -10,44 +10,31 @@ class Fonts extends Base {
 
     function __construct()
     {
-        $this->font_path = ASSETS_PATH . 'font';
+        $this->font_path = WEB_ROOT . 'data/font';
     }
 
     // 生成网页字体
     protected function postBuild($request_data)
     {
         $this->webfont = $request_data['webfont'];
-
         $fontid = $request_data['fontid'];
-
         $this->font_path .= "/$fontid";
 
         FS::rmkdir($this->font_path);
 
         $content = $request_data['content'];
-
         $filelist = $this->buildWebFonts($fontid, $content);
-
-        if ( count($filelist) > 0 )
-        {
-            if ( $this->downloadFiles($filelist, 'remove') )
-            {
-                if ( file_put_contents($this->font_path . '/content.txt', $content) )
-                {
+        if (count($filelist) > 0) {
+            if ($this->downloadFiles($filelist, 'remove')) {
+                if (file_put_contents($this->font_path . '/content.txt', $content)) {
                     return $this->_success();
-                }
-                else
-                {
+                } else {
                     return $this->_error('保存字符失败！');
                 }
-            }
-            else
-            {
+            } else {
                 return $this->_error('下载网页字体失败！');
             }
-        }
-        else
-        {
+        } else {
             return $this->_error('生成网页字体失败！');
         }
     }
@@ -56,32 +43,22 @@ class Fonts extends Base {
     protected function postDownload($request_data)
     {
         $this->webfont = $request_data['webfont'];
-
         $fontid = $request_data['fontid'];
         $number = $request_data['number'];
         $lang = $request_data['lang'];
-
         $this->font_path .= "/$fontid";
 
         FS::rmkdir($this->font_path);
 
         $filelist = $this->getCSSFiles($fontid, $number, $lang);
-
-        if ( count($filelist) > 0 )
-        {
-            if ( $this->downloadFiles($filelist) )
-            {
+        if (count($filelist) > 0) {
+            if ($this->downloadFiles($filelist)) {
                 file_put_contents($this->font_path . '/content.txt', '{"number":"' . $number . ($lang ? '_' . $lang : $lang) . '"}');
-
                 return $this->_success();
-            }
-            else
-            {
+            } else {
                 return $this->_error('下载网页字体失败！');
             }
-        }
-        else
-        {
+        } else {
             return $this->_error('没有找到网页字体！');
         }
     }
@@ -90,15 +67,11 @@ class Fonts extends Base {
     protected function getRemove($fontid)
     {
         $dirname = $this->font_path . "/$fontid";
-
-        if ( is_dir($dirname) )
-        {
-            if ( ! FS::rrmdir($dirname) )
-            {
+        if (is_dir($dirname)) {
+            if (!FS::rrmdir($dirname)) {
                 return $this->_error('删除网页字体失败！');
             }
         }
-
         return $this->_success();
     }
 
@@ -106,15 +79,10 @@ class Fonts extends Base {
     protected function getContent($fontid)
     {
         $filename = $this->font_path . "/$fontid/content.txt";
-
-        if ( is_file($filename) )
-        {
+        if (is_file($filename)) {
             $content = file_get_contents($filename);
-
             return $this->_success('', $content);
-        }
-        else
-        {
+        } else {
             return $this->_error('没有找到文字内容！');
         }
     }
@@ -134,13 +102,10 @@ class Fonts extends Base {
 
         $curl->close();
 
-        if ( $curl->error )
-        {
+        if ($curl->error) {
             debug('Error: ' . $curl->errorMessage . "\n");
             return [];
-        }
-        else
-        {
+        } else {
             return json_decode($curl->rawResponse, true);
         }
     }
@@ -201,13 +166,10 @@ class Fonts extends Base {
 
         $curl->close();
 
-        if ( $curl->error )
-        {
+        if ($curl->error) {
             debug('Error: ' . $curl->errorMessage . "\n");
             return [];
-        }
-        else
-        {
+        } else {
             return json_decode($curl->rawResponse, true);
         }
     }
@@ -220,22 +182,17 @@ class Fonts extends Base {
         $curl->setOpt(CURLOPT_SSL_VERIFYHOST, false);
         $curl->setTimeout(300);
 
-        foreach ($filelist as $file)
-        {
+        foreach ($filelist as $file) {
             $filename = basename($file);
-
             $curl->download($this->webfont['base_url'] . "download/?filename=$file&action=$action", "$this->font_path/$filename");
         }
 
         $curl->close();
 
-        if ( $curl->error )
-        {
+        if ($curl->error) {
             debug('Error: ' . $curl->errorMessage . "\n");
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
