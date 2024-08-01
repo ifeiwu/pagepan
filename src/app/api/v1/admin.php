@@ -168,7 +168,7 @@ class Admin extends CRUD {
         $site_domain = $request_data['site_domain'];
         // 备份网站文件
         if ($this->_backupsql()) {
-            $zipfile = ROOT_PATH . 'data/backup/upgrade-' . date('Ymdhi') . '.zip';
+            $zipfile = ROOT_PATH . 'data/backup/upgrade-' . date('Ymdh') . '.zip';
             $zipFile = new \PhpZip\ZipFile();
             try {
                 $finder = (new \Symfony\Component\Finder\Finder())

@@ -11,7 +11,7 @@ const zip = require('gulp-zip');
 const fs = require('fs'); // 文件操作
 
 gulp.task('clean', function () {
-	return del(['dist/**/*', 'pack/**/*']);
+	return del(['dist/**/*', 'package/**/*']);
 });
 
 gulp.task('copy', function () {
@@ -72,7 +72,7 @@ gulp.task('config', function (done) {
 gulp.task('install.zip', function () {
     return gulp.src('dist/**', { dot: true })
 		.pipe(zip('install.zip'))
-		.pipe(gulp.dest('pack'));
+		.pipe(gulp.dest('package'));
 });
 
 gulp.task('upgrade.zip', function () {
@@ -91,9 +91,9 @@ gulp.task('upgrade.zip', function () {
 		'!dist/robots.txt'
 	], { dot: true })
 		.pipe(zip('upgrade.zip'))
-		.pipe(gulp.dest('pack'));
+		.pipe(gulp.dest('package'));
 });
 
 
 gulp.task('default', gulp.series('clean', 'copy', 'js', 'css', 'html', 'config'));
-gulp.task('pack', gulp.series('install.zip', 'upgrade.zip'));
+gulp.task('package', gulp.series('install.zip', 'upgrade.zip'));

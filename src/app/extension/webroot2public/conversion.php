@@ -19,7 +19,6 @@ return function () {
         $zip = new \PhpZip\ZipFile();
         try {
             $finder = (new \Symfony\Component\Finder\Finder())
-                ->exclude('!backup/')
                 ->exclude('data/backup/')
                 ->exclude('public/')
                 ->exclude('vendor/')
@@ -66,23 +65,43 @@ return function () {
     $db = db();
     $site = $db->select('site', ['name', 'value'], ['state', '=', 1]);
     $site = helper('arr/tokv', [$site]);
-    if ( FS::rcopy(ROOT_PATH . $site['logo'], $public_path . "/{$site['logo']}") === true ) {
-        FS::rrmdir(ROOT_PATH . $site['logo']);
+    $logo = $site['logo'];
+    if ( $logo && strlen($logo) > 2 ) {
+        if ( FS::rcopy(ROOT_PATH . $logo, $public_path . "/{$logo}") === true ) {
+            FS::rrmdir(ROOT_PATH . $logo);
+        }
     }
-    if ( FS::rcopy(ROOT_PATH . $site['favicon'], $public_path . "/{$site['favicon']}") === true ) {
-        FS::rrmdir(ROOT_PATH . $site['favicon']);
+    $favicon = $site['favicon'];
+    if ( $favicon && strlen($favicon) > 2 ) {
+        if (FS::rcopy(ROOT_PATH . $favicon, $public_path . "/{$favicon}") === true) {
+            FS::rrmdir(ROOT_PATH . $favicon);
+        }
     }
-    if ( FS::rcopy(ROOT_PATH . $site['touchicon'], $public_path . "/{$site['touchicon']}") === true ) {
-        FS::rrmdir(ROOT_PATH . $site['touchicon']);
-    }
-    if ( FS::rcopy(ROOT_PATH . 'index.php', $public_path . '/index.php') === true ) {
-        unlink(ROOT_PATH . 'index.php');
+    $touchicon = $site['touchicon'];
+    if ( $touchicon && strlen($touchicon) > 2 ) {
+        if (FS::rcopy(ROOT_PATH . $touchicon, $public_path . "/{$touchicon}") === true) {
+            FS::rrmdir(ROOT_PATH . $touchicon);
+        }
     }
     if ( FS::rcopy(ROOT_PATH . '.htaccess', $public_path . '/.htaccess') === true ) {
         unlink(ROOT_PATH . '.htaccess');
     }
     if ( FS::rcopy(ROOT_PATH . 'robots.txt', $public_path . '/robots.txt') === true ) {
         unlink(ROOT_PATH . 'robots.txt');
+    }
+
+    $index_file = $public_path . '/index.php';
+    if ( FS::rcopy(ROOT_PATH . 'index.php', $index_file) === true ) {
+        $index_code = file_get_contents($index_file);
+        if ( $index_code ) {
+            $index_code = str_replace("define('ROOT_PATH', WEB_ROOT);", "define('ROOT_PATH', dirname(WEB_ROOT) . '/');", $index_code);
+            if ( ! file_put_contents($index_file, $index_code) ) {
+                Response::error('写入文件失败：' . $index_file);
+            }
+        } else {
+            Response::error('获取文件内容失败：' . $index_file);
+        }
+        unlink(ROOT_PATH . 'index.php');
     }
 
     Response::success("必要文件已经移动至【/public】目录，您现在可以将 public 目录设置为Web根目录。");
