@@ -1,6 +1,6 @@
 RewriteEngine On
 # CORS 跨域设置
-<FilesMatch "\.(ttf|otf|eot|woff|woff2)$">
+<FilesMatch "\.(ttf|otf|eot|woff|woff2|svg|json|font.css|css|js|gif|png|webp|jpg|jpeg|ico)$">
     Header set Access-Control-Allow-Origin "*"
 </FilesMatch>
 # iframe 跨域设置
@@ -8,7 +8,7 @@ RewriteEngine On
 # 禁止访问目录
 RewriteRule ^(app|config|helper|extend|library|vendor)/ - [F]
 # 禁止访问目录下指定的文件扩展名
-RewriteRule (data|assets)/(.*).(php|db|sql|inc|src)$ – [F]
+RewriteRule (assets|data)/(.*).(php|phtml|inc|db|sql|log)$ – [F]
 # URL 重写规则
 RewriteRule ^$ index.php [QSA,L]
 RewriteCond %{REQUEST_FILENAME} !-f
