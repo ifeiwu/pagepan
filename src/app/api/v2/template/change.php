@@ -1,7 +1,7 @@
 <?php
 // 更换模板
 return function ($request_data) {
-    $version = $request_data['version'];
+    set_time_limit(300);
 
     if ( Config::file('db', 'type') != 'sqlite' ) {
         Response::error('目录只支持 SQLite 数据库更换网站模板！');
@@ -39,7 +39,8 @@ return function ($request_data) {
     }
 
     // 下载模板安装文件
-    $ctx = stream_context_create(array('http' => array('timeout' => 10)));
+    $version = $request_data['version'];
+    $ctx = stream_context_create(array('http' => array('timeout' => 30)));
     $url = 'http://get.pagepan.com/install/' . $version . '/template?t=' . time();
     $code = file_get_contents($url, false, $ctx);
     $filename = WEB_ROOT . 'template.php';
@@ -52,6 +53,8 @@ return function ($request_data) {
     $data = ['demo' => $request_data['demo'], 'version' => $version]; // 更换模板的URL
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 300);
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POST, 1);

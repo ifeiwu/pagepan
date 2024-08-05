@@ -1,6 +1,8 @@
 <?php
 // 打包模板
 return function ($request_data) {
+    set_time_limit(300);
+
     $zip_path = WEB_ROOT . 'data/pack/';
     $zip_name = 'template.zip';
     $zip_file = $zip_path . $zip_name;
