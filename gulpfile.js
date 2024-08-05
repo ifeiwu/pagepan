@@ -88,7 +88,7 @@ gulp.task('upgrade.zip', function () {
 		'!dist/public/data/**',
 		'!dist/public/assets/css/pagepan.css',
 		'!dist/public/assets/css/theme.css',
-		'!dist/robots.txt'
+		'!dist/public/robots.txt'
 	], { dot: true })
 		.pipe(zip('upgrade.zip'))
 		.pipe(gulp.dest('package'));
