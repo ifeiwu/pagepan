@@ -21,12 +21,7 @@ return function ($request_data) {
 
     $db->update('admin', array('_more' => json_encode($_more)), array('id', '=', $admin['id']));
 
-    $token = bin2hex(random_bytes(32));
-    if ( ! file_put_contents(APP_PATH . 'api/token.php', "<?php return '{$token}';") ) {
-        Response::error('生成安全令牌失败');
-    }
-
-    $admin['token'] = $token;
+    $admin['token'] = include APP_PATH . 'api/token.php';
     unset($admin['pass']);
     Response::success('ok', $admin);
 };

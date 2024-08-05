@@ -8,20 +8,19 @@ return function ($request_data) {
     }
 
     $zip_path = DATA_PATH . 'backup/';
-    $zip_name = 'template-' . date('Ymdhi') . '.zip';
+    $zip_name = 'template-' . date('Ymdh') . '.zip';
     $zip_file = $zip_path . $zip_name;
     if ( ! FS::rmkdir($zip_path) ) {
         Response::error('创建目录失败：' . $zip_path);
     }
 
-    // 备份网站文件
     try {
         loader_vendor();
+        // 备份网站文件
         $zipFile = new \PhpZip\ZipFile();
         $finder = (new \Symfony\Component\Finder\Finder())
             ->exclude('.git')
             ->exclude('vendor')
-            ->exclude('data/!backup')
             ->exclude('data/backup')
             ->exclude('data/cache')
             ->exclude('data/pack')
@@ -39,17 +38,17 @@ return function ($request_data) {
         Response::error($e->getMessage());
     }
 
-    // 下载更新文件
+    // 下载模板安装文件
     $ctx = stream_context_create(array('http' => array('timeout' => 10)));
     $url = 'http://get.pagepan.com/install/' . $version . '/template?t=' . time();
     $code = file_get_contents($url, false, $ctx);
-    $filename = ROOT_PATH . 'template.php';
+    $filename = WEB_ROOT . 'template.php';
     if ( ! file_put_contents($filename, $code) ) {
         Response::error('无法写入更新文件：' . $filename);
     }
 
-    // 执行更新文件
-    $url = $request_data['domain'] . '/template.php';
+    // 执行模板安装文件
+    $url = $request_data['domain'] . 'template.php';
     $data = ['demo' => $request_data['demo'], 'version' => $version]; // 更换模板的URL
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -61,6 +60,8 @@ return function ($request_data) {
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     $res = curl_exec($ch);
     curl_close($ch);
+
+    @unlink($filename);
 
     $res = json_decode($res, true);
     if ( $res['code'] == 1 ) {

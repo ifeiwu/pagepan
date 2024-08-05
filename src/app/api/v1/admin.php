@@ -149,17 +149,6 @@ class Admin extends CRUD {
         }
     }
 
-    // 修改令牌
-    protected function postToken($request_data) {
-        if ($token = $request_data['token']) {
-            if (file_put_contents('token.php', "<?php return '$token';")) {
-                return $this->_success();
-            }
-        }
-
-        return $this->_error('没有权限更换密钥！');
-    }
-
     // 网站升级（使用覆盖方式）
     protected function postUpgrade($request_data) {
         $last_version2 = $request_data['last_version2'];
