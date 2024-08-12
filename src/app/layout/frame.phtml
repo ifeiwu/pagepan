@@ -24,7 +24,9 @@ $theme_screen = $theme['screen'];
         <meta name="description" content="<?=$this->seo['description']?>">
 
         <script>
-            if ( "ActiveXObject" in window || ! CSS.supports('container-type', 'inline-size') ) {
+            try {
+                new CSSStyleSheet().replaceSync('@layer test {}');
+            } catch (e) {
                 if ( confirm('您正在使用不兼容的浏览器，是否下载最新现代浏览器？') ) {
                     window.location.href = "//www.pagepan.com/browser-upgrade.html?ref=" + encodeURIComponent(window.location.href);
                 }
