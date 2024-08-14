@@ -11,8 +11,7 @@ define(function (require) {
     require(['plyr'], function () {
         require(['Plyr'], function (Plyr) {
             $('video.plyr, audio.plyr').each(function (i, el) {
-                if ( ! el.plyr )
-                {
+                if (!el.plyr) {
                     let player = new Plyr(el, {
                         iconUrl: 'assets/js/lib/plyr/plyr.svg',
                         blankVideo: 'assets/js/lib/plyr/blank.mp4',
@@ -21,21 +20,15 @@ define(function (require) {
                             normal: '正常'
                         }
                     });
-
                     player.on('play', function (event) {
-
                         // 只能播放一个视频
                         const _this = event.detail.plyr;
-
                         $.each(window.plyrs, function (i, _plyr) {
-
-                            if ( _this.id != _plyr.id )
-                            {
+                            if (_this.id != _plyr.id) {
                                 _plyr.pause();
                             }
                         });
                     })
-
                     window.plyrs[i] = player;
                 }
             });
@@ -43,29 +36,20 @@ define(function (require) {
     });
 
     // 支持流媒体 Hls
-    if ( $('audio.plyr[hls-src$=".m3u8"], video.plyr[hls-src$=".m3u8"]').length )
-    {
+    if ($('audio.plyr[hls-src$=".m3u8"], video.plyr[hls-src$=".m3u8"]').length) {
         require(['hls'], function (Hls) {
-
             $('audio.plyr[hls-src$=".m3u8"], video.plyr[hls-src$=".m3u8"]').each(function (i, el) {
-
                 let url = $(el).attr('hls-src');
-
-                if ( Hls.isSupported() )
-                {
+                if (Hls.isSupported()) {
                     let hls = new Hls();
-
                     hls.loadSource(url);
                     hls.attachMedia(el);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    hls.on(Hls.Events.MANIFEST_PARSED, function () {
                         el.play();
                     });
-                }
-                else if ( el.canPlayType('application/vnd.apple.mpegurl') )
-                {
+                } else if (el.canPlayType('application/vnd.apple.mpegurl')) {
                     el.src = url;
-
-                    el.addEventListener('loadedmetadata', function() {
+                    el.addEventListener('loadedmetadata', function () {
                         el.play();
                     });
                 }

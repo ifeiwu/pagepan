@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: pagevar.domain3 +  'assets/js/lib',
+    baseUrl: pagevar.domain3 + 'assets/js/lib',
     paths: {
         app: '../app',
         util: '../util',
@@ -13,8 +13,8 @@ require.config({
         scrollbar: 'scrollbar/overlayscrollbars',
         spotlight: 'spotlight/spotlight',
         // parsley: 'parsley/parsley',
-		// parsley_zh_cn: 'parsley/i18n/zh_cn',
-		'@popperjs/core': 'popper', // tippy.js
+        // parsley_zh_cn: 'parsley/i18n/zh_cn',
+        '@popperjs/core': 'popper', // tippy.js
     },
     shim: {
         plyr: ['css!plyr.css'],
@@ -25,12 +25,12 @@ require.config({
         spotlight: ['css!spotlight.css'],
         scrollbar: ['css!../lib/scrollbar/overlayscrollbars.css'],
         filterizr: ['jquery'],
-		// parsley_zh_cn: ['parsley/parsley'],
+        // parsley_zh_cn: ['parsley/parsley'],
         prefixfree: {
             exports: 'PrefixFree'
         }
     },
-	skipDataMain: true,
+    skipDataMain: true,
     waitSeconds: 0,
     urlArgs: pagevar.timestamp
 });
@@ -38,20 +38,13 @@ require.config({
 
 // 捕获局域未捕获的异常
 require.onError = function (err) {
-
     console.log('requireType: ' + err.requireType);
-
-    if (err.requireType === 'timeout')
-    {
+    if (err.requireType === 'timeout') {
         console.log('requireModules: ' + err.requireModules);
     }
-
     throw err;
 };
 
-
 window.onerror = function (message, source, lineno, colno, error) {
-
-    console.error( error.stack );
-
+    console.error(error.stack);
 };
