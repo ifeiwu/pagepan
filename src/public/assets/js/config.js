@@ -35,7 +35,6 @@ require.config({
     urlArgs: pagevar.timestamp
 });
 
-
 // 捕获局域未捕获的异常
 require.onError = function (err) {
     console.log('requireType: ' + err.requireType);

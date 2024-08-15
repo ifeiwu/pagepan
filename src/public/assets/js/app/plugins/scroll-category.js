@@ -7,7 +7,6 @@ define(function (require) {
             const $categorys = $component.find('.category>li');
             const setting = $component.data('scroll-category') || {};
             const duration = setting.duration || 'swing';
-
             $component.find('.category').parents('[number]').addClass('sticky-top');
             // 点击分类滚动到导航页
             $categorys.each(function () {
