@@ -246,6 +246,25 @@ class Uikit {
         return $user_class ?: $default_class;
     }
 
+    // 获取 setting 响应式 class 的值
+    public function getSettingBreakpointClass($prefix)
+    {
+        $setting = $this->view->setting;
+        $prefix_xs = $setting[$prefix];
+        $prefix_sm = $setting[$prefix . '-sm'];
+        $prefix_md = $setting[$prefix . '-md'];
+        $prefix_lg = $setting[$prefix . '-lg'];
+        $prefix_xl = $setting[$prefix . '-xl'];
+        $values = [
+            $prefix_xs,
+            $prefix_sm ? $prefix_sm . '-sm' : '',
+            $prefix_md ? $prefix_md . '-md' : '',
+            $prefix_lg ? $prefix_lg . '-lg' : '',
+            $prefix_xl ? $prefix_xl . '-xl' : ''
+        ];
+        return implode(' ', array_filter($values));
+    }
+
     // 内联样式输出
     public function getSettingStyle($prefix, $default_style = '')
     {
