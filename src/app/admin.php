@@ -1,6 +1,6 @@
 <?php
 return function () {
-    $server = Request::get('s');
+    $query_upgrade = isset($_GET['upgrade']) ? 'upgrade=1' : '';
     $domain = $_SERVER['HTTP_HOST'] ?: $_SERVER['SERVER_NAME'];
 
     if ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) || isset($_SERVER['HTTP_X_REAL_IP']) ) {
@@ -22,8 +22,8 @@ return function () {
     $admin = Config::file('admin');
     $admin_domain = $admin['domain'];
     $admin_version = $admin['version'];
-    $admin_url = $admin_version ? "$admin_domain/$admin_version" : $admin_domain;
-    $admin_url = Request::scheme() . "://$admin_url";
+    $admin_url = $admin_version ? "{$admin_domain}/{$admin_version}" : $admin_domain;
+    $admin_url = Request::scheme() . "://{$admin_url}";
 
-    Response::redirect("$admin_url/main/login.verify?d=$domain&s=$server");
+    Response::redirect("{$admin_url}/main/login?d={$domain}{$query_upgrade}");
 };

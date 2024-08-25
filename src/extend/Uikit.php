@@ -276,51 +276,51 @@ class Uikit {
     }
 
     // 标签属性输出
-    public function getSettingAttrs($prefix, $values = [])
+    public function getSettingAttrs($prefix, $attrs = [])
     {
-        $attrs = '';
+        $_attrs = '';
         $setting = $this->view->setting;
 
         if ($prefix == 'component') {
-            $attrs .= 'uk="' . $this->view->path . '" ';
-            $attrs .= $this->view->ukid . ' ';
+            $_attrs .= 'uk="' . $this->view->path . '" ';
+            $_attrs .= $this->view->ukid . ' ';
         } elseif (isset($setting[$prefix . '.alias'])) {
-            $attrs .= 'number="' . $setting[$prefix . '.alias'] . '" ';
+            $_attrs .= 'number="' . $setting[$prefix . '.alias'] . '" ';
         }
 
-        if (!isset($values['data'])) {
-            $values['data'] = '';
+        if (!isset($attrs['data'])) {
+            $attrs['data'] = '';
         }
-        if (!isset($values['class'])) {
-            $values['class'] = '';
+        if (!isset($attrs['class'])) {
+            $attrs['class'] = '';
         }
-        if (!isset($values['style'])) {
-            $values['style'] = '';
+        if (!isset($attrs['style'])) {
+            $attrs['style'] = '';
         }
 
-        foreach ($values as $attr => $value) {
+        foreach ($attrs as $attr => $value) {
             if ($attr === 'class') {
                 // '-'可替换的样式, '+'必需的样式
                 if (is_array($value)) {
                     $_class = $this->getSettingClass($prefix, $value['-']);
-                    $attrs .= 'class="' . $_class . ' ' . $value['+'] . '" ';
+                    $_attrs .= 'class="' . $_class . ' ' . $value['+'] . '" ';
                 } else {
                     // 可替换的样式
                     $_class = $this->getSettingClass($prefix, $value);
                     if ($_class) {
-                        $attrs .= 'class="' . $_class . '" ';
+                        $_attrs .= 'class="' . $_class . '" ';
                     }
                 }
             } elseif ($attr === 'style') {
                 // '-'可替换的样式, '+'必需的样式
                 if (is_array($value)) {
                     $_style = $this->getSettingStyle($prefix, $value['-']);
-                    $attrs .= 'style="' . $_style . ' ' . $value['+'] . '" ';
+                    $_attrs .= 'style="' . $_style . ' ' . $value['+'] . '" ';
                 } else {
                     // 可替换的样式
                     $_style = $this->getSettingStyle($prefix, $value);
                     if ($_style) {
-                        $attrs .= 'style="' . $_style . '" ';
+                        $_attrs .= 'style="' . $_style . '" ';
                     }
                 }
             } elseif ($attr === 'data') {
@@ -328,28 +328,28 @@ class Uikit {
                 if (is_array($setting_data)) {
                     foreach ($setting_data as $k => $v) {
                         $v = is_array($v) ? htmlentities(json_encode($v), ENT_QUOTES) : $v;
-                        $attrs .= 'data-' . $k . '="' . $v . '" ';
+                        $_attrs .= 'data-' . $k . '="' . $v . '" ';
                     }
                 }
             } elseif (is_bool($value) && $value == true) {
-                $attrs .= $attr . ' ';
+                $_attrs .= $attr . ' ';
             } elseif (is_string($attr)) {
                 $attr_value = $setting[$prefix . '.' . $attr] ?: $value;
                 if ($attr_value) {
-                    $attrs .= $attr . '="' . $attr_value . '" ';
+                    $_attrs .= $attr . '="' . $attr_value . '" ';
                 }
             } elseif (is_int($attr)) {
-                $attrs .= $value . ' ';
+                $_attrs .= $value . ' ';
             }
         }
 
         if (!$_GET['isbuilder']) {
-            return $attrs;
+            return $_attrs;
         } else {
             if ($prefix == 'component' || $prefix == 'container') {
-                return $attrs;
+                return $_attrs;
             } else {
-                return $attrs . 'data-setting-prefix="' . $prefix . '"';
+                return $_attrs . 'data-setting-prefix="' . $prefix . '"';
             }
         }
     }
@@ -432,8 +432,7 @@ class Uikit {
         }
         // 如是是svg图片，则返回源代码
         if ( preg_match('/.+?\.svg/i', $image) ) {
-//            return file_get_contents($image, false, stream_context_create(['ssl'=>['verify_peer'=>false, 'verify_peer_name'=>false]])); // 图标很多的时间，速度会很慢。
-            return '<img src="'.$image.'" alt="" onload="fetch(\''.$image.'\').then(response => response.text()).then(data => {this.parentNode.innerHTML=data})">';
+            return '<img src="'.$image.'" style="display:none" alt="" onload="fetch(\''.$image.'\').then(response => response.text()).then(data => {this.parentNode.innerHTML=data})">';
         }
         // 其它图片格式，返回图片标签。
         else {
