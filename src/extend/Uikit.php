@@ -111,9 +111,10 @@ class Uikit {
             }
 
             $content = $this->getRemoteCode($path, $name);
-
-            if ( file_put_contents($filename, $content) === false ) {
-                throw new Exception("写入文件失败：{$filename}");
+            if ( $content ) {
+                if ( file_put_contents($filename, $content) === false ) {
+                    throw new Exception("写入文件失败：{$filename}");
+                }
             }
 
             return $content;

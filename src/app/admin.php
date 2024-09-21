@@ -1,6 +1,6 @@
 <?php
 return function () {
-    $query_upgrade = isset($_GET['upgrade']) ? 'upgrade=1' : '';
+    $query_upgrade = isset($_GET['upgrade']) ? '&upgrade=1' : '';
     $domain = $_SERVER['HTTP_HOST'] ?: $_SERVER['SERVER_NAME'];
 
     if ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) || isset($_SERVER['HTTP_X_REAL_IP']) ) {

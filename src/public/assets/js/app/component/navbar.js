@@ -18,7 +18,7 @@ define([], function () {
         }
     }
 
-    const dropdown = function (component, active = '') {
+    /*const dropdown = function (component, active = '') {
         let $component = $(component);
         linkLiActive(component, active);
         // 下拉菜单按钮
@@ -41,7 +41,7 @@ define([], function () {
                 $component.find('.col-nav,.collapse').hide();
             });
         }
-    }
+    }*/
 
     // 自动高亮导航链接上级 li
     const linkLiActive = function (component, active = null) {
@@ -57,55 +57,45 @@ define([], function () {
     const getLinkElement = function (component, active = null) {
         let $component = $.isPlainObject(component) ? component : $(component);
         let $link = $component.find('a[href="' + pagevar.page_alias + '"]');
+        if ($link.length > 0) {
+            return $link;
+        }
+
         if (pagevar.get_alias) {
             $link = $component.find('a[href*="' + pagevar.get_alias + '/category/"]');
             if (pagevar.get_cid) {
                 $link = $component.find('a[href*="' + pagevar.get_alias + '/category/' + pagevar.get_cid + '"]');
             }
+            if ($link.length > 0) {
+                return $link;
+            }
         }
 
-        if (active != null && !$link.is('.active')) {
+        if (active != null) {
             $link = $component.find('a[active="' + active + '"]');
+            if ($link.length > 0) {
+                return $link;
+            }
         }
 
-        if (!$link.is('.active')) {
-            let alias = pagevar.join_alias ? pagevar.join_alias : pagevar.page_alias ? pagevar.page_alias : '';
-            alias = alias.indexOf('/') > 0 ? alias.split('/')[0] : alias;
-            $link = $component.find('a[href="' + alias + '"]');
+        let alias = pagevar.join_alias ? pagevar.join_alias : pagevar.page_alias ? pagevar.page_alias : '';
+        alias = alias.indexOf('/') > 0 ? alias.split('/')[0] : alias;
+        $link = $component.find('a[href="' + alias + '"]');
+        if ($link.length > 0) {
+            return $link;
         }
 
-        if (!$link.is('.active')) {
-            $link = $component.find('a[active~="' + pagevar.page_alias + '"],a[active~="' + pagevar.join_alias + '"],a[active="' + pagevar.get_cid + '"]');
+        $link = $component.find('a[active~="' + pagevar.page_alias + '"],a[active~="' + pagevar.join_alias + '"],a[active="' + pagevar.get_cid + '"]');
+        if ($link.length > 0) {
+            return $link;
         }
 
-        if (!$link.is('.active')) {
-            $link = $component.find('a[href="#"],a[href="/"],a[href="./"]');
-        }
-
-        return $link;
-    }
-
-    // 响应式拆叠导航内容复制到打开菜单内容里
-    const setMenuContent = function (component) {
-        let $component = $.isPlainObject(component) ? component : $(component);
-        let $menubtn = $component.find('.menubtn');
-        if ($menubtn.length) {
-            $menubtn.click(function () {
-                let $menuopen = $component.find('.menuopen');
-                $menuopen.css('top', $component.outerHeight());
-                let $content = $menuopen.find('.content');
-                if ($content.is(':empty')) {
-                    $content.html($component.find('.collapse').html());
-                }
-            });
-        }
+        return $component.find('a[href="#"],a[href="/"],a[href="./"]');
     }
 
     return {
         'simple': simple,
-        'dropdown': dropdown,
         'linkActive': linkActive,
-        'linkLiActive': linkLiActive,
-        'setMenuContent': setMenuContent,
+        'linkLiActive': linkLiActive
     }
 });
