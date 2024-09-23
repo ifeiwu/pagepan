@@ -9,6 +9,7 @@ require ROOT_PATH . 'helper.php';
 $router = new Router();
 $router->setBasePath(ltrim(ROOT_URL, '/'));
 $router->addMatchTypes(['a+' => '[\w-]+', '+' => '[^\.]*(?:\.html)?', 'i+' => '[0-9a-z]+(?:\.html)?']);
+$router->map('OPTIONS', '/api/[*]', 'app/api/cors');
 $router->map('GET|POST', '/api/v1/[*]', 'app/api/v1/main');
 $router->map('GET|POST', '/api/[:version]/[:module]/[:action]', 'app/api');
 $router->map('GET|POST', '/[!|act]/[:action]?', 'app/act');
