@@ -1,6 +1,6 @@
 <?php
 // 前端跨域请求
-return function () {debug('cors');
+return function () {
     // 如果已经在 Web 服务器上配置 CORS，请添加以下代码以避免重复设置问题。
     // Apache: RequestHeader set X-Custom-Access-Control "Ignore PHP CORS settings"
     // Nginx: more_set_headers "X-Custom-Access-Control: Ignore PHP CORS settings";

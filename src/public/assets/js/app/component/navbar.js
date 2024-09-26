@@ -58,7 +58,28 @@ define([], function () {
         return $component.find('a[href="#"],a[href="/"],a[href="./"]');
     }
 
+
+    // 导航条组件通用代码。注意：未来将会删除
+    const simple = function (component) {
+        let $component = $.isPlainObject(component) ? component : $(component);
+        linkActive($component);
+        // 下拉菜单按钮
+        let $menu = $component.find('.menu');
+        if ($menu.length) {
+            $menu.click(function () {
+                $(this).toggleClass('active');
+                let $nav = $component.find('.col-nav,.collapse');
+                if ($nav.is('.hidden')) {
+                    $nav.removeClass('hidden');
+                } else {
+                    $nav.addClass('hidden');
+                }
+            });
+        }
+    }
+
     return {
+        'simple': simple,
         'linkActive': linkActive,
         'linkLiActive': linkLiActive
     }
