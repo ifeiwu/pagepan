@@ -13,7 +13,7 @@ return function ($request_data) {
 
     // 演示数据库
     $demo_db = DB::new(['debug' => false, 'type' => 'sqlite', 'file' => 'data/sqlite/demo.db', 'prefix' => '']);
-    $demo_tables = ['url_nav']; // 注意：在这里添加表名
+    $demo_tables = ['url_nav','faq']; // 注意：在这里添加表名
     foreach ($demo_tables as $table) {
         $demo_columns = $demo_db->getTableColumns($table);
         // 两个数据库字段是否相同

@@ -45,8 +45,10 @@ require(['jquery', 'device', 'smoothscroll', 'picturefill'], function () {
 
     // 延加载图片
     if ( $('.lazyload').length ) {
-        require(['lazysizes'], function () {
-            window.lazySizesConfig = { addClasses: true };
+        require(['lazyload'], function (LazyLoad) {
+            new LazyLoad({
+                elements_selector: '.lazyload'
+            });
         });
     }
 
