@@ -29,7 +29,7 @@ class Pager {
         // 站点信息
         $site = $this->db->select('site', ['name', 'value'], ['state', '=', 1]);
         $site = helper('arr/tokv', [$site]);
-        $this->view->assign('site', $site);
+        $this->view->assign('site', $site); // 这里要改为常量输出 define('SITE', $site)
         // 页面别名
         $alias = $data['alias'];
         $alias = str_replace('.html', '', $alias); // 删除伪静态后缀.html
@@ -50,7 +50,7 @@ class Pager {
             'get_tag' => $data['tag'] ?: '',
             'get_keyword' => $data['keyword'] ?: '',
             'get_pagenum' => $data['pagenum'] ?: '',
-        ]);
+        ]);// 这里要改为配置属性输出，这样可以修改值： Config::set('pagevar', []);
 
         // 没有找到页面，尝试执行/app/目录下定义的文件回调函数。
         if ( ! $page ) {

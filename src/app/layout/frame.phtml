@@ -1,5 +1,5 @@
 <?php
-$theme = json_decode($this->site['theme'], true);
+$theme = json_decode($site['theme'], true);
 $theme_screen = $theme['screen'];
 ?>
 <!DOCTYPE html>
@@ -19,9 +19,9 @@ $theme_screen = $theme['screen'];
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
         <meta name="applicable-device" content="mobile">
         <?php endif;?>
-        <title><?=$this->seo['title']?></title>
-        <meta name="keywords" content="<?=$this->seo['keywords']?>">
-        <meta name="description" content="<?=$this->seo['description']?>">
+        <title><?=$seo['title']?></title>
+        <meta name="keywords" content="<?=$seo['keywords']?>">
+        <meta name="description" content="<?=$seo['description']?>">
 
         <script>
             try {
@@ -35,17 +35,17 @@ $theme_screen = $theme['screen'];
         
         <?php
         // 全局页头
-        if ( $this->site['open_header_php'] ) { include ROOT_PATH . 'data/php/header.inc'; }
+        if ( $site['open_header_php'] ) { include ROOT_PATH . 'data/php/header.inc'; }
         // 网站图标
-        if ( $this->site['favicon'] ) { echo '<link rel="icon" href="' . $this->asset($this->site['favicon']) . '">'; }
+        if ( $site['favicon'] ) { echo '<link rel="icon" href="' . $this->asset($site['favicon']) . '">'; }
         // 应用图标
-        if ( $this->site['touchicon'] ) { echo '<link rel="apple-touch-icon" href="' . $this->asset($this->site['touchicon']) . '">'; }
+        if ( $site['touchicon'] ) { echo '<link rel="apple-touch-icon" href="' . $this->asset($site['touchicon']) . '">'; }
         
         echo '<link href="' . $this->asset('assets/css/pagepan.css') . '" rel="stylesheet">';
 		echo '<link href="' . $this->asset('assets/css/theme.css') . '" rel="stylesheet">';
         echo '<link href="' . $this->asset('assets/css/animate.css') . '" rel="stylesheet">';
         // 加载自定义字体
-        $site_fonts_list = $this->site['fonts_list'];
+        $site_fonts_list = $site['fonts_list'];
         if ( $site_fonts_list ) {
             $site_fonts_list = json_decode($site_fonts_list, true);
             foreach ($site_fonts_list as $font) {
@@ -55,9 +55,9 @@ $theme_screen = $theme['screen'];
             }
         }
         
-        if ( $this->site['open_article_css'] ) { echo '<link href="' . $this->asset('data/css/article.min.css') . '" rel="stylesheet">'; }
-        if ( $this->site['open_graphic_css'] ) { echo '<link href="' . $this->asset('data/css/graphic.min.css') . '" rel="stylesheet">'; }
-        if ( $this->site['open_global_css'] ) { echo '<link href="' . $this->asset('data/css/global.min.css') . '" rel="stylesheet">'; }
+        if ( $site['open_article_css'] ) { echo '<link href="' . $this->asset('data/css/article.min.css') . '" rel="stylesheet">'; }
+        if ( $site['open_graphic_css'] ) { echo '<link href="' . $this->asset('data/css/graphic.min.css') . '" rel="stylesheet">'; }
+        if ( $site['open_global_css'] ) { echo '<link href="' . $this->asset('data/css/global.min.css') . '" rel="stylesheet">'; }
         
         echo '<script>var pagevar = ' . json_encode($this->pagevar, JSON_UNESCAPED_UNICODE) . ';</script>';
         echo '<script src="' . $this->asset('assets/js/require.js') . '" type="text/javascript"></script>';
@@ -72,15 +72,15 @@ $theme_screen = $theme['screen'];
         <?php
         echo '<script src="' . $this->asset('assets/js/app/main.js') . '" type="text/javascript"></script>';
         // 全局脚本
-        if ($this->site['open_global_js']) { echo '<script src="' . $this->asset('data/js/global.min.js') . '" type="text/javascript"></script>'; }
+        if ($site['open_global_js']) { echo '<script src="' . $this->asset('data/js/global.min.js') . '" type="text/javascript"></script>'; }
         // 全局页脚
-        if ($this->site['open_footer_php']) { include ROOT_PATH . 'data/php/footer.inc'; }
+        if ($site['open_footer_php']) { include ROOT_PATH . 'data/php/footer.inc'; }
         // 在线客服
-        if ($this->site['service3_open'] == 1) { echo html_decode(base64_decode($this->site['service3_code'])); }
+        if ($site['service3_open'] == 1) { echo html_decode(base64_decode($site['service3_code'])); }
         // 社交分享
-        if ($this->site['share3_open'] == 1) { echo html_decode(base64_decode($this->site['share3_code'])); }
+        if ($site['share3_open'] == 1) { echo html_decode(base64_decode($site['share3_code'])); }
         // 流量统计
-        if ($this->site['stats3_open'] == 1) { echo html_decode(base64_decode($this->site['stats3_code'])); }
+        if ($site['stats3_open'] == 1) { echo html_decode(base64_decode($site['stats3_code'])); }
         ?>
     </body>
 </html>
