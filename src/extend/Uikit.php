@@ -465,6 +465,8 @@ class Uikit {
                     if ( empty($default_url) ) {
                         $join_alias = $this->view->setting['join.alias'];
                         $link_url = $join_alias ? $this->parseUrlItemParams($join_alias . '/id/[item.id].html', $item) : 'javascript:;';
+                    } else {
+                        $link_url = $this->parseUrlItemParams($default_url, $item);
                     }
                 } else {
                     $link_title = $link['title'];
@@ -474,7 +476,7 @@ class Uikit {
             }
         }
 
-        $link_url = $this->parseUrlGetParams($link_url ?: $default_url);
+        $link_url = $this->parseUrlGetParams($link_url);
 
         return [
             'url' => $link_url,

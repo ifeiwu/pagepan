@@ -55,7 +55,7 @@ define([], function () {
             return $link;
         }
 
-        return $component.find('a[href="#"],a[href="/"],a[href="./"]');
+        return $component.find('a[href="#"],a[href="/"],a[href="./"],a[href=""]');
     }
 
 

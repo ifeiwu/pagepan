@@ -13,7 +13,7 @@ define(function () {
                 $component.find('a[active~="' + pagevar.page_alias + '"],a[active~="' + pagevar.join_alias + '"],a[active="' + pagevar.get_pid + '"]').parent('li').addClass('active');
             }
 
-            $component.find('a[href="#"],a[href="/"],a[href="./"]').parent('li').addClass('active');
+            $component.find('a[href="#"],a[href="/"],a[href="./"],a[href=""]').parent('li').addClass('active');
         }
     };
 });
