@@ -1,6 +1,6 @@
 /**
  * 视频播放组件
- * <video class="video-js" data-theme="<?=$this->setting['userdata.video.theme']; ?>" data-poster="<?=$this->uikit->item_image($path, $image); ?>" width="100%" controls>
+ * <video class="video-js" data-theme="<?=$setting['userdata.video.theme']; ?>" data-poster="<?=$this->uikit->item_image($path, $image); ?>" width="100%" controls>
  *     <source src="$this->uikit->item_file($path, $item['video']); ?>"></source>
  * </video>
  **/
