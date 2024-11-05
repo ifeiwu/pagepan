@@ -78,6 +78,16 @@ function db()
     return DB::new(Config::file('db'));
 }
 
+// 购物车
+function cart()
+{
+    return new Cart([
+        'cartMaxItem'      => 0,
+        'itemMaxQuantity'  => 999,
+        'useCookie'        => false,
+    ]);
+}
+
 // GET 请求
 function get($name = null, $type = '*', $default = null)
 {

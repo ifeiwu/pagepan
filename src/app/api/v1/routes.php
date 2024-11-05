@@ -312,16 +312,128 @@ $o['GET']['api/v1/item/find/:id/:columns']=array (
 	  'method_flag' => 3,
 	);
 
-#==== GET api/v1/page/all
+#==== GET api/v1/goods/one
 
-$o['GET']['api/v1/page/all']=array (
-	  'class_name' => 'Page',
-	  'method_name' => 'getAll',
+$o['GET']['api/v1/goods/one']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'getOne',
 	  'arguments' => 
 	  array (
+	    'id' => 0,
+	    'column' => 1,
 	  ),
 	  'defaults' => 
 	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '获取单条数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== GET api/v1/goods/one/:id
+
+$o['GET']['api/v1/goods/one/:id']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'getOne',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'column' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '获取单条数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== GET api/v1/goods/one/:id/:column
+
+$o['GET']['api/v1/goods/one/:id/:column']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'getOne',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'column' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '获取单条数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== GET api/v1/goods/find
+
+$o['GET']['api/v1/goods/find']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'getFind',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'columns' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== GET api/v1/goods/find/:id
+
+$o['GET']['api/v1/goods/find/:id']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'getFind',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'columns' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== GET api/v1/goods/find/:id/:columns
+
+$o['GET']['api/v1/goods/find/:id/:columns']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'getFind',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'columns' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
 	  ),
 	  'metadata' => 
 	  array (
@@ -1107,25 +1219,6 @@ $o['POST']['api/v1/admin/delete']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/admin/token
-
-$o['POST']['api/v1/admin/token']=array (
-	  'class_name' => 'Admin',
-	  'method_name' => 'postToken',
-	  'arguments' => 
-	  array (
-	    'request_data' => 0,
-	  ),
-	  'defaults' => 
-	  array (
-	    0 => NULL,
-	  ),
-	  'metadata' => 
-	  array (
-	  ),
-	  'method_flag' => 3,
-	);
-
 #==== POST api/v1/admin/upgrade
 
 $o['POST']['api/v1/admin/upgrade']=array (
@@ -1563,10 +1656,193 @@ $o['POST']['api/v1/item/delete']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/page/delete
+#==== POST api/v1/goods/page
 
-$o['POST']['api/v1/page/delete']=array (
-	  'class_name' => 'Page',
+$o['POST']['api/v1/goods/page']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'postPage',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goods/select
+
+$o['POST']['api/v1/goods/select']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'postSelect',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '查询/分页',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goods/query
+
+$o['POST']['api/v1/goods/query']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'postQuery',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '预处理查询',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goods/add
+
+$o['POST']['api/v1/goods/add']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'postAdd',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '添加数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goods/update
+
+$o['POST']['api/v1/goods/update']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'postUpdate',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'request_data' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '更新数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goods/update/:id
+
+$o['POST']['api/v1/goods/update/:id']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'postUpdate',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'request_data' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '更新数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goods/copy
+
+$o['POST']['api/v1/goods/copy']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'postCopy',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '复制数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goods/field
+
+$o['POST']['api/v1/goods/field']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'postField',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '更新字段',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goods/count
+
+$o['POST']['api/v1/goods/count']=array (
+	  'class_name' => 'Goods',
+	  'method_name' => 'postCount',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '统计数量',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goods/delete
+
+$o['POST']['api/v1/goods/delete']=array (
+	  'class_name' => 'Goods',
 	  'method_name' => 'postDelete',
 	  'arguments' => 
 	  array (
@@ -1578,6 +1854,7 @@ $o['POST']['api/v1/page/delete']=array (
 	  ),
 	  'metadata' => 
 	  array (
+	    'long_description' => '删除数据',
 	  ),
 	  'method_flag' => 3,
 	);
@@ -1761,6 +2038,26 @@ $o['POST']['api/v1/page/count']=array (
 	  'metadata' => 
 	  array (
 	    'long_description' => '统计数量',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/page/delete
+
+$o['POST']['api/v1/page/delete']=array (
+	  'class_name' => 'Page',
+	  'method_name' => 'postDelete',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '删除数据',
 	  ),
 	  'method_flag' => 3,
 	);
@@ -2308,44 +2605,6 @@ $o['POST']['api/v1/uploader/image']=array (
 $o['POST']['api/v1/uploader/file']=array (
 	  'class_name' => 'Uploader',
 	  'method_name' => 'postFile',
-	  'arguments' => 
-	  array (
-	    'request_data' => 0,
-	  ),
-	  'defaults' => 
-	  array (
-	    0 => NULL,
-	  ),
-	  'metadata' => 
-	  array (
-	  ),
-	  'method_flag' => 3,
-	);
-
-#==== POST api/v1/template/change
-
-$o['POST']['api/v1/template/change']=array (
-	  'class_name' => 'Template',
-	  'method_name' => 'postChange',
-	  'arguments' => 
-	  array (
-	    'request_data' => 0,
-	  ),
-	  'defaults' => 
-	  array (
-	    0 => NULL,
-	  ),
-	  'metadata' => 
-	  array (
-	  ),
-	  'method_flag' => 3,
-	);
-
-#==== POST api/v1/template/pack
-
-$o['POST']['api/v1/template/pack']=array (
-	  'class_name' => 'Template',
-	  'method_name' => 'postPack',
 	  'arguments' => 
 	  array (
 	    'request_data' => 0,
