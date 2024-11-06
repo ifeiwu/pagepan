@@ -408,20 +408,17 @@ class Cart
      *
      * @return bool
      */
-    public function remove($id, $attributes = [])
+    public function remove($id, $hash)
     {
-        $attributes = (is_array($attributes)) ? array_filter($attributes) : [$attributes];
+        $attributes = $this->getAttributes($id, $hash);
 
         if (isset($this->collection[$id])) {
             if (empty($attributes)) {
                 unset($this->collection[$id]);
             } else {
-                $hash = md5(json_encode($attributes));
-
                 foreach ($this->collection[$id] as $index => $item) {
                     if ($item['hash'] == $hash) {
                         unset($this->collection[$id][$index]);
-
                         if (empty($this->collection[$id])) {
                             unset($this->collection[$id]);
                         }

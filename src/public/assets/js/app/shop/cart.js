@@ -19,14 +19,15 @@ define(function (require) {
 
     // 设置购物车商口数量
     const updateCartQuantity = function ($number) {
-        let id = $number.data('id');
-        let hash = $number.data('hash');
+        let $li = $number.closest('li');
+        let id = $li.find('input[name="id"]').val();
+        let hash = $li.find('input[name="hash"]').val();
         let quantity = $number.val();
 
-        $.getJSON('./m/shop/update-cart-quantity', {'id': id, 'hash': hash, 'quantity': quantity}, function (res) {
+        $.getJSON('./m/shop/cart-quantity', {'id': id, 'hash': hash, 'quantity': quantity}, function (res) {
             if (res.code == 0) {
                 $number.val(quantity);
-                let $drawer = $number.closest('.drawer');
+                let $drawer = $li.find('.drawer');
                 $drawer.removeClass('open');
                 $drawer.find('.minus').attr('disabled', false);
                 if (quantity == 99) {
@@ -42,7 +43,7 @@ define(function (require) {
     // 双击商品抽屉方式打开删除按钮
     const drawerInit = function () {
         let $drawers = $('.drawer');
-        $drawers.dblclick(function(e) {
+        $drawers.dblclick(function (e) {
             e.preventDefault();
             let $target = $(e.target);
             // 排除双击商品内的元素
@@ -53,7 +54,7 @@ define(function (require) {
             $target.closest('.drawer').addClass('open');
         });
         // 点击任何一个商品删除
-        $('body').click(function(e) {
+        $('body').click(function (e) {
             let $target = $(e.target);
             // 排除双击商品内的元素
             if ($target.closest('.quantity').length) {
@@ -61,7 +62,7 @@ define(function (require) {
             }
             $drawers.each(function () {
                 let $drawer = $(this);
-                if ($drawer.is('.open') && $drawer.find('.number').val() > 0) {
+                if ($drawer.is('.open') && $drawer.find('input[name="number"]').val() > 0) {
                     $drawer.removeClass('open');
                     $drawer.find('.minus').attr('disabled', false);
                 }
@@ -71,16 +72,19 @@ define(function (require) {
         // 从购物车删除
         $('.remove').click(function (e) {
             e.preventDefault();
-            var $this = $(this);
-            $.getJSON('./shopcart/remove', {'ids': $this.data('id')}, function (json) {
-                if (json.code == 'success') {
-                    $('#cart_count').text(json.count);
-                    $('#cart_total').text(json.cart_total);
+            console.log(e)
+            let $li = $(this).closest('li');
+            let id = $li.find('input[name="id"]').val();
+            let hash = $li.find('input[name="hash"]').val();
+            $.getJSON('./m/shop/cart-remove', {'id': id, 'hash': hash}, function (res) {
+                if (res.code == 0) {
+                    $component.find('.total-price').text(res.data.totalPrice);
 
-                    $this.parents('tr').fadeOut('slow', function () {
+                    $li.fadeOut('slow', function () {
                         $(this).remove();
                     });
-                    if (!$('.shopcart-items tr').length) {
+
+                    if ($li.closest('ul').find('li').length == 0) {
                         location.reload();
                     }
                 }
@@ -90,9 +94,9 @@ define(function (require) {
 
     // 商品数量调整
     const quantitysInit = function () {
-        $component.find('.quantity').each(function (i, v) {
+        $component.find('.quantity').each(function () {
             let $quantity = $(this);
-            let $number = $quantity.find('.number');
+            let $number = $quantity.find('input[name="number"]');
             // 数量减 1
             $quantity.find('.minus').click(function () {
                 let quantity = parseInt($number.val());
