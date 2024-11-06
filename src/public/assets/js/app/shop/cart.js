@@ -17,26 +17,7 @@ define(function (require) {
         return t.split("").reverse().join("") + "." + r;
     }
 
-    //从购物车删除
-    $('.remove-item').click(function (e) {
-        e.preventDefault();
-        var $this = $(this);
-        $.getJSON('./shopcart/remove', {'ids': $this.data('id')}, function (json) {
-            if (json.code == 'success') {
-                $('#cart_count').text(json.count);
-                $('#cart_total').text(json.cart_total);
-
-                $this.parents('tr').fadeOut('slow', function () {
-                    $(this).remove();
-                });
-                if (!$('.shopcart-items tr').length) {
-                    location.reload();
-                }
-            }
-        });
-    });
-
-    //设置购物车商口数量
+    // 设置购物车商口数量
     const updateCartQuantity = function ($number) {
         let id = $number.data('id');
         let hash = $number.data('hash');
@@ -45,6 +26,14 @@ define(function (require) {
         $.getJSON('./m/shop/update-cart-quantity', {'id': id, 'hash': hash, 'quantity': quantity}, function (res) {
             if (res.code == 0) {
                 $number.val(quantity);
+                let $drawer = $number.closest('.drawer');
+                $drawer.removeClass('open');
+                $drawer.find('.minus').attr('disabled', false);
+                if (quantity == 99) {
+                    $drawer.find('.plus').attr('disabled', true);
+                } else {
+                    $drawer.find('.plus').attr('disabled', false);
+                }
                 $component.find('.total-price').text(res.data.totalPrice);
             }
         });
@@ -57,25 +46,49 @@ define(function (require) {
             e.preventDefault();
             let $target = $(e.target);
             // 排除双击商品内的元素
-            if ($target.closest('.quantity').length ||
-                $target.closest('.delete').length ||
-                $target.closest('img').length) {
+            if ($target.closest('.quantity').length || $target.closest('img').length) {
                 return false;
             }
             // 打开当前双击商品的删除按钮
-            let $drawer = $(e.target).closest('.drawer');
-            $drawer.toggleClass('open');
-            // 关闭其它商品打开的删除按钮
-            let $lis = $drawer.closest('li').siblings();
-            $lis.each(function () {
-                let $drawer = $(this).find('.drawer');
-                if ($drawer.is('.open')) {
+            $target.closest('.drawer').addClass('open');
+        });
+        // 点击任何一个商品删除
+        $('body').click(function(e) {
+            let $target = $(e.target);
+            // 排除双击商品内的元素
+            if ($target.closest('.quantity').length) {
+                return false;
+            }
+            $drawers.each(function () {
+                let $drawer = $(this);
+                if ($drawer.is('.open') && $drawer.find('.number').val() > 0) {
                     $drawer.removeClass('open');
+                    $drawer.find('.minus').attr('disabled', false);
+                }
+            });
+        });
+
+        // 从购物车删除
+        $('.remove').click(function (e) {
+            e.preventDefault();
+            var $this = $(this);
+            $.getJSON('./shopcart/remove', {'ids': $this.data('id')}, function (json) {
+                if (json.code == 'success') {
+                    $('#cart_count').text(json.count);
+                    $('#cart_total').text(json.cart_total);
+
+                    $this.parents('tr').fadeOut('slow', function () {
+                        $(this).remove();
+                    });
+                    if (!$('.shopcart-items tr').length) {
+                        location.reload();
+                    }
                 }
             });
         });
     };
 
+    // 商品数量调整
     const quantitysInit = function () {
         $component.find('.quantity').each(function (i, v) {
             let $quantity = $(this);
@@ -87,7 +100,8 @@ define(function (require) {
                     $number.val(quantity - 1);
                     updateCartQuantity($number);
                 } else {
-
+                    $(this).attr('disabled', true);
+                    $number.closest('.drawer').addClass('open');
                 }
             });
 
@@ -100,7 +114,7 @@ define(function (require) {
                 updateCartQuantity($number);
             });
 
-            //输入数量
+            // 输入数量
             $number.on('input', function () {
                 let quantity = parseInt($(this).val());
                 if (quantity <= 0 || isNaN(quantity)) {
