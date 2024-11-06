@@ -16,60 +16,76 @@
 class Cart
 {
     /**
-     * An unique ID for the cart.
+     * 购物车的唯一 ID
      *
      * @var string
      */
     protected $cartId;
 
     /**
-     * Maximum item allowed in the cart.
+     * 购物车中允许的最大商品数
      *
      * @var int
      */
     protected $cartMaxItem = 0;
 
     /**
-     * Maximum quantity of a item allowed in the cart.
+     * 购物车中允许的商品的最大数量
      *
      * @var int
      */
     protected $itemMaxQuantity = 0;
 
     /**
-     * Enable or disable cookie.
+     * 启用或禁用 Cookie
      *
      * @var bool
      */
     protected $useCookie = false;
 
     /**
-     * A collection of cart items.
+     * 购物车项目的集合
      *
      * @var array
      */
-    private $items = [];
+    private $collection = [];
 
     /**
-     * Discount applied to the cart.
+     * 折扣应用于购物车
      *
      * @var float
      */
     private $discount = 0.0;
 
     /**
-     * Shipping cost for the cart.
+     * 购物车的运费
      *
      * @var float
      */
     private $shippingCost = 0.0;
 
     /**
-     * Initialize cart.
+     * 单例设计模式
+     * @var object
+     */
+    private static $_instance;
+
+    public static function new($path = null)
+    {
+        if ( ! (self::$_instance instanceof self) )
+        {
+            self::$_instance = new self($path);
+        }
+
+        return self::$_instance;
+    }
+
+    /**
+     * 初始化购物车
      *
      * @param array $options
      */
-    public function __construct($options = [])
+    private function __construct($options = [])
     {
         if (!session_id()) {
             session_start();
@@ -87,33 +103,48 @@ class Cart
             $this->useCookie = true;
         }
 
-        $this->cartId = md5((isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : 'SimpleCart') . '_cart';
+        $this->cartId = md5((isset($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : 'PagePanCart') . '_cart';
 
         $this->read();
     }
 
     /**
-     * Get items in the cart.
+     * 获取购物车中所有商品。
      *
+     * @param bool $merge 是否合并集合中的商品
      * @return array
      */
     public function getItems()
     {
-        return $this->items;
+        $_items = [];
+        foreach ($this->collection as $items) {
+            $_items = array_merge($_items, $items);
+        }
+        return $_items;
     }
 
     /**
-     * Check if the cart is empty.
+     * 获取购物车中商品集合
+     *
+     * @return array
+     */
+    public function getCollection()
+    {
+        return $this->collection;
+    }
+
+    /**
+     * 检查购物车是否为空
      *
      * @return bool
      */
     public function isEmpty()
     {
-        return empty(array_filter($this->items));
+        return empty(array_filter($this->collection));
     }
 
     /**
-     * Get the total number of items in the cart.
+     * 获取购物车中的商品总数
      *
      * @return int
      */
@@ -121,7 +152,7 @@ class Cart
     {
         $total = 0;
 
-        foreach ($this->items as $items) {
+        foreach ($this->collection as $items) {
             foreach ($items as $item) {
                 ++$total;
             }
@@ -131,7 +162,7 @@ class Cart
     }
 
     /**
-     * Get the total quantity of items in the cart.
+     * 获取购物车中的商品总数。
      *
      * @return int
      */
@@ -139,7 +170,7 @@ class Cart
     {
         $quantity = 0;
 
-        foreach ($this->items as $items) {
+        foreach ($this->collection as $items) {
             foreach ($items as $item) {
                 $quantity += $item['quantity'];
             }
@@ -149,17 +180,26 @@ class Cart
     }
 
     /**
-     * Get the sum of a specific attribute (e.g., price) in the cart.
+     * 获取购物车中的商品总价格。
+     *
+     * @return int
+     */
+    public function getTotalPrice()
+    {
+        return $this->getAttributeTotal('price');
+    }
+
+    /**
+     * 获取购物车中特定属性（例如 price）的总和
      *
      * @param string $attribute
-     *
      * @return int
      */
     public function getAttributeTotal($attribute = 'price')
     {
         $total = 0;
 
-        foreach ($this->items as $items) {
+        foreach ($this->collection as $items) {
             foreach ($items as $item) {
                 if (isset($item['attributes'][$attribute])) {
                     $total += $item['attributes'][$attribute] * $item['quantity'];
@@ -171,19 +211,19 @@ class Cart
     }
 
     /**
-     * Remove all items from the cart.
+     * 从购物车中删除所有商品
      */
     public function clear()
     {
-        $this->items = [];
+        $this->collection = [];
         $this->write();
     }
 
     /**
-     * Check if an item exists in the cart.
+     * 检查购物车中是否存在商品
      *
      * @param string $id
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return bool
      */
@@ -191,9 +231,9 @@ class Cart
     {
         $attributes = (is_array($attributes)) ? array_filter($attributes) : [$attributes];
 
-        if (isset($this->items[$id])) {
+        if (isset($this->collection[$id])) {
             $hash = md5(json_encode($attributes));
-            foreach ($this->items[$id] as $item) {
+            foreach ($this->collection[$id] as $item) {
                 if ($item['hash'] == $hash) {
                     return true;
                 }
@@ -204,7 +244,7 @@ class Cart
     }
 
     /**
-     * Get one item from the cart.
+     * 从购物车中获取 1 件商品
      *
      * @param string $id
      * @param string $hash
@@ -214,22 +254,22 @@ class Cart
     public function getItem($id, $hash = null)
     {
         if ($hash) {
-            $key = array_search($hash, array_column($this->items[$id], 'hash'));
+            $key = array_search($hash, array_column($this->collection[$id], 'hash'));
             if ($key !== false) {
-                return $this->items[$id][$key];
+                return $this->collection[$id][$key];
             }
             return false;
         } else {
-            return reset($this->items[$id]);
+            return reset($this->collection[$id]);
         }
     }
 
     /**
-     * Add an item to the cart.
+     * 将商品添加到购物车
      *
      * @param string $id
-     * @param int    $quantity
-     * @param array  $attributes
+     * @param int $quantity
+     * @param array $attributes
      *
      * @return bool
      */
@@ -239,15 +279,15 @@ class Cart
         $attributes = (is_array($attributes)) ? array_filter($attributes) : [$attributes];
         $hash = md5(json_encode($attributes));
 
-        if (count($this->items) >= $this->cartMaxItem && $this->cartMaxItem != 0) {
+        if (count($this->collection) >= $this->cartMaxItem && $this->cartMaxItem != 0) {
             return false;
         }
 
-        if (isset($this->items[$id])) {
-            foreach ($this->items[$id] as $index => $item) {
+        if (isset($this->collection[$id])) {
+            foreach ($this->collection[$id] as $index => $item) {
                 if ($item['hash'] == $hash) {
-                    $this->items[$id][$index]['quantity'] += $quantity;
-                    $this->items[$id][$index]['quantity'] = ($this->itemMaxQuantity < $this->items[$id][$index]['quantity'] && $this->itemMaxQuantity != 0) ? $this->itemMaxQuantity : $this->items[$id][$index]['quantity'];
+                    $this->collection[$id][$index]['quantity'] += $quantity;
+                    $this->collection[$id][$index]['quantity'] = ($this->itemMaxQuantity < $this->collection[$id][$index]['quantity'] && $this->itemMaxQuantity != 0) ? $this->itemMaxQuantity : $this->collection[$id][$index]['quantity'];
 
                     $this->write();
 
@@ -256,10 +296,10 @@ class Cart
             }
         }
 
-        $this->items[$id][] = [
-            'id'         => $id,
-            'quantity'   => ($quantity > $this->itemMaxQuantity && $this->itemMaxQuantity != 0) ? $this->itemMaxQuantity : $quantity,
-            'hash'       => $hash,
+        $this->collection[$id][] = [
+            'id' => $id,
+            'quantity' => ($quantity > $this->itemMaxQuantity && $this->itemMaxQuantity != 0) ? $this->itemMaxQuantity : $quantity,
+            'hash' => $hash,
             'attributes' => $attributes,
         ];
 
@@ -269,75 +309,102 @@ class Cart
     }
 
     /**
-     * Update item quantity.
+     * 更新商品数量
      *
-     * @param string $id
-     * @param int    $quantity
-     * @param array  $attributes
-     *
+     * @param $id
+     * @param $hash
+     * @param $quantity
      * @return bool
      */
-    public function update($id, $quantity = 1, $attributes = [])
+    public function update($id, $hash, $quantity = 1)
     {
+        $attributes = $this->getAttributes($id, $hash);
         $quantity = (preg_match('/^\d+$/', $quantity)) ? $quantity : 1;
 
         if ($quantity == 0) {
             $this->remove($id, $attributes);
-
             return true;
         }
 
-        if (isset($this->items[$id])) {
-            $hash = md5(json_encode(array_filter($attributes)));
-
-            foreach ($this->items[$id] as $index => $item) {
+        if (isset($this->collection[$id])) {
+            foreach ($this->collection[$id] as $index => $item) {
                 if ($item['hash'] == $hash) {
-                    $this->items[$id][$index]['quantity'] = $quantity;
-                    $this->items[$id][$index]['quantity'] = ($this->itemMaxQuantity < $this->items[$id][$index]['quantity'] && $this->itemMaxQuantity != 0) ? $this->itemMaxQuantity : $this->items[$id][$index]['quantity'];
-
+                    $this->collection[$id][$index]['quantity'] = $quantity;
+                    $this->collection[$id][$index]['quantity'] = ($this->itemMaxQuantity < $this->collection[$id][$index]['quantity'] && $this->itemMaxQuantity != 0) ? $this->itemMaxQuantity : $this->collection[$id][$index]['quantity'];
                     $this->write();
-
                     return true;
                 }
             }
         }
-
         return false;
     }
 
     /**
-     * Update the attributes of a specific item in the cart.
+     * 通过 hash 更新购特定商品的数量
+     *
+     * @param $hash
+     * @param $quantity
+     * @return bool
+     */
+    public function updateByHash($hash, $quantity = 1)
+    {
+        $bool = false;
+        foreach ($this->collection as $id => $items) {
+            $item = $this->getItem($id, $hash);
+            if ($item) {
+                $bool = $this->update($id, $hash, $quantity);
+                break;
+            }
+        }
+        return $bool;
+    }
+
+    /**
+     * 获取购物车中特定商品的属性
+     *
+     * @param $id
+     * @param $hash
+     * @return array|mixed
+     */
+    public function getAttributes($id, $hash)
+    {
+        $item = $this->getItem($id, $hash);
+        if ($item) {
+            return $item['attributes'];
+        }
+        return [];
+    }
+
+    /**
+     * 更新购物车中特定商品的属性
      *
      * @param string $id
      * @param string $hash
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return bool
      */
     public function updateAttributes($id, $hash, $attributes = [])
     {
-        if (isset($this->items[$id])) {
-            foreach ($this->items[$id] as $index => $item) {
+        if (isset($this->collection[$id])) {
+            foreach ($this->collection[$id] as $index => $item) {
                 if ($item['hash'] == $hash) {
                     foreach ($attributes as $key => $value) {
-                        $this->items[$id][$index]['attributes'][$key] = $value;
+                        $this->collection[$id][$index]['attributes'][$key] = $value;
                     }
-
                     $this->write();
-
                     return true;
                 }
             }
         }
-
         return false;
     }
 
     /**
-     * Remove an item from the cart.
+     * 从购物车中删除商品
      *
      * @param string $id
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return bool
      */
@@ -345,18 +412,18 @@ class Cart
     {
         $attributes = (is_array($attributes)) ? array_filter($attributes) : [$attributes];
 
-        if (isset($this->items[$id])) {
+        if (isset($this->collection[$id])) {
             if (empty($attributes)) {
-                unset($this->items[$id]);
+                unset($this->collection[$id]);
             } else {
                 $hash = md5(json_encode($attributes));
 
-                foreach ($this->items[$id] as $index => $item) {
+                foreach ($this->collection[$id] as $index => $item) {
                     if ($item['hash'] == $hash) {
-                        unset($this->items[$id][$index]);
+                        unset($this->collection[$id][$index]);
 
-                        if (empty($this->items[$id])) {
-                            unset($this->items[$id]);
+                        if (empty($this->collection[$id])) {
+                            unset($this->collection[$id]);
                         }
                     }
                 }
@@ -371,10 +438,10 @@ class Cart
     }
 
     /**
-     * Apply a discount code to the cart.
+     * 将折扣代码应用于购物车
      *
      * @param string $code
-     * @param float  $amount
+     * @param float $amount
      */
     public function applyDiscount($code, $amount)
     {
@@ -382,7 +449,7 @@ class Cart
     }
 
     /**
-     * Get the total after applying the discount.
+     * 应用折扣后获取总额.
      *
      * @return float
      */
@@ -392,7 +459,7 @@ class Cart
     }
 
     /**
-     * Set shipping cost for the cart.
+     * 设置购物车的运费
      *
      * @param float $cost
      */
@@ -402,7 +469,7 @@ class Cart
     }
 
     /**
-     * Get the total after adding shipping cost.
+     * 获取添加运费后的总额
      *
      * @return float
      */
@@ -412,18 +479,18 @@ class Cart
     }
 
     /**
-     * Save cart to database for persistent sessions.
+     * 将购物车保存到数据库以进行持久会话
      *
      * @param int $userId
      */
     public function saveToDatabase($userId)
     {
-        $cartData = serialize($this->items);
+        $cartData = serialize($this->collection);
         // Save $cartData to the database associated with the $userId.
     }
 
     /**
-     * Load cart from database for persistent sessions.
+     * 从数据库加载 cart 以进行持久会话
      *
      * @param int $userId
      */
@@ -431,26 +498,26 @@ class Cart
     {
         // Fetch cart data from the database for the given $userId.
         // Example: $cartData = fetch_cart_data($userId);
-        // $this->items = unserialize($cartData);
+        // $this->collection = unserialize($cartData);
     }
 
     /**
-     * Save cart data to session or cookie.
+     * 将购物车数据保存到会话或 Cookie
      */
     protected function write()
     {
         if ($this->useCookie) {
-            setcookie($this->cartId, json_encode($this->items), time() + 604800, '/');
+            setcookie($this->cartId, json_encode($this->collection), time() + 604800, '/');
         } else {
-            $_SESSION[$this->cartId] = $this->items;
+            $_SESSION[$this->cartId] = $this->collection;
         }
     }
 
     /**
-     * Read cart data from session or cookie.
+     * 从会话或 Cookie 中读取购物车数据
      */
     protected function read()
     {
-        $this->items = ($this->useCookie && isset($_COOKIE[$this->cartId])) ? json_decode($_COOKIE[$this->cartId], true) : ((isset($_SESSION[$this->cartId])) ? $_SESSION[$this->cartId] : []);
+        $this->collection = ($this->useCookie && isset($_COOKIE[$this->cartId])) ? json_decode($_COOKIE[$this->cartId], true) : ((isset($_SESSION[$this->cartId])) ? $_SESSION[$this->cartId] : []);
     }
 }

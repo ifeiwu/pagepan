@@ -66,7 +66,7 @@ define(function (require) {
             // 数量加 1
             $quantity.find('.plus').click(function () {
                 let quantity = parseInt($number.val());
-                if (quantity < 999 || isNaN(quantity)) {
+                if (quantity < 99 || isNaN(quantity)) {
                     $number.val(quantity + 1);
                 }
                 // inputAutoWidth($number, init_font_width, init_number_width);
@@ -77,8 +77,8 @@ define(function (require) {
                 let quantity = parseInt($(this).val());
                 if (quantity <= 0 || isNaN(quantity)) {
                     $number.val(1);
-                } else if (quantity >= 999) {
-                    $number.val(999);
+                } else if (quantity >= 99) {
+                    $number.val(99);
                 } else {
                     $number.val(quantity);
                 }

@@ -81,9 +81,9 @@ function db()
 // 购物车
 function cart()
 {
-    return new Cart([
+    return Cart::new([
         'cartMaxItem'      => 0,
-        'itemMaxQuantity'  => 999,
+        'itemMaxQuantity'  => 99,
         'useCookie'        => false,
     ]);
 }
@@ -144,6 +144,12 @@ function html_decode($str)
 function html_encode($str)
 {
     return htmlspecialchars($str, ENT_QUOTES);
+}
+
+// 价格格式化
+function price_format($num)
+{
+    return number_format($num, 2, '.', ',');
 }
 
 // 压缩内容
