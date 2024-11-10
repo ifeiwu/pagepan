@@ -17,7 +17,7 @@ define(function (require) {
                 data: formData,
                 success: function(res) {
                     if (res.code == 0) {
-
+                        location.href = 'order-success';
                     } else {
                         alert(res.message);
                         $component.find('[name="'+res.data.field+'"]')[0].focus();

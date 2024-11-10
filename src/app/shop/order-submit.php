@@ -31,7 +31,10 @@ return function () {
         Response::error('订单备注长度 1-200 个字符', ['field' => 'remark']);
     }
 
+    // 订单信息
     $order = [];
+    $cart = cart();
+    // 登录用户使用的地址
     $address_id = post('address_id');
     if ($address_id) {
         $user_id = session('user.id');
@@ -45,22 +48,53 @@ return function () {
         $wechat = $address['wechat'];
     }
 
-    // 订单信息
     $order['sn'] = date('YmdHis') . substr(microtime(), 2, 6) . rand(1000, 9999); // 订单序号
     $order['ctime'] = time(); // 创建时间
-    $order['is_new'] = 0; // 未读/已读状态
-    $order['is_read'] = 0; // 未读/已读状态
-    $order['status'] = 1; // 订单状态：1正常，2关闭
-    $order['total'] = cart()->getTotalWithDiscount(); // 商品总额
+    $order['is_new'] = 0; // 0未读/1已读状态
+    $order['is_read'] = 0; // 0未读/1已读状态
+    $order['status'] = 1; // 订单状态：1正常/2关闭
+    $order['price'] = $cart->getTotalWithDiscount(); // 实付总额
     $order['score'] = floatval($score); // 获得积分
     $order['remark'] = $remark; // 买家备注
-
-    // 收货地址
-    $order['linkman'] = $linkman;
-    $order['phone'] = $phone;
-    $order['wechat'] = $wechat;
-    $order['address'] = $street . $house;
+    $order['linkman'] = $linkman; // 联系人
+    $order['phone'] = $phone; // 手机号
+    $order['wechat'] = $wechat; // 微信号
+    $order['address'] = $street . $house; // 收货地址
 
     $db = db();
-    $db->insert();
+    $order_id = $db->insert('order', $order);
+    if ($order_id) {
+        // 添加商品清单
+        $is_add_item = true;
+        $items = $cart->getItems();
+        foreach ($items as $item) {
+            $quantity = $item['quantity'];
+            $attrs = $item['attributes'];
+            $detail = [
+                'order_id' => $order_id,
+                'goods_id' => $item['id'],
+                'quantity' => $quantity,
+                'title' => $attrs['title'],
+                'specs' => $attrs['specs'],
+                'price' => $attrs['price'],
+                'image' => $attrs['image'],
+                'path' => $attrs['path'],
+            ];
+            if (!$db->insert('order_detail', $detail)) {
+                $is_add_item = false;
+                break;
+            }
+        }
+        // 提交或回滚事务
+        if ($is_add_item !== false) {
+            $cart->clear();
+            Response::success('添加订单成功', ['id' => $order_id]);
+        } else {
+            $db->delete('order', [['id', '=', $order_id]]);
+            $db->delete('order_detail', [['order_id', '=', $order_id]]);
+            Response::error('添加订单商品失败');
+        }
+    } else {
+        Response::error('添加订单失败');
+    }
 };
