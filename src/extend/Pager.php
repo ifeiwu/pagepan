@@ -30,6 +30,7 @@ class Pager {
         $site = $this->db->select('site', ['name', 'value'], ['state', '=', 1]);
         $site = helper('arr/tokv', [$site]);
         $this->view->assign('site', $site); // 这里要改为常量输出 define('SITE', $site)
+        define('SITE', $site);
         // 页面别名
         $alias = $data['alias'];
         $alias = str_replace('.html', '', $alias); // 删除伪静态后缀.html

@@ -1,9 +1,9 @@
 <?php
 return function () {
-    // 街道名称
-    $street = post('street');
-    if (strlen($street) <= 2 || strlen($street) >= 20) {
-        Response::error('街道名称长度 2-20 个字符', ['field' => 'street']);
+    // 道路名称
+    $road = post('road');
+    if (strlen($road) <= 2 || strlen($road) >= 20) {
+        Response::error('街道名称长度 2-20 个字符', ['field' => 'road']);
     }
     // 门牌号
     $house = post('house');
@@ -41,12 +41,19 @@ return function () {
         $order['user_id'] = $user_id; // 用户ID
         // 获取用户收货地址
         $address = $db->find('user_address', '*', [['user_id', '=', $user_id], 'AND', ['address_id', '=', $address_id]]);
-        $street = $address['street'];
+        $road = $address['road'];
         $house = $address['house'];
         $linkman = $address['linkman'];
         $phone = $address['phone'];
         $wechat = $address['wechat'];
     }
+
+    $shop_range = db()->find('site', 'value', ['name', '=', 'shop_range'], null, 0);
+    $shop_range = json_decode($shop_range, true);
+    $province = $shop_range['province'];
+    $city = $shop_range['city'];
+    $district = $shop_range['district'];
+    session('order_address', ['province' => $province, 'city' => $city, 'district' => $district, 'road' => $road, 'house' => $house]);
 
     $order['sn'] = date('YmdHis') . substr(microtime(), 2, 6) . rand(1000, 9999); // 订单序号
     $order['ctime'] = time(); // 创建时间
@@ -59,7 +66,7 @@ return function () {
     $order['linkman'] = $linkman; // 联系人
     $order['phone'] = $phone; // 手机号
     $order['wechat'] = $wechat; // 微信号
-    $order['address'] = $street . $house; // 收货地址
+    $order['address'] = "$province,$city,$district,$road,$house"; // 收货地址
 
     $db = db();
     $order_id = $db->insert('order', $order);

@@ -28,6 +28,17 @@ define(function (require) {
                 }
             });
         });
+
+        require(['form-storage'], function (FormStorage) {
+            const formStorage = new FormStorage('#orderForm', {
+                name: 'form-order',
+                ignores: [
+                    '[type="hidden"]'
+                ],
+                text: '[type="text"]'
+            });
+            formStorage.apply();
+        });
     }
 
     return {

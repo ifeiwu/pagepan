@@ -48,11 +48,6 @@ define(function (require) {
         $quantitys.each(function (i, v) {
             let $quantity = $(this);
             let $number = $quantity.find('.number');
-            // let init_number_width = $number.width();
-            // $number2 = $number.clone().css('width', '0px');
-            // $number.after($number2);
-            // let init_font_width = $number2[0].scrollWidth;
-            // $number2.remove();
 
             // 数量减 1
             $quantity.find('.minus').click(function () {
@@ -60,7 +55,6 @@ define(function (require) {
                 if (quantity > 1 || isNaN(quantity)) {
                     $number.val(quantity - 1);
                 }
-                // inputAutoWidth($number, init_font_width, init_number_width);
             });
 
             // 数量加 1
@@ -69,7 +63,6 @@ define(function (require) {
                 if (quantity < 99 || isNaN(quantity)) {
                     $number.val(quantity + 1);
                 }
-                // inputAutoWidth($number, init_font_width, init_number_width);
             });
 
             //输入数量
@@ -82,21 +75,24 @@ define(function (require) {
                 } else {
                     $number.val(quantity);
                 }
-                // inputAutoWidth($number, init_font_width, init_number_width);
             });
         });
-        // 输出框自动宽度
-        // function inputAutoWidth($number, font_width, number_width) {
-        //     let width = $number.val().length * font_width;
-        //     if ( width > number_width ) {
-        //         $number.width(width);
-        //     }
-        // }
     }
 
+    const openWeChatAddFriend = function (wxhao) {
+        require(['clipboard'], function (ClipboardJS) {
+            let clipboard = new ClipboardJS('#open_wechat');
+            clipboard.on('success', function(e) {
+                alert("微信号复制成功，请进");
+                window.location.href='weixin://';
+                e.clearSelection();
+            });
+        });
+    }
 
     return {
         'quantitysInit': quantitysInit,
-        'addShopCartInit': addShopCartInit
+        'addShopCartInit': addShopCartInit,
+        'openWeChatAddFriend': openWeChatAddFriend
     }
 });
