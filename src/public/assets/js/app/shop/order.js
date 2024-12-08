@@ -10,9 +10,11 @@ define(function (require) {
 
         $component.find('form').submit(function (e) {
             e.preventDefault();
-            let formData = $(this).serializeArray();
+            let $form = $(this);
+            let token = $form.data('token');
+            let formData = $form.serializeArray();
             $.ajax({
-                url: 'm/shop/order-submit',
+                url: 'm/shop/order-submit?_token=' + token,
                 type: 'POST',
                 data: formData,
                 success: function(res) {
@@ -32,12 +34,14 @@ define(function (require) {
         require(['form-storage'], function (FormStorage) {
             const formStorage = new FormStorage('#orderForm', {
                 name: 'form-order',
-                ignores: [
-                    '[type="hidden"]'
-                ],
+                includes: ['select','input','textarea'],
                 text: '[type="text"]'
             });
             formStorage.apply();
+            // 每秒钟保存表单
+            setInterval(() => {
+                formStorage.save();
+            }, 1000);
         });
     }
 

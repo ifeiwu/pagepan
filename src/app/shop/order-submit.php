@@ -1,41 +1,50 @@
 <?php
+// 保存提交的订单
 return function () {
-    // 道路名称
-    $road = post('road');
-    if (strlen($road) <= 2 || strlen($road) >= 20) {
-        Response::error('街道名称长度 2-20 个字符', ['field' => 'road']);
+    // 令牌验证
+    $_token = preg_replace('/[^0-9a-z]+/', '', $_GET['_token']);
+    if (!helper('form/token', [$_token])) {
+        Response::error('invalid token');
+    }
+    // 道路名
+    $road = filter_var($_POST['road'], FILTER_SANITIZE_SPECIAL_CHARS);
+    if (empty($road)) {
+        Response::error('请选择道路名称', ['field' => 'road']);
     }
     // 门牌号
-    $house = post('house');
-    if (strlen($house) <= 5 || strlen($house) >= 100) {
-        Response::error('门牌号长度 5-100 个字符', ['field' => 'house']);
+    $house = filter_var($_POST['house'], FILTER_SANITIZE_SPECIAL_CHARS);
+    $house_length = mb_strlen($house, 'UTF-8');
+    if ($house_length <= 2 || $house_length >= 30) {
+        Response::error('门牌号长度 2-30 个字符', ['field' => 'house']);
     }
     // 联系人
-    $linkman = post('linkman');
-    if (strlen($linkman) <= 1 || strlen($linkman) >= 10) {
-        Response::error('联系人长度 1-10 个字符', ['field' => 'linkman']);
+    $linkman = filter_var($_POST['linkman'], FILTER_SANITIZE_SPECIAL_CHARS);
+    $linkman_length = mb_strlen($linkman, 'UTF-8');
+    if ($linkman_length <= 1 || $linkman_length >= 5) {
+        Response::error('联系人长度 1-5 个字符', ['field' => 'linkman']);
     }
     // 手机号
-    $phone = post('phone');
+    $phone = $_POST['phone'];
     if (!preg_match('/^1[0-9]{10}$/', $phone)) {
         Response::error('无效的手机号码', ['field' => 'phone']);
     }
     // 微信号
-    $wechat = post('wechat');
-    if (!preg_match('/^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/', $wechat)) {
+    $wechat = $_POST['wechat'];
+    if (!preg_match('/^[-_a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/', $wechat)) {
         Response::error('微信号格式错误', ['field' => 'wechat']);
     }
     // 订单备注
-    $remark = post('remark');
-    if (strlen($remark) >= 200) {
-        Response::error('订单备注长度 1-200 个字符', ['field' => 'remark']);
+    $remark = filter_var($_POST['remark'], FILTER_SANITIZE_SPECIAL_CHARS);
+    $remark_length = mb_strlen($remark, 'UTF-8');
+    if ($remark_length >= 200) {
+        Response::error('订单备注长度 2-100 个字符', ['field' => 'remark']);
     }
 
     // 订单信息
     $order = [];
     $cart = cart();
     // 登录用户使用的地址
-    $address_id = post('address_id');
+    /*$address_id = $post['address_id'];
     if ($address_id) {
         $user_id = session('user.id');
         $order['user_id'] = $user_id; // 用户ID
@@ -46,7 +55,7 @@ return function () {
         $linkman = $address['linkman'];
         $phone = $address['phone'];
         $wechat = $address['wechat'];
-    }
+    }*/
 
     $shop_range = db()->find('site', 'value', ['name', '=', 'shop_range'], null, 0);
     $shop_range = json_decode($shop_range, true);
@@ -69,39 +78,46 @@ return function () {
     $order['address'] = "$province,$city,$district,$road,$house"; // 收货地址
 
     $db = db();
-    $order_id = $db->insert('order', $order);
-    if ($order_id) {
-        // 添加商品清单
-        $is_add_item = true;
-        $items = $cart->getItems();
-        foreach ($items as $item) {
-            $quantity = $item['quantity'];
-            $attrs = $item['attributes'];
-            $detail = [
-                'order_id' => $order_id,
-                'goods_id' => $item['id'],
-                'quantity' => $quantity,
-                'title' => $attrs['title'],
-                'specs' => $attrs['specs'],
-                'price' => $attrs['price'],
-                'image' => $attrs['image'],
-                'path' => $attrs['path'],
-            ];
-            if (!$db->insert('order_detail', $detail)) {
-                $is_add_item = false;
-                break;
+    try {
+        $db->pdo->beginTransaction();
+        $order_id = $db->insert('order', $order);
+        if ($order_id) {
+            // 添加商品清单
+            $is_add_items = true;
+            $items = $cart->getItems();
+            foreach ($items as $item) {
+                $quantity = $item['quantity'];
+                $attrs = $item['attributes'];
+                $detail = [
+                    'order_id' => $order_id,
+                    'goods_id' => $item['id'],
+                    'quantity' => $quantity,
+                    'title' => $attrs['title'],
+                    'specs' => $attrs['specs'],
+                    'price' => $attrs['price'],
+                    'image' => $attrs['image'],
+                    'path' => $attrs['path'],
+                ];
+                if (!$db->insert('order_detail', $detail)) {
+                    $is_add_items = false;
+                    break;
+                }
             }
-        }
-        // 提交或回滚事务
-        if ($is_add_item !== false) {
-            $cart->clear();
-            Response::success('添加订单成功', ['id' => $order_id]);
+            if ($is_add_items == true) {
+                $db->pdo->commit();
+                $cart->clear();
+                Response::success('添加订单成功', ['id' => $order_id]);
+            } else {
+                $db->pdo->rollBack();
+                Response::error('添加订单商品失败');
+            }
         } else {
-            $db->delete('order', [['id', '=', $order_id]]);
-            $db->delete('order_detail', [['order_id', '=', $order_id]]);
-            Response::error('添加订单商品失败');
+            $db->pdo->rollBack();
+            Response::error('添加订单失败');
         }
-    } else {
+    } catch (Exception $e) {
+        $db->pdo->rollBack();
+        debug($e->getMessage());
         Response::error('添加订单失败');
     }
 };

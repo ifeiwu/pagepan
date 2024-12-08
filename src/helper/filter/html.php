@@ -1,18 +1,11 @@
 <?php
-// HTML 过滤
+// 过滤器对特殊字符进行 HTML 转义
 return function ($data) {
-    require_once EXT_PATH . 'HTMLPurifier.php';
-
-	$config = HTMLPurifier_Config::createDefault();
-	$purifier = new HTMLPurifier($config);
-	
 	$filter_html = function ($data) use (&$filter_html, $purifier) {
-
 		if ( is_array($data) ) {
 		    return array_map($filter_html, $data);
 		}
-
-		return $purifier->purify($data);
+		return filter_var($data, FILTER_SANITIZE_SPECIAL_CHARS);
 	};
 	
 	return $filter_html($data);
