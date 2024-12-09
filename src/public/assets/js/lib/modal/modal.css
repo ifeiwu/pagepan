@@ -1,5 +1,5 @@
 @layer lib {
-    .blocker {
+    .jqmodal.blocker {
         position: fixed;
         top: 0;
         right: 0;
@@ -14,7 +14,7 @@
         text-align: center;
     }
 
-    .blocker:before {
+    .jqmodal.blocker:before {
         content: "";
         display: inline-block;
         height: 100%;
@@ -22,11 +22,11 @@
         margin-right: -0.05em;
     }
 
-    .blocker.behind {
+    .jqmodal.blocker.behind {
         background-color: transparent;
     }
 
-    .modal {
+    .jqmodal .modal-body {
         display: none;
         vertical-align: middle;
         position: relative;
@@ -34,13 +34,13 @@
         max-width: 100%;
         width: auto;
         background: #fff;
-        padding: 1rem;
+        padding: 2rem;
         border-radius: 8px;
         box-shadow: 0 0 10px #333;
         text-align: left;
     }
 
-    .modal a.close-modal {
+    .jqmodal a.close-modal {
         background: #000;
         border: none;
         border-radius: 50%;
@@ -57,12 +57,12 @@
         transition: transform 600ms;
     }
 
-    .modal a.close-modal:hover {
+    .jqmodal a.close-modal:hover {
         transform: rotate(180deg) scale(1.05);
     }
 
-    .modal a.close-modal:before,
-    .modal a.close-modal:after {
+    .jqmodal a.close-modal:before,
+    .jqmodal a.close-modal:after {
         background: none;
         bottom: 0;
         left: 0;
@@ -79,27 +79,27 @@
         width: 16px;
     }
 
-    .modal a.close-modal:before {
+    .jqmodal a.close-modal:before {
         transform: rotate(45deg);
     }
 
-    .modal a.close-modal:after {
+    .jqmodal a.close-modal:after {
         transform: translateY(-2px) rotate(-45deg);
         top: 4px;
     }
 
-    .modal-iframe {
+    .jqmodal .modal-iframe {
         width: 70%;
         height: 100%;
     }
 
-    .modal iframe {
+    .jqmodal iframe {
         width: 100%;
         min-width: 100%;
         height: 100%;
     }
 
-    .modal-spinner {
+    .jqmodal .modal-spinner {
         display: none;
         position: fixed;
         top: 50%;
@@ -111,24 +111,33 @@
     }
 
     @media only screen and (max-width: 1279px) {
-        .modal-iframe {
+        .jqmodal .modal-iframe {
             width: 100%;
         }
     }
 
     @media only screen and (max-width: 767px) {
-        .blocker {
+        .jqmodal.blocker {
             padding: 5px;
         }
-        .modal a.close-modal {
+        .jqmodal .modal-body {
+            padding: 1rem;
+        }
+        .jqmodal a.close-modal {
             width: 32px;
             height: 32px;
             top: 5px;
             right: 5px;
+            background: transparent;
         }
-        .modal a.close-modal:before,
-        .modal a.close-modal:after {
-            width: 14px;
+        .jqmodal a.close-modal:before,
+        .jqmodal a.close-modal:after {
+            background: #000;
+        }
+
+        .jqmodal .modal-iframe,
+        .jqmodal .modal-image {
+            padding-top: 2.5rem;
         }
     }
 }
