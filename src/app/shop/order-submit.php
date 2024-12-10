@@ -26,7 +26,7 @@ return function () {
     // 手机号
     $phone = $_POST['phone'];
     if (!preg_match('/^1[0-9]{10}$/', $phone)) {
-        Response::error('无效的手机号码', ['field' => 'phone']);
+        Response::error('手机号码格式错误', ['field' => 'phone']);
     }
     // 微信号
     $wechat = $_POST['wechat'];

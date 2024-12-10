@@ -32,7 +32,7 @@ $theme_screen = $theme['screen'];
                 }
             }
         </script>
-        
+        <link rel="manifest" href="<?=$this->asset('manifest.json')?>" />
         <?php
         // 全局页头
         if ( $site['open_header_php'] ) { include ROOT_PATH . 'data/php/header.inc'; }
@@ -40,7 +40,9 @@ $theme_screen = $theme['screen'];
         if ( $site['favicon'] ) { echo '<link rel="icon" href="' . $this->asset($site['favicon']) . '">'; }
         // 应用图标
         if ( $site['touchicon'] ) { echo '<link rel="apple-touch-icon" href="' . $this->asset($site['touchicon']) . '">'; }
-        
+        // 应用清单
+        if ( $site['manifest'] ) { echo '<link rel="manifest" href="' . $this->asset('manifest.json') . '">'; }
+
         echo '<link href="' . $this->asset('assets/css/pagepan.css') . '" rel="stylesheet">';
 		echo '<link href="' . $this->asset('assets/css/theme.css') . '" rel="stylesheet">';
         echo '<link href="' . $this->asset('assets/css/animate.css') . '" rel="stylesheet">';
