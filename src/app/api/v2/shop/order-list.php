@@ -1,19 +1,20 @@
 <?php
-return function () {
-    $columns = '*';
-    $wheres = "1=1";
-    $orders = "ctime DESC";
+return function ($request_data) {
+    $column = $request_data['column'] ?? '*';
+    $where = $request_data['where'];
+    $order = $request_data['order'];
+    $limit = $request_data['limit'];
+    $number = $request_data['number'];
 
     $db = db();
     $db->debug = false;
+    $total = $db->count('order', $where);
+    $items = $db->select('order', $column, $where, $order, $limit, $number);
 
-    $table = $db->prefix . 'order';
-    $items = $db->queryAll("SELECT {$columns} FROM `{$table}` WHERE {$wheres} ORDER BY {$orders}");
-//    debug("SELECT {$columns} FROM {$table} WHERE {$wheres} ORDER BY {$orders}");
-    foreach ($items as $key => $item)
-    {
-
+    foreach ($items as $key => $item) {
+//        $items[$key]['number'] = $db->count('order_detail', ['order_id', '=', $item['id']]);
+//        $items[$key]['ctime'] = date('Y/m/d H:i', $item['ctime']);
     }
 
-    Response::success('订单查询', $items);
+    Response::success('订单查询', $items, ['total' => $total]);
 };

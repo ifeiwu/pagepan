@@ -327,6 +327,7 @@ class DB
     public function select($table, $columns = '*', $wheres = [], $order = null, $limit = null, $column_number = null)
     {
         $params = [];
+        $values = [];
         $sql = 'SELECT ' . $this->quoteSelectColumns($columns) . ' FROM ' . $this->getTableName($table);
 
         if (!empty($wheres)) {
