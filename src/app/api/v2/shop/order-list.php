@@ -11,10 +11,5 @@ return function ($request_data) {
     $total = $db->count('order', $where);
     $items = $db->select('order', $column, $where, $order, $limit, $number);
 
-    foreach ($items as $key => $item) {
-//        $items[$key]['number'] = $db->count('order_detail', ['order_id', '=', $item['id']]);
-//        $items[$key]['ctime'] = date('Y/m/d H:i', $item['ctime']);
-    }
-
     Response::success('订单查询', $items, ['total' => $total]);
 };

@@ -69,7 +69,7 @@ return function () {
     $order['is_read'] = 0; // 0未读/1已读状态
     $order['status'] = 1; // 订单状态：1正常/2关闭
     $order['quantity'] = $cart->getTotalQuantity(); // 商品总数量
-    $order['price'] = $cart->getTotalWithDiscount(); // 实付总额
+    $order['total'] = $cart->getTotalWithDiscount(); // 实付总额
     $order['score'] = floatval($score); // 获得积分
     $order['remark'] = $remark; // 买家备注
     $order['linkman'] = $linkman; // 联系人
@@ -83,7 +83,7 @@ return function () {
         $order_id = $db->insert('order', $order);
         if ($order_id) {
             // 订单序号
-            $sn = str_pad($order_id, 6, '0', STR_PAD_LEFT);
+            $sn = str_pad($order_id, 8, '0', STR_PAD_LEFT);
             $db->update('order', ['sn' => $sn], ['id', '=', $order_id]);
             // 添加商品清单
             $is_add_items = true;
