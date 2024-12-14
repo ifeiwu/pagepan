@@ -2,7 +2,7 @@
 return function ($request_data) {
     $column = $request_data['column'] ?? '*';
     $where = $request_data['where'];
-    $order = $request_data['order'];
+    $order = $request_data['order'] ?: ['sortby' => 'DESC', 'ctime' => 'DESC'];
     $limit = $request_data['limit'];
     $number = $request_data['number'];
 
@@ -17,13 +17,9 @@ return function ($request_data) {
         $image = $item['image'];
         $items[$i]['image'] = $path ? "$path/$image" : $image;
         if ( $pid > 0 ) {
-            $items[$i]['ctitle'] = $db->find('goods', 'title', ['id', '=', $pid], [], 0);
+            $items[$i]['pid'] = $db->find('goods', 'title', ['id', '=', $pid], [], 0);
         }
     }
 
-
-    foreach ($list as $i => $item) {
-
-    }
     Response::success('商品查询', $items, ['total' => $total]);
 };

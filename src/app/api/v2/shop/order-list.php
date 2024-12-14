@@ -2,7 +2,7 @@
 return function ($request_data) {
     $column = $request_data['column'] ?? '*';
     $where = $request_data['where'];
-    $order = $request_data['order'];
+    $order = $request_data['order'] ?: ['ctime' => 'DESC'];
     $limit = $request_data['limit'];
     $number = $request_data['number'];
 

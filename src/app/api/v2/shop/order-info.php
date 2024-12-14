@@ -10,10 +10,9 @@ return function ($request_data) {
     $order['ctime'] = date('Y-m-d H:i', $order['ctime']);
     $order['address'] = implode('', array_slice(explode(',', $order['address']), -2));
 
-    $goods = $db->select('order_detail', '*', ['order_id' , '=', $id]);
-
     if ($order) {
-        Response::success('获取订单信息成功', [], ['order' => $order, 'goods' => $goods]);
+        $items = $db->select('order_detail', '*', ['order_id' , '=', $id]);
+        Response::success('获取订单信息成功', [], ['order' => $order, 'items' => $items]);
     } else {
         Response::error('获取订单信息失败');
     }
