@@ -441,6 +441,135 @@ $o['GET']['api/v1/goods/find/:id/:columns']=array (
 	  'method_flag' => 3,
 	);
 
+#==== GET api/v1/goodsspec/one
+
+$o['GET']['api/v1/goodsspec/one']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'getOne',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'column' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '获取单条数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== GET api/v1/goodsspec/one/:id
+
+$o['GET']['api/v1/goodsspec/one/:id']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'getOne',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'column' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '获取单条数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== GET api/v1/goodsspec/one/:id/:column
+
+$o['GET']['api/v1/goodsspec/one/:id/:column']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'getOne',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'column' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '获取单条数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== GET api/v1/goodsspec/find
+
+$o['GET']['api/v1/goodsspec/find']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'getFind',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'columns' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== GET api/v1/goodsspec/find/:id
+
+$o['GET']['api/v1/goodsspec/find/:id']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'getFind',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'columns' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== GET api/v1/goodsspec/find/:id/:columns
+
+$o['GET']['api/v1/goodsspec/find/:id/:columns']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'getFind',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'columns' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
 #==== GET api/v1/page/one
 
 $o['GET']['api/v1/page/one']=array (
@@ -1843,6 +1972,209 @@ $o['POST']['api/v1/goods/count']=array (
 
 $o['POST']['api/v1/goods/delete']=array (
 	  'class_name' => 'Goods',
+	  'method_name' => 'postDelete',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '删除数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goodsspec/page
+
+$o['POST']['api/v1/goodsspec/page']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'postPage',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goodsspec/select
+
+$o['POST']['api/v1/goodsspec/select']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'postSelect',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '查询/分页',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goodsspec/query
+
+$o['POST']['api/v1/goodsspec/query']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'postQuery',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '预处理查询',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goodsspec/add
+
+$o['POST']['api/v1/goodsspec/add']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'postAdd',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '添加数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goodsspec/update
+
+$o['POST']['api/v1/goodsspec/update']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'postUpdate',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'request_data' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '更新数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goodsspec/update/:id
+
+$o['POST']['api/v1/goodsspec/update/:id']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'postUpdate',
+	  'arguments' => 
+	  array (
+	    'id' => 0,
+	    'request_data' => 1,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	    1 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '更新数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goodsspec/copy
+
+$o['POST']['api/v1/goodsspec/copy']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'postCopy',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '复制数据',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goodsspec/field
+
+$o['POST']['api/v1/goodsspec/field']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'postField',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '更新字段',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goodsspec/count
+
+$o['POST']['api/v1/goodsspec/count']=array (
+	  'class_name' => 'GoodsSpec',
+	  'method_name' => 'postCount',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	    'long_description' => '统计数量',
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/goodsspec/delete
+
+$o['POST']['api/v1/goodsspec/delete']=array (
+	  'class_name' => 'GoodsSpec',
 	  'method_name' => 'postDelete',
 	  'arguments' => 
 	  array (

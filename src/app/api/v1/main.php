@@ -15,6 +15,7 @@ return function () {
     $r->addAPIClass('Site', 'api/v1/site');
     $r->addAPIClass('Item', 'api/v1/item');
     $r->addAPIClass('Goods', 'api/v1/goods');
+    $r->addAPIClass('GoodsSpec', 'api/v1/goodsspec');
     $r->addAPIClass('Page', 'api/v1/page');
     $r->addAPIClass('Trash', 'api/v1/trash');
     $r->addAPIClass('Finder', 'api/v1/finder');
