@@ -6,7 +6,7 @@ return function ($request_data) {
     $db = db();
     $db->debug = false;
     $order = $db->find('order', '*', ['id' , '=', $id]);
-    $order['status'] = $status_text[$order['status']];
+//    $order['status_text'] = $status_text[$order['status']];
     $order['ctime'] = date('Y-m-d H:i', $order['ctime']);
     $order['address'] = implode('', array_slice(explode(',', $order['address']), -2));
 
