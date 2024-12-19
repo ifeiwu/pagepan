@@ -1,7 +1,7 @@
 <?php
 return function ($request_data) {
     $id = $request_data['id'];
-    $status_text = ['0'=>'未确认', '1'=>'已确认', '2'=>'已签收', '3'=>'已取消'];
+//    $status_text = ['0'=>'未确认', '1'=>'已确认', '2'=>'已签收', '3'=>'已取消'];
 
     $db = db();
     $db->debug = false;

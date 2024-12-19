@@ -490,6 +490,11 @@ class DB
                             $sql .= ' (' . rtrim(str_repeat('?,', count($value)), ',') . ')';
                             $values = array_merge($values, $value);
                             break;
+                        case 'BETWEEN':
+                            $value = is_array($value) ? $value : explode(',', $value);
+                            $sql .= ' ' . rtrim(str_repeat('? AND ', count($value)), 'AND ');
+                            $values = array_merge($values, $value);
+                            break;
                         case 'IS NULL':
                             break;
                         case 'IS NOT NULL':
