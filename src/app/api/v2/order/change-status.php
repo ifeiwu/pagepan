@@ -4,7 +4,7 @@ return function ($request_data) {
     $status = intval($request_data['status']);
 
     $db = db();
-    $db->debug = true;
+    $db->debug = false;
     if ($db->update('order', ['status' => $status], ['id', '=', $id])) {
         Response::success('改变订单状态成功');
     } else {
