@@ -395,6 +395,21 @@ class DB
     }
 
     /**
+     * 获取表所有列名
+     * @param $table
+     * @return array
+     */
+    public function getTableColumnNames($table)
+    {
+        $names = [];
+        $fields = $this->queryAll("PRAGMA table_info({$table})");
+        foreach ($fields as $field) {
+            $names[] = $field['name'];
+        }
+        return $names;
+    }
+
+    /**
      * 构建字段排序 sql 语句
      * @param $sql
      * @param $order
