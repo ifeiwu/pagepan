@@ -4,7 +4,10 @@ return function ($request_data) {
 
     $db = db();
     $db->debug = false;
-    if ($db->delete('goods', ['id', '=', $id])) {
+    $table = 'goods';
+    $item = $db->find($table, '*', ['id', '=', $id]);
+    if ($item && $db->delete($table, ['id', '=', $id])) {
+        helper('api/v2/addTrash', [$table, $item, $request_data]); // 回收站
         Response::success('删除商品成功');
     } else {
         Response::error('删除商品失败');
