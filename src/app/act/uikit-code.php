@@ -23,7 +23,7 @@ return function () {
     $site = db()->select('site', ['name', 'value'], ['state', '=', 1]);
     $site = helper('arr/tokv', [$site]);
     $view->assign('site', $site);
-
+    define('SITE', $site);
 	ob_start();
 	ob_implicit_flush(0);
 
