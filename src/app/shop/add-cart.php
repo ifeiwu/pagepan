@@ -6,7 +6,7 @@ return function () {
     $quantity = $quantity ? $quantity : 1;
 
     if ($id) {
-        $item = db()->find('goods', ['id AS goods_id', 'title', 'price', 'image', 'path', 'score'], [['id', '=', $id], 'AND', ['state', '=', 1]]);
+        $item = db()->find('goods', ['id AS goods_id', 'title', 'price', 'image', 'path', 'score', 'utime'], [['id', '=', $id], 'AND', ['state', '=', 1]]);
         $item['spec'] = '';
         $specs = $_GET['specs'];
         if ($specs) {
