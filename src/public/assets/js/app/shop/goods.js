@@ -24,19 +24,9 @@ define(function (require) {
                 }
             }
 
-            $.getJSON('./m/shop/add-cart', {'id': goodsid, 'quantity': quantity, 'specs': specs}, function (json) {
-                if (json.code == 'success') {
-                    /*$('.topbar .cart-count').text(json.count).show();
-                    $('.toolbar-user__tabs .cart-count').attr('data-count', json.count).show();
-
-                    if ($('.add-cart-tip').length) {
-                        $('.add-cart-tip .cart-count').text(json.count);
-                        $('.add-cart-tip').show();
-                    }
-
-                    if ($this.data('url')) {
-                        location.href = $this.data('url');
-                    }*/
+            $.getJSON('./m/shop/add-cart', {'id': goodsid, 'quantity': quantity, 'specs': specs}, function (res) {
+                if (res.code == 0) {
+                    $('.cart-count').text(res.data).show();
                 }
             });
         });

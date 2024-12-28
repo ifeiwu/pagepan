@@ -1,10 +1,7 @@
 <?php
 // 添加到购物车
 return function () {
-    $id = $_GET['id'];
-    $quantity = intval($_GET['quantity']);
-    $quantity = $quantity ? $quantity : 1;
-
+    $id = intval($_GET['id']);
     if ($id) {
         $item = db()->find('goods', ['id AS goods_id', 'title', 'price', 'image', 'path', 'score', 'utime'], [['id', '=', $id], 'AND', ['state', '=', 1]]);
         $item['spec'] = '';
@@ -25,15 +22,14 @@ return function () {
         }
 
         $cart = cart();
+        $quantity = intval($_GET['quantity']);
+        $quantity = $quantity ? $quantity : 1;
         for ($i = 0; $i < $quantity; $i++) {
             $cart->add($id, $quantity, $item);
         }
 
-        // 购物车商品总数量
-        $cart_count = $cart->getTotalItem();
-
-        exit(json_encode(array('code' => 'success', 'count' => $cart_count)));
+        Response::success('', $cart->getTotalItem());
     } else {
-        exit(json_encode(array('code' => 'error')));
+        Response::error();
     }
 };
