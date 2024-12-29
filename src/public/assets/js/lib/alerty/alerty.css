@@ -1,0 +1,265 @@
+/*!
+ * alerty v0.0.1 (https://github.com/undead25/alerty#readme)
+ * Copyright 2022 undead25
+ * Licensed under the MIT license
+ */
+.alerty {
+    color: var(--mix-10);
+    position: fixed;
+    z-index: 99999;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;
+    transform: translateX(-50%);
+    background-color: var(--mix-40);
+    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+    left: 50%;
+    top: 50%;
+    font-size: 15px;
+}
+
+.alerty.alerty-show {
+    animation: bounceIn .35s ease;
+}
+
+.alerty.alerty-hide {
+    animation: bounceOut .35s ease;
+}
+
+.alerty .alerty-title {
+    padding: 24px 24px 14px;
+    font-size: 17px;
+    color: var(--mix);
+    line-height: 1;
+    font-weight: bold;
+}
+
+.alerty .alerty-title + .alerty-content {
+    padding-top: 0;
+}
+
+.alerty .alerty-content {
+    text-align: justify;
+    padding: 24px;
+    padding: 24px;
+}
+
+.alerty .alerty-content .alerty-message {
+    margin: 0;
+    padding: 0;
+    color: var(--mix-5);
+}
+
+.alerty .alerty-content .alerty-prompt {
+    margin-top: 16px;
+    text-align: center;
+    position: relative;
+}
+
+.alerty .alerty-content .alerty-prompt input {
+    width: 100%;
+    height: 36px;
+    display: inline-block;
+    padding: 6px 0;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: var(--mix-10);
+    background-color: var(--mix-40);
+    border-bottom: 1px solid var(--mix-30);
+}
+
+.alerty .alerty-content .alerty-prompt input:focus + .input-line {
+    visibility: visible;
+    transform: scaleX(1);
+}
+
+.alerty .alerty-content .alerty-prompt .input-line {
+    height: 2px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--secondary);
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+    display: block;
+}
+
+.alerty .alerty-action {
+    padding: 12px;
+    text-align: right;
+    font-size: 14px;
+}
+
+.alerty .alerty-action [class*="btn-"] {
+    margin-left: 8px;
+    cursor: pointer;
+    color: var(--primary);
+    height: 34px;
+    line-height: 34px;
+    min-width: 60px;
+    text-align: center;
+    background-color: transparent;
+    display: inline-block;
+    border-radius: 6px;
+    transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.alerty .alerty-action [class*="btn-"]:hover {
+    background-color: var(--mix-38);
+}
+
+.alerty .alerty-action .btn-ok {
+    color: var(--primary);
+}
+
+.alerty .alerty-action .btn-cancel {
+    color: var(--mix-10);
+}
+
+.alerty.toast {
+    height: 48px;
+    bottom: 0;
+    background-color: var(--mix-5);
+    width: auto;
+    min-width: 200px;
+    max-width: 400px;
+    box-shadow: none;
+}
+
+.alerty.toast .alerty-content {
+    height: 48px;
+    line-height: 48px;
+    padding: 0 24px;
+    font-size: 14px;
+}
+
+.alerty.toast .alerty-content .alerty-message {
+    color: var(--mix-40);
+}
+
+.alerty.toast.alerty-show {
+    animation: slideInUp .35s ease;
+}
+
+.alerty.toast.alerty-hide {
+    animation: slideOutDown .35s ease;
+}
+
+.alerty.toast.place-top {
+    top: 0;
+    bottom: auto;
+}
+
+.alerty.toast.place-top.alerty-show {
+    animation: slideInDown .35s ease;
+}
+
+.alerty.toast.place-top.alerty-hide {
+    animation: slideOutUp .35s ease;
+}
+
+@media all and (max-width: 540px) {
+    .alerty {
+        width: auto;
+        margin-left: 0;
+        margin-right: 0;
+        left: 15px;
+        right: 15px;
+    }
+
+    .alerty.toast {
+        width: 100%;
+        border-radius: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
+.alerty-overlay {
+    position: fixed;
+    background-color: #000;
+    z-index: 99998;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    transition: opacity 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.alerty-overlay.active {
+    opacity: 0.4;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+}
+
+.no-scrolling {
+    height: 100%;
+    overflow: hidden;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: translateX(-50%) scale(0.7);
+    }
+    45% {
+        transform: translateX(-50%) scale(1.05);
+    }
+    80% {
+        transform: translateX(-50%) scale(0.95);
+    }
+    100% {
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+@keyframes bounceOut {
+    0% {
+        transform: translateX(-50%) scale(1);
+    }
+    100% {
+        transform: translateX(-50%) scale(0.5);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateX(-50%) translate3d(0, -100%, 0);
+    }
+    to {
+        transform: translateX(-50%) translate3d(0, 0, 0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateX(-50%) translate3d(0, 100%, 0);
+    }
+    to {
+        transform: translateX(-50%) translate3d(0, 0, 0);
+    }
+}
+
+@keyframes slideOutUp {
+    from {
+        transform: translateX(-50%) translate3d(0, 0, 0);
+    }
+    to {
+        transform: translateX(-50%) translate3d(0, -100%, 0);
+    }
+}
+
+@keyframes slideOutDown {
+    from {
+        transform: translateX(-50%) translate3d(0, 0, 0);
+    }
+    to {
+        transform: translateX(-50%) translate3d(0, 100%, 0);
+    }
+}
