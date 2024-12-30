@@ -125,7 +125,7 @@
     bottom: 0;
     background-color: var(--mix-5);
     width: auto;
-    min-width: 200px;
+    min-width: 100px;
     max-width: 400px;
     box-shadow: none;
 }
@@ -139,6 +139,9 @@
 
 .alerty.toast .alerty-content .alerty-message {
     color: var(--mix-40);
+}
+.alerty.toast .alerty-content .alerty-message svg {
+    vertical-align: middle;
 }
 
 .alerty.toast.alerty-show {

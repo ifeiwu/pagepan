@@ -5,7 +5,7 @@ return function () {
     $quantity = get('quantity');
 
     $cart = cart();
-    if ($cart->update($id, $hash, $quantity)) {
+    if ($cart->update($id, $quantity, $hash)) {
         Response::success('', ['totalPrice' => price_format($cart->getTotalWithDiscount())]);
     } else {
         Response::error('', ['totalPrice' => price_format($cart->getTotalWithDiscount())]);

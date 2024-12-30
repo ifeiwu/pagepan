@@ -229,10 +229,8 @@ class Cart
      */
     public function isItemExists($id, $attributes = [])
     {
-        $attributes = (is_array($attributes)) ? array_filter($attributes) : [$attributes];
-
         if (isset($this->collection[$id])) {
-            $hash = md5(json_encode($attributes));
+            $hash = $this->getHash($attributes);
             foreach ($this->collection[$id] as $item) {
                 if ($item['hash'] == $hash) {
                     return true;
@@ -276,8 +274,7 @@ class Cart
     public function add($id, $quantity = 1, $attributes = [])
     {
         $quantity = (preg_match('/^\d+$/', $quantity)) ? $quantity : 1;
-        $attributes = (is_array($attributes)) ? array_filter($attributes) : [$attributes];
-        $hash = md5(json_encode($attributes));
+        $hash = $this->getHash($attributes);
 
         if (count($this->collection) >= $this->cartMaxItem && $this->cartMaxItem != 0) {
             return false;
@@ -312,14 +309,17 @@ class Cart
      * 更新商品数量
      *
      * @param $id
-     * @param $hash
+     * @param $attributes
      * @param $quantity
      * @return bool
      */
-    public function update($id, $hash, $quantity = 1)
+    public function update($id, $quantity = 1, $attributes = [])
     {
-        $attributes = $this->getAttributes($id, $hash);
-        $quantity = (preg_match('/^\d+$/', $quantity)) ? $quantity : 1;
+        $quantity = intval($quantity) ? $quantity : 1;
+
+        if (is_string($attributes)) {
+            $attributes = $this->getItemAttributes($id, $attributes);
+        }
 
         if ($quantity == 0) {
             $this->remove($id, $attributes);
@@ -327,6 +327,7 @@ class Cart
         }
 
         if (isset($this->collection[$id])) {
+            $hash = $this->getHash($attributes);
             foreach ($this->collection[$id] as $index => $item) {
                 if ($item['hash'] == $hash) {
                     $this->collection[$id][$index]['quantity'] = $quantity;
@@ -340,23 +341,14 @@ class Cart
     }
 
     /**
-     * 通过 hash 更新购特定商品的数量
-     *
-     * @param $hash
-     * @param $quantity
-     * @return bool
+     * 获取生成的属性hash
+     * @param $attributes
+     * @return string
      */
-    public function updateByHash($hash, $quantity = 1)
+    public function getHash($attributes = [])
     {
-        $bool = false;
-        foreach ($this->collection as $id => $items) {
-            $item = $this->getItem($id, $hash);
-            if ($item) {
-                $bool = $this->update($id, $hash, $quantity);
-                break;
-            }
-        }
-        return $bool;
+        $attributes = (is_array($attributes)) ? array_filter($attributes) : [$attributes];
+        return md5(json_encode($attributes));
     }
 
     /**
@@ -366,7 +358,7 @@ class Cart
      * @param $hash
      * @return array|mixed
      */
-    public function getAttributes($id, $hash)
+    public function getItemAttributes($id, $hash)
     {
         $item = $this->getItem($id, $hash);
         if ($item) {
@@ -404,18 +396,21 @@ class Cart
      * 从购物车中删除商品
      *
      * @param string $id
-     * @param array $attributes
+     * @param array|string $attributes
      *
      * @return bool
      */
-    public function remove($id, $hash)
+    public function remove($id, $attributes = [])
     {
-        $attributes = $this->getAttributes($id, $hash);
+        if (is_string($attributes)) {
+            $attributes = $this->getItemAttributes($id, $attributes);
+        }
 
         if (isset($this->collection[$id])) {
             if (empty($attributes)) {
                 unset($this->collection[$id]);
             } else {
+                $hash = $this->getHash($attributes);
                 foreach ($this->collection[$id] as $index => $item) {
                     if ($item['hash'] == $hash) {
                         unset($this->collection[$id][$index]);
