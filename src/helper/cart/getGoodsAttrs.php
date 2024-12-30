@@ -1,6 +1,6 @@
 <?php
 return function ($id = 0) {
-    $item = db()->find('goods', ['id AS goods_id', 'title', 'price', 'image', 'path', 'score', 'utime'], [['id', '=', $id], 'AND', ['state', '=', 1]]);
+    $item = db()->find('goods', ['title', 'price', 'image', 'path', 'score', 'utime'], [['id', '=', $id], 'AND', ['state', '=', 1]]);
     /*$item['spec'] = '';
     $specs = $_GET['specs'];
     if ($specs) {

@@ -5,9 +5,8 @@ return function () {
     if ($id) {
         $attrs = helper('cart/getGoodsAttrs', [$id]);
         $cart = cart();
-        $quantity = intval($_GET['quantity']);
-        $quantity = $quantity ? $quantity : 1;
-        if ($cart->isItemExists($id, $attrs)) {
+        $quantity = $_GET['quantity'];
+        if ($cart->has($id, $attrs)) {
             $cart->update($id, $quantity, $attrs);
         } else {
             $cart->add($id, $quantity, $attrs);

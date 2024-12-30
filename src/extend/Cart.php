@@ -227,10 +227,10 @@ class Cart
      *
      * @return bool
      */
-    public function isItemExists($id, $attributes = [])
+    public function has($id, $attributes = [])
     {
         if (isset($this->collection[$id])) {
-            $hash = $this->getHash($attributes);
+            $hash = $this->generateHash($attributes);
             foreach ($this->collection[$id] as $item) {
                 if ($item['hash'] == $hash) {
                     return true;
@@ -267,14 +267,14 @@ class Cart
      *
      * @param string $id
      * @param int $quantity
-     * @param array $attributes
+     * @param array|string $attributes
      *
      * @return bool
      */
     public function add($id, $quantity = 1, $attributes = [])
     {
-        $quantity = (preg_match('/^\d+$/', $quantity)) ? $quantity : 1;
-        $hash = $this->getHash($attributes);
+        $quantity = intval($quantity) ? $quantity : 1;
+        $hash = $this->generateHash($attributes);
 
         if (count($this->collection) >= $this->cartMaxItem && $this->cartMaxItem != 0) {
             return false;
@@ -327,7 +327,7 @@ class Cart
         }
 
         if (isset($this->collection[$id])) {
-            $hash = $this->getHash($attributes);
+            $hash = $this->generateHash($attributes);
             foreach ($this->collection[$id] as $index => $item) {
                 if ($item['hash'] == $hash) {
                     $this->collection[$id][$index]['quantity'] = $quantity;
@@ -341,11 +341,11 @@ class Cart
     }
 
     /**
-     * 获取生成的属性hash
+     * 生成属性 hash 值
      * @param $attributes
      * @return string
      */
-    public function getHash($attributes = [])
+    public function generateHash($attributes = [])
     {
         $attributes = (is_array($attributes)) ? array_filter($attributes) : [$attributes];
         return md5(json_encode($attributes));
@@ -410,7 +410,7 @@ class Cart
             if (empty($attributes)) {
                 unset($this->collection[$id]);
             } else {
-                $hash = $this->getHash($attributes);
+                $hash = $this->generateHash($attributes);
                 foreach ($this->collection[$id] as $index => $item) {
                     if ($item['hash'] == $hash) {
                         unset($this->collection[$id][$index]);

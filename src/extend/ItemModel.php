@@ -26,6 +26,11 @@ class ItemModel
         return nl2br(self::$item['subtitle']);
     }
 
+    public static function getPrice()
+    {
+        return number_format(self::$item['price'], 2, '.', ',');
+    }
+
     public static function getSummary()
     {
         $summary = html_decode(self::$item['summary']);
