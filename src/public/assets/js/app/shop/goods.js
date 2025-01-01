@@ -88,7 +88,7 @@ define(function (require) {
         });
     }
 
-    const openWeChatAddFriend = function (wxhao) {
+    /*const openWeChatAddFriend = function (wxhao) {
         require(['clipboard'], function (ClipboardJS) {
             let clipboard = new ClipboardJS('#open_wechat');
             clipboard.on('success', function(e) {
@@ -97,11 +97,10 @@ define(function (require) {
                 e.clearSelection();
             });
         });
-    }
+    }*/
 
     return {
         'quantitysInit': quantitysInit,
         'addShopCartInit': addShopCartInit,
-        'openWeChatAddFriend': openWeChatAddFriend
     }
 });
