@@ -30,8 +30,10 @@ return function () {
     }
     // 微信号
     $wechat = $_POST['wechat'];
-    if (!preg_match('/^[-_a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/', $wechat)) {
-        Response::error('微信号格式错误', ['field' => 'wechat']);
+    if ($wechat) {
+        if (!preg_match('/^[-_a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/', $wechat)) {
+            Response::error('微信号格式错误', ['field' => 'wechat']);
+        }
     }
     // 订单备注
     $remark = filter_var($_POST['remark'], FILTER_SANITIZE_SPECIAL_CHARS);
@@ -109,18 +111,18 @@ return function () {
             if ($is_add_items == true) {
                 $db->pdo->commit();
                 $cart->clear();
-                Response::success('添加订单成功', ['id' => $order_id]);
+                Response::success('下单成功', ['id' => $order_id, 'sn' => $sn]);
             } else {
                 $db->pdo->rollBack();
-                Response::error('添加订单商品失败');
+                Response::error('添加订单商品失败', ['id' => 0]);
             }
         } else {
             $db->pdo->rollBack();
-            Response::error('添加订单失败');
+            Response::error('下单失败，请稍候再试。', ['id' => 0]);
         }
     } catch (Exception $e) {
         $db->pdo->rollBack();
         debug($e->getMessage());
-        Response::error('添加订单失败');
+        Response::error('下单失败');
     }
 };

@@ -7,30 +7,43 @@ define(function (require) {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight + padding) + 'px';
         });
-
+        // 提交订单
         $component.find('form').submit(function (e) {
             e.preventDefault();
+            let $submit = $('button[form="orderForm"]');
             let $form = $(this);
             let token = $form.data('token');
             let formData = $form.serializeArray();
+            $submit.attr('disabled', true);
             $.ajax({
                 url: 'm/shop/order-submit?_token=' + token,
                 type: 'POST',
                 data: formData,
                 success: function(res) {
                     if (res.code == 0) {
-                        location.href = 'order-success';
+                        $.post('m/shop/order-pushme', {'order_sn': res.data.sn}, function () {
+                            location.href = 'order-success';
+                        });
                     } else {
+                        let data = res.data;
+                        if (data) {
+                            if (data.field) {
+                                $component.find('[name="'+data.field+'"]')[0].focus();
+                                $submit.attr('disabled', false);
+                            } else if (data.id == 0) {
+                                $submit.attr('disabled', true);
+                                $.post('m/shop/order-pushme', formData, function () {});
+                            }
+                        }
                         alert(res.message);
-                        $component.find('[name="'+res.data.field+'"]')[0].focus();
                     }
                 },
                 error: function(error) {
-                    console.error('Error submitting form:', error);
+                    console.error(error);
                 }
             });
         });
-
+        // 保存填写表单数据
         require(['form-storage'], function (FormStorage) {
             const formStorage = new FormStorage('#orderForm', {
                 name: 'form-order',
@@ -38,7 +51,7 @@ define(function (require) {
                 text: '[type="text"]'
             });
             formStorage.apply();
-            // 每秒钟保存表单
+            // 每秒钟保存
             setInterval(() => {
                 formStorage.save();
             }, 1000);

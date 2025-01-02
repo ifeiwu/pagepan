@@ -1,9 +1,15 @@
 define(function (require) {
     const alerty = require('alerty');
+
+    let $component;
+    const setComponent = function ($_component) {
+        $component = $_component;
+    }
+
     // 添加到购物车
-    const addShopCartInit = function ($component) {
+    const addCartInit = function () {
         $component.find('#addcart').click(function () {
-            let data = getRequestData();
+            let data = getFormData();
             $.getJSON('./m/shop/add-cart', data, function (res) {
                 if (res.code == 0) {
                     $('.cart-count').text(res.data).show();
@@ -12,28 +18,24 @@ define(function (require) {
                 }
             });
         });
-
-        $component.find('#buynow').click(function () {
-            let data = getRequestData();console.log(data)
-            let specs = btoa(JSON.stringify(data.specs));
-            location.href = `order-confirm?id=${data.goodsid}&quantity=${data.quantity}&specs=${specs}`;
-        });
-
-        $component.find('#share').click(function () {
-            navigator.clipboard.writeText(window.location.href).then(function() {
-                alerty.toast('链接复制成功，快去分享给好友吧!');
-            }).catch(err => {
-                console.error('复制链接失败:', err);
-            });
-        });
     };
 
-    function getRequestData() {
+    // 立刻购买
+    const buyNowInit = function () {
+        $component.find('#buynow').click(function () {
+            let data = getFormData();console.log(data)
+            let specs = btoa(JSON.stringify(data.specs));
+            location.href = `order-confirm?id=${data.id}&quantity=${data.quantity}&specs=${specs}`;
+        });
+    }
+
+    // 获取表单数据
+    function getFormData() {
         let goodsid = $('#goods_id').val();
         let quantity = $('#number').val();
         let specs = new Array();
         // 选择的规格
-        if ($('.specs ul').length) {
+        /*if ($('.specs ul').length) {
             $('.specs ul').each(function (i) {
                 var $li = $(this).find('li');
                 $li.each(function () {
@@ -46,13 +48,13 @@ define(function (require) {
                 alert('请选择您要购买的商品规格！');
                 return;
             }
-        }
+        }*/
 
         return {'id': goodsid, 'quantity': quantity, 'specs': specs};
     }
 
     // 数量减 1
-    const quantitysInit = function ($component) {
+    const quantitysInit = function () {
         let $quantitys = $component.find('.quantity');
         $quantitys.each(function (i, v) {
             let $quantity = $(this);
@@ -88,6 +90,21 @@ define(function (require) {
         });
     }
 
+    // 分享链接
+    const shareInit = function () {
+        $component.find('#share').click(function () {
+            try {
+                navigator.clipboard.writeText(window.location.href).then(function() {
+                    alerty.toast('链接复制成功，快去分享给好友吧!');
+                }).catch(err => {
+                    alerty.toast('复制链接失败!');
+                });
+            } catch (e) {
+                alerty.toast('复制链接失败!', {'bgColor': '#DB9600'});
+            }
+        });
+    }
+
     /*const openWeChatAddFriend = function (wxhao) {
         require(['clipboard'], function (ClipboardJS) {
             let clipboard = new ClipboardJS('#open_wechat');
@@ -100,7 +117,10 @@ define(function (require) {
     }*/
 
     return {
+        'setComponent': setComponent,
         'quantitysInit': quantitysInit,
-        'addShopCartInit': addShopCartInit,
+        'addCartInit': addCartInit,
+        'buyNowInit': buyNowInit,
+        'shareInit': shareInit,
     }
 });
