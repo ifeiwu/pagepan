@@ -21,7 +21,7 @@ define(function (require) {
                 data: formData,
                 success: function(res) {
                     if (res.code == 0) {
-                        $.post('m/shop/order-pushme', {'order_sn': res.data.sn}, function () {
+                        $.post('m/shop/order-notice', {'order_sn': res.data.sn}, function () {
                             location.href = 'order-success';
                         });
                     } else {
@@ -32,7 +32,7 @@ define(function (require) {
                                 $submit.attr('disabled', false);
                             } else if (data.id == 0) {
                                 $submit.attr('disabled', true);
-                                $.post('m/shop/order-pushme', formData, function () {});
+                                $.post('m/shop/order-notice', formData, function () {});
                             }
                         }
                         alert(res.message);

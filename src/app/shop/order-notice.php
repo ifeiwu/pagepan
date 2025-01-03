@@ -24,11 +24,11 @@ return function () {
         ]));
 
         if ($res != 'success') {
-            Log::pushme("推送失败：", $_POST);
+            Log::pushme("推送失败:", $_POST);
         }
     } else {
         if (!isset($_POST['order_sn'])) {
-            Log::order("下单失败: {$content}");
+            Log::order("下单失败:", $content);
         }
     }
 };
