@@ -135,21 +135,23 @@
       previousCallback: null,  // for cache previous toasts callbak, to handle if call more than 1 alerty
 
       // html templates
-      template: '<div class="alerty-overlay" tabindex="-1"></div>'+
-                '<div class="alerty">'+
-                  '<div class="alerty-title"></div>'+
-                  '<div class="alerty-content">'+
-                    '<p class="alerty-message"></p>'+
-                    '<div class="alerty-prompt">'+
-                      '<input type="text" placeholder="" value="">'+
-                      '<div class="input-line"></div>'+
-                    '</div>'+
-                  '</div>'+
-                  '<div class="alerty-action">'+
-                    '<a class="btn-cancel"></a>'+
-                    '<a class="btn-ok"></a>'+
-                  '</div>'+
-                '</div>',
+      template: `<div class="alerty-overlay" tabindex="-1"></div>
+                 <div class="alerty">
+                   <div class="alerty-body">
+                      <div class="alerty-title"></div>
+                      <div class="alerty-content">
+                        <p class="alerty-message"></p>
+                        <div class="alerty-prompt">
+                          <input type="text" placeholder="" value="">
+                          <div class="input-line"></div>
+                        </div>
+                      </div>
+                      <div class="alerty-action">
+                        <a class="btn-cancel"></a>
+                        <a class="btn-ok"></a>
+                      </div>
+                   </div>
+                </div>`,
 
 
 
@@ -191,6 +193,7 @@
 
         // cache alerty dom for next use
         var $modal = document.querySelector('.alerty');
+        var $body = document.querySelector('.alerty-body');
         var $overlay = document.querySelector('.alerty-overlay');
         var $title = $modal.querySelector('.alerty-title');
         var $message = $modal.querySelector('.alerty-message');
@@ -230,15 +233,14 @@
           commonUse.removeElement($overlay);
           commonUse.addClass($modal, 'toast');
 
-          if (opts && opts.place === 'top') commonUse.addClass($modal, 'place-top'); // handle toast top place
-          if (opts && opts.bgColor) $modal.style.backgroundColor = opts.bgColor;
-          if (opts && opts.fontColor) $message.style.color =opts.fontColor;
+          if (opts && opts.place) commonUse.addClass($modal, 'place-' + opts.place); // handle toast top place
+          if (opts && opts.bgColor) $body.style.backgroundColor = opts.bgColor;
+          if (opts && opts.fontColor) $message.style.color = opts.fontColor;
 
         } else {
           commonUse.addClass(document.body, 'no-scrolling'); // body no scorll
           (opts && opts.title) ? $title.innerHTML = opts.title : commonUse.removeElement($title); // handle title if set
           (opts && opts.okLabel) ? $btnOk.innerHTML = opts.okLabel : $btnOk.innerHTML = this.defaults.okLabel; // handle ok text if set
-          $modal.style.marginTop =  - $modal.offsetHeight / 2 + 'px'; // set the place to center using margin-top;
 
           if (type === 'confirm' || type === 'prompt') {
             (opts && opts.cancelLabel) ? $btnCancel.innerHTML = opts.cancelLabel : $btnCancel.innerHTML = this.defaults.cancelLabel; // handle cancel text if set

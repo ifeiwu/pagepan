@@ -1,4 +1,5 @@
 <?php
+
 class Request
 {
     /**
@@ -15,7 +16,7 @@ class Request
      */
     public static function __callStatic($name, $args)
     {
-        if ( ! isset(self::$funcs[$name]) ) {
+        if (!isset(self::$funcs[$name])) {
             self::$funcs[$name] = require LIB_PATH . "request/{$name}.php";
         }
 
@@ -57,7 +58,6 @@ class Request
         if (!is_null($name)) {
             $value = isset($data[$name]) ? $data[$name] : $default;
             $type = !is_callable($type) ? $type : 'object';
-
             switch ($type) {
                 case 'int':
                     $value = intval($value);
@@ -82,6 +82,9 @@ class Request
                     break;
                 case 'a':
                     $value = preg_replace('/[^a-z]+/', '', $value);
+                    break;
+                case 'escape': // HTML 转义 '“<>& 和 ASCII 值小于 32 的字符
+                    $value = filter_var($value, FILTER_SANITIZE_SPECIAL_CHARS);
                     break;
                 case 'username': // 用户名：替换非中文、数字、字母、下划线和横线的字符。
                     $value = preg_replace('/[^\x{4e00}-\x{9fa5}A-Za-z0-9_-]/u', '', $value);

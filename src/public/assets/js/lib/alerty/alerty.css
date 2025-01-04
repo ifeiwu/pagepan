@@ -4,27 +4,30 @@
  * Licensed under the MIT license
  */
 .alerty {
-    color: var(--mix-10);
     position: fixed;
     z-index: 99999;
-    border-radius: 10px;
     width: 100%;
     max-width: 400px;
-    margin: 20px;
-    transform: translateX(-50%);
-    background-color: var(--mix-40);
-    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+    padding: 10px;
+    transform: translate(-50%, -50%);
     left: 50%;
     top: 50%;
-    font-size: 15px;
 }
 
 .alerty.alerty-show {
-    animation: bounceIn .35s ease;
+    animation: bounceIn .25s ease;
 }
 
 .alerty.alerty-hide {
     animation: bounceOut .35s ease;
+}
+
+.alerty-body {
+    color: var(--mix-10);
+    font-size: 15px;
+    background-color: var(--mix-40);
+    border-radius: 10px;
+    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
 }
 
 .alerty .alerty-title {
@@ -123,11 +126,15 @@
 .alerty.toast {
     height: 48px;
     bottom: 0;
-    background-color: var(--mix-5);
     width: auto;
     min-width: 100px;
     max-width: 400px;
+}
+
+.alerty.toast .alerty-body {
+    background-color: var(--mix-5);
     box-shadow: none;
+    white-space: nowrap;
 }
 
 .alerty.toast .alerty-content {
@@ -155,6 +162,13 @@
 .alerty.toast.place-top {
     top: 0;
     bottom: auto;
+    transform: translate3d(-50%, 0, 0);
+}
+
+.alerty.toast.place-bottom {
+    top: auto;
+    bottom: 0;
+    transform: translate3d(-50%, -50%, 0);
 }
 
 .alerty.toast.place-top.alerty-show {
@@ -165,21 +179,12 @@
     animation: slideOutUp .35s ease;
 }
 
-@media all and (max-width: 540px) {
-    .alerty {
-        width: auto;
-        margin-left: 0;
-        margin-right: 0;
-        left: 15px;
-        right: 15px;
-    }
+.alerty.toast.place-bottom.alerty-show {
+    animation: slideInUp .35s ease;
+}
 
-    .alerty.toast {
-        width: 100%;
-        border-radius: 0;
-        left: 0;
-        right: 0;
-    }
+.alerty.toast.place-bottom.alerty-hide {
+    animation: slideOutDown .35s ease;
 }
 
 .alerty-overlay {
@@ -193,13 +198,11 @@
     top: 0;
     bottom: 0;
     opacity: 0;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
     transition: opacity 0.45s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .alerty-overlay.active {
     opacity: 0.4;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
 }
 
 .no-scrolling {
@@ -209,60 +212,54 @@
 
 @keyframes bounceIn {
     0% {
-        transform: translateX(-50%) scale(0.7);
-    }
-    45% {
-        transform: translateX(-50%) scale(1.05);
-    }
-    80% {
-        transform: translateX(-50%) scale(0.95);
+        transform: translate(-50%, -50%) scale(0.8);
     }
     100% {
-        transform: translateX(-50%) scale(1);
+        transform: translate(-50%, -50%) scale(1);
     }
 }
 
 @keyframes bounceOut {
     0% {
-        transform: translateX(-50%) scale(1);
+        transform: translate(-50%, -50%) scale(1);
     }
     100% {
-        transform: translateX(-50%) scale(0.5);
-    }
-}
-
-@keyframes slideInDown {
-    from {
-        transform: translateX(-50%) translate3d(0, -100%, 0);
-    }
-    to {
-        transform: translateX(-50%) translate3d(0, 0, 0);
+        transform: translate(-50%, -50%) scale(0.5);
     }
 }
 
 @keyframes slideInUp {
     from {
-        transform: translateX(-50%) translate3d(0, 100%, 0);
+        transform: translate3d(-50%, 0, 0);
     }
     to {
-        transform: translateX(-50%) translate3d(0, 0, 0);
+        transform: translate3d(-50%, -50%, 0);
     }
 }
 
 @keyframes slideOutUp {
     from {
-        transform: translateX(-50%) translate3d(0, 0, 0);
+        transform: translate3d(-50%, 0, 0);
     }
     to {
-        transform: translateX(-50%) translate3d(0, -100%, 0);
+        transform: translate3d(-50%, -50%, 0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translate3d(-50%, -50%, 0);
+    }
+    to {
+        transform: translate3d(-50%, 0, 0);
     }
 }
 
 @keyframes slideOutDown {
     from {
-        transform: translateX(-50%) translate3d(0, 0, 0);
+        transform: translate3d(-50%, -50%, 0);
     }
     to {
-        transform: translateX(-50%) translate3d(0, 100%, 0);
+        transform: translate3d(-50%, 0, 0);
     }
 }
