@@ -1,6 +1,6 @@
 <?php
 return function ($request_data) {
-    $column = $request_data['column'] ?? '*';
+    $column = $request_data['column'] ?? 'id,pid,ctime,state,sortby,sale,title,price,path,image';
     $where = $request_data['where'];
     $order = $request_data['order'] ?: ['sortby' => 'DESC', 'ctime' => 'DESC'];
     $limit = $request_data['limit'];
@@ -15,7 +15,7 @@ return function ($request_data) {
         $pid = $item['pid'];
         $path = $item['path'];
         $image = $item['image'];
-        $items[$i]['image'] = $path ? "$path/$image" : $image;
+//        $items[$i]['image'] = preg_match('/^(https?:\/\/|\/\/)/i', $image) ? $image : "$path/$image";
         if ( $pid > 0 ) {
             $items[$i]['pid'] = $db->find('goods', 'title', ['id', '=', $pid], [], 0);
         }
