@@ -24,8 +24,8 @@ return function ($request_data) {
 
     // 响应
     if (count($error) === 0) {
-        return Response::success('保存站点数据成功');
+        return Response::success('保存数据成功');
     } else {
-        return Response::error('保存站点数据失败');
+        return Response::error('保存数据失败');
     }
 };
