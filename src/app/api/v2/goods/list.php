@@ -15,7 +15,6 @@ return function ($request_data) {
         $pid = $item['pid'];
         $path = $item['path'];
         $image = $item['image'];
-//        $items[$i]['image'] = preg_match('/^(https?:\/\/|\/\/)/i', $image) ? $image : "$path/$image";
         if ( $pid > 0 ) {
             $items[$i]['pid'] = $db->find('goods', 'title', ['id', '=', $pid], [], 0);
         }

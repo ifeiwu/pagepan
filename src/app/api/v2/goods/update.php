@@ -10,9 +10,6 @@ return function ($request_data) {
         $db = db();
         $item = $db->find($table, '*', ['id', '=', $request_data['id']]);
         $pid = $item['pid'];
-        $path = $item['path'];
-        $image = $item['image'];
-        $item['image'] = $path ? "$path/$image" : $image;
         if ($pid > 0) {
             $item['pid'] = $db->find($table, 'title', ['id', '=', $pid], [], 0);
         }
