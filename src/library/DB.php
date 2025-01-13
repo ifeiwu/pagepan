@@ -105,7 +105,7 @@ class DB
         $columns = array_keys($params);
         $values = array_values($params);
         $lastId = false;
-        $sql = $this->getInsertSQL($table, $columns, $values);
+        $sql = $this->getInsertSQL($table, $columns);
 
         if ($this->pdo->prepare($sql)->execute($values)) {
             $lastId = $this->pdo->lastInsertId();
@@ -128,7 +128,7 @@ class DB
     public function inserts($table, $columns = [], $values = [])
     {
         $lastIds = [];
-        $sql = $this->getInsertSQL($table, $columns, $values);
+        $sql = $this->getInsertSQL($table, $columns);
         $statement = $this->pdo->prepare($sql);
 
         foreach ($values as $value) {
@@ -151,7 +151,7 @@ class DB
      * @param $values
      * @return string
      */
-    public function getInsertSQL($table, $columns, $values)
+    public function getInsertSQL($table, $columns)
     {
         return 'INSERT INTO ' . $this->getTableName($table) . ' (' . $this->quoteColumns($columns) . ') VALUES (' . $this->buildValues($columns) . ')';
     }

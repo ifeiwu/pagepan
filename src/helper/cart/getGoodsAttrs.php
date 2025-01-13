@@ -9,8 +9,8 @@ return function ($id = 0) {
         foreach ($specs as $kv) {
             $kv_arr = explode(':', $kv);
             $spec_arr[$kv_arr[0]] = $kv_arr[1];
-            $title = db()->find('goods_spec', 'title', array('id' => $kv_arr[0]));
-            $title2 = db()->find('goods_spec', 'title', array('id' => $kv_arr[1]));
+            $title = db()->find('specs', 'title', array('id' => $kv_arr[0]));
+            $title2 = db()->find('specs', 'title', array('id' => $kv_arr[1]));
             $item['spec'] .= $title . '：' . $title2 . '<br>';
         }
         //规格的价格等参数

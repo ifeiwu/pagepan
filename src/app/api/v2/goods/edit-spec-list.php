@@ -6,15 +6,18 @@ return function ($request_data) {
 
     $db = db();
     $db->debug = false;
-    $specs = $db->select('goods_spec', $column, $where, $order);
+    $specs = $db->select('specs', $column, $where, $order);
 
     if ($specs) {
         foreach ($specs as $i => $spec) {
-            $specs[$i]['_child'] = $db->select('goods_spec', $column, [['pid', '=', $spec['id']], 'AND', ['state', '=', 1]], $order);
+            $specs[$i]['_child'] = $db->select('specs', $column, [['pid', '=', $spec['id']], 'AND', ['state', '=', 1]], $order);
         }
     } else {
         $specs = [];
     }
 
-    Response::success('商品编辑规格列表', $specs);
+    $id = intval($request_data['id']);
+    $gskus = $db->select('goods_sku', '*', ['goods_id', '=', $id]);
+
+    Response::success('商品编辑规格列表', ['gskus' => $gskus, 'specs' => $specs]);
 };

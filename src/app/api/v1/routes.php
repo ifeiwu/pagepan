@@ -441,10 +441,10 @@ $o['GET']['api/v1/goods/find/:id/:columns']=array (
 	  'method_flag' => 3,
 	);
 
-#==== GET api/v1/goodsspec/one
+#==== GET api/v1/specs/one
 
-$o['GET']['api/v1/goodsspec/one']=array (
-	  'class_name' => 'GoodsSpec',
+$o['GET']['api/v1/specs/one']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'getOne',
 	  'arguments' => 
 	  array (
@@ -463,10 +463,10 @@ $o['GET']['api/v1/goodsspec/one']=array (
 	  'method_flag' => 3,
 	);
 
-#==== GET api/v1/goodsspec/one/:id
+#==== GET api/v1/specs/one/:id
 
-$o['GET']['api/v1/goodsspec/one/:id']=array (
-	  'class_name' => 'GoodsSpec',
+$o['GET']['api/v1/specs/one/:id']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'getOne',
 	  'arguments' => 
 	  array (
@@ -485,10 +485,10 @@ $o['GET']['api/v1/goodsspec/one/:id']=array (
 	  'method_flag' => 3,
 	);
 
-#==== GET api/v1/goodsspec/one/:id/:column
+#==== GET api/v1/specs/one/:id/:column
 
-$o['GET']['api/v1/goodsspec/one/:id/:column']=array (
-	  'class_name' => 'GoodsSpec',
+$o['GET']['api/v1/specs/one/:id/:column']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'getOne',
 	  'arguments' => 
 	  array (
@@ -507,10 +507,10 @@ $o['GET']['api/v1/goodsspec/one/:id/:column']=array (
 	  'method_flag' => 3,
 	);
 
-#==== GET api/v1/goodsspec/find
+#==== GET api/v1/specs/find
 
-$o['GET']['api/v1/goodsspec/find']=array (
-	  'class_name' => 'GoodsSpec',
+$o['GET']['api/v1/specs/find']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'getFind',
 	  'arguments' => 
 	  array (
@@ -528,10 +528,10 @@ $o['GET']['api/v1/goodsspec/find']=array (
 	  'method_flag' => 3,
 	);
 
-#==== GET api/v1/goodsspec/find/:id
+#==== GET api/v1/specs/find/:id
 
-$o['GET']['api/v1/goodsspec/find/:id']=array (
-	  'class_name' => 'GoodsSpec',
+$o['GET']['api/v1/specs/find/:id']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'getFind',
 	  'arguments' => 
 	  array (
@@ -549,10 +549,10 @@ $o['GET']['api/v1/goodsspec/find/:id']=array (
 	  'method_flag' => 3,
 	);
 
-#==== GET api/v1/goodsspec/find/:id/:columns
+#==== GET api/v1/specs/find/:id/:columns
 
-$o['GET']['api/v1/goodsspec/find/:id/:columns']=array (
-	  'class_name' => 'GoodsSpec',
+$o['GET']['api/v1/specs/find/:id/:columns']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'getFind',
 	  'arguments' => 
 	  array (
@@ -1988,10 +1988,10 @@ $o['POST']['api/v1/goods/delete']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/goodsspec/page
+#==== POST api/v1/specs/page
 
-$o['POST']['api/v1/goodsspec/page']=array (
-	  'class_name' => 'GoodsSpec',
+$o['POST']['api/v1/specs/page']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'postPage',
 	  'arguments' => 
 	  array (
@@ -2007,10 +2007,10 @@ $o['POST']['api/v1/goodsspec/page']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/goodsspec/select
+#==== POST api/v1/specs/select
 
-$o['POST']['api/v1/goodsspec/select']=array (
-	  'class_name' => 'GoodsSpec',
+$o['POST']['api/v1/specs/select']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'postSelect',
 	  'arguments' => 
 	  array (
@@ -2027,10 +2027,10 @@ $o['POST']['api/v1/goodsspec/select']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/goodsspec/query
+#==== POST api/v1/specs/query
 
-$o['POST']['api/v1/goodsspec/query']=array (
-	  'class_name' => 'GoodsSpec',
+$o['POST']['api/v1/specs/query']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'postQuery',
 	  'arguments' => 
 	  array (
@@ -2047,10 +2047,10 @@ $o['POST']['api/v1/goodsspec/query']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/goodsspec/add
+#==== POST api/v1/specs/add
 
-$o['POST']['api/v1/goodsspec/add']=array (
-	  'class_name' => 'GoodsSpec',
+$o['POST']['api/v1/specs/add']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'postAdd',
 	  'arguments' => 
 	  array (
@@ -2067,10 +2067,10 @@ $o['POST']['api/v1/goodsspec/add']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/goodsspec/update
+#==== POST api/v1/specs/update
 
-$o['POST']['api/v1/goodsspec/update']=array (
-	  'class_name' => 'GoodsSpec',
+$o['POST']['api/v1/specs/update']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'postUpdate',
 	  'arguments' => 
 	  array (
@@ -2089,10 +2089,10 @@ $o['POST']['api/v1/goodsspec/update']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/goodsspec/update/:id
+#==== POST api/v1/specs/update/:id
 
-$o['POST']['api/v1/goodsspec/update/:id']=array (
-	  'class_name' => 'GoodsSpec',
+$o['POST']['api/v1/specs/update/:id']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'postUpdate',
 	  'arguments' => 
 	  array (
@@ -2111,10 +2111,10 @@ $o['POST']['api/v1/goodsspec/update/:id']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/goodsspec/copy
+#==== POST api/v1/specs/copy
 
-$o['POST']['api/v1/goodsspec/copy']=array (
-	  'class_name' => 'GoodsSpec',
+$o['POST']['api/v1/specs/copy']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'postCopy',
 	  'arguments' => 
 	  array (
@@ -2131,10 +2131,10 @@ $o['POST']['api/v1/goodsspec/copy']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/goodsspec/field
+#==== POST api/v1/specs/field
 
-$o['POST']['api/v1/goodsspec/field']=array (
-	  'class_name' => 'GoodsSpec',
+$o['POST']['api/v1/specs/field']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'postField',
 	  'arguments' => 
 	  array (
@@ -2151,10 +2151,10 @@ $o['POST']['api/v1/goodsspec/field']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/goodsspec/count
+#==== POST api/v1/specs/count
 
-$o['POST']['api/v1/goodsspec/count']=array (
-	  'class_name' => 'GoodsSpec',
+$o['POST']['api/v1/specs/count']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'postCount',
 	  'arguments' => 
 	  array (
@@ -2171,10 +2171,10 @@ $o['POST']['api/v1/goodsspec/count']=array (
 	  'method_flag' => 3,
 	);
 
-#==== POST api/v1/goodsspec/delete
+#==== POST api/v1/specs/delete
 
-$o['POST']['api/v1/goodsspec/delete']=array (
-	  'class_name' => 'GoodsSpec',
+$o['POST']['api/v1/specs/delete']=array (
+	  'class_name' => 'Specs',
 	  'method_name' => 'postDelete',
 	  'arguments' => 
 	  array (
