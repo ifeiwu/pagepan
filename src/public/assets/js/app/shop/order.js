@@ -22,7 +22,7 @@ define(function (require) {
                 success: function(res) {
                     if (res.code == 0) {
                         $.post('m/shop/order-notice', {'order_sn': res.data.sn}, function () {
-                            location.href = 'order-success';
+                            location.href = 'shop-order-success';
                         });
                     } else {
                         let data = res.data;

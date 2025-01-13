@@ -12,6 +12,27 @@ return function ($request_data) {
         $goods_id = $request_data['id'];
         $specs = $request_data['specs'];
         if (is_array($specs)) {
+            /*$specs = $request_data['specs'];
+            $prices = $request_data['prices'];
+            $stocks = $request_data['stocks'];
+            foreach($skuids as $i => $skuid) {
+                $data = [
+                    'goods_id' => $goods_id,
+                    'specs' => json_encode($specs[$i], JSON_UNESCAPED_UNICODE),
+                    'price' => intval($prices[$i]),
+                    'stock' => intval($stocks[$i])
+                ];
+                if ($db->has('goods_sku', ['id', '=', $skuid])) {
+                    if (!$db->update('goods_sku', $data, ['id', '=', $skuid])) {
+                        Response::error('更新商品规格失败');
+                    }
+                } else {
+                    if (!$db->insert('goods_sku', $data)) {
+                        Response::error('添加商品规格失败');
+                    }
+                }
+            }*/
+
             // 删除商品之前所有规格，再重新添加规格
             if ($db->delete('goods_sku', ['goods_id', '=', $goods_id])) {
                 $prices = $request_data['prices'];
