@@ -5,6 +5,7 @@ return function ($request_data) {
     if ($inventory <= 0) {
         $request_data['state'] = 0;
     }*/
+    $request_data['price'] = price_format($request_data['price']);
     if (helper('api/v2/updateItem', ['goods', $request_data])) {
         $db = db();
         $db->debug = false;
@@ -32,14 +33,13 @@ return function ($request_data) {
                     }
                 }
             }*/
-
             // 删除商品之前所有规格，再重新添加规格
             if ($db->delete('goods_sku', ['goods_id', '=', $goods_id])) {
                 $prices = $request_data['prices'];
                 $stocks = $request_data['stocks'];
                 $sku_values = [];
                 foreach($specs as $i => $spec) {
-                    $sku_values[$i] = [$goods_id, json_encode($spec, JSON_UNESCAPED_UNICODE), intval($prices[$i]), intval($stocks[$i])];
+                    $sku_values[$i] = [$goods_id, json_encode($spec, JSON_UNESCAPED_UNICODE), price_format($prices[$i]), intval($stocks[$i])];
                 }
                 $ids = $db->inserts('goods_sku', ['goods_id', 'specs', 'price', 'stock'], $sku_values);
                 if (count($ids) !== count($sku_values)) {
