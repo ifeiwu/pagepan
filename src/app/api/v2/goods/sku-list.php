@@ -1,23 +1,19 @@
 <?php
 return function ($request_data) {
-    $column = ['id', 'title'];
-    $where = [['type', '=', 2], 'AND', ['state', '=', 1]];
-    $order = ['sortby' => 'DESC', 'ctime' => 'DESC'];
+    $goods_id = intval($request_data['goodsid']);
 
     $db = db();
     $db->debug = false;
-    $specs = $db->select('specs', $column, $where, $order);
-
-    if ($specs) {
+    $specs = $db->select('goods_spec', ['id', 'name', 'value'], ['goods_id', '=', $goods_id], ['id' => 'ASC']);
+    /*if ($specs) {
         foreach ($specs as $i => $spec) {
-            $specs[$i]['_child'] = $db->select('specs', $column, [['pid', '=', $spec['id']], 'AND', ['state', '=', 1]], $order);
+            $specs[$i]['_child'] = explode(',', $spec['value']);
         }
     } else {
         $specs = [];
-    }
+    }*/
 
-    $id = intval($request_data['id']);
-    $gskus = $db->select('goods_sku', '*', ['goods_id', '=', $id]);
+    $gskus = $db->select('goods_sku', '*', ['goods_id', '=', $goods_id]);
 
     Response::success('商品编辑规格列表', ['gskus' => $gskus, 'specs' => $specs]);
 };

@@ -4,7 +4,6 @@ return function ($request_data) {
     $db = db();
     $db->debug = false;
     $specs = $db->select('goods_spec', ['id', 'name', 'value'], ['goods_id', '=', $goods_id]);
-//    $specs = helper('arr/tree', [$specs]);
-//debug($specs);
-    Response::success('商品编辑规格列表', ['specs' => $specs]);
+
+    Response::success('商品编辑规格列表', $specs);
 };
