@@ -160,6 +160,27 @@ function loader_vendor()
     require_once VEN_PATH . 'autoload.php';
 }
 
+// JSON 数组编码：默认不编码成 Unicode
+function json_encode2($value, int $flags = 0, int $depth = 512)
+{
+    $flags |= JSON_UNESCAPED_UNICODE;
+    $json= \json_encode($value, $flags, $depth);
+    if ($json === false) {
+        throw new Exception(json_last_error_msg());
+    }
+    return $json;
+}
+
+// JSON 字符串解码：默认数组
+function json_decode2($json, $associative = null, $depth = 512, $flags = 0) {
+    $data = \json_decode($json, $associative ?? true, $depth, $flags);
+    if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
+        $error = json_last_error_msg();
+        throw new Exception(json_last_error_msg());
+    }
+    return $data;
+}
+
 // html实体转换为字符
 function html_decode($str)
 {

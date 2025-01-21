@@ -1,22 +1,14 @@
 <?php
-return function ($id = 0) {
-    $item = db()->find('goods', ['title', 'price', 'image', 'path', 'score', 'utime'], [['id', '=', $id], 'AND', ['state', '=', 1]]);
-    /*$item['spec'] = '';
-    $specs = $_GET['specs'];
-    if ($specs) {
-        //规格处理
-        $spec_arr = array();
-        foreach ($specs as $kv) {
-            $kv_arr = explode(':', $kv);
-            $spec_arr[$kv_arr[0]] = $kv_arr[1];
-            $title = db()->find('specs', 'title', array('id' => $kv_arr[0]));
-            $title2 = db()->find('specs', 'title', array('id' => $kv_arr[1]));
-            $item['spec'] .= $title . '：' . $title2 . '<br>';
-        }
-        //规格的价格等参数
-        $goods_join_spec = db()->find('goods_join_spec', array('goods_no', 'price', 'price2'), array('AND' => array('goods_id' => $id, 'spec' => serialize($spec_arr))));
-        $item['price'] = $goods_join_spec['price'];
-    }*/
+return function ($id = 0, $specs = null) {
+    $db = db();
+    $item = $db->find('goods', ['title', 'price', 'image', 'path', 'score', 'utime'], [['id', '=', $id], 'AND', ['state', '=', 1]]);
+
+    if (is_array($specs)) {
+        $specs_json = json_encode2($specs);
+        $sku = $db->find('goods_sku', ['price', 'price2'], [['goods_id', '=', $id], 'AND', ['specs', '=', json_encode2($specs)]]);
+        $item['price'] = $sku['price'];
+        $item['specs'] = $specs;
+    }
 
     return $item;
 };

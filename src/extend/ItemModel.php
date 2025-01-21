@@ -31,6 +31,24 @@ class ItemModel
         return number_format(self::$item['price'], 2, '.', ',');
     }
 
+    public static function getSpecs($type = 1)
+    {
+        $specs = self::$item['specs'];
+        if ($specs) {
+            $result = [];
+            foreach ($specs as $key => $value) {
+                if ($type == 1) {
+                    $result[] = $value;
+                } else {
+                    $result[] = $key . ": " . $value;
+                }
+            }
+            return implode(";", $result);
+        } else {
+            return '';
+        }
+    }
+
     public static function getSummary()
     {
         $summary = html_decode(self::$item['summary']);

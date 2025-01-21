@@ -15,7 +15,7 @@ return function ($table, $request_data) {
         $value = $request_data[$column];
         if (!is_null($value)) {
             if (is_array($value)) {
-                $data[$column] = json_encode($value, JSON_UNESCAPED_UNICODE);
+                $data[$column] = json_encode2($value);
             } else {
                 $data[$column] = MAGIC_QUOTES_GPC ? stripslashes($value) : $value;
             }

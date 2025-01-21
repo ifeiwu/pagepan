@@ -84,7 +84,7 @@ class FS {
     public static function jsonp($file, $data = null, $callback = 'result')
     {
         if (is_array($data)) {
-            return self::write($file, $callback . '(' . json_encode($data, JSON_UNESCAPED_UNICODE) . ')');
+            return self::write($file, $callback . '(' . json_encode2($data) . ')');
         } else {
             if (!is_file($file)) {
                 return [];
@@ -104,7 +104,7 @@ class FS {
     public static function json($file, $data = null)
     {
         if (is_array($data)) {
-            return self::write($file, json_encode($data, JSON_UNESCAPED_UNICODE));
+            return self::write($file, json_encode2($data));
         } else {
             if (!is_file($file)) {
                 return [];
