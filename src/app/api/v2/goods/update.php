@@ -5,7 +5,7 @@ return function ($request_data) {
     if ($inventory <= 0) {
         $request_data['state'] = 0;
     }*/
-    $request_data['price'] = price_format($request_data['price']);
+//    $request_data['price'] = price_format($request_data['price']);
     if (helper('api/v2/updateItem', ['goods', $request_data])) {
         $db = db();
         $db->debug = false;
@@ -19,7 +19,7 @@ return function ($request_data) {
                 $stocks = $request_data['stocks'];
                 $sku_values = [];
                 foreach($specs as $i => $spec) {
-                    $sku_values[$i] = [$goods_id, json_encode2($spec), price_format($prices[$i]), intval($stocks[$i])];
+                    $sku_values[$i] = [$goods_id, json_encode2($spec), $prices[$i], intval($stocks[$i])];
                 }
                 $ids = $db->inserts('goods_sku', ['goods_id', 'specs', 'price', 'stock'], $sku_values);
                 if (count($ids) !== count($sku_values)) {
