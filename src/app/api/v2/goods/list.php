@@ -1,6 +1,6 @@
 <?php
 return function ($request_data) {
-    $column = $request_data['column'] ?? 'id,pid,ctime,state,sortby,sale,title,price,path,image';
+    $column = $request_data['column'] ?? 'id,pid,ctime,utime,state,sortby,sale,title,price,path,image';
     $where = $request_data['where'];
     $order = $request_data['order'] ?: ['sortby' => 'DESC', 'ctime' => 'DESC'];
     $limit = $request_data['limit'];

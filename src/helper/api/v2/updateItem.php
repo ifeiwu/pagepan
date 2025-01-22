@@ -10,34 +10,34 @@ return function ($table, $request_data) {
     }
     // 构建表数据
     $data = [];
-    $tableColumnNames = $db->getTableColumnNames($table);
-    foreach ($tableColumnNames as $column) {
-        $value = $request_data[$column];
+    $colnames = $db->getTableColumnNames($table);
+    foreach ($colnames as $name) {
+        $value = $request_data[$name];
         if (!is_null($value)) {
             if (is_array($value)) {
-                $data[$column] = json_encode2($value);
+                $data[$name] = json_encode2($value);
             } else {
-                $data[$column] = MAGIC_QUOTES_GPC ? stripslashes($value) : $value;
+                $data[$name] = MAGIC_QUOTES_GPC ? stripslashes($value) : $value;
             }
         }
     }
     // 当前更新时间
-    if (isset($data['utime'])) {
+    if (in_array('utime', $colnames)) {
         $data['utime'] = time();
     }
     // 修改创建时间
-    if (isset($data['ctime'])) {
+    if (in_array('ctime', $colnames) && isset($data['ctime'])) {
         $data['ctime'] = strtotime($data['ctime']);
     }
     // 状态转整型
-    if (isset($data['state'])) {
+    if (in_array('state', $colnames) && isset($data['state'])) {
         $data['state'] = intval($data['state']);
     }
     // 分类层次
-    if (isset($data['pid'])) {
+    if (in_array('pid', $colnames) && isset($data['pid'])) {
         $pid = intval($data['pid']);
         $data['pid'] = $pid;
-        if (in_array('level', $tableColumnNames)) {
+        if (in_array('level', $colnames)) {
             $data['level'] = helper('api/v2/getLevel', [$table, $pid, $id]);
         }
     }
@@ -47,7 +47,7 @@ return function ($table, $request_data) {
     }
     // 上传路径
     $upload_name = $request_data['$upload_name'];
-    if (in_array($upload_name, $tableColumnNames)) {
+    if (in_array($upload_name, $colnames)) {
         $upload_path = $request_data['$upload_path'];
         $upload_path2 = WEB_ROOT . $upload_path;
         if (!is_dir($upload_path2)) {
