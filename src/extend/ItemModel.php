@@ -31,9 +31,28 @@ class ItemModel
         return number_format(self::$item['price'], 2, '.', ',');
     }
 
-    public static function getSpecs($type = 1)
+    // 获取商品SKU
+    public static function getGoodsSkus($goods_id)
     {
-        $specs = self::$item['specs'];
+        $goods_skus = db()->select('goods_sku', '*', ['goods_id', '=', $goods_id]);
+        if ($goods_skus) {
+            foreach ($goods_skus as $i => $sku) {
+                $goods_skus[$i]['specs'] = json_decode($sku['specs'], true);
+            }
+        }
+        return $goods_skus;
+    }
+
+    // 获取商品规格
+    public static function getGoodsSpecs($goods_id)
+    {
+        return db()->select('goods_spec', '*', ['goods_id', '=', $goods_id]);
+    }
+
+    // 返回商品规格格式化的字符串，如：(白色;M) 或 (颜色:白色;尺寸:M)
+    public static function getGoodsSpecsFormatStr($type = 1, $specs = null)
+    {
+        $specs = $specs ?? self::$item['specs'];
         if ($specs) {
             $result = [];
             foreach ($specs as $key => $value) {
