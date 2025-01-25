@@ -66,6 +66,8 @@ define(function (require) {
                 let quantity = parseInt($number.val());
                 if (quantity > 1 || isNaN(quantity)) {
                     $number.val(quantity - 1);
+                } else {
+                    alerty.toast('数量不能再少啦~', {place:'top'});
                 }
             });
             // 数量加 1
@@ -73,17 +75,26 @@ define(function (require) {
                 let quantity = parseInt($number.val());
                 if (quantity < 99 || isNaN(quantity)) {
                     $number.val(quantity + 1);
+                } else {
+                    alerty.toast('数量已经最大了~', {place:'top'});
                 }
             });
-            //输入数量
+            // 输入数量
             $number.on('input', function () {
                 let quantity = parseInt($(this).val());
                 if (quantity <= 0 || isNaN(quantity)) {
-                    $number.val(1);
+                    $number.val('');
                 } else if (quantity >= 99) {
                     $number.val(99);
                 } else {
                     $number.val(quantity);
+                }
+            });
+            // 数量修复
+            $number.blur(function () {
+                let quantity = parseInt($(this).val());
+                if (quantity <= 0 || isNaN(quantity)) {
+                    $number.val(1);
                 }
             });
         });
