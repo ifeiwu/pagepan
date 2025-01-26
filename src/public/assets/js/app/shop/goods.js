@@ -8,24 +8,31 @@ define(function (require) {
 
     // 添加到购物车
     const addCartInit = function () {
-        $component.find('#addcart').click(function () {
+        $component.find('.addcart').click(function () {
             let data = getFormData();
-            $.post('./m/shop/add-cart', data, function (res) {
-                if (res.code == 0) {
-                    $('.cart-count').text(res.data).show();
-                    let icon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
-                    alerty.toast(`${icon} 成功加入购物车`);
-                }
-            });
+            if (data !== false) {
+                $.post('./m/shop/add-cart', data, function (res) {
+                    if (res.code == 0) {
+                        $('.cart-count').text(res.data).show();
+                        let icon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+                        alerty.toast(`${icon} 成功加入购物车`);
+                    }
+                });
+            }
         });
     };
 
     // 立刻购买
     const buyNowInit = function () {
-        $component.find('#buynow').click(function () {
+        $component.find('.buynow').click(function () {
             let data = getFormData();
-            let specs = btoa(JSON.stringify(data.specs));
-            location.href = `order-confirm?id=${data.id}&quantity=${data.quantity}&specs=${specs}`;
+            if (data !== false) {
+                $.post('./m/shop/buy-now', data, function (res) {
+                    if (res.code == 0) {
+                        location.href = `shop-order-confirm?id=${data.id}`;
+                    }
+                });
+            }
         });
     }
 
@@ -53,11 +60,12 @@ define(function (require) {
                         alerty.toast(`请选择商品规格`, {place:'top'});
                     } else {
                         $drawer.addClass('open');
+                        $('body').css('overflow', 'hidden');
                     }
                 } else {
                     alerty.toast(`请选择商品规格`, {place:'top'});
                 }
-                return;
+                return false;
             }
         }
 

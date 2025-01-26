@@ -83,7 +83,7 @@ define(function (require) {
                     let sku = skus[skukey];
                     let sku_specs = skus[skukey].specs;
                     if (JSON.stringify(ksort(selected_specs)) == JSON.stringify(ksort(sku_specs))) {
-                        $component.find('#price').text(sku.price);
+                        $component.find('#spec_price').text(sku.price);
                         break;
                     }
                 }
@@ -96,6 +96,7 @@ define(function (require) {
         $drawer.click(function (e) {
             if ($(e.target).is(this)) {
                 $(this).removeClass('open');
+                $('body').css('overflow', '');
             }
         });
         let $content = $drawer.find('>div');
