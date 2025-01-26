@@ -47,7 +47,16 @@ define(function (require) {
                 });
             });
             if ($ols.length != Object.keys(specs).length) {
-                alerty.toast(`请选择商品规格`);
+                let $drawer = $component.find('#drawer');
+                if ($drawer.length) {
+                    if ($drawer.is('.open')) {
+                        alerty.toast(`请选择商品规格`, {place:'top'});
+                    } else {
+                        $drawer.addClass('open');
+                    }
+                } else {
+                    alerty.toast(`请选择商品规格`, {place:'top'});
+                }
                 return;
             }
         }
@@ -90,7 +99,7 @@ define(function (require) {
                     $number.val(quantity);
                 }
             });
-            // 数量修复
+            // 默认数量
             $number.blur(function () {
                 let quantity = parseInt($(this).val());
                 if (quantity <= 0 || isNaN(quantity)) {

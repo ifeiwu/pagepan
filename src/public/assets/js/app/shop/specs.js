@@ -91,8 +91,20 @@ define(function (require) {
         });
     }
 
+    const initDrawer = function (skus) {
+        let $drawer = $component.find('#drawer');
+        $drawer.click(function (e) {
+            if ($(e.target).is(this)) {
+                $(this).removeClass('open');
+            }
+        });
+        let $content = $drawer.find('>div');
+        $content.css('--specs-box-height', $content.outerHeight() + 'px');
+    }
+
     return {
-        'setComponent': setComponent,
-        'init': init,
+        setComponent: setComponent,
+        init: init,
+        initDrawer: initDrawer
     }
 });
