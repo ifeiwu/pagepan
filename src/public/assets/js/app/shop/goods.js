@@ -8,8 +8,8 @@ define(function (require) {
 
     // 添加到购物车
     const initAddCart = function () {
-        $component.find('.addcart').click(function () {
-            let data = getFormData();
+        $component.find('.addcart').click(function (e) {
+            let data = getFormData(e);
             if (data !== false) {
                 $.post('./m/shop/add-cart', data, function (res) {
                     if (res.code == 0) {
@@ -24,8 +24,8 @@ define(function (require) {
 
     // 立刻购买
     const initBuyNow = function () {
-        $component.find('.buynow').click(function () {
-            let data = getFormData();
+        $component.find('.buynow').click(function (e) {
+            let data = getFormData(e);
             if (data !== false) {
                 $.post('./m/shop/buy-now', data, function (res) {
                     if (res.code == 0) {
@@ -37,11 +37,11 @@ define(function (require) {
     }
 
     // 获取表单数据
-    function getFormData() {
+    function getFormData(e) {
         let goodsid = $component.find('#goods_id').val();
         let quantity = $component.find('#number').val();
         let specs = {};
-        // 选择的规格
+        // 有多规格选择
         let $ols = $component.find('#specs ol');
         if ($ols.length) {
             $ols.each(function (i) {
@@ -54,7 +54,18 @@ define(function (require) {
                 });
             });
             let $drawer = $component.find('#drawer');
+            // 抽屉窗口显隐[加入购物车]或[立即购买]按钮
+            if ($drawer.length) {
+                if ($(e.target).is('.addcart')) {
+                    $drawer.find('.buynow').hide();
+                    $drawer.find('.addcart').show();
+                } else {
+                    $drawer.find('.addcart').hide();
+                    $drawer.find('.buynow').show();
+                }
+            }
             if ($ols.length != Object.keys(specs).length) {
+                // 是否使用抽屉窗口方式显示规格选择
                 if ($drawer.length) {
                     if ($drawer.is('.open')) {
                         alerty.toast(`请选择商品规格`, {place:'top'});
@@ -67,13 +78,13 @@ define(function (require) {
                 }
                 return false;
             } else {
+                // 已完成规格选择，但是关闭了抽屉窗口。
                 if ($drawer.length && !$drawer.is('.open')) {
                     $drawer.addClass('open');
                     return false;
                 }
             }
         }
-
         return {'id': goodsid, 'quantity': quantity, 'specs': specs};
     }
 
