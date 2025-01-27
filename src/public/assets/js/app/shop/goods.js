@@ -1,13 +1,13 @@
 define(function (require) {
-    const alerty = require('alerty');
-
     let $component;
     const setComponent = function ($_component) {
         $component = $_component;
     }
 
+    const alerty = require('alerty');
+
     // 添加到购物车
-    const addCartInit = function () {
+    const initAddCart = function () {
         $component.find('.addcart').click(function () {
             let data = getFormData();
             if (data !== false) {
@@ -23,7 +23,7 @@ define(function (require) {
     };
 
     // 立刻购买
-    const buyNowInit = function () {
+    const initBuyNow = function () {
         $component.find('.buynow').click(function () {
             let data = getFormData();
             if (data !== false) {
@@ -53,8 +53,8 @@ define(function (require) {
                     specs[spec_name] = spec_value;
                 });
             });
+            let $drawer = $component.find('#drawer');
             if ($ols.length != Object.keys(specs).length) {
-                let $drawer = $component.find('#drawer');
                 if ($drawer.length) {
                     if ($drawer.is('.open')) {
                         alerty.toast(`请选择商品规格`, {place:'top'});
@@ -66,14 +66,19 @@ define(function (require) {
                     alerty.toast(`请选择商品规格`, {place:'top'});
                 }
                 return false;
+            } else {
+                if ($drawer.length && !$drawer.is('.open')) {
+                    $drawer.addClass('open');
+                    return false;
+                }
             }
         }
 
         return {'id': goodsid, 'quantity': quantity, 'specs': specs};
     }
 
-    // 数量减 1
-    const quantitysInit = function () {
+    // 商品数量调整
+    const initQuantitys = function () {
         let $quantitys = $component.find('.quantity');
         $quantitys.each(function (i, v) {
             let $quantity = $(this);
@@ -118,7 +123,7 @@ define(function (require) {
     }
 
     // 分享链接
-    const shareInit = function () {
+    const initShare = function () {
         $component.find('#share').click(function () {
             try {
                 navigator.clipboard.writeText(window.location.href).then(function() {
@@ -145,9 +150,9 @@ define(function (require) {
 
     return {
         'setComponent': setComponent,
-        'quantitysInit': quantitysInit,
-        'addCartInit': addCartInit,
-        'buyNowInit': buyNowInit,
-        'shareInit': shareInit,
+        'initQuantitys': initQuantitys,
+        'initAddCart': initAddCart,
+        'initBuyNow': initBuyNow,
+        'initShare': initShare,
     }
 });

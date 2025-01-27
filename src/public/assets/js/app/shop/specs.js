@@ -4,8 +4,10 @@ define(function (require) {
         $component = $_component;
     }
 
+    const price_format = require('util/price-format');
+
     // 规格选择初始化
-    const init = function (skus) {
+    const initTabs = function (skus) {
         let $ols = $component.find('#specs ol');
         let ols_count = $ols.length;
         // 商品只有一个规格，查找库存是0的禁用li选项
@@ -83,21 +85,29 @@ define(function (require) {
                     let sku = skus[skukey];
                     let sku_specs = skus[skukey].specs;
                     if (JSON.stringify(ksort(selected_specs)) == JSON.stringify(ksort(sku_specs))) {
-                        $component.find('#spec_price').text(sku.price);
+                        $component.find('#price').hide();
+                        $component.find('#spec_price').text(price_format(sku.price)).show();
                         break;
+                    } else {
+                        $component.find('#price').show();
+                        $component.find('#spec_price').hide();
                     }
                 }
             }
         });
     }
 
+    // 抽屉方式显示选择规格
     const initDrawer = function (skus) {
-        let $drawer = $component.find('#drawer');
+        let $drawer = $component.find('#drawer').show();
         $drawer.click(function (e) {
             if ($(e.target).is(this)) {
                 $(this).removeClass('open');
                 $('body').css('overflow', '');
             }
+        });
+        $drawer.find('.close').click(function () {
+            $drawer.removeClass('open');
         });
         let $content = $drawer.find('>div');
         $content.css('--specs-box-height', $content.outerHeight() + 'px');
@@ -105,7 +115,7 @@ define(function (require) {
 
     return {
         setComponent: setComponent,
-        init: init,
+        initTabs: initTabs,
         initDrawer: initDrawer
     }
 });

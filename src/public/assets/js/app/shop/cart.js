@@ -4,44 +4,10 @@ define(function (require) {
         $component = $_component;
     }
 
-    // 价格格式化
-    const price_format = function (number, decimals) {
-        decimals = decimals > 0 && decimals <= 20 ? decimals : 2;
-        number = parseFloat((number + "").replace(/[^\d\.-]/g, "")).toFixed(decimals) + "";
-        var l = number.split(".")[0].split("").reverse(),
-            r = number.split(".")[1];
-        t = "";
-        for (i = 0; i < l.length; i++) {
-            t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
-        }
-        return t.split("").reverse().join("") + "." + r;
-    }
-
-    // 设置购物车商口数量
-    const updateCartQuantity = function ($number) {
-        let $li = $number.closest('li');
-        let id = $li.find('input[name="id"]').val();
-        let hash = $li.find('input[name="hash"]').val();
-        let quantity = $number.val();
-
-        $.getJSON('./m/shop/cart-quantity', {'id': id, 'hash': hash, 'quantity': quantity}, function (res) {
-            if (res.code == 0) {
-                $number.val(quantity);
-                let $drawer = $li.find('.drawer');
-                $drawer.removeClass('open');
-                $drawer.find('.minus').attr('disabled', false);
-                if (quantity == 99) {
-                    $drawer.find('.plus').attr('disabled', true);
-                } else {
-                    $drawer.find('.plus').attr('disabled', false);
-                }
-                $component.find('.total-price').text(res.data.totalPrice);
-            }
-        });
-    }
+    const price_format = require('util/price-format');
 
     // 双击商品抽屉方式打开删除按钮
-    const drawerInit = function () {
+    const initDrawer = function () {
         let $drawers = $('.drawer');
         $drawers.dblclick(function (e) {
             e.preventDefault();
@@ -91,11 +57,34 @@ define(function (require) {
         });
     };
 
+    // 设置购物车商口数量
+    const updateCartQuantity = function ($number) {
+        let $li = $number.closest('li');
+        let id = $li.find('input[name="id"]').val();
+        let hash = $li.find('input[name="hash"]').val();
+        let quantity = $number.val();
+
+        $.getJSON('./m/shop/cart-quantity', {'id': id, 'hash': hash, 'quantity': quantity}, function (res) {
+            if (res.code == 0) {
+                $number.val(quantity);
+                let $drawer = $li.find('.drawer');
+                $drawer.removeClass('open');
+                $drawer.find('.minus').attr('disabled', false);
+                if (quantity == 99) {
+                    $drawer.find('.plus').attr('disabled', true);
+                } else {
+                    $drawer.find('.plus').attr('disabled', false);
+                }
+                $component.find('.total-price').text(res.data.totalPrice);
+            }
+        });
+    }
+
     // 商品数量调整
-    const quantitysInit = function () {
+    const initQuantitys = function () {
         $component.find('.quantity').each(function () {
             let $quantity = $(this);
-            let $number = $quantity.find('input[name="number"]');
+            let $number = $quantity.find('.number');
             // 数量减 1
             $quantity.find('.minus').click(function () {
                 let quantity = parseInt($number.val());
@@ -107,7 +96,6 @@ define(function (require) {
                     $number.closest('li').addClass('open');
                 }
             });
-
             // 数量加 1
             $quantity.find('.plus').click(function () {
                 let quantity = parseInt($number.val());
@@ -116,12 +104,11 @@ define(function (require) {
                 }
                 updateCartQuantity($number);
             });
-
             // 输入数量
             $number.on('input', function () {
                 let quantity = parseInt($(this).val());
                 if (quantity <= 0 || isNaN(quantity)) {
-                    $number.val(1);
+                    $number.val('');
                 } else if (quantity >= 99) {
                     $number.val(99);
                 } else {
@@ -129,12 +116,19 @@ define(function (require) {
                 }
                 updateCartQuantity($number);
             });
+            // 默认数量
+            $number.blur(function () {
+                let quantity = parseInt($(this).val());
+                if (quantity <= 0 || isNaN(quantity)) {
+                    $number.val(1);
+                }
+            });
         });
     }
 
     return {
         'setComponent': setComponent,
-        'quantitysInit': quantitysInit,
-        'drawerInit': drawerInit
+        'initQuantitys': initQuantitys,
+        'initDrawer': initDrawer
     };
 });

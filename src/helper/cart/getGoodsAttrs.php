@@ -1,7 +1,7 @@
 <?php
 return function ($id = 0, $specs = null) {
     $db = db();
-    $item = $db->find('goods', ['title', 'price', 'image', 'path', 'score', 'utime'], [['id', '=', $id], 'AND', ['state', '=', 1]]);
+    $item = $db->find('goods', ['title', 'price', 'image', 'path', 'stock', 'utime'], [['id', '=', $id], 'AND', ['state', '=', 1]]);
 
     if (is_array($specs)) {
         $specs_json = json_encode2($specs);
