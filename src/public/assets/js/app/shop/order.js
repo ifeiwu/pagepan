@@ -1,6 +1,10 @@
 define(function (require) {
+    let $component;
+    const setComponent = function ($_component) {
+        $component = $_component;
+    }
 
-    const init = function ($component) {
+    const init = function () {
         // 订单备注文本域自动高度
         $component.find('textarea[name="notes"]').on('input', function () {
             let padding = parseInt($(this).css('paddingTop')) * 2;
@@ -59,6 +63,7 @@ define(function (require) {
     }
 
     return {
+        'setComponent': setComponent,
         'init': init
     };
 });

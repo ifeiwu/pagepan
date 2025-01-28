@@ -42,44 +42,42 @@ return function () {
         Response::error('订单备注长度 2-100 个字符', ['field' => 'remark']);
     }
 
-    // 订单信息
-    $order = [];
-    $cart = cart();
-    // 登录用户使用的地址
-    /*$address_id = $post['address_id'];
-    if ($address_id) {
-        $user_id = session('user.id');
-        $order['user_id'] = $user_id; // 用户ID
-        // 获取用户收货地址
-        $address = $db->find('user_address', '*', [['user_id', '=', $user_id], 'AND', ['address_id', '=', $address_id]]);
-        $road = $address['road'];
-        $house = $address['house'];
-        $linkman = $address['linkman'];
-        $phone = $address['phone'];
-        $wechat = $address['wechat'];
-    }*/
-
-    $shop_range = db()->find('site', 'value', ['name', '=', 'shop_range'], null, 0);
+    // 服务范围
+    $db = db();
+    $shop_range = $db->find('site', 'value', ['name', '=', 'shop_range'], null, 0);
     $shop_range = json_decode($shop_range, true);
     $province = $shop_range['province'];
     $city = $shop_range['city'];
     $district = $shop_range['district'];
     session('order_address', ['province' => $province, 'city' => $city, 'district' => $district, 'road' => $road, 'house' => $house]);
 
+    // 提取会话信息
+    $buynow = session('shop-buynow');
+    if ($buynow != null) {
+        $order_quantity = $buynow['quantity'];
+        $order_total = $buynow['total'];
+        $order_items = $buynow['items'];
+        session('shop-buynow', null);
+    } else {
+        $cart = cart();
+        $order_quantity = $cart->getTotalQuantity();
+        $order_total = $cart->getTotalWithDiscount();
+        $order_items = $cart->getItems();
+        $cart->clear();
+    }
+
+    // 订单信息
+    $order = [];
     $order['ctime'] = time(); // 创建时间
-    $order['is_new'] = 0; // 0未读/1已读状态
-    $order['is_read'] = 0; // 0未读/1已读状态
-    $order['status'] = 1; // 订单状态：1正常/2关闭
-    $order['quantity'] = $cart->getTotalQuantity(); // 商品总数量
-    $order['total'] = $cart->getTotalWithDiscount(); // 实付总额
-    $order['score'] = floatval($score); // 获得积分
+    $order['status'] = 0; // 订单状态：0未确认/1已确认/2已签收/3已取消
+    $order['quantity'] = $order_quantity; // 商品总数量
+    $order['total'] = $order_total; // 实付总额
     $order['remark'] = $remark; // 买家备注
     $order['linkman'] = $linkman; // 联系人
     $order['phone'] = $phone; // 手机号
     $order['wechat'] = $wechat; // 微信号
     $order['address'] = "$province,$city,$district,$road,$house"; // 收货地址
 
-    $db = db();
     try {
         $db->pdo->beginTransaction();
         $order_id = $db->insert('order', $order);
@@ -89,8 +87,7 @@ return function () {
             $db->update('order', ['sn' => $sn], ['id', '=', $order_id]);
             // 添加商品清单
             $is_add_items = true;
-            $items = $cart->getItems();
-            foreach ($items as $item) {
+            foreach ($order_items as $item) {
                 $quantity = $item['quantity'];
                 $attrs = $item['attributes'];
                 $detail = [
@@ -98,7 +95,7 @@ return function () {
                     'goods_id' => $item['id'],
                     'quantity' => $quantity,
                     'title' => $attrs['title'],
-                    'specs' => $attrs['specs'],
+                    'specs' => json_encode2($attrs['specs'] ?: '{}'),
                     'price' => $attrs['price'],
                     'image' => $attrs['image'],
                     'path' => $attrs['path'],
@@ -110,7 +107,6 @@ return function () {
             }
             if ($is_add_items == true) {
                 $db->pdo->commit();
-                $cart->clear();
                 Response::success('下单成功', ['id' => $order_id, 'sn' => $sn]);
             } else {
                 $db->pdo->rollBack();

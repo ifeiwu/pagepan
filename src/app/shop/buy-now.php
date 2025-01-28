@@ -9,10 +9,11 @@ return function () {
         $total = price_format($attrs['price'] * $quantity);
     } else {
         $items = [];
-        $total = '0.00';
+        $total = 0;
+        $quantity = 0;
     }
 
-    session('shop-buy-now', ['items' => $items, 'total' => $total]);
+    session('shop-buynow', ['items' => $items, 'total' => $total, 'quantity' => $quantity]);
 
     Response::success('立即购买');
 };

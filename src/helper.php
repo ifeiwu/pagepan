@@ -3,11 +3,9 @@
 function helper($name, $args = [])
 {
     $key = 'helper.' . $name;
-
     if ( ! Config::has($key) ) {
         Config::set($key, require ROOT_PATH . "helper/{$name}.php");
     }
-
     return call_user_func_array(Config::get($key), $args);
 }
 
@@ -29,7 +27,6 @@ function config($name, $value = '')
 function session($name, $value = '')
 {
     $session = Session::new();
-
     if ( is_null($name) ) {
         $session->clear($value);
     } elseif ( $value === '' ) {
@@ -45,7 +42,6 @@ function session($name, $value = '')
 function cache($name, $value = '', $seconds = 0)
 {
     $cache = Cache::new('file', Config::file('cache'));
-
     if ( is_null($name) ) {
         $cache->clear();
     } elseif ( $value === '' ) {
@@ -61,14 +57,12 @@ function cache($name, $value = '', $seconds = 0)
 function view($path = null)
 {
     $view = View::new($path);
-
     if ( ! $view->uikit )
     {
         $uikit = Uikit::new();
         $uikit->view = $view;
         $view->uikit = $uikit;
     }
-
     return $view;
 }
 
