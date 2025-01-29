@@ -4,6 +4,7 @@ define(function (require) {
         $component = $_component;
     }
 
+    const alerty = require('alerty');
     const price_format = require('util/price-format');
 
     // 双击商品抽屉方式打开删除按钮
@@ -22,7 +23,6 @@ define(function (require) {
         // 点击任何一个商品删除
         $('body').click(function (e) {
             let $target = $(e.target);
-
             // 排除双击商品内的元素
             if ($target.closest('.quantity').length || $target.closest('.remove').length) {
                 return false;
@@ -63,6 +63,7 @@ define(function (require) {
         let id = $li.find('input[name="id"]').val();
         let hash = $li.find('input[name="hash"]').val();
         let quantity = $number.val();
+        let stock = $number.data('stock');
 
         $.getJSON('./m/shop/cart-quantity', {'id': id, 'hash': hash, 'quantity': quantity}, function (res) {
             if (res.code == 0) {
@@ -70,8 +71,9 @@ define(function (require) {
                 let $drawer = $li.find('.drawer');
                 $drawer.removeClass('open');
                 $drawer.find('.minus').attr('disabled', false);
-                if (quantity == 99) {
+                if (quantity == stock) {
                     $drawer.find('.plus').attr('disabled', true);
+                    alerty.toast(`最大库存（${stock}）`, {place:'top'});
                 } else {
                     $drawer.find('.plus').attr('disabled', false);
                 }
@@ -85,6 +87,7 @@ define(function (require) {
         $component.find('.quantity').each(function () {
             let $quantity = $(this);
             let $number = $quantity.find('.number');
+            let stock = $number.data('stock');
             // 数量减 1
             $quantity.find('.minus').click(function () {
                 let quantity = parseInt($number.val());
@@ -99,7 +102,7 @@ define(function (require) {
             // 数量加 1
             $quantity.find('.plus').click(function () {
                 let quantity = parseInt($number.val());
-                if (quantity < 99 || isNaN(quantity)) {
+                if (quantity < stock || isNaN(quantity)) {
                     $number.val(quantity + 1);
                 }
                 updateCartQuantity($number);
@@ -109,8 +112,9 @@ define(function (require) {
                 let quantity = parseInt($(this).val());
                 if (quantity <= 0 || isNaN(quantity)) {
                     $number.val('');
-                } else if (quantity >= 99) {
-                    $number.val(99);
+                } else if (quantity >= stock) {
+                    $number.val(stock);
+                    alerty.toast(`最大库存（${stock}）`, {place:'top'});
                 } else {
                     $number.val(quantity);
                 }

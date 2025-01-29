@@ -4,6 +4,7 @@ define(function (require) {
         $component = $_component;
     }
 
+    const alerty = require('alerty');
     const price_format = require('util/price-format');
 
     // 规格选择初始化
@@ -79,6 +80,9 @@ define(function (require) {
                     }
                 });
             });
+            // 规格库存数量设置，用于调整数量提示。
+            let $number = $component.find('#number');
+            $number.data('stock', -1);
             // 完成规格选择，获取价格
             if (selected_count === $ols.length) {
                 for (skukey in skus) {
@@ -87,6 +91,12 @@ define(function (require) {
                     if (JSON.stringify(ksort(selected_specs)) == JSON.stringify(ksort(sku_specs))) {
                         $component.find('#price').hide();
                         $component.find('#spec_price').text(price_format(sku.price)).show();
+                        let quantity = parseInt($number.val());
+                        if (quantity > sku.stock) {
+                            $number.val(sku.stock);
+                            alerty.toast('超出购买的数量~');
+                        }
+                        $number.data('stock', sku.stock); // 设置当前规格库存
                         break;
                     } else {
                         $component.find('#price').show();

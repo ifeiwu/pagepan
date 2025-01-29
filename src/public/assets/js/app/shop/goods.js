@@ -97,30 +97,45 @@ define(function (require) {
             // 数量减 1
             $quantity.find('.minus').click(function () {
                 let quantity = parseInt($number.val());
-                if (quantity > 1 || isNaN(quantity)) {
-                    $number.val(quantity - 1);
-                } else {
-                    alerty.toast('数量不能再少啦~', {place:'top'});
+                let stock = $number.data('stock');
+                if (checkStockCount(stock)) {
+                    if (quantity > 1 || isNaN(quantity)) {
+                        $number.val(quantity - 1);
+                    } else {
+                        alerty.toast('数量不能再少啦~', {place: 'top'});
+                    }
                 }
             });
             // 数量加 1
             $quantity.find('.plus').click(function () {
                 let quantity = parseInt($number.val());
-                if (quantity < 99 || isNaN(quantity)) {
-                    $number.val(quantity + 1);
-                } else {
-                    alerty.toast('数量已经最大了~', {place:'top'});
+                let stock = $number.data('stock');
+                if (checkStockCount(stock)) {
+                    if (quantity < stock || isNaN(quantity)) {
+                        $number.val(quantity + 1);
+                    } else {
+                        alerty.toast('数量已经最大了~', {place:'top'});
+                    }
                 }
             });
             // 输入数量
             $number.on('input', function () {
                 let quantity = parseInt($(this).val());
+                let stock = $number.data('stock');
                 if (quantity <= 0 || isNaN(quantity)) {
                     $number.val('');
-                } else if (quantity >= 99) {
-                    $number.val(99);
+                } else if (quantity >= stock) {
+                    $number.val(stock);
+                    alerty.toast(`最大库存（${stock}）`, {place:'top'});
                 } else {
                     $number.val(quantity);
+                }
+            });
+            // 检测库存
+            $number.click(function (e) {
+                let stock = $number.data('stock');
+                if (!checkStockCount(stock)) {
+                    $number.trigger('blur');
                 }
             });
             // 默认数量
@@ -131,6 +146,14 @@ define(function (require) {
                 }
             });
         });
+        // 检测当前商品库存
+        function checkStockCount(value) {
+            if (value == -1) {
+                alerty.toast('请选择规格选项', {place:'top'});
+                return false
+            }
+            return true;
+        }
     }
 
     // 分享链接
