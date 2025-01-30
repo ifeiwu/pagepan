@@ -25,9 +25,9 @@ return function ($request_data) {
                 if (count($ids) !== count($sku_values)) {
                     Response::error('添加商品规格失败');
                 }
-                $goods_sku = $db->find('goods_sku', ['max(price) AS max_price', 'min(price) AS min_price'], ['goods_id', '=', $goods_id]);
+                $goods_sku = $db->find('goods_sku', ['max(price) AS max_price', 'min(price) AS min_price', 'sum(stock) AS sum_stock'], ['goods_id', '=', $goods_id]);
                 if ($goods_sku) {
-                    $data = ['max_price' => $goods_sku['max_price'], 'min_price' => $goods_sku['min_price']];
+                    $data = ['max_price' => $goods_sku['max_price'], 'min_price' => $goods_sku['min_price'], 'stock' => $goods_sku['sum_stock']];
                     if (!$db->update('goods', $data, ['id', '=', $goods_id])) {
                         Response::error('更新商品价格区间失败');
                     }
@@ -37,9 +37,16 @@ return function ($request_data) {
             } else {
                 Response::error('删除商品规格失败');
             }
+        } else {
+            $data = ['max_price' => 0, 'min_price' => 0];
+            if (!$db->update('goods', $data, ['id', '=', $goods_id])) {
+                Response::error('更新商品价格区间失败');
+            }
         }
 
-        $item = $db->find('goods', '*', ['id', '=', $goods_id]);
+        $columns = ['id','pid','ctime','utime','sortby','state','stock','sale','title','price','path','image'];
+        $item = $db->find('goods', $columns, ['id', '=', $goods_id]);
+        // 表格显示分类标题
         $pid = $item['pid'];
         if ($pid > 0) {
             $item['pid'] = $db->find('goods', 'title', ['id', '=', $pid], [], 0);

@@ -5,7 +5,7 @@ return function () {
     if ($id) {
         $quantity = intval($_POST['quantity']) ?: 1;
         $attrs = helper('cart/getGoodsAttrs', [$id, $_POST['specs']]);
-        $items = [['quantity' => $quantity, 'attributes' => $attrs]];
+        $items = [['id' => $id, 'quantity' => $quantity, 'attributes' => $attrs]];
         $total = price_format($attrs['price'] * $quantity);
     } else {
         $items = [];

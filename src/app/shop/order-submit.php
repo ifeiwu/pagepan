@@ -84,23 +84,27 @@ return function () {
         if ($order_id) {
             // 订单序号
             $sn = str_pad($order_id, 8, '0', STR_PAD_LEFT);
-            $db->update('order', ['sn' => $sn], ['id', '=', $order_id]);
+            if (false === $db->update('order', ['sn' => $sn], ['id', '=', $order_id])) {
+                $db->pdo->rollBack();
+                Response::error('更新订单号失败', ['id' => $order_id]);
+            }
             // 添加商品清单
             $is_add_items = true;
             foreach ($order_items as $item) {
                 $quantity = $item['quantity'];
                 $attrs = $item['attributes'];
+                $specs = json_encode2($attrs['specs'] ?: '{}');
                 $detail = [
                     'order_id' => $order_id,
                     'goods_id' => $item['id'],
                     'quantity' => $quantity,
                     'title' => $attrs['title'],
-                    'specs' => json_encode2($attrs['specs'] ?: '{}'),
+                    'specs' => $specs,
                     'price' => $attrs['price'],
                     'image' => $attrs['image'],
                     'path' => $attrs['path'],
                 ];
-                if (!$db->insert('order_detail', $detail)) {
+                if (false === $db->insert('order_detail', $detail)) {
                     $is_add_items = false;
                     break;
                 }
