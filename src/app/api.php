@@ -1,7 +1,7 @@
 <?php
 // /api/[:version]/[:module]/[:action]
 return function ($version, $module, $action) {
-    (require APP_PATH . 'api/cors.php')();
+    helper('api/cors');
 
     // 非登录需要验证访问令牌
     if ( $module != 'admin' && $action != 'login') {

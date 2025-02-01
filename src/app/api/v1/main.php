@@ -3,7 +3,7 @@ return function () {
     define('MAGIC_QUOTES_GPC', ini_set('magic_quotes_runtime', 0) ? true : false);
     define('DS', DIRECTORY_SEPARATOR);
 
-    (require APP_PATH . 'api/cors.php')();
+    helper('api/cors');
     require ROOT_PATH . 'vendor/autoload.php';
     require APP_PATH . 'api/v1/db.php';
     require APP_PATH . 'api/v1/restler.php';

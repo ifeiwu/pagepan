@@ -34,6 +34,13 @@ class Response
         exit(json_encode($object));
 	}
 
+    public static function jsonp($object, $callback = 'result')
+    {
+        header('Content-type: application/json');
+        $json = json_encode($object);
+        exit(";$callback($json);");
+    }
+
     // JSON 请求错误输出
 	public static function error($message = '', $data = null, ...$params)
 	{

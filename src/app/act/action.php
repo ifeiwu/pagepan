@@ -4,6 +4,5 @@
  * @param string $name 页面名称
  */
 return function ($name) {
-
     view()->display($name);
 };
