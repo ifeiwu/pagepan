@@ -137,6 +137,37 @@ class FS {
         }
     }
 
+    /**
+     * 检查目录是否为空
+     * @return bool
+     */
+    public static function isDirEmpty($dir) {
+        $handle = opendir($dir);
+        while (($file = readdir($handle)) !== false) {
+            if ($file !== '.' && $file !== '..') {
+                closedir($handle);
+                return false;
+            }
+        }
+        closedir($handle);
+        return true;
+    }
+
+    /**
+     * 返回目录文件数量
+     * @return int
+     */
+    public static function fileCount($dir) {
+        $handle = opendir($dir);
+        $count = 0;
+        while (($file = readdir($handle)) !== false) {
+            if ($file !== '.' && $file !== '..') {
+                $count++;
+            }
+        }
+        closedir($handle);
+        return $count;
+    }
 
     /**
      * 返回目录字节大小

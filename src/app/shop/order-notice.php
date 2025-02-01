@@ -4,12 +4,12 @@ return function () {
     $order_sn = $_POST['order_sn'];
     // 文件记录：后台订单管理页面用 jsonp 检查是否有订单
     if ($order_sn) {
-        $savedir = DATA_PATH . "order/new";
+        $savedir = DATA_PATH . 'order/new';
         FS::rrmdir($savedir);
         FS::write(DATA_PATH . "{$savedir}/{$order_sn}");
     } else {
         $data = ['联系人' => $_POST['linkman'], '手机号' => $_POST['phone'], '微信号' => $_POST['wechat'], '收货地址' => "{$_POST['road']}{$_POST['house']}", '备注信息' => $_POST['remark']];
-        $savedir = DATA_PATH . "order/err";
+        $savedir = DATA_PATH . 'order/err';
         FS::rrmdir($savedir);
         FS::json("{$savedir}/" . uniqid() . '.json', $data);
     }
