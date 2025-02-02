@@ -2,7 +2,7 @@
 // 用户下单消息通知
 return function () {
     $order_sn = $_POST['order_sn'];
-    // 文件记录：后台订单管理页面用 jsonp 检查是否有订单
+    // 文件记录新订单：后台订单管理页面定时检查是否有订单
     if ($order_sn) {
         $savedir = DATA_PATH . 'order/new';
         FS::rrmdir($savedir);

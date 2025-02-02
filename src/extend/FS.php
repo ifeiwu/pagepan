@@ -12,20 +12,25 @@ class FS {
     }
 
     /**
-     * 删除目录
-     * @param {Object} $dir
+     * 删除目录中的所有文件和子目录
+     * @param $dir 目录绝对路径
+     * @param $itself 是否保留目录本身
+     * @return true
+     * @throws Exception
      */
-    public static function rrmdir($dir)
+    public static function rrmdir($dir, $itself = true)
     {
         try {
             if (is_dir($dir)) {
                 $files = scandir($dir);
                 foreach ($files as $file) {
                     if ($file != '.' && $file != '..') {
-                        self::rrmdir("$dir/$file");
+                        self::rrmdir("$dir/$file", true);
                     }
                 }
-                rmdir($dir);
+                if ($itself == true) {
+                    rmdir($dir);
+                }
             } elseif (is_file($dir)) {
                 unlink($dir);
             }
@@ -35,6 +40,26 @@ class FS {
         }
     }
 
+    /**
+     * 删除目录中的所有文件，但保留目录本身（仅适用于无子目录的情况）
+     * @return void
+     */
+    function clearDir($dir) {
+        try {
+            $files = glob($dir . '/*');
+            foreach ($files as $file) {
+                if (is_dir($file)) {
+                    self::clearDir($file);
+                    rmdir($file);
+                } else {
+                    unlink($file);
+                }
+            }
+            return true;
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 
     /**
      * 复制目录
@@ -142,15 +167,19 @@ class FS {
      * @return bool
      */
     public static function isDirEmpty($dir) {
-        $handle = opendir($dir);
-        while (($file = readdir($handle)) !== false) {
-            if ($file !== '.' && $file !== '..') {
-                closedir($handle);
-                return false;
+        if (is_dir($dir)) {
+            $handle = opendir($dir);
+            while (($file = readdir($handle)) !== false) {
+                if ($file !== '.' && $file !== '..') {
+                    closedir($handle);
+                    return false;
+                }
             }
+            closedir($handle);
+            return true;
+        } else {
+            throw new Exception('No directory found.');
         }
-        closedir($handle);
-        return true;
     }
 
     /**

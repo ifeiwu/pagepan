@@ -1,11 +1,11 @@
 <?php
+// 检查是否有新的订单
 return function () {
     helper('api/cors');
 
-    $count = FS::fileCount(DATA_PATH . 'order/new');
-    if ($count != 0) {
-        Response::success('', ['count' => $count]);
+    if (FS::isDirEmpty(DATA_PATH . 'order/new')) {
+        Response::success('', ['isnew' => false]);
     } else {
-        Response::success('', ['count' => 0]);
+        Response::success('', ['isnew' => true]);
     }
 };

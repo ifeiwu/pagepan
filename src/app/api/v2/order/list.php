@@ -11,5 +11,8 @@ return function ($request_data) {
     $total = $db->count('order', $where);
     $items = $db->select('order', $column, $where, $order, $limit, $number);
 
+    // 获取订单表列，清空有新订单通知目录。
+    FS::rrmdir(DATA_PATH . 'order/new', false);
+
     Response::success('订单查询', $items, ['total' => $total]);
 };
