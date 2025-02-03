@@ -49,7 +49,6 @@ return function () {
     $province = $shop_range['province'];
     $city = $shop_range['city'];
     $district = $shop_range['district'];
-    session('order_address', ['province' => $province, 'city' => $city, 'district' => $district, 'road' => $road, 'house' => $house]);
 
     // 提取会话信息
     $buynow = session('shop-buynow');
@@ -57,17 +56,16 @@ return function () {
         $order_quantity = $buynow['quantity'];
         $order_total = $buynow['total'];
         $order_items = $buynow['items'];
-        session('shop-buynow', null);
     } else {
         $cart = cart();
         $order_quantity = $cart->getTotalQuantity();
         $order_total = $cart->getTotalWithDiscount();
         $order_items = $cart->getItems();
-        $cart->clear();
     }
 
     // 订单信息
     $order = [];
+    $order['delivery'] = intval($_POST['delivery']);
     $order['ctime'] = time(); // 创建时间
     $order['status'] = 0; // 订单状态：0未确认/1已确认/2已签收/3已取消
     $order['quantity'] = $order_quantity; // 商品总数量
@@ -86,7 +84,7 @@ return function () {
             $sn = str_pad($order_id, 8, '0', STR_PAD_LEFT);
             if (false === $db->update('order', ['sn' => $sn], ['id', '=', $order_id])) {
                 $db->pdo->rollBack();
-                Response::error('更新订单号失败', ['id' => $order_id]);
+                Response::error('更新订单号失败~', ['id' => 0]);
             }
             // 添加商品清单
             $is_add_items = true;
@@ -111,18 +109,26 @@ return function () {
             }
             if ($is_add_items == true) {
                 $db->pdo->commit();
-                Response::success('下单成功', ['id' => $order_id, 'sn' => $sn]);
+                $order['sn'] = $sn;
+                session('order_info', $order);
+                // 清理订单会话
+                if ($buynow != null) {
+                    session('shop-buynow', null);
+                } else {
+                    $cart->clear();
+                }
+                Response::success('下单成功~', ['id' => $order_id, 'sn' => $sn]);
             } else {
                 $db->pdo->rollBack();
-                Response::error('添加订单商品失败', ['id' => 0]);
+                Response::error('添加订单商品失败~', ['id' => 0]);
             }
         } else {
             $db->pdo->rollBack();
-            Response::error('下单失败，请稍候再试。', ['id' => 0]);
+            Response::error('下单失败，请稍候刷新页面重试~', ['id' => 0]);
         }
     } catch (Exception $e) {
         $db->pdo->rollBack();
         debug($e->getMessage());
-        Response::error('下单失败');
+        Response::error('下单失败，系统发生异常~', ['id' => 0]);
     }
 };
