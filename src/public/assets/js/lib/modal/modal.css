@@ -33,10 +33,7 @@
         z-index: 2;
         max-width: 100%;
         width: auto;
-        background: #fff;
         padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 0 10px #333;
         text-align: left;
     }
 

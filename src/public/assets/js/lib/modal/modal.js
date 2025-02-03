@@ -115,7 +115,7 @@
     block: function() {
       this.$elm.trigger($.modal.BEFORE_BLOCK, [this._ctx()]);
       this.$body.addClass('scrollbar-hidden');
-      this.$blocker = $('<div class="' + this.options.blockerClass + ' blocker current"></div>').appendTo(this.$body);
+      this.$blocker = $('<div class="jqmodal ' + this.options.blockerClass + ' blocker current"></div>').appendTo(this.$body);
       selectCurrent();
       if(this.options.doFade) {
         this.$blocker.css('opacity',0).animate({opacity: 1}, this.options.fadeDuration);
@@ -206,8 +206,8 @@
     clickClose: true,
     closeText: 'Close',
     closeClass: '',
-    modalClass: "modal",
-    blockerClass: "jquery-modal",
+    modalClass: 'modal-body',
+    blockerClass: '',
     spinnerHtml: '<div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div>',
     showSpinner: true,
     showClose: true,
