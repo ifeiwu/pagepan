@@ -2,6 +2,6 @@
 return [
     'debug' => false,
     'type' => 'sqlite',
-    'file' => 'data/sqlite/pagepan-dev.db',
+    'file' => 'data/sqlite/pagepan-test.db',
     'prefix' => ''
 ];
