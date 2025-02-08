@@ -6,16 +6,20 @@ return function () {
     if (!helper('form/token', [$_token])) {
         Response::error('invalid token');
     }
-    // 道路名
-    $road = filter_var($_POST['road'], FILTER_SANITIZE_SPECIAL_CHARS);
-    if (empty($road)) {
-        Response::error('请选择道路名称', ['field' => 'road']);
-    }
-    // 门牌号
-    $house = filter_var($_POST['house'], FILTER_SANITIZE_SPECIAL_CHARS);
-    $house_length = mb_strlen($house, 'UTF-8');
-    if ($house_length <= 2 || $house_length >= 30) {
-        Response::error('门牌号长度 2-30 个字符', ['field' => 'house']);
+    // 配送方式是送货上门才需要填写地址
+    $delivery = intval($_POST['delivery']);
+    if ($delivery == 1) {
+        // 道路名
+        $road = filter_var($_POST['road'], FILTER_SANITIZE_SPECIAL_CHARS);
+        if (empty($road)) {
+            Response::error('请选择道路名称', ['field' => 'road']);
+        }
+        // 门牌号
+        $house = filter_var($_POST['house'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $house_length = mb_strlen($house, 'UTF-8');
+        if ($house_length <= 2 || $house_length >= 30) {
+            Response::error('门牌号长度 2-30 个字符', ['field' => 'house']);
+        }
     }
     // 联系人
     $linkman = filter_var($_POST['linkman'], FILTER_SANITIZE_SPECIAL_CHARS);

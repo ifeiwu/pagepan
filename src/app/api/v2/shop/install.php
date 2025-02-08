@@ -1,8 +1,6 @@
 <?php
 // 安装小店
 return function () {
-    uptable();
-    Response::error('开通小店失败');
     $insert_sql = <<<'EOT'
     INSERT INTO "main"."page" ("pid", "cid", "state", "sortby", "ctime", "utime", "cache", "type", "title", "alias", "dataset", "layout", "seo", "setting", "body", "content", "source") VALUES (9, 0, 1, 100, 1716709442, 1738219963, 0, 'home', '小店首页', 'shop', '', 'shop-layout', '{"title":"","keywords":"","description":""}', '[{"dataset.id":"1","dataset.table":"goods","join.alias":"goods-detail"}]', '{"class":"ms-viewing-0"}', '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');
     INSERT INTO "main"."page" ("pid", "cid", "state", "sortby", "ctime", "utime", "cache", "type", "title", "alias", "dataset", "layout", "seo", "setting", "body", "content", "source") VALUES (9, 0, 1, 100, 1729509119, 1736761144, 0, 'inside', '下单成功', 'shop-order-success', '', 'shop-layout', '{"title":"","keywords":"","description":""}', '', '', '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');
@@ -18,9 +16,12 @@ return function () {
         $db = db();
         $db->debug = false;
         $db->pdo->beginTransaction();
-        if (!$db->isTable('goods')) {
-
-        }
+//        if (!$db->isTable('goods')) {
+//            $result = upgradeDB();
+//            if ($result !== true) {
+//                Response::error($result);
+//            }
+//        }
         // 添加页面分组“小店”如果存在不重复添加
         $page_group = $db->find('site', 'value', ['name', '=', 'page_group'], null, 0);
         $page_group = json_decode2($page_group);
@@ -31,6 +32,8 @@ return function () {
         }
         // 设置开店状态
         $db->save('site', ['name' => 'shop_open', 'value' => 1], ['name', '=', 'shop_open']);
+        $db->save('site', ['name' => 'shop_delivery', 'value' => 1], ['name', '=', 'shop_delivery']);
+        $db->save('site', ['name' => 'shop_opening', 'value' => 1], ['name', '=', 'shop_opening']);
         if ($db->count('page', ['alias', '=', 'shop']) == 0) {
             if ($db->pdo->exec($insert_sql) !== false) {
                 $db->pdo->commit();
@@ -40,6 +43,7 @@ return function () {
                 Response::error('开通小店失败');
             }
         } else {
+            $db->pdo->commit();
             Response::success('小店己开通');
         }
     } catch (\Exception $e) {
@@ -48,18 +52,27 @@ return function () {
     }
 };
 
-function uptable() {
+// 升级数据库
+function upgradeDB($old_dbname = 'pagepan.db') {
     try {
-        $oldDb = new PDO("sqlite:" . DATA_PATH . 'sqlite/pagepan-dev.db');
-        $oldDb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//        $data_dbfile = ROOT_PATH . 'data/sqlite/pagepan.db';
+//        $backup_dbfile = $backup_dbdir . '/pagepan-' . time() . '.db';
+//        if ( ! copy($data_dbfile, $backup_dbfile) ) {
+//            json_error('备份数据库文件失败：' . $backup_dbfile);
+//        }
 
-        $newDb = new PDO("sqlite:" . DATA_PATH . 'sqlite/pagepan-test.db');
-        $newDb->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//        $newDb->beginTransaction();
+        $oldDb = new \PDO("sqlite:" . DATA_PATH . 'sqlite/pagepan-dev.db');
+        $oldDb->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+        $oldDb->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+        $newDb = new \PDO("sqlite:" . DATA_PATH . 'sqlite/pagepan-test.db');
+        $newDb->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+        $newDb->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $newDb->beginTransaction();
 
         // 获取 $oldDb 中的所有表
         $stmt = $oldDb->query("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
-        $tables = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $tables = $stmt->fetchAll();
         foreach ($tables as $table) {
             $tableName = $table['name'];
 
@@ -74,7 +87,7 @@ function uptable() {
 
             // 获取 $oldDb 中表的列名
             $stmt = $oldDb->query("PRAGMA table_info(\"$tableName\")");
-            $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $columns = $stmt->fetchAll();
             $columnNames = [];
             foreach ($columns as $col) {
                 $columnNames[] = '"' . $col['name'] . '"';
@@ -83,7 +96,7 @@ function uptable() {
 
             // 从 $oldDb 中获取数据
             $stmt = $oldDb->query("SELECT $columnsStr FROM \"$tableName\"");
-            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $rows = $stmt->fetchAll();
             foreach ($rows as $row) {
                 $placeholders = implode(',', array_fill(0, count($columnNames), '?'));
                 $sql = "INSERT INTO \"$tableName\" ($columnsStr) VALUES ($placeholders)";
@@ -92,34 +105,9 @@ function uptable() {
             }
         }
         $newDb->commit();
-    } catch (PDOException $e) {
-        debug($e->getMessage());
+        return true;
+    } catch (\PDOException $e) {
         $newDb->rollBack();
-        Response::error($e->getMessage());
+        return $e->getMessage();
     }
-    /*$oldDb = new SQLite3(DATA_PATH . 'sqlite/pagepan-dev.db');
-    $newDb = new SQLite3(DATA_PATH . 'sqlite/pagepan-test.db');
-    try {
-        $newDb->beginTransaction();
-        $tables = $oldDb->query('SELECT name FROM sqlite_master WHERE type="table"');
-        while ($row = $tables->fetchArray(SQLITE3_ASSOC)) {
-            $tableName = $row['name'];
-            // 复制数据
-            $data = $oldDb->query("SELECT * FROM $tableName");
-            while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
-                $columns = implode(', ', array_keys($row));
-                $values = implode(', ', array_map(function($value) {
-                    return is_null($value) ? 'NULL' : "'$value'";
-                }, $row));
-                $newDb->exec("INSERT INTO $tableName ($columns) VALUES ($values)");
-            }
-        }
-        $newDb->commit();
-    } catch (Exception $ex) {
-        $newDb->rollBack();
-        Response::error($e->getMessage());
-    } finally {
-        $oldDb->close();
-        $newDb->close();
-    }*/
 }
