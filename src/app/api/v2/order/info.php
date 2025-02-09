@@ -6,7 +6,13 @@ return function ($request_data) {
     $db->debug = false;
     $order = $db->find('order', '*', ['id' , '=', $id]);
     $order['ctime'] = date('Y-m-d H:i', $order['ctime']);
-    $order['address'] = implode('', array_slice(explode(',', $order['address']), -2));
+    $address = explode(',', $order['address']);
+    $city = $address[1];
+    $district = $address[2];
+    $district = $district ?: $city;
+    $road = $address[3];
+    $house = $address[4];
+    $order['address'] = "{$district}{$road}{$house}";
     if ($order) {
         $items = $db->select('order_detail', '*', ['order_id' , '=', $id]);
         Response::success('获取订单信息成功', [], ['order' => $order, 'items' => $items]);

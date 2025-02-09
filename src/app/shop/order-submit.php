@@ -7,7 +7,8 @@ return function () {
         Response::error('invalid token');
     }
     // 配送方式是送货上门才需要填写地址
-    $delivery = intval($_POST['delivery']);
+    $db = db();
+    $delivery = $db->column('site', 'value', ['name', '=', 'shop_delivery']);
     if ($delivery == 1) {
         // 道路名
         $road = filter_var($_POST['road'], FILTER_SANITIZE_SPECIAL_CHARS);
@@ -47,8 +48,7 @@ return function () {
     }
 
     // 服务范围
-    $db = db();
-    $shop_range = $db->find('site', 'value', ['name', '=', 'shop_range'], null, 0);
+    $shop_range = $db->column('site', 'value', ['name', '=', 'shop_range']);
     $shop_range = json_decode($shop_range, true);
     $province = $shop_range['province'];
     $city = $shop_range['city'];
@@ -69,7 +69,7 @@ return function () {
 
     // 订单信息
     $order = [];
-    $order['delivery'] = intval($_POST['delivery']);
+    $order['delivery'] = $delivery;
     $order['ctime'] = time(); // 创建时间
     $order['status'] = 0; // 订单状态：0未确认/1已确认/2已签收/3已取消
     $order['quantity'] = $order_quantity; // 商品总数量
@@ -78,7 +78,9 @@ return function () {
     $order['linkman'] = $linkman; // 联系人
     $order['phone'] = $phone; // 手机号
     $order['wechat'] = $wechat; // 微信号
-    $order['address'] = "$province,$city,$district,$road,$house"; // 收货地址
+    if ($delivery == 1) {
+        $order['address'] = "$province,$city,$district,$road,$house"; // 收货地址
+    }
 
     try {
         $db->pdo->beginTransaction();
