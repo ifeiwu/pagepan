@@ -12,6 +12,29 @@ class Response
         500 => 'Internal Server Error'
     ];
 
+    /**
+     * 扩展函数数组
+     * @var array
+     */
+    private static $funcs = [];
+
+    /**
+     * 调用扩展函数
+     * @param $name 名称
+     * @param $args 参数
+     * @return mixed
+     */
+    public static function __callStatic($name, $args)
+    {
+        if (!isset(self::$funcs[$name])) {
+            self::$funcs[$name] = require LIB_PATH . "response/{$name}.php";
+        }
+
+        $func = Closure::bind(self::$funcs[$name], new self());
+
+        return call_user_func_array($func, $args);
+    }
+
     // 设置响应状态码
 	public static function status($code = 200, $phrase = 'OK')
 	{

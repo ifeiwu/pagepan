@@ -3,6 +3,10 @@
 return function ($request_data) {
     set_time_limit(300);
 
+    if (RUN_MODE == 'dev') {
+        Response::error('开发模式无法使用此功能');
+    }
+
     if ( Config::file('db', 'type') != 'sqlite' ) {
         Response::error('目录只支持 SQLite 数据库更换网站模板！');
     }

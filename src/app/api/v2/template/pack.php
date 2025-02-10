@@ -3,6 +3,10 @@
 return function ($request_data) {
     set_time_limit(300);
 
+    if (RUN_MODE == 'dev') {
+        Response::error('开发模式无法使用此功能');
+    }
+
     $zip_path = WEB_ROOT . 'data/pack/';
     $zip_name = 'template.zip';
     $zip_file = $zip_path . $zip_name;
