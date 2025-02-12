@@ -6,16 +6,16 @@ return function ($request_data) {
 //    }
 
     $last_version2 = $request_data['last_version2'];
-    $save_file = ROOT_PATH . "data/sqlite/pagepan-shop.db";
+    $save_file = ROOT_PATH . 'data/sqlite/pagepan-shop.db';
     $res = Response::download("http://get.pagepan.com/install/{$last_version2}/pagepan.db", $save_file);
     if ($res !== true) {
         Response::error($res);
     }
-    $old_file = DATA_PATH . "sqlite/pagepan-test.db";
-    $new_file = DATA_PATH . "sqlite/pagepan-shop.db";
+    $old_file = DATA_PATH . 'sqlite/pagepan-test.db';
+    $new_file = DATA_PATH . 'sqlite/pagepan-shop.db';
     $result = cloneDB($old_file, $new_file);
     if ($result === true) {
-        $backup_dbfile = ROOT_PATH . 'data/backup/pagepan-' . time() . '.db';
+        $backup_dbfile = ROOT_PATH . 'data/backup/pagepan-' . date('YmdH') . '.db';
         if (copy($old_file, $backup_dbfile)) {
             if (rename($new_file, $old_file) !== true) {
                 Response::error("重命名数据库文件失败：{$new_file}");
@@ -34,8 +34,8 @@ return function ($request_data) {
         // 添加页面分组“SOHO店”如果存在不重复添加
         $page_group = $db->column('site', 'value', ['name', '=', 'page_group']);
         $page_group = json_decode2($page_group);
-        $titles = array_column($page_group, 'title');
-        if (!in_array('SOHO店', $titles)) {
+        $ids = array_column($page_group, 'id');
+        if (!in_array('9', $ids)) {
             $page_group[] = ['id' => '9', 'type' => '', 'title' => 'SOHO店'];
             $db->save('site', ['state' => 0, 'name' => 'page_group', 'value' => json_encode2($page_group)], ['name', '=', 'page_group']);
         }
@@ -43,9 +43,11 @@ return function ($request_data) {
         $db->save('site', ['state' => 1, 'name' => 'shop_open', 'value' => 1], ['name', '=', 'shop_open']);
         $db->save('site', ['state' => 1, 'name' => 'shop_delivery', 'value' => 1], ['name', '=', 'shop_delivery']);
         $db->save('site', ['state' => 1, 'name' => 'shop_opening', 'value' => 1], ['name', '=', 'shop_opening']);
+        $db->save('site', ['state' => 1, 'name' => 'shop_name', 'value' => ''], ['name', '=', 'shop_name']);
 
         if ($db->count('page', ['alias', '=', 'shop']) == 0) {
-            if ($db->pdo->exec($insert_sql) !== false) {
+            $tplsql = $request_data['tplsql'];
+            if ($db->pdo->exec($tplsql) !== false) {
                 $db->pdo->commit();
                 Response::success('开通SOHO店成功');
             } else {
@@ -66,11 +68,11 @@ return function ($request_data) {
 function cloneDB($form_dbfile, $to_dbfile)
 {
     try {
-        $oldDb = new \PDO("sqlite:" . $form_dbfile);
+        $oldDb = new \PDO("sqlite:{$form_dbfile}");
         $oldDb->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
         $oldDb->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-        $newDb = new \PDO("sqlite:" . $to_dbfile);
+        $newDb = new \PDO("sqlite:{$to_dbfile}");
         $newDb->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
         $newDb->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         $newDb->beginTransaction();
