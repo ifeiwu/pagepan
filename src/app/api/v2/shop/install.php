@@ -1,9 +1,9 @@
 <?php
-// 安装SOHO店
+// 安装Soho店
 return function ($request_data) {
-//    if (RUN_MODE == 'dev') {
-//        Response::error('开发模式无法使用此功能');
-//    }
+    if (RUN_MODE == 'dev') {
+        Response::error('开发模式无法使用此功能');
+    }
 
     $last_version2 = $request_data['last_version2'];
     $save_file = ROOT_PATH . 'data/sqlite/pagepan-shop.db';
@@ -11,7 +11,7 @@ return function ($request_data) {
     if ($res !== true) {
         Response::error($res);
     }
-    $old_file = DATA_PATH . 'sqlite/pagepan-test.db';
+    $old_file = DATA_PATH . 'sqlite/pagepan.db'; // 本地测试改为 pagepan-test.db
     $new_file = DATA_PATH . 'sqlite/pagepan-shop.db';
     $result = cloneDB($old_file, $new_file);
     if ($result === true) {
@@ -31,12 +31,12 @@ return function ($request_data) {
         $db = db();
         $db->debug = false;
         $db->pdo->beginTransaction();
-        // 添加页面分组“SOHO店”如果存在不重复添加
+        // 添加页面分组“Soho店”如果存在不重复添加
         $page_group = $db->column('site', 'value', ['name', '=', 'page_group']);
         $page_group = json_decode2($page_group);
         $ids = array_column($page_group, 'id');
         if (!in_array('9', $ids)) {
-            $page_group[] = ['id' => '9', 'type' => '', 'title' => 'SOHO店'];
+            $page_group[] = ['id' => '9', 'type' => '', 'title' => 'Soho店'];
             $db->save('site', ['state' => 0, 'name' => 'page_group', 'value' => json_encode2($page_group)], ['name', '=', 'page_group']);
         }
         // 设置开店状态
@@ -49,14 +49,14 @@ return function ($request_data) {
             $tplsql = $request_data['tplsql'];
             if ($db->pdo->exec($tplsql) !== false) {
                 $db->pdo->commit();
-                Response::success('开通SOHO店成功');
+                Response::success('开通Soho店成功');
             } else {
                 $db->pdo->rollBack();
-                Response::error('开通SOHO店失败');
+                Response::error('开通Soho店失败');
             }
         } else {
             $db->pdo->commit();
-            Response::success('SOHO店己开通');
+            Response::success('Soho店己开通');
         }
     } catch (\Exception $e) {
         $db->pdo->rollBack();

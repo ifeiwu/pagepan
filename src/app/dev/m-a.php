@@ -5,7 +5,7 @@
 return function ($module, $action) {
 	$site = db()->select('site', ['name', 'value'], ['state', '=', 1]);
     $site = helper('arr/tokv', [$site]);
-
+    define('SITE', $site);
     $view = view();
     $view->assign('site', $site);
     $view->assign('pagevar', [
