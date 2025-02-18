@@ -47,12 +47,12 @@ return function () {
         Response::error('订单备注长度 2-100 个字符', ['field' => 'remark']);
     }
 
-    // 服务范围
-    $shop_range = $db->column('site', 'value', ['name', '=', 'shop_range']);
-    $shop_range = json_decode($shop_range, true);
-    $province = $shop_range['province'];
-    $city = $shop_range['city'];
-    $district = $shop_range['district'];
+    // 店铺地址
+    $shop_address = $db->column('site', 'value', ['name', '=', 'shop_address']);
+    $shop_address = json_decode($shop_address, true);
+    $province = $shop_address['province'];
+    $city = $shop_address['city'];
+    $district = $shop_address['district'];
 
     // 提取会话信息
     $buynow = session('shop-buynow');
