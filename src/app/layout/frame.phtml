@@ -24,15 +24,17 @@ $theme_screen = $theme['screen'];
         <meta name="description" content="<?=$seo['description']?>">
 
         <script>
-            try {
-                new CSSStyleSheet().replaceSync('@layer test {}');
-            } catch (e) {
-                if ( confirm('您正在使用不兼容的浏览器，是否下载最新现代浏览器？') ) {
-                    window.location.href = "//www.pagepan.com/browser-upgrade.html?ref=" + encodeURIComponent(window.location.href);
+            if (typeof CSSLayerBlockRule === "undefined") {
+                let link = document.createElement("link");
+                link.href = "<?=$this->asset('assets/css/pagepan-polyfill.css')?>";
+                link.rel = "stylesheet";
+                document.head.appendChild(link);
+                if (sessionStorage.getItem('pagepan-base-not-layer') !== 'true') {
+                    alert('当前浏览器版本较低，为保证您的使用体验，建议使用最新版本的浏览器访问。');
+                    sessionStorage.setItem('pagepan-base-not-layer', 'true');
                 }
             }
         </script>
-        <link rel="manifest" href="<?=$this->asset('manifest.json')?>" />
         <?php
         // 全局页头
         if ( $site['open_header_php'] ) { include ROOT_PATH . 'data/php/header.inc'; }

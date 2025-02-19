@@ -1,8 +1,10 @@
 <?php
+
 use utils\FS;
 use utils\Log;
 
-class Site extends Base {
+class Site extends Base
+{
 
     function __construct()
     {
@@ -16,8 +18,7 @@ class Site extends Base {
         $site = array();
         $data = db_all($this->table);
 
-        foreach ($data as $d)
-        {
+        foreach ($data as $d) {
             $site[$d['name']] = $d['value'];
         }
 
@@ -27,14 +28,11 @@ class Site extends Base {
     // 保存数据
     protected function postSave($request_data)
     {
-        if ($this->_save($request_data))
-        {
+        if ($this->_save($request_data)) {
             $this->_log('update', array('title' => '站点设置'));
 
             return $this->_success('保存成功！');
-        }
-        else
-        {
+        } else {
             return $this->_error('保存失败！');
         }
     }
@@ -42,18 +40,15 @@ class Site extends Base {
     // 保存并返回数据
     protected function postSave2($request_data)
     {
-        if ($this->_save($request_data))
-        {
+        if ($this->_save($request_data)) {
             $this->_log('update', array('title' => '站点设置'));
 
             $res = $this->getAll();
-            
+
             $res['message'] = '保存成功！';
-            
+
             return $res;
-        }
-        else
-        {
+        } else {
             return $this->_error('保存失败！');
         }
     }
@@ -63,14 +58,11 @@ class Site extends Base {
     {
         // $rdata['menu[!_encode]'] = $request_data['menu'];
 
-        if ($this->_save($rdata))
-        {
+        if ($this->_save($rdata)) {
             $this->_log('update', array('title' => '菜单'));
 
             return $this->_success('保存成功！');
-        }
-        else
-        {
+        } else {
             return $this->_error('保存失败！');
         }
     }
@@ -81,80 +73,63 @@ class Site extends Base {
         $this->_removeFiles2($rdata['_removefiles']);
 
         $rdata = $this->_bulidRequestData($rdata);
-        
+
         // 处理数据
         $save_data = [];
 
-        foreach ($rdata as $name => $value)
-        {
-            if ( stripos($name, '_') === 0 )
-            {
+        foreach ($rdata as $name => $value) {
+            if (stripos($name, '_') === 0) {
                 continue;
             }
-            
-            if ( $value !== null )
-            {
+
+            if ($value !== null) {
                 // 数组转 json 格式
-                if ( is_array($value) )
-                {
+                if (is_array($value)) {
                     $value = json_encode($value, JSON_UNESCAPED_UNICODE);
-                }
-                // json 格式不编码
-                else if ( ! helper('str/isjson', [$value]) )
-                {
+                } // json 格式不编码
+                else if (!helper('str/isjson', [$value])) {
                     $value = $this->_encode($value);
                 }
             }
-            
+
             // 更改状态为 0，注意：提交的名称必需是置后的来覆盖原来的值
             // 例子：<input type="hidden" name="{state=0}" value="cdn_sftp_config">
-            if ( $name == '{state=0}' )
-            {
+            if ($name == '{state=0}') {
                 $names = explode(',', $value);
-                
-                foreach ($names as $name)
-                {
+
+                foreach ($names as $name) {
                     $save_data[$name]['state'] = 0;
                 }
             }
             // 更改值为 base64 编码
             // 例子：<input type="hidden" name="{value=base64}" value="cdn_sftp_config">
-            elseif ( $name == '{value=base64}' )
-            {
+            elseif ($name == '{value=base64}') {
                 $names = explode(',', $value);
-                
-                foreach ($names as $name)
-                {
+
+                foreach ($names as $name) {
                     $value = base64_encode($save_data[$name]['value']);
-                    
+
                     $save_data[$name]['value'] = $value;
                 }
-            }
-            else
-            {
+            } else {
                 $save_data[$name] = ['name' => $name, 'value' => $value];
             }
         }
-        
+
         // 写入数据
         $error = [];
-        
-        foreach ($save_data as $name => $data)
-        {
+
+        foreach ($save_data as $name => $data) {
             $is_save = db_save($this->table, $data, array('name', '=', $name));
-            
-            if ( $is_save === false )
-            {
+
+            if ($is_save === false) {
                 $error[] = $name;
             }
         }
 
-        if ( count($error) === 0 )
-        {
+        if (count($error) === 0) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -164,10 +139,8 @@ class Site extends Base {
     {
         unset($request_data['token'], $request_data['admin']);
 
-        if (!empty($fields) && is_array($fields))
-        {
-            foreach ($fields as $value)
-            {
+        if (!empty($fields) && is_array($fields)) {
+            foreach ($fields as $value) {
                 unset($request_data[$value]);
             }
         }
@@ -178,36 +151,34 @@ class Site extends Base {
     // 网站主题
     protected function postTheme($request_data)
     {
-        if (isset($request_data['pagepan-css']))
-        {
-            if (file_put_contents(ASSETS_PATH . 'css/pagepan.css', $request_data['pagepan-css']) === false)
-            {
+        if (isset($request_data['pagepan-css'])) {
+            if (file_put_contents(ASSETS_PATH . 'css/pagepan.css', $request_data['pagepan-css']) === false) {
                 return $this->_error('写入 pagepan.css 文件失败！');
             }
-
             unset($request_data['pagepan-css']);
         }
-		
-		if (isset($request_data['theme-css']))
-		{
-		    if (file_put_contents(ASSETS_PATH . 'css/theme.css', $request_data['theme-css']) === false)
-		    {
-		        return $this->_error('写入 theme.css 文件失败！');
-		    }
-		
-		    unset($request_data['theme-css']);
-		}
 
-        if ($this->_save($request_data))
-        {
-            return $this->_success('保存成功！');
+        if (isset($request_data['pagepan-polyfill-css'])) {
+            if (file_put_contents(ASSETS_PATH . 'css/pagepan-polyfill.css', $request_data['pagepan-polyfill-css']) === false) {
+                return $this->_error('写入 pagepan-polyfill.css 文件失败！');
+            }
+            unset($request_data['pagepan-polyfill-css']);
         }
-        else
-        {
+
+        if (isset($request_data['theme-css'])) {
+            if (file_put_contents(ASSETS_PATH . 'css/theme.css', $request_data['theme-css']) === false) {
+                return $this->_error('写入 theme.css 文件失败！');
+            }
+            unset($request_data['theme-css']);
+        }
+
+        if ($this->_save($request_data)) {
+            return $this->_success('保存成功！');
+        } else {
             return $this->_error('保存失败！');
         }
     }
-    
+
     /* protected function getArticleCSS()
     {
         $filename = ROOT_PATH . 'data/site/article.css';
@@ -282,7 +253,7 @@ class Site extends Base {
             return $this->_error('保存失败！');
         }
     } */
-    
+
 
     // 运行环境
     protected function getRuntime()
@@ -295,20 +266,17 @@ class Site extends Base {
         $env['mysql'] = 'Disabled';
         $env['dirsize'] = $this->_getDirSize(ROOT_PATH);
 
-        if (function_exists('apache_get_version'))
-        {
+        if (function_exists('apache_get_version')) {
             $env['apache'] = @apache_get_version();
         }
 
         $mysql = db_query_get('select version();', null, 0);//$this->db->query('select version();')->get(0);
 
-        if ($mysql)
-        {
+        if ($mysql) {
             $env['mysql'] = 'MySql ' . $mysql;
         }
 
-        if (@phpversion())
-        {
+        if (@phpversion()) {
             $env['php'] = 'PHP ' . @phpversion();
         }
 
@@ -319,30 +287,25 @@ class Site extends Base {
 
 
     // 获取文件夹大小
-	private function _getDirSize($dir)
-	{ 
-		$handle = opendir($dir);
+    private function _getDirSize($dir)
+    {
+        $handle = opendir($dir);
 
-		$sizeResult = 0;
+        $sizeResult = 0;
 
-		while (false !== ($FolderOrFile = readdir($handle)))
-		{ 
-			if ($FolderOrFile != "." && $FolderOrFile != "..") 
-			{ 
-				if (is_dir("$dir/$FolderOrFile"))
-				{ 
-					$sizeResult += $this->_getDirSize("$dir/$FolderOrFile"); 
-				}
-				else
-				{ 
-					$sizeResult += filesize("$dir/$FolderOrFile"); 
-				}
-			}    
-		}
+        while (false !== ($FolderOrFile = readdir($handle))) {
+            if ($FolderOrFile != "." && $FolderOrFile != "..") {
+                if (is_dir("$dir/$FolderOrFile")) {
+                    $sizeResult += $this->_getDirSize("$dir/$FolderOrFile");
+                } else {
+                    $sizeResult += filesize("$dir/$FolderOrFile");
+                }
+            }
+        }
 
-		closedir($handle);
+        closedir($handle);
 
-		return $sizeResult;
-	}
+        return $sizeResult;
+    }
 
 }
