@@ -11,19 +11,19 @@ return function () {
     $delivery = $db->column('site', 'value', ['name', '=', 'shop_delivery']);
     if ($delivery == 1) {
         // 道路名
-        $road = filter_var($_POST['road'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $road = post('road', 'escape');
         if (empty($road)) {
             Response::error('请选择道路名称', ['field' => 'road']);
         }
         // 门牌号
-        $house = filter_var($_POST['house'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $house = post('house', 'escape');
         $house_length = mb_strlen($house, 'UTF-8');
         if ($house_length <= 2 || $house_length >= 30) {
             Response::error('门牌号长度 2-30 个字符', ['field' => 'house']);
         }
     }
     // 联系人
-    $linkman = filter_var($_POST['linkman'], FILTER_SANITIZE_SPECIAL_CHARS);
+    $linkman = post('linkman', 'escape');
     $linkman_length = mb_strlen($linkman, 'UTF-8');
     if ($linkman_length <= 1 || $linkman_length >= 5) {
         Response::error('联系人长度 1-5 个字符', ['field' => 'linkman']);
@@ -41,7 +41,7 @@ return function () {
         }
     }
     // 订单备注
-    $remark = filter_var($_POST['remark'], FILTER_SANITIZE_SPECIAL_CHARS);
+    $remark = post('remark', 'escape');
     $remark_length = mb_strlen($remark, 'UTF-8');
     if ($remark_length >= 200) {
         Response::error('订单备注长度 2-100 个字符', ['field' => 'remark']);
