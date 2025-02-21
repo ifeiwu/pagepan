@@ -129,7 +129,7 @@
         }
         .jqmodal a.close-modal:before,
         .jqmodal a.close-modal:after {
-            background: #000;
+            width: 20px;
         }
 
         .jqmodal .modal-iframe,
