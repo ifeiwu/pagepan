@@ -24,7 +24,6 @@ $router->map('GET', '/[:alias]/tag/[:tag]', 'app/pager/tag');
 $router->map('GET|POST', '/[a:alias]/search', 'app/pager/search');
 $router->map('GET|POST', '/[+:alias]', 'app/pager/name');
 //$router->map('GET|POST', '@(?:/(?P<alias>.*))(?:\.html)?', 'app/page/name');
-//dump(helper('ip/ip2region', ['139.207.17.121']));
 
 // 匹配当前请求参数
 $match = $router->match();
