@@ -8,7 +8,7 @@ return function () {
     } elseif ($opening == 2) {
         $hour = '休息中';
     } else {
-        $weeks = json_decode2(SITE['shop_opening_week']) ?? [];
+        $weeks = json_decode2(SITE['shop_opening_weeks']) ?? [];
         $hour = SITE['shop_opening_start'] . '-' . SITE['shop_opening_end'];
         if (count($weeks) < 7) {
             if ([1, 2, 3, 4, 5, 6] == $weeks) {
