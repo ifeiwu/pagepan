@@ -6,9 +6,19 @@ return function () {
     if (!helper('form/token', [$_token])) {
         Response::error('invalid token');
     }
+    // 开启城市访问限制
+    $limit_region = helper('site/value', ['shop_limit_region']);
+    if ($limit_region) {
+        $ip_region = helper('ip/ip2region', [Request::ip()]);
+        $ip_province = $ip_region[2];
+        if (!empty($ip_region) && $ip_province != 0) {
+            if ($ip_province != $limit_region) {
+                Response::error('您所在的地区无法下订单');
+            }
+        }
+    }
     // 配送方式是送货上门才需要填写地址
-    $db = db();
-    $delivery = $db->column('site', 'value', ['name', '=', 'shop_delivery']);
+    $delivery = helper('site/value', ['shop_delivery']);
     if ($delivery == 1) {
         // 道路名
         $road = post('road', 'escape');
@@ -48,7 +58,7 @@ return function () {
     }
 
     // 店铺地址
-    $shop_address = $db->column('site', 'value', ['name', '=', 'shop_address']);
+    $shop_address = helper('site/value', ['shop_address']);
     $shop_address = json_decode($shop_address, true);
     $province = $shop_address['province'];
     $city = $shop_address['city'];
@@ -83,6 +93,7 @@ return function () {
     }
 
     try {
+        $db = db();
         $db->pdo->beginTransaction();
         $order_id = $db->insert('order', $order);
         if ($order_id) {

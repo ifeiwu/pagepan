@@ -1,4 +1,4 @@
-<?php //$t1 = microtime(true);
+<?php
 define('WEB_ROOT', __DIR__ . '/');
 define('ROOT_PATH', dirname(WEB_ROOT) . '/');
 
@@ -24,9 +24,10 @@ $router->map('GET', '/[:alias]/tag/[:tag]', 'app/pager/tag');
 $router->map('GET|POST', '/[a:alias]/search', 'app/pager/search');
 $router->map('GET|POST', '/[+:alias]', 'app/pager/name');
 //$router->map('GET|POST', '@(?:/(?P<alias>.*))(?:\.html)?', 'app/page/name');
+//dump(helper('ip/ip2region', ['139.207.17.121']));
 
 // 匹配当前请求参数
-$match = $router->match();//debug(BASE_URL, $match);
+$match = $router->match();
 // 调用文件匿名函数
 if ( is_array($match) ) {
     try {
@@ -40,5 +41,3 @@ if ( is_array($match) ) {
 } else {
     Response::status(404);
 }
-//echo '<p>' . round(microtime(true) - $t1, 3) . '秒</p>';
-//dump(get_included_files()); // 获取所有载入的文件

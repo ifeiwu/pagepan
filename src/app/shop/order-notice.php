@@ -15,7 +15,7 @@ return function () {
     }
 
     // PushMe 通知
-    $pushme_key = helper('site/find', ['shop_pushme']);
+    $pushme_key = helper('site/value', ['shop_pushme']);
     if ($pushme_key) {
         if ($order_sn) {
             $title = '[s]线上店铺有新的订单';

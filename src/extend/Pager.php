@@ -27,7 +27,7 @@ class Pager {
     // 显示页面内容
     function display($data = []) {
         // 站点信息
-        $site = helper('site/find');
+        $site = helper('site/kv');
         $this->view->assign('site', $site); // 这里要改为常量输出 define('SITE', $site)
         define('SITE', $site);
         // 页面别名

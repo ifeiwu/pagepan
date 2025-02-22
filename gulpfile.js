@@ -22,6 +22,8 @@ gulp.task('copy', function () {
 		'!src/app/dev/**',
 		'!src/config/db.php',
 		'!src/config/*.dev.php',
+		'!src/data/ip2region.xdb',
+		'!src/data/backup/**/*',
 		'!src/data/cache/**/*',
 		'!src/data/logs/**/*',
 		'!src/data/sqlite/**/*',
