@@ -1,4 +1,5 @@
 <?php
+// 营业时间：返回是否开店状
 return function () {
     $value = false;
     $opening = SITE['shop_opening'];

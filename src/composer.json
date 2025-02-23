@@ -15,6 +15,6 @@
 		"wyrihaximus/html-compress": "^4.2",
 		"php-curl-class/php-curl-class": "^11.0",
 		"overtrue/easy-sms": "^3.0",
-		"gregwar/captcha": "^1.2"
+		"fabianwennink/iconcaptcha": "^4.0"
 	}
 }

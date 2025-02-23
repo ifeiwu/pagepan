@@ -6,6 +6,7 @@ return function () {
     if (!helper('form/token', [$_token])) {
         Response::error('invalid token');
     }
+
     // 开启城市访问限制
     $limit_region = helper('site/value', ['shop_limit_region']);
     if ($limit_region) {
@@ -17,6 +18,17 @@ return function () {
             }
         }
     }
+
+    // 图标验证
+    loader_vendor();
+    session_start();
+    $options = Config::file('iconcaptcha');
+    $captcha = new \IconCaptcha\IconCaptcha($options);
+    $validation = $captcha->validate($_POST);
+    if (!$validation->success()) {
+        Response::error('点击图标验证失败', ['field' => 'iconcaptcha-widget']);
+    }
+
     // 配送方式是送货上门才需要填写地址
     $delivery = helper('site/value', ['shop_delivery']);
     if ($delivery == 1) {

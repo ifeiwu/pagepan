@@ -1,4 +1,5 @@
 <?php
+// 返回营业时间文本
 return function () {
     $hour = '';
     $week = '';
