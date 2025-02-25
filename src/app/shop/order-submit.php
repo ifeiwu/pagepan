@@ -7,8 +7,10 @@ return function () {
         Response::error('invalid token');
     }
 
+    $site = helper('site/kv', ['shop_iconcaptcha', 'shop_delivery', 'shop_address', 'shop_limit_region']);
+
     // 开启城市访问限制
-    $limit_region = helper('site/value', ['shop_limit_region']);
+    $limit_region = $site['shop_limit_region'];
     if ($limit_region) {
         $ip_region = helper('ip/ip2region', [Request::ip()]);
         $ip_province = $ip_region[2];
@@ -20,17 +22,19 @@ return function () {
     }
 
     // 图标验证
-    loader_vendor();
-    session_start();
-    $options = Config::file('iconcaptcha');
-    $captcha = new \IconCaptcha\IconCaptcha($options);
-    $validation = $captcha->validate($_POST);
-    if (!$validation->success()) {
-        Response::error('点击图标验证失败', ['field' => 'iconcaptcha-widget']);
+    if ($site['shop_iconcaptcha'] == 1) {
+        loader_vendor();
+        session_start();
+        $options = Config::file('iconcaptcha');
+        $captcha = new \IconCaptcha\IconCaptcha($options);
+        $validation = $captcha->validate($_POST);
+        if (!$validation->success()) {
+            Response::error('点击图标验证失败', ['field' => 'iconcaptcha-widget']);
+        }
     }
 
     // 配送方式是送货上门才需要填写地址
-    $delivery = helper('site/value', ['shop_delivery']);
+    $delivery = $site['shop_delivery'];
     if ($delivery == 1) {
         // 道路名
         $road = post('road', 'escape');
@@ -70,7 +74,7 @@ return function () {
     }
 
     // 店铺地址
-    $shop_address = helper('site/value', ['shop_address']);
+    $shop_address = $site['shop_address'];
     $shop_address = json_decode($shop_address, true);
     $province = $shop_address['province'];
     $city = $shop_address['city'];
