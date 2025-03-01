@@ -1,0 +1,268 @@
+.typography {
+    line-height: 1.6
+}
+
+.typography a {
+    text-decoration: none
+}
+
+.typography a:hover {
+    border-bottom: 1px solid
+}
+
+.typography abbr[title] {
+    border-bottom: 1px dotted;
+    text-decoration: none;
+    cursor: help;
+}
+
+.typography cite {
+    font-style: italic
+}
+
+.typography hr {
+    background: #e6e6e6;
+    border: none;
+    display: block;
+    height: 1px;
+    margin-bottom: 1.4em;
+    margin-top: 1.4em
+}
+
+.typography img {
+    vertical-align: text-bottom
+}
+
+.typography ins {
+    background-color: lime;
+    text-decoration: none
+}
+
+.typography mark {
+    background-color: #ff0
+}
+
+.typography small {
+    font-size: 0.8em
+}
+
+.typography strong {
+    font-weight: 700
+}
+
+.typography sub, .typography sup {
+    font-size: 0.8em
+}
+
+.typography sub {
+    vertical-align: sub
+}
+
+.typography sup {
+    vertical-align: super
+}
+
+.typography p, .typography dl, .typography ol, .typography ul, .typography blockquote, .typography pre, .typography table {
+    margin-top: 0;
+    margin-bottom: 1.4em
+}
+
+.typography p:last-child, .typography dl:last-child, .typography ol:last-child, .typography ul:last-child, .typography blockquote:last-child, .typography pre:last-child, .typography table:last-child {
+    margin-bottom: 0
+}
+
+.typography p:empty {
+    display: none
+}
+
+.typography h1, .typography h2, .typography h3, .typography h4, .typography h5, .typography h6 {
+    font-weight: 700;
+    line-height: 1.2
+}
+
+.typography h1:first-child, .typography h2:first-child, .typography h3:first-child, .typography h4:first-child, .typography h5:first-child, .typography h6:first-child {
+    margin-top: 0
+}
+
+.typography h1 {
+    font-size: 2em;
+    margin-bottom: .58333em;
+    margin-top: .58333em;
+    line-height: 1
+}
+
+.typography h2 {
+    font-size: 1.6em;
+    margin-bottom: .875em;
+    margin-top: 1.75em;
+    line-height: 1.1
+}
+
+.typography h3 {
+    font-size: 1.3em;
+    margin-bottom: 1.07692em;
+    margin-top: 1.07692em
+}
+
+.typography h4 {
+    font-size: 1.2em;
+    margin-bottom: 1.16667em;
+    margin-top: 1.16667em
+}
+
+.typography h5 {
+    font-size: 1.1em;
+    margin-bottom: 1.27273em;
+    margin-top: 1.27273em
+}
+
+.typography h6 {
+    font-size: 1em;
+    margin-bottom: 1.4em;
+    margin-top: 1.4em
+}
+
+.typography dd {
+    margin-left: 1.4em
+}
+
+.typography ol, .typography ul {
+    list-style-position: outside;
+    padding-left: 0;
+    margin-left: 1.4em
+}
+
+.typography ol {
+    list-style-type: decimal
+}
+
+.typography ol ol {
+    list-style-type: lower-alpha
+}
+
+.typography ol ol ol {
+    list-style-type: lower-roman
+}
+
+.typography ol ol ol ol {
+    list-style-type: lower-greek
+}
+
+.typography ol ol ol ol ol {
+    list-style-type: decimal
+}
+
+.typography ol ol ol ol ol ol {
+    list-style-type: lower-alpha
+}
+
+.typography ul {
+    list-style-type: disc
+}
+
+.typography ul ul {
+    list-style-type: circle
+}
+
+.typography ul ul ul {
+    list-style-type: square
+}
+
+.typography ul ul ul ul {
+    list-style-type: circle
+}
+
+.typography ul ul ul ul ul {
+    list-style-type: disc
+}
+
+.typography ul ul ul ul ul ul {
+    list-style-type: circle
+}
+
+.typography blockquote {
+    border-left: 4px solid #e6e6e6;
+    padding: 0.6em 1.2em
+}
+
+.typography blockquote p {
+    margin-bottom: 0
+}
+
+.typography code, .typography kbd, .typography samp, .typography pre {
+    -moz-osx-font-smoothing: auto;
+    -webkit-font-smoothing: auto;
+    background-color: #f2f2f2;
+    color: #333;
+    font-size: 0.9em
+}
+
+.typography code, .typography kbd, .typography samp {
+    border-radius: 3px;
+    line-height: 1.77778;
+    padding: 0.1em 0.4em 0.2em;
+    vertical-align: baseline
+}
+
+.typography pre {
+    overflow: auto;
+    padding: 1em 1.2em
+}
+
+.typography pre code {
+    background: none;
+    font-size: 1em;
+    line-height: 1em
+}
+
+.typography figure {
+    margin-bottom: 2.8em;
+    text-align: center
+}
+
+.typography figure:first-child {
+    margin-top: 0
+}
+
+.typography figure:last-child {
+    margin-bottom: 0
+}
+
+.typography figcaption {
+    font-size: 0.8em;
+    margin-top: .875em
+}
+
+.typography table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+.typography table pre {
+    white-space: pre-wrap
+}
+
+.typography th, .typography td {
+    font-size: 1em;
+    padding: .7em;
+    border: 1px solid #e6e6e6;
+    line-height: 1.4
+}
+
+.typography thead tr, .typography tfoot tr {
+    background-color: #f5f5f5
+}
+
+.typography thead th, .typography thead td, .typography tfoot th, .typography tfoot td {
+    font-size: .9em;
+    padding: .77778em
+}
+
+.typography thead th code, .typography thead td code, .typography tfoot th code, .typography tfoot td code {
+    background-color: #fff
+}
+
+.typography tbody tr {
+    background-color: #fff
+}

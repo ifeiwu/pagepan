@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>wysiwyg.css</title>
+    <link rel="stylesheet" type="text/css" href="/assets/css/typography/wysiwyg.css" />
+</head>
+<body>
+<main class="typography" style="width:800px;margin:20px auto;padding:20px;border:1px solid;border-radius:12px">
+    <p>
+        <code>
+            <a href="https://github.com/jgthms/wysiwyg.css">wysiwyg.css</a>
+        </code>
+        文件是一个简单的 <strong>样式集合</strong>，针对由 <abbr title="What You See Is What You Get">所见即所得</abbr>（WYSIWYG）编辑器（如
+        TinyMCE）或 Markdown 生成的 HTML 元素。
+    </p>
+    <p>它的目的包括：</p>
+    <ul>
+        <li>
+            <strong>可读性</strong>：间距和颜色在视觉上是 <em>平衡</em> 的。
+        </li>
+        <li>
+            <strong>简洁性</strong>：你只需要一个 <em>单一</em> 的类就可以为所有元素设置样式。
+        </li>
+        <li>
+            <strong>可扩展性</strong>：你可以轻松地 <em>自定义</em> 输出内容，这得益于变量的使用。
+        </li>
+    </ul>
+    <p>
+        事实上，<code>wysiwyg.css</code> 支持 <a
+            href="https://github.com/jgthms/wysiwyg.css/blob/master/themes">themes</a>。
+    </p>
+    <h2>示例</h2>
+    <p>
+        这个整个白色的内容块仅在其容器上使用了一个CSS类。
+        <br />
+        内部的所有内容都是没有附加类的HTML元素。
+    </p>
+    <h2>它是如何工作的</h2>
+    <p>
+        你只需要在一个<strong>容器</strong>上添加<code>.wysiwyg</code> CSS类，它就会为所有子元素设置样式：
+    </p>
+    <pre>
+    &lt;div class="wysiwyg"&gt;
+      &lt;!-- Your generated HTML --&gt;
+    &lt;/div&gt;</pre>
+    <p>
+        为了能够优雅地与你的设计融为一体，<code>wysiwyg</code> 容器会 <strong>继承颜色</strong>（用于文本、标题和链接）以及
+        <strong>排版</strong>（字体家族、大小和平滑效果）。
+    </p>
+    <h2>What it styles</h2>
+    <h3>Blocks</h3>
+    <ul>
+        <li>
+            Headings: from <code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code>
+        </li>
+        <li>Paragraphs <code>&lt;p&gt;</code>
+        </li>
+        <li>Lists: <code>&lt;ol&gt;</code> and <code>&lt;ul&gt;</code>
+        </li>
+        <li>Blockquotes <code>&lt;blockquote&gt;</code>
+        </li>
+        <li>
+            Tables <code>&lt;table&gt;</code>
+            <code>&lt;tr&gt;</code>
+            <code>&lt;th&gt;</code> and <code>&lt;td&gt;</code>
+        </li>
+        <li>Pre <code>&lt;pre&gt;</code>
+        </li>
+        <li>
+            Figures <code>&lt;figure&gt;</code> and
+            <code>&lt;figcaption&gt;</code>
+        </li>
+    </ul>
+    <h3>Inline elements</h3>
+    <ul>
+        <li>
+            Links:
+            <code>&lt;a&gt;</code>
+        </li>
+        <li>
+            Semantic:
+            <code>&lt;strong&gt;</code>
+            and
+            <code>&lt;em&gt;</code>
+        </li>
+        <li>
+            Code:
+            <code>&lt;code&gt;</code>
+            <code>&lt;kbd&gt;</code>
+            and
+            <code>&lt;samp&gt;</code>
+        </li>
+        <li>
+            Abbreviations:
+            <code>&lt;abbr&gt;</code>
+        </li>
+        <li>
+            Notations:
+            <code>&lt;mark&gt;</code>
+            <code>&lt;s&gt;</code>
+            <code>&lt;del&gt;</code>
+            and
+            <code>&lt;ins&gt;</code>
+        </li>
+        <li>
+            Quotes:
+            <code>&lt;q&gt;</code>
+            and
+            <code>&lt;cite&gt;</code>
+        </li>
+        <li>
+            Other:
+            <code>&lt;small&gt;</code>
+            <code>&lt;sub&gt;</code>
+            <code>&lt;sup&gt;</code>
+            <code>&lt;hr&gt;</code>
+        </li>
+    </ul>
+    <h2>它看起来如何</h2>
+    <p>
+        你正在阅读的内容是使用 <code>wysiwyg.css</code> 及其默认参数进行样式的。
+    </p>
+    <h1>标题 Heading 1</h1>
+    <h2>标题 Heading 2</h2>
+    <h3>标题 Heading 3</h3>
+    <h4>标题 Heading 4</h4>
+    <h5>标题 Heading 5</h5>
+    <h6>标题 Heading 6</h6>
+    <h2>内联文本元素</h2>
+    <div
+        style="display:grid;grid-column-gap:1rem;grid-row-gap:1rem;grid-template-columns:repeat(auto-fit, minmax(0%, 1fr));margin-bottom:1em">
+        <div>
+            <p>
+                <abbr title="Abbreviation">Abbr.</abbr>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">abbr</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+            <p>
+                <strong>Bold</strong>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">strong</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+                <code
+                    class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">b</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+            <p>
+                <em>Italic</em>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">i</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+                <code
+                    class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">em</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+                <code
+                    class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">cite</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+            <p>
+                <del>Deleted</del>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">del</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+            <p>
+                <ins>Inserted</ins>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">ins</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+            <p>
+                <kbd>Ctrl + S</kbd>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">kbd</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+        </div>
+        <div>
+            <p>
+                <mark>Highlighted</mark>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">mark</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+            <p>
+                <s>Strikethrough</s>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">s</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+            <p>
+                <small>Small </small>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">small</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+            <p>Text <sub>Sub</sub>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">sub</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+            <p>Text <sup>Sup</sup>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">sup</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+            <p>
+                <u>Underline</u>
+                <code class="language-html">
+                    <span class="token tag punctuation">&lt;</span>
+                    <span
+                        class="token tag">u</span>
+                    <span class="token tag punctuation">&gt;</span>
+                </code>
+            </p>
+        </div>
+    </div>
+    <p>
+        你可以拥有段落，其中包含 <a href="#">链接</a>、<strong>重要的</strong> 或 <em>强调的</em>
+        单词、<code>代码片段</code>、<abbr title="缩写">缩写</abbr>、<q>短引用</q>、<cite>引用出处</cite>、
+        <mark>高亮文本</mark>
+        、<kbd>键盘输入</kbd>、<s>划线</s>、
+        <del>删除</del>
+        和
+        <ins>插入</ins>
+        的元素、<samp>示例文本</samp>、<small>小号文本</small>，以及带有 <sub>下标</sub> 和 <sup>上标</sup> 的单词。
+    </p>
+    <h2>块引用</h2>
+    <blockquote>
+        “设计是一个有趣的词。有些人认为设计意味着它看起来如何。但当然，如果你深入探究，它真正关乎的是它如何工作。”
+        <footer>
+            <cite>— Steve Jobs</cite>
+        </footer>
+    </blockquote>
+    <p>
+        你也可以使用水平分隔线。
+    </p>
+    <hr />
+    <p>
+        你还可以使用 <strong>无序列表</strong>：
+    </p>
+    <ul>
+        <li>
+            基础列表
+            <ul>
+                <li>
+                    嵌套项目
+                    <ul>
+                        <li>
+                            每一级都有不同的项目符号
+                            <ul>
+                                <li>
+                                    每一级
+                                    <ul>
+                                        <li>
+                                            最多到
+                                            <ul>
+                                                <li>
+                                                    第六级
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>
+            可以延伸到多行的项目
+        </li>
+        <li>
+            这是一段经典的“Lorem Ipsum”占位文本，通常用于排版和设计领域，以展示字体、排版效果或作为临时内容。
+        </li>
+    </ul>
+    <p>
+        以及 <strong>有序列表</strong>：
+    </p>
+    <ol>
+        <li>
+            第一步
+            <ol>
+                <li>
+                    旁支第一步
+                    <ol>
+                        <li>
+                            旁支第二步
+                            <ol>
+                                <li>
+                                    旁支第三步
+                                    <ol>
+                                        <li>
+                                            旁支第四步
+                                            <ol>
+                                                <li>
+                                                    旁支第五步
+                                            </ol>
+                                        </li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </li>
+        <li>
+            第二步
+        </li>
+        <li>
+            ?????
+        </li>
+        <li>
+            PROFIT!!!
+        </li>
+    </ol>
+    <p>
+        甚至还有 <strong>定义列表</strong>：
+    </p>
+    <dl>
+        <dt>名字</dt>
+        <dd>哥斯拉</dd>
+        <dt>出生年份</dt>
+        <dd>1952</dd>
+        <dt>出生地</dt>
+        <dd>日本</dd>
+        <dt>颜色</dt>
+        <dd>绿色</dd>
+    </dl>
+    <blockquote>
+        你也可以使用 <code>blockquote</code> 元素。它可以与段落一起使用，也可以单独使用。
+    </blockquote>
+    <p>
+        <strong>figure</strong> 和相关的 <em>figcaption</em> 元素也是支持的：
+    </p>
+    <figure>
+        <a href="https://jgthms.com/web-design-in-4-minutes/">
+            <img
+                src="https://jgthms.com/web-design-in-4-minutes/web-design-in-4-minutes.png"
+                alt="Web design in 4 minutes"
+                width="1200"
+                height="630" />
+        </a>
+        <figcaption>全宽图像</figcaption>
+    </figure>
+    <figure>
+        <img
+            src="https://jgthms.com/web-design-in-4-minutes/web-design-in-4-minutes.png"
+            alt="An awesome picture"
+            width="62"
+            height="71" />
+        <figcaption>小图片</figcaption>
+    </figure>
+    <p>
+        <strong>表格</strong> 是支持的：表格单元格、行、表头、表体和表尾都被设置了样式。
+    </p>
+    <table>
+        <thead>
+        <tr>
+            <th>名字</th>
+            <th>乐器</th>
+            <th>时期</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <th>名字</th>
+            <th>乐器</th>
+            <th>时期</th>
+        </tr>
+        </tfoot>
+        <tbody>
+        <tr>
+            <td>约翰·列侬</td>
+            <td>主唱，吉他</td>
+            <td>1960–1969</td>
+        </tr>
+        <tr>
+            <td>保罗·麦卡特尼</td>
+            <td>主唱，贝斯</td>
+            <td>1960–1970</td>
+        </tr>
+        <tr>
+            <td>乔治·哈里森</td>
+            <td>吉他</td>
+            <td>1960–1970</td>
+        </tr>
+        <tr>
+            <td>林戈·斯塔尔</td>
+            <td>鼓手</td>
+            <td>1962–1970</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
