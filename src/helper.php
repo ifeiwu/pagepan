@@ -95,7 +95,7 @@ function post($name = null, $type = '*', $default = null)
 }
 
 // 返回资源文件完整链接
-function asset($name = '', $isfull = false) {
+function assets($name = '', $isfull = false) {
     // 站外链接
     if ( preg_match('/^(https?:\/\/|\/\/)/i', $name) ) {
         return $name;

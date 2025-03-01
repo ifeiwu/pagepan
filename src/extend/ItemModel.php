@@ -173,7 +173,7 @@ class ItemModel
             $utime = self::$item['utime'];
             $file = trim($path, '/') . "/$name";
             if (!preg_match($pattern, $file)) {
-                $file = asset(trim($file . rtrim("?$utime", '?'), '/'), $isfull);
+                $file = assets(trim($file . rtrim("?$utime", '?'), '/'), $isfull);
             }
         }
         return $file;

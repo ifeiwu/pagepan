@@ -125,11 +125,10 @@
             height: 32px;
             top: 5px;
             right: 5px;
-            background: transparent;
         }
         .jqmodal a.close-modal:before,
         .jqmodal a.close-modal:after {
-            width: 20px;
+            width: 14px;
         }
 
         .jqmodal .modal-iframe,

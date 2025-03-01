@@ -42,6 +42,7 @@ class Pager {
             'domain3' => $site['domain3'] ?: '',
             'timestamp' => $site['timestamp'],
             'page_id' => $page['id'],
+            'page_type' => $page['type'],
             'page_alias' => $page['alias'],
             'page_title' => $page['title'],
             'get_alias' => $data['alias'] ?: '',
