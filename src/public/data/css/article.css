@@ -1,26 +1,19 @@
 .article-content {
-    font-size: 1rem;
-    line-height: 1.8
-}
-
-.article-content p {
-    color: var(--mix-5)
+    line-height: 1.6
 }
 
 .article-content a {
-    font-size: 1rem;
     text-decoration: none
 }
 
-.article-content a:hover,
-.article-content a:focus {
-    color: var(--primary);
+.article-content a:hover {
     border-bottom: 1px solid
 }
 
-.article-content abbr {
+.article-content abbr[title] {
     border-bottom: 1px dotted;
-    cursor: help
+    text-decoration: none;
+    cursor: help;
 }
 
 .article-content cite {
@@ -28,11 +21,14 @@
 }
 
 .article-content hr {
+    background: #e6e6e6;
+    border: none;
+    display: block;
+    height: 1px;
     margin-bottom: 1.4em;
     margin-top: 1.4em
 }
 
-.article-content svg,
 .article-content img {
     vertical-align: text-bottom
 }
@@ -47,7 +43,7 @@
 }
 
 .article-content small {
-    font-size: 0.75em
+    font-size: 0.8em
 }
 
 .article-content strong {
@@ -56,7 +52,7 @@
 
 .article-content sub,
 .article-content sup {
-    font-size: 0.75em
+    font-size: 0.8em
 }
 
 .article-content sub {
@@ -74,7 +70,8 @@
 .article-content blockquote,
 .article-content pre,
 .article-content table {
-    margin-bottom: 1em
+    margin-top: 0;
+    margin-bottom: 1.4em
 }
 
 .article-content p:last-child,
@@ -87,6 +84,20 @@
     margin-bottom: 0
 }
 
+.article-content p:empty {
+    display: none
+}
+
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+    font-weight: 700;
+    line-height: 1.2
+}
+
 .article-content h1:first-child,
 .article-content h2:first-child,
 .article-content h3:first-child,
@@ -97,33 +108,41 @@
 }
 
 .article-content h1 {
+    font-size: 2em;
     margin-bottom: .58333em;
-    margin-top: .58333em
+    margin-top: .58333em;
+    line-height: 1
 }
 
 .article-content h2 {
+    font-size: 1.6em;
     margin-bottom: .875em;
-    margin-top: 2.75em
+    margin-top: 1.75em;
+    line-height: 1.1
 }
 
 .article-content h3 {
+    font-size: 1.3em;
     margin-bottom: 1.07692em;
-    margin-top: 2.07692em
+    margin-top: 1.07692em
 }
 
 .article-content h4 {
+    font-size: 1.2em;
     margin-bottom: 1.16667em;
-    margin-top: 2.16667em
+    margin-top: 1.16667em
 }
 
 .article-content h5 {
+    font-size: 1.1em;
     margin-bottom: 1.27273em;
-    margin-top: 2.27273em
+    margin-top: 1.27273em
 }
 
 .article-content h6 {
+    font-size: 1em;
     margin-bottom: 1.4em;
-    margin-top: 2.4em
+    margin-top: 1.4em
 }
 
 .article-content dd {
@@ -132,7 +151,9 @@
 
 .article-content ol,
 .article-content ul {
-
+    list-style-position: outside;
+    padding-left: 0;
+    margin-left: 1.4em
 }
 
 .article-content ol {
@@ -192,6 +213,37 @@
     margin-bottom: 0
 }
 
+.article-content code,
+.article-content kbd,
+.article-content samp,
+.article-content pre {
+    -moz-osx-font-smoothing: auto;
+    -webkit-font-smoothing: auto;
+    background-color: #f2f2f2;
+    color: #333;
+    font-size: 0.9em
+}
+
+.article-content code,
+.article-content kbd,
+.article-content samp {
+    border-radius: 3px;
+    line-height: 1.77778;
+    padding: 0.1em 0.4em 0.2em;
+    vertical-align: baseline
+}
+
+.article-content pre {
+    overflow: auto;
+    padding: 1em 1.2em
+}
+
+.article-content pre code {
+    background: none;
+    font-size: 1em;
+    line-height: 1em
+}
+
 .article-content figure {
     margin-bottom: 2.8em;
     text-align: center
@@ -206,12 +258,14 @@
 }
 
 .article-content figcaption {
-    font-size: 0.75em;
-    margin-top: 0.75em
+    font-size: 0.8em;
+    margin-top: .875em
 }
 
 .article-content table {
-    width: 100%
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0
 }
 
 .article-content table pre {
@@ -220,6 +274,7 @@
 
 .article-content th,
 .article-content td {
+    font-size: 1em;
     padding: .7em;
     border: 1px solid #e6e6e6;
     line-height: 1.4
@@ -234,8 +289,8 @@
 .article-content thead td,
 .article-content tfoot th,
 .article-content tfoot td {
-    font-size: 0.875em;
-    padding: 0.77778em
+    font-size: .9em;
+    padding: .77778em
 }
 
 .article-content thead th code,

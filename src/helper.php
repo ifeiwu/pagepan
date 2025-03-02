@@ -3,7 +3,7 @@
 function helper($name, $args = [])
 {
     $key = 'helper.' . $name;
-    if ( ! Config::has($key) ) {
+    if (!Config::has($key)) {
         Config::set($key, require ROOT_PATH . "helper/{$name}.php");
     }
     return call_user_func_array(Config::get($key), $args);
@@ -12,11 +12,11 @@ function helper($name, $args = [])
 // 配置操作
 function config($name, $value = '')
 {
-    if ( is_array($name) ) {
+    if (is_array($name)) {
         foreach ($name as $key => $value) {
             Config::set($key, $value);
         }
-    } elseif ( $value === '' ) {
+    } elseif ($value === '') {
         return Config::get($name);
     } else {
         Config::set($name, $value);
@@ -27,11 +27,11 @@ function config($name, $value = '')
 function session($name, $value = '')
 {
     $session = Session::new();
-    if ( is_null($name) ) {
+    if (is_null($name)) {
         $session->clear($value);
-    } elseif ( $value === '' ) {
+    } elseif ($value === '') {
         return strpos($name, '?') === 0 ? $session->has(substr($name, 1)) : $session->get($name);
-    } elseif ( is_null($value) ) {
+    } elseif (is_null($value)) {
         $session->delete($name);
     } else {
         $session->set($name, $value);
@@ -42,11 +42,11 @@ function session($name, $value = '')
 function cache($name, $value = '', $seconds = 0)
 {
     $cache = Cache::new('file', Config::file('cache'));
-    if ( is_null($name) ) {
+    if (is_null($name)) {
         $cache->clear();
-    } elseif ( $value === '' ) {
+    } elseif ($value === '') {
         return strpos($name, '?') === 0 ? $cache->has(substr($name, 1)) : $cache->get($name);
-    } elseif ( is_null($value) ) {
+    } elseif (is_null($value)) {
         $cache->delete($name);
     } else {
         $cache->set($name, $value, $seconds);
@@ -57,8 +57,7 @@ function cache($name, $value = '', $seconds = 0)
 function view($path = null)
 {
     $view = View::new($path);
-    if ( ! $view->uikit )
-    {
+    if (!$view->uikit) {
         $uikit = Uikit::new();
         $uikit->view = $view;
         $view->uikit = $uikit;
@@ -76,9 +75,9 @@ function db()
 function cart()
 {
     return Cart::new([
-        'cartMaxItem'      => 0,
-        'itemMaxQuantity'  => 99,
-        'useCookie'        => false,
+        'cartMaxItem' => 0,
+        'itemMaxQuantity' => 99,
+        'useCookie' => false,
     ]);
 }
 
@@ -95,17 +94,18 @@ function post($name = null, $type = '*', $default = null)
 }
 
 // 返回资源文件完整链接
-function assets($name = '', $isfull = false) {
+function assets($name = '', $isfull = false)
+{
     // 站外链接
-    if ( preg_match('/^(https?:\/\/|\/\/)/i', $name) ) {
+    if (preg_match('/^(https?:\/\/|\/\/)/i', $name)) {
         return $name;
     }
     // 加速域名或网站域名
     $domain3 = SITE['domain3'];
-    if ( $domain3 ) {
+    if ($domain3) {
         $domain = $domain3;
     } else {
-        if ( $isfull == false ) {
+        if ($isfull == false) {
             $domain = ROOT_URL;
         } else {
             $domain = SITE['domain'];
@@ -113,7 +113,7 @@ function assets($name = '', $isfull = false) {
     }
 
     $name = ltrim($name, '/');
-    if ( strpos($name, '?') === false ) {
+    if (strpos($name, '?') === false) {
         return "{$domain}{$name}?" . SITE['timestamp'];
     }
 
@@ -131,8 +131,7 @@ function thumb($path, $image, $params = [])
 {
     $image = ltrim("$path/$image", '/');
 
-    if ( preg_match('/^(https?:\/\/|\/\/)/i', $image) )
-    {
+    if (preg_match('/^(https?:\/\/|\/\/)/i', $image)) {
         return $image;
     }
 
@@ -158,7 +157,7 @@ function loader_vendor()
 function json_encode2($value, int $flags = 0, int $depth = 512)
 {
     $flags |= JSON_UNESCAPED_UNICODE;
-    $json= \json_encode($value, $flags, $depth);
+    $json = \json_encode($value, $flags, $depth);
     if ($json === false) {
         throw new Exception(json_last_error_msg());
     }
@@ -166,7 +165,8 @@ function json_encode2($value, int $flags = 0, int $depth = 512)
 }
 
 // JSON 字符串解码：默认数组
-function json_decode2($json, $associative = null, $depth = 512, $flags = 0) {
+function json_decode2($json, $associative = null, $depth = 512, $flags = 0)
+{
     $data = \json_decode($json, $associative ?? true, $depth, $flags);
     if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
         $error = json_last_error_msg();
@@ -216,7 +216,7 @@ function dump()
 {
     $args = func_get_args();
     foreach ($args as $arg) {
-        if ( is_array($arg) ) {
+        if (is_array($arg)) {
             echo '<pre>' . print_r($arg, 1) . '</pre>';
         } else {
             var_dump($arg);
