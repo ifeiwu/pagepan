@@ -59,6 +59,7 @@ class Css extends \Base
 
         $is_save = db_save('site', ['name' => 'open_' . $name . '_css', 'value' => $open_name_css], ['name', '=', 'open_' . $name . '_css']);
         if ($is_save) {
+            db_save('site', ['name' => 'timestamp', 'value' => time()], ['name', '=', 'timestamp']);
             return $this->_success('保存成功！');
         } else {
             return $this->_error('保存失败！');

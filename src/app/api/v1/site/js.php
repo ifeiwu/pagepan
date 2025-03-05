@@ -59,6 +59,7 @@ class Js extends \Base {
 
         $is_save = db_save('site', ['name' => 'open_' . $name . '_js', 'value' => $open_name_js], ['name', '=', 'open_' . $name . '_js']);
         if ($is_save) {
+            db_save('site', ['name' => 'timestamp', 'value' => time()], ['name', '=', 'timestamp']);
             return $this->_success('保存成功！');
         } else {
             return $this->_error('保存失败！');

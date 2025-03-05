@@ -7,7 +7,7 @@ return function () {
         Response::error('invalid token');
     }
 
-    $site = helper('site/kv', ['shop_iconcaptcha', 'shop_delivery', 'shop_address', 'shop_limit_region']);
+    $site = helper('site/kv', [['shop_iconcaptcha', 'shop_delivery', 'shop_address', 'shop_limit_region']]);
 
     // 开启城市访问限制
 //    $limit_region = $site['shop_limit_region'];

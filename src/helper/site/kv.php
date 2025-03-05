@@ -5,7 +5,7 @@ return function ($names = []) {
     if (empty($names)) {
         $wheres = [['state', '=', 1]];
     } else {
-        $wheres = ['name', 'IN', $names];
+        $wheres = [['name', 'IN', $names]];
     }
 
     $site = db()->select('site', ['name', 'value'], $wheres);

@@ -21,6 +21,7 @@ return function ($request_data) {
             ->exclude('.git')
             ->exclude('data/backup')
             ->exclude('data/logs')
+            ->exclude('data/order')
             ->exclude('data/cache')
             ->exclude('data/sql')
             ->exclude('data/pack')
