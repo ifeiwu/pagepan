@@ -76,7 +76,6 @@ class Site extends Base
 
         // 处理数据
         $save_data = [];
-
         foreach ($rdata as $name => $value) {
             if (stripos($name, '_') === 0) {
                 continue;
@@ -118,7 +117,11 @@ class Site extends Base
 
         // 写入数据
         $error = [];
-
+        // 添加更新时间
+        $save_data['timestamp'] = [
+            'name' => 'timestamp',
+            'value' => time()
+        ];
         foreach ($save_data as $name => $data) {
             $is_save = db_save($this->table, $data, array('name', '=', $name));
 
