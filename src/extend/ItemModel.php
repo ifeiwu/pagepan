@@ -221,6 +221,7 @@ class ItemModel
         return [
             'url' => $link_url,
             'target' => $link_target ?: self::$setting['dataview.link.target'],
+            'title' => $link_title,
             'link_title' => $link_title,
             'link_url' => $link_url,
             'link_target' => $link_target

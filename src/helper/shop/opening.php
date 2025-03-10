@@ -5,6 +5,8 @@ return function () {
     $opening = SITE['shop_opening'];
     if ($opening == 1) {
         $value = true;
+    } elseif ($opening == 2) {
+        $value = false;
     } else {
         $date = new DateTime();
         $weekday = $date->format('N');
