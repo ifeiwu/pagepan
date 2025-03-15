@@ -4,7 +4,7 @@ class Log {
 
     /**
      * 生成自定义函数名前缀文件日志
-     * 例如：Log:sql('select * from table');
+     * 例如：Log::sql('select * from table');
      * 输出：data/logs/sql_202403.log
      * @param $name
      * @param $args
@@ -13,6 +13,11 @@ class Log {
     private static function __callStatic($name, $args)
     {
         return self::write($args, $name);
+    }
+
+    public static function error()
+    {
+        return self::write(func_get_args(), 'error');
     }
 
     public static function debug()

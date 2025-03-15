@@ -1,5 +1,6 @@
 .article-content {
-    line-height: 1.6
+    line-height: 1.6;
+    letter-spacing: 1px;
 }
 
 .article-content a {
@@ -21,7 +22,7 @@
 }
 
 .article-content hr {
-    background: #e6e6e6;
+    background: var(--mix-35);
     border: none;
     display: block;
     height: 1px;
@@ -47,7 +48,7 @@
 }
 
 .article-content strong {
-    font-weight: 700
+    font-weight: 700;
 }
 
 .article-content sub,
@@ -205,7 +206,7 @@
 }
 
 .article-content blockquote {
-    border-left: 4px solid #e6e6e6;
+    border-left: 4px solid var(--mix-36);
     padding: 0.6em 1.2em
 }
 
@@ -219,8 +220,8 @@
 .article-content pre {
     -moz-osx-font-smoothing: auto;
     -webkit-font-smoothing: auto;
-    background-color: #f2f2f2;
-    color: #333;
+    background-color: var(--mix-38);
+    color: var(--mix);
     font-size: 0.9em
 }
 
@@ -276,13 +277,13 @@
 .article-content td {
     font-size: 1em;
     padding: .7em;
-    border: 1px solid #e6e6e6;
+    border: 1px solid var(--mix-35);
     line-height: 1.4
 }
 
 .article-content thead tr,
 .article-content tfoot tr {
-    background-color: #f5f5f5
+    background-color: var(--mix-38)
 }
 
 .article-content thead th,
@@ -297,9 +298,9 @@
 .article-content thead td code,
 .article-content tfoot th code,
 .article-content tfoot td code {
-    background-color: #fff
+    background-color: var(--mix-40)
 }
 
 .article-content tbody tr {
-    background-color: #fff
+    background-color: var(--mix-40)
 }
