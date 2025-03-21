@@ -100,7 +100,18 @@ function assets($name = '', $isfull = false)
     if (preg_match('/^(https?:\/\/|\/\/)/i', $name)) {
         return $name;
     }
-    // 加速域名或网站域名
+    // 静态加速域名
+    $domain = assets_domain($isfull);
+    // 站点时间戳
+    $name = ltrim($name, '/');
+    if (strpos($name, '?') === false) {
+        return "{$domain}{$name}?" . SITE['timestamp'];
+    }
+    return "{$domain}{$name}";
+}
+
+// 加速域名或网站域名
+function assets_domain($isfull = false) {
     $domain3 = SITE['domain3'];
     if ($domain3) {
         $domain = $domain3;
@@ -111,13 +122,7 @@ function assets($name = '', $isfull = false)
             $domain = SITE['domain'];
         }
     }
-
-    $name = ltrim($name, '/');
-    if (strpos($name, '?') === false) {
-        return "{$domain}{$name}?" . SITE['timestamp'];
-    }
-
-    return "{$domain}{$name}";
+    return $domain;
 }
 
 /**

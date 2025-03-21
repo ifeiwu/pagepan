@@ -112,16 +112,16 @@ class ItemModel
     public static function getTags()
     {
         $tags = self::$item['tags'];
-        $tags = $tags ? explode(' ', $tags) : [];
+        return $tags ? explode(' ', $tags) : [];
     }
 
-    // item 返回图片链接
-    public static function getImage($isfull = false)
+    // 返回图片链接
+    public static function getImage($cache_time = true, $isfull = false)
     {
         $item = self::$item;
         $image = $item['image'];
         if ($image) {
-            $image = self::getFilePath($image);
+            $image = self::getFilePath($image, $cache_time, $isfull);
         } else {
             // 1像素透明图片，防止有些浏览器没有图片显示交叉图片占位符。
             $image = base64_decode('ZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFBRUFBQUFCQ0FRQUFBQzFIQXdDQUFBQUMwbEVRVlI0QVdQNHp3QUFBZ0VCQUFidktNc0FBQUFBU1VWT1JLNUNZSUk9');
@@ -129,7 +129,25 @@ class ItemModel
         return $image;
     }
 
-    // item 返回图标图片，支持返回svg源代码
+    // 返回图片缩略图链接
+    public static function getThumb($query = '')
+    {
+        $item = self::$item;
+        $image = $item['image'];
+        if ($image) {
+            $pattern = '/^(https?:\/\/|\/\/)/i';
+            if (!preg_match($pattern, $image)) {
+                $path = self::$item['path'];
+                $image = 'img/' . trim(trim($path, '/') . "/{$image}?{$query}", '/');
+            }
+        } else {
+            // 1像素透明图片，防止有些浏览器没有图片显示交叉图片占位符。
+            $image = base64_decode('ZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFBRUFBQUFCQ0FRQUFBQzFIQXdDQUFBQUMwbEVRVlI0QVdQNHp3QUFBZ0VCQUFidktNc0FBQUFBU1VWT1JLNUNZSUk9');
+        }
+        return $image;
+    }
+
+    // 返回图标图片，支持返回svg源代码
     public static function getIcon($image = null, $isfull = false)
     {
         $item = self::$item;
@@ -163,17 +181,21 @@ class ItemModel
     }
 
     // 获取 item 文件链接路径
-    public static function getFilePath($name, $isfull = false)
+    public static function getFilePath($name, $cache_time = true, $isfull = false)
     {
         $pattern = '/^(https?:\/\/|\/\/)/i';
         if (preg_match($pattern, $name)) {
-            $file = $name;
+            $filepath = $name;
         } else {
             $path = self::$item['path'];
             $utime = self::$item['utime'];
-            $file = trim($path, '/') . "/$name";
-            if (!preg_match($pattern, $file)) {
-                $file = assets(trim($file . rtrim("?$utime", '?'), '/'), $isfull);
+            $filepath = trim(trim($path, '/') . "/$name", '/');
+            if (!preg_match($pattern, $filepath)) {
+                if ($cache_time == true) {
+                    $filepath = $filepath . rtrim("?$utime", '?');
+                }
+                $domain = assets_domain();
+                return "{$domain}{$filepath}";
             }
         }
         return $file;
