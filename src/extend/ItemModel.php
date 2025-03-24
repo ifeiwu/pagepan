@@ -198,7 +198,7 @@ class ItemModel
                 return "{$domain}{$filepath}";
             }
         }
-        return $file;
+        return $filepath;
     }
 
     // item 返回链接数组
