@@ -8,13 +8,14 @@
 		"verot/class.upload.php" : "^2.1",
 		"symfony/finder" : "^5.0",
 		"symfony/filesystem" : "^5.0",
-		"league/glide": "^1.7",
 		"gumlet/php-image-resize": "^2.0",
-		"league/flysystem-sftp": "^1.1",
 		"jbzoo/utils": "^2.3",
 		"wyrihaximus/html-compress": "^4.2",
 		"php-curl-class/php-curl-class": "^11.0",
 		"overtrue/easy-sms": "^3.0",
-		"fabianwennink/iconcaptcha": "^4.0"
+		"fabianwennink/iconcaptcha": "^4.0",
+		"siriusphp/upload": "^4.0",
+		"league/glide": "^3.0",
+		"league/flysystem-sftp-v3": "^3.29"
 	}
 }

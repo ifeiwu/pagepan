@@ -78,8 +78,8 @@ class ItemModel
         return $summary;
     }
 
-    // item 返回转换的内容
-    public static function getContent()
+    // 返回转换的内容
+    public static function getContent($thumb_query = null)
     {
         $item = self::$item;
         $content = $item['content'];
@@ -90,7 +90,30 @@ class ItemModel
         } else {
             $content = html_decode($content);
         }
-        return preg_replace('/<img.+?src=[\'"](.+?\.(jpg|jpge|gif|svg|apng|png|webp))[\'"](.*?)>/i', "<img class=\"lazyload zooming\" data-src=\"$1\" src=\"assets/image/loading.svg\" $3>", $content);
+        // 图片延迟加载，点击放大缩小效果。
+        if (empty($thumb_query)) {
+            $pattern = '/<img(.*?)[^>]src=["\'](.+?\.(jpg|jpge|gif|svg|apng|png|webp))["\'][^>](.*?)>/i';
+            $replace = "<img class=\"lazyload zooming\" data-src=\"$2\" src=\"assets/image/loading.svg\" $1 $4>";
+            $content = preg_replace($pattern, $replace, $content);
+        } else {
+            // 图片动态调整大小
+            $pattern = '/<img(.*?)[^>]src=["\'](.+?\.(jpg|jpge|png|webp))["\'][^>](.*?)>/i';
+            $replace = function ($matches) use ($thumb_query) {
+                $src = $matches[2];
+                // 检查是否是相对路径
+                if (!preg_match('/^(https?:\/\/|\/\/)/i', $src)) {
+                    $new_src = 'img/' . $src . '?' . $thumb_query;
+                } else {
+                    $new_src = $src;
+                }
+                return "<img class=\"lazyload zooming\" data-src=\"$new_src\" src=\"assets/image/loading.svg\" $matches[1] $matches[4]>";
+            };
+
+            // 使用 preg_replace_callback 进行替换
+            $content = preg_replace_callback($pattern, $replace, $content);
+        }
+
+        return $content;
     }
 
     // item 返回分类链接
@@ -115,13 +138,19 @@ class ItemModel
         return $tags ? explode(' ', $tags) : [];
     }
 
-    // 返回图片链接
-    public static function getImage($cache_time = true, $isfull = false)
+    /**
+     * 返回图片链接
+     * @param $prefix 图片前缀：s_,m_
+     * @param $iscache 是否添加时间缓存控制
+     * @param $isfull 是否带域名
+     * @return false|mixed|string
+     */
+    public static function getImage($size = '', $iscache = true, $isfull = false)
     {
         $item = self::$item;
         $image = $item['image'];
         if ($image) {
-            $image = self::getFilePath($image, $cache_time, $isfull);
+            $image = self::getFileURL($image, $size, $iscache, $isfull);
         } else {
             // 1像素透明图片，防止有些浏览器没有图片显示交叉图片占位符。
             $image = base64_decode('ZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFBRUFBQUFCQ0FRQUFBQzFIQXdDQUFBQUMwbEVRVlI0QVdQNHp3QUFBZ0VCQUFidktNc0FBQUFBU1VWT1JLNUNZSUk9');
@@ -160,7 +189,7 @@ class ItemModel
             return urldecode($image);
         }
         // 站外或站内图标
-        $image = self::getFilePath($image);
+        $image = self::getFileURL($image);
         // 如是是svg图片，则返回源代码
         if (preg_match('/.+?\.svg/i', $image)) {
             return '<img src="' . $image . '" style="display:none" alt="" onload="fetch(\'' . $image . '\').then(response => response.text()).then(data => {this.parentNode.innerHTML=data})">';
@@ -172,16 +201,23 @@ class ItemModel
 
     public static function getVideo($isfull = false)
     {
-        return self::getFilePath(self::$item['video']);
+        return self::getFileURL(self::$item['video']);
     }
 
     public static function getFile($isfull = false)
     {
-        return self::getFilePath(self::$item['file']);
+        return self::getFileURL(self::$item['file']);
     }
 
-    // 获取 item 文件链接路径
-    public static function getFilePath($name, $cache_time = true, $isfull = false)
+    /**
+     * 返回文件链接路径
+     * @param $name 文件名称
+     * @param $prefix 文件名前缀，一般图片才有。如：s_,m_
+     * @param $iscache 是否添加时间缓存控制
+     * @param $isfull 是否带域名
+     * @return mixed|string
+     */
+    public static function getFileURL($name, $prefix = '', $iscache = true, $isfull = false)
     {
         $pattern = '/^(https?:\/\/|\/\/)/i';
         if (preg_match($pattern, $name)) {
@@ -189,9 +225,9 @@ class ItemModel
         } else {
             $path = self::$item['path'];
             $utime = self::$item['utime'];
-            $filepath = trim(trim($path, '/') . "/$name", '/');
+            $filepath = trim(trim($path, '/') . "/{$prefix}{$name}", '/');
             if (!preg_match($pattern, $filepath)) {
-                if ($cache_time == true) {
+                if ($iscache == true) {
                     $filepath = $filepath . rtrim("?$utime", '?');
                 }
                 $domain = assets_domain();

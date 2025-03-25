@@ -1,11 +1,8 @@
 <?php
 use utils\FS;
 use utils\Log;
-
 use Symfony\Component\Finder\Finder as Finder2;
 use Symfony\Component\Filesystem\Filesystem;
-use League\Flysystem\Util\MimeType;
-
 
 class Finder extends Base
 {
@@ -127,7 +124,8 @@ class Finder extends Base
             $files[$i]['ext'] = $ext;
             $files[$i]['size'] = $file->getSize();
             $files[$i]['type'] = $file->getType();
-            $files[$i]['mtype'] = MimeType::detectByFileExtension($ext);
+//            $files[$i]['mtype'] = MimeType::detectByFileExtension($ext);
+            $files[$i]['mtype'] = MimeType::getMime($ext);
             $files[$i]['mtime'] = $file->getMTime();
 
             if (preg_match('/' . $this->file_types['image'] . '/i', $name)) {
