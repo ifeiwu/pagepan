@@ -47,7 +47,10 @@ require(['jquery', 'device', 'smoothscroll', 'picturefill'], function () {
     if ( $('.lazyload').length ) {
         require(['lazyload'], function (LazyLoad) {
             new LazyLoad({
-                elements_selector: '.lazyload'
+                elements_selector: '.lazyload',
+                callback_error: function (el) {
+                    el.src = 'assets/image/broken-image.png';
+                }
             });
         });
     }

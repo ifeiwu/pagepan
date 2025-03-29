@@ -1,11 +1,11 @@
 <?php
-/**
- * 生成缩略图片
- * <img src="img/data/file/ad.png?p=600">
- */
-require_once VEN_PATH . 'autoload.php';
+define('WEB_ROOT', __DIR__ . '/');
+define('ROOT_PATH', dirname(WEB_ROOT) . '/');
 
-return function ($name) {
+require ROOT_PATH . 'base.php';
+require VEN_PATH . 'autoload.php';
+
+\Co\async(function () {
     $server = League\Glide\ServerFactory::create([
         'source' => WEB_ROOT, // 原始图片存储路径
         'cache' => CACHE_PATH, // 缓存路径
@@ -27,5 +27,8 @@ return function ($name) {
         ]
     ]);
     // 为了安全起见只能使用预设，避免生成过多尺寸的图片。
-    $server->outputImage($name, ['p' => $_GET['p']]);
-};
+    $filepath = preg_replace('/[<>:"|?*]+/', '', $_GET['path']);
+    $preset = intval($_GET['p']);
+    $server->outputImage($filepath, ['p' => $preset]);
+});
+\Co\wait();

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5f8cbab081a7c29da7fd34f77edab7b",
+    "content-hash": "b12cc61e2add45799d2b295878ea7955",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -80,6 +80,77 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
+        },
+        {
+            "name": "cloudtay/ripple",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cloudtay/ripple.git",
+                "reference": "5e6eea89f820ae02a921363c8a61bf3e8c0e617f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cloudtay/ripple/zipball/5e6eea89f820ae02a921363c8a61bf3e8c0e617f",
+                "reference": "5e6eea89f820ae02a921363c8a61bf3e8c0e617f",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-openssl": "*",
+                "ext-sockets": "*",
+                "php": ">=8.1",
+                "psr/http-message": "*",
+                "revolt/event-loop": "^1.0"
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "ext-parallel": "*",
+                "ext-pcntl": "*",
+                "ext-posix": "*",
+                "ext-zlib": "*",
+                "friendsofphp/php-cs-fixer": "^3.68",
+                "phpunit/phpunit": "*"
+            },
+            "suggest": {
+                "cloudtay/ripple-http": "For better http client",
+                "cloudtay/ripple-rdo": "For better mysql client",
+                "cloudtay/ripple-websocket": "For better websocket client",
+                "ext-curl": "For better http client",
+                "ext-parallel": "For better parallel processing",
+                "ext-pcntl": "For better signal handling",
+                "ext-posix": "For better signal handling",
+                "ext-zlib": "For better compression"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Ripple\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "cclilshy",
+                    "email": "jingnigg@gmail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/cloudtay/ripple/issues",
+                "source": "https://github.com/cloudtay/ripple/tree/v1.0.4"
+            },
+            "time": "2025-02-15T09:28:06+00:00"
         },
         {
             "name": "fabianwennink/iconcaptcha",
@@ -2779,6 +2850,84 @@
                 "source": "https://github.com/ralouphie/getallheaders/tree/develop"
             },
             "time": "2019-03-08T08:55:37+00:00"
+        },
+        {
+            "name": "revolt/event-loop",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/revoltphp/event-loop.git",
+                "reference": "09bf1bf7f7f574453efe43044b06fafe12216eb3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/revoltphp/event-loop/zipball/09bf1bf7f7f574453efe43044b06fafe12216eb3",
+                "reference": "09bf1bf7f7f574453efe43044b06fafe12216eb3",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "ext-json": "*",
+                "jetbrains/phpstorm-stubs": "^2019.3",
+                "phpunit/phpunit": "^9",
+                "psalm/phar": "^5.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Revolt\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Piotrowski",
+                    "email": "aaron@trowski.com"
+                },
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "ceesjank@gmail.com"
+                },
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@clue.engineering"
+                },
+                {
+                    "name": "Niklas Keller",
+                    "email": "me@kelunik.com"
+                }
+            ],
+            "description": "Rock-solid event loop for concurrent PHP applications.",
+            "keywords": [
+                "async",
+                "asynchronous",
+                "concurrency",
+                "event",
+                "event-loop",
+                "non-blocking",
+                "scheduler"
+            ],
+            "support": {
+                "issues": "https://github.com/revoltphp/event-loop/issues",
+                "source": "https://github.com/revoltphp/event-loop/tree/v1.0.7"
+            },
+            "time": "2025-01-25T19:27:39+00:00"
         },
         {
             "name": "samdark/sitemap",
