@@ -1,60 +1,51 @@
 <?php
 return function ($request_data) {
+    // 保存文件块
     if (Request::isPost()) {
-        postFile();
-    } else {
-        echo getFile();
+        $save_path = rtrim(WEB_ROOT . $_POST['save_path'], '/');
+        $resumableFilename = $_POST['resumableFilename'];
+        $resumableChunkNumber = $_POST['resumableChunkNumber'];
+        $resumableIdentifier = $_POST['resumableIdentifier'];
+
+        $_FILES['file']['name'] = $_POST['file_name'];
+        $_FILES['file']['type'] = $_POST['file_type'];
+        $_FILES['file']['size'] = $_POST['file_size'];
+        $_FILES['file']['error'] = $_POST['file_error'];
+
+        $file = $_FILES['file'];
+        if ($file['error'] != 0) {
+            debug('error ' . $file['error'] . ' in file ' . $resumableFilename);
+        }
+
+        $temp_dir = $save_path . '/' . $resumableIdentifier;
+        $dest_file = $temp_dir . '/' . $resumableFilename . '.part' . $resumableChunkNumber;
+        if (!is_dir($temp_dir)) {
+            mkdir($temp_dir, 0755, true);
+        }
+
+        if (!move_uploaded_file($file['tmp_name'], $dest_file)) {
+            debug('Error saving (move_uploaded_file) chunk ' . $resumableChunkNumber . ' for file ' . $resumableFilename);
+        } else {
+            _createFileFromChunks($save_path, $temp_dir, $resumableFilename, $_POST['resumableChunkSize'], $_POST['resumableTotalSize']);
+        }
+    }
+    // 检查文件块是否存在
+    else {
+        $save_path = rtrim(WEB_ROOT . $_GET['save_path'], '/');
+        $resumableFilename = $_GET['resumableFilename'];
+        $resumableChunkNumber = $_GET['resumableChunkNumber'];
+        $resumableIdentifier = $_GET['resumableIdentifier'];
+
+        $temp_dir = $save_path . '/' . $resumableIdentifier;
+        $chunk_file = $temp_dir . '/' . $resumableFilename . '.part' . $resumableChunkNumber;
+
+        if (file_exists($chunk_file)) {
+            echo 202;
+        } else {
+            echo 404;
+        }
     }
 };
-
-// 上传文件
-function postFile()
-{
-    $save_path = rtrim(WEB_ROOT . $_POST['save_path'], '/');
-    $resumableFilename = $_POST['resumableFilename'];
-    $resumableChunkNumber = $_POST['resumableChunkNumber'];
-    $resumableIdentifier = $_POST['resumableIdentifier'];
-
-    $_FILES['file']['name'] = $_POST['file_name'];
-    $_FILES['file']['type'] = $_POST['file_type'];
-    $_FILES['file']['size'] = $_POST['file_size'];
-    $_FILES['file']['error'] = $_POST['file_error'];
-
-    $file = $_FILES['file'];
-    if ($file['error'] != 0) {
-        debug('error ' . $file['error'] . ' in file ' . $resumableFilename);
-    }
-
-    $temp_dir = $save_path . '/' . $resumableIdentifier;
-    $dest_file = $temp_dir . '/' . $resumableFilename . '.part' . $resumableChunkNumber;
-    if (!is_dir($temp_dir)) {
-        mkdir($temp_dir, 0755, true);
-    }
-
-    if (!move_uploaded_file($file['tmp_name'], $dest_file)) {
-        debug('Error saving (move_uploaded_file) chunk ' . $resumableChunkNumber . ' for file ' . $resumableFilename);
-    } else {
-        _createFileFromChunks($save_path, $temp_dir, $resumableFilename, $_POST['resumableChunkSize'], $_POST['resumableTotalSize']);
-    }
-}
-
-// 检查文件块是否存在
-function getFile()
-{
-    $save_path = rtrim(WEB_ROOT . $_GET['save_path'], '/');
-    $resumableFilename = $_GET['resumableFilename'];
-    $resumableChunkNumber = $_GET['resumableChunkNumber'];
-    $resumableIdentifier = $_GET['resumableIdentifier'];
-
-    $temp_dir = $save_path . '/' . $resumableIdentifier;
-    $chunk_file = $temp_dir . '/' . $resumableFilename . '.part' . $resumableChunkNumber;
-
-    if (file_exists($chunk_file)) {
-        return 202;
-    } else {
-        return 404;
-    }
-}
 
 // 检查所有的文件块是否存在，并创建最终的目标文件
 function _createFileFromChunks($save_path, $temp_dir, $fileName, $chunkSize, $totalSize)
