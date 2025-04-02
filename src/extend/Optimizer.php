@@ -1,9 +1,10 @@
 <?php
 
+/**
+ * 压缩图像。支持 JPEG、PNG 和 GIF。
+ */
 class Optimizer
 {
-    public $is_curl_enabled = true;
-
     public $source;
 
     public $target;
@@ -14,24 +15,36 @@ class Optimizer
 
     public $ext;
 
-    public $qualitys = ['jpg' => 90, 'png' => 90, 'webp' => 100];
+    public $qualitys = ['jpg' => 10, 'png' => 100, 'webp' => 100];
 
     public $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp'];
 
     public $allowed_file_exts = ['jpg', 'jpeg', 'png', 'webp'];
 
-    public $api_uri = 'http://192.168.31.5:8000';
-//    public $api_uri = 'http://api.resmush.it';
+    public $api_uri;
 
-    public function __construct($api_uri = '')
+    public $api_key;
+
+    public function __construct($api_uri, $api_key)
     {
-        if (!function_exists('curl_version')) {
-            $this->is_curl_enabled = false;
-        }
-
         if ($api_uri) {
-            $this->api_uri = $api_uri;
+            $this->api_uri = rtrim($api_uri, '/');
+            $this->api_key = $api_key;
         }
+    }
+
+    /**
+     * 设置图片压缩质量
+     * @param $jpg_quality
+     * @param $png_quality
+     * @param $webp_quality
+     * @return void
+     */
+    public function setQualitys($jpg_quality, $png_quality, $webp_quality)
+    {
+        $this->qualitys['jpg'] = $jpg_quality;
+        $this->qualitys['png'] = $png_quality;
+        $this->qualitys['webp'] = $webp_quality;
     }
 
     /**
@@ -39,25 +52,12 @@ class Optimizer
      */
     public function buildRequest()
     {
-        if (!$this->is_curl_enabled) {
-            return array(
-                'multipart' => array(
-                    array(
-                        'name' => 'files',
-                        'contents' => fopen($this->source, 'r'),
-                        'filename' => pathinfo($this->source)['basename'],
-                        'headers' => array('Content-Type' => $this->mime)
-                    )
-                )
-            );
-        } else {
-            $info = pathinfo($this->source);
-            $name = $info['basename'];
-            $output = new \CURLFile($this->source, $this->mime, $name);
-            return array(
-                'files' => $output,
-            );
-        }
+        $info = pathinfo($this->source);
+        $name = $info['basename'];
+        $output = new \CURLFile($this->source, $this->mime, $name);
+        return [
+            'files' => $output
+        ];
     }
 
     /**
@@ -117,24 +117,34 @@ class Optimizer
         }
 
         $filesize = filesize($this->source);
-        if ($filesize >= 5242880) {
-            throw new \Exception("源文件（{$this->source}）超出了允许的最大限制，限制大小为 5MB。");
-        }
+//        if ($filesize >= 5242880) {
+//            throw new \Exception("源文件（{$this->source}）超出了允许的最大限制，限制大小为 5MB。");
+//        }
 
         $quality = $this->qualitys[$this->ext];
+        $post_data = $this->buildRequest($this->source);
+        if ($this->api_uri) {
+            $api_url = $this->api_uri . '/compress?quality=' . $quality;
+        } else {
+            $this->compressImage();
+        }
 
         try {
-            $data = $this->buildRequest($this->source);
-            $api_url = $this->api_uri . '/compress?quality=' . $quality;
-
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $api_url);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $this->api_key
+            ]);
             $json = curl_exec($ch);
-            if (curl_errno($ch)) {
+            $info = curl_getinfo($ch);
+            dump($info,$json);
+            if ($info['http_code'] != 200) {
+                throw new \Exception("HTTP Error: {$info['http_code']}");
+            } elseif (curl_errno($ch) != 0) {
                 throw new \Exception(curl_error($ch));
             }
             curl_close($ch);
@@ -146,8 +156,8 @@ class Optimizer
             // 数组必需要 file 属性
             if (array_key_exists('file', $compress)) {
                 // 压缩后的图片小于源文件才保存图片
-                if ($compress['size'] < $filesize ) {
-                    $this->saveFile("{$this->api_uri}/{$compress['file']}");
+                if ($compress['size'] < $filesize) {
+                    $this->saveImage("{$this->api_uri}/{$compress['file']}");
                 } elseif ($overwrite == false) {
                     copy($this->source, $this->target);
                 }
@@ -160,53 +170,20 @@ class Optimizer
     }
 
     /**
-     * Use Guzzle HTTP client to interact with resmush.it api
-     */
-    /*public function useGuzzleHTTPClient()
-    {
-        try {
-            $client = new \GuzzleHttp\Client(["base_uri" => $this->api_uri]);
-            $data = $this->buildRequest($this->source);
-            $response = $client->request('POST', "?quality=" . $this->quality, $data);
-            if (200 == $response->getStatusCode()) {
-                $response = $response->getBody();
-                if (!empty($response)) {
-                    $res = json_decode($response);
-                    if (property_exists($res, 'file')) {
-                        $this->saveFile("{$this->api_uri}.{$res->file}");
-                    } else {
-                        throw new \Exception("Response does not contain compressed file URL.");
-                    }
-                } else {
-                    throw new \Exception("Error Processing Request.");
-                }
-            } else {
-                throw new \Exception("Status code is not 200.");
-            }
-        } catch (\Exception $e) {
-            $this->quality = 85;
-            $this->compressImage();
-        }
-    }*/
-
-    /**
      * 保存压缩后的图片
      * @param $res
      * @return void
      */
-    public function saveFile($file)
+    public function saveImage($file)
     {
         $fp = fopen($this->target, 'wb');
-        if (!$this->is_curl_enabled) {
-            $client = new \GuzzleHttp\Client();
-            $request = $client->get($file, ['sink' => $fp]);
-        } else {
-            $ch = curl_init($file);
-            curl_setopt($ch, CURLOPT_FILE, $fp);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_exec($ch);
-            curl_close($ch);
-        }
+
+        $ch = curl_init($file);
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_exec($ch);
+        curl_close($ch);
+
         fclose($fp);
     }
 
@@ -215,37 +192,40 @@ class Optimizer
      */
     public function compressImage()
     {
+        $quality = $this->qualitys[$this->ext];
+        $source_size = filesize($this->source);// 获取原始文件大小
         switch ($this->mime) {
             case 'image/jpeg':
-                $image = imagecreatefromjpeg($this->source);
+                $source_image = imagecreatefromjpeg($this->source);
                 break;
             case 'image/png':
-                $image = imagecreatefrompng($this->source);
+                $source_image = imagecreatefrompng($this->source);
                 break;
             case 'image/webp':
-                $image = imagecreatefromwebp($this->source);
+                $source_image = imagecreatefromwebp($this->source);
             default:
                 throw new \Exception('Unsupported image type.');
         }
-        $quality = $this->qualitys[$this->ext];
         // 模拟压缩并获取压缩后的大小
         ob_start();
         if ($this->mime == 'image/jpeg') {
-            imagejpeg($image, null, $quality);
+            imagejpeg($source_image, null, $quality);
         } elseif ($this->mime == 'image/png') {
-            imagepng($image, null, round(9 - ($quality / 10))); // PNG 质量为 0（最好）到 9（最差）
+            imagealphablending($source_image, false); // 关闭混合模式
+            imagesavealpha($source_image, true); // 保留透明度
+            imagepng($source_image, null, round(10 - ($quality / 10))); // PNG 质量为 0（最好）到 9（最差）
         } elseif ($this->mime == 'image/webp') {
-            imagewebp($image, null, $quality);
+            imagewebp($source_image, null, $quality);
         }
         $compressed_image = ob_get_clean();
         $compressed_size = strlen($compressed_image);
-        $original_size = filesize($this->source);// 获取原始文件大小
         // 比较大小，决定是否需要压缩后图片
-        if ($compressed_size < $original_size) {
+        if ($compressed_size < $source_size) {
             file_put_contents($this->target, $compressed_image);
         } elseif ($overwrite == false) {
             copy($this->source, $this->target);
         }
+        imagedestroy($source_image);
     }
 
     /**
@@ -261,11 +241,11 @@ class Optimizer
         $ext = $ext ? '.' . $ext : '';
         $number = '';
         while (file_exists("{$dir}/{$name}")) {
-            $new_number = (int) $number + 1;
+            $new_number = (int)$number + 1;
             if ('' == "{$number}{$ext}") {
                 $name = "{$name}-{$new_number}";
             } else {
-                $name = str_replace(array("-{$number}{$ext}", "{$number}{$ext}"), "-{$new_number}{$ext}", $name);
+                $name = str_replace(["-{$number}{$ext}", "{$number}{$ext}"], "-{$new_number}{$ext}", $name);
             }
             $number = $new_number;
         }
