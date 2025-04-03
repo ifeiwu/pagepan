@@ -15,7 +15,7 @@ class Optimizer
 
     public $ext;
 
-    public $qualitys = ['jpg' => 10, 'png' => 100, 'webp' => 100];
+    public $qualitys = ['jpg' => 90, 'png' => 90, 'webp' => 90];
 
     public $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp'];
 
@@ -25,7 +25,7 @@ class Optimizer
 
     public $api_key;
 
-    public function __construct($api_uri, $api_key)
+    public function __construct($api_uri = '', $api_key = '')
     {
         if ($api_uri) {
             $this->api_uri = rtrim($api_uri, '/');
@@ -88,18 +88,17 @@ class Optimizer
     /**
      * 开始压缩图片
      * @param $source
-     * @param $target
-     * @param $quality
      * @param $overwrite
      * @return void
      * @throws Exception
      */
-    public function optimize($source, $overwrite = false)
+    public function optimize($source, $overwrite = true)
     {
         $this->source = $source;
         $this->target = $source;
         $this->overwrite = $overwrite;
 
+        // 不是覆盖源文件，生成唯一的文件名称
         if ($overwrite == false) {
             $this->target = $this->getUniqueFilename($this->target);
         }
@@ -122,14 +121,15 @@ class Optimizer
 //        }
 
         $quality = $this->qualitys[$this->ext];
-        $post_data = $this->buildRequest($this->source);
         if ($this->api_uri) {
-            $api_url = $this->api_uri . '/compress?quality=' . $quality;
+            $api_url = $this->api_uri . ':8091/compress?quality=' . $quality;
         } else {
             $this->compressImage();
         }
 
         try {
+            $post_data = $this->buildRequest($this->source);
+
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $api_url);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -139,25 +139,25 @@ class Optimizer
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $this->api_key
             ]);
-            $json = curl_exec($ch);
+            $content = curl_exec($ch);
             $info = curl_getinfo($ch);
-            dump($info,$json);
+
             if ($info['http_code'] != 200) {
                 throw new \Exception("HTTP Error: {$info['http_code']}");
             } elseif (curl_errno($ch) != 0) {
                 throw new \Exception(curl_error($ch));
             }
             curl_close($ch);
-
-            $compress = json_decode($json, true);
+            // 返回数据格式是否正确
+            $compress = json_decode($content, true);
             if (empty($compress)) {
                 throw new \Exception("处理请求时出错：{$api_url}");
             }
             // 数组必需要 file 属性
             if (array_key_exists('file', $compress)) {
-                // 压缩后的图片小于源文件才保存图片
+                // 压缩后的图片小于源图片才会保存图片
                 if ($compress['size'] < $filesize) {
-                    $this->saveImage("{$this->api_uri}/{$compress['file']}");
+                    $this->saveImage("{$this->api_uri}:8092/image.php?filename={$compress['file']}");
                 } elseif ($overwrite == false) {
                     copy($this->source, $this->target);
                 }
@@ -229,7 +229,7 @@ class Optimizer
     }
 
     /**
-     * 在原有的文件路径生成唯一的文件名称
+     * 生成唯一的文件名称
      * @param $file
      * @return string
      */

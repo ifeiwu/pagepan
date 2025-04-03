@@ -20,4 +20,4 @@ if ($compressedSize < $originalSize) {
     echo "图片不需要压缩，压缩后大小未减小。";
 }*/
 //var_dump(getimagesize($source));
-(new Optimizer('http://192.168.31.5:8002', 'ddd'))->optimize(WEB_ROOT . 'data/file/5.png');
+(new Optimizer('http://175.178.217.190', 'AZxuJxfW1GVQBoGaepKzkO1qJU7cCROF'))->optimize(WEB_ROOT . 'data/file/1.jpg', false);
