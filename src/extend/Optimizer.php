@@ -15,11 +15,11 @@ class Optimizer
 
     public $ext;
 
-    public $qualitys = ['jpg' => 90, 'png' => 90, 'webp' => 90];
+    public $qualitys = ['jpg' => 90, 'png' => 100, 'webp' => 100, 'avif' => 63];
 
-    public $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp'];
+    public $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif', 'image/svg+xml'];
 
-    public $allowed_file_exts = ['jpg', 'jpeg', 'png', 'webp'];
+    public $allowed_file_exts = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'svg'];
 
     public $api_uri;
 
@@ -40,11 +40,12 @@ class Optimizer
      * @param $webp_quality
      * @return void
      */
-    public function setQualitys($jpg_quality, $png_quality, $webp_quality)
+    public function setQualitys($jpg_quality, $png_quality, $webp_quality, $avif_quality)
     {
         $this->qualitys['jpg'] = $jpg_quality;
         $this->qualitys['png'] = $png_quality;
         $this->qualitys['webp'] = $webp_quality;
+        $this->qualitys['avif'] = $avif_quality;
     }
 
     /**
@@ -116,9 +117,9 @@ class Optimizer
         }
 
         $filesize = filesize($this->source);
-//        if ($filesize >= 5242880) {
-//            throw new \Exception("源文件（{$this->source}）超出了允许的最大限制，限制大小为 5MB。");
-//        }
+        if ($filesize >= 20971520) {
+            throw new \Exception("源文件（{$this->source}）超出了允许的最大限制，限制大小为 20MB。");
+        }
 
         $quality = $this->qualitys[$this->ext];
         if ($this->api_uri) {
@@ -193,7 +194,7 @@ class Optimizer
     public function compressImage()
     {
         $quality = $this->qualitys[$this->ext];
-        $source_size = filesize($this->source);// 获取原始文件大小
+        $source_size = filesize($this->source);
         switch ($this->mime) {
             case 'image/jpeg':
                 $source_image = imagecreatefromjpeg($this->source);
@@ -203,8 +204,20 @@ class Optimizer
                 break;
             case 'image/webp':
                 $source_image = imagecreatefromwebp($this->source);
+                break;
+            case 'image/avif':
+                $source_image = imagecreatefromavif($this->source);
+                break;
+            case 'image/gif':
+                $source_image = imagecreatefromgif($this->source);
+                break;
+            case 'image/svg+xml':
+                $source_image = file_get_contents($this->source);
+                $source_image = preg_replace('/<!--.*?-->/s', '', $source_image); // 去除注释
+                $source_image = preg_replace('/\s+/', ' ', $source_image); // 去除多余的空格和换行符
+                break;
             default:
-                throw new \Exception('Unsupported image type.');
+                $source_image = file_get_contents($this->source);
         }
         // 模拟压缩并获取压缩后的大小
         ob_start();
@@ -216,6 +229,12 @@ class Optimizer
             imagepng($source_image, null, round(10 - ($quality / 10))); // PNG 质量为 0（最好）到 9（最差）
         } elseif ($this->mime == 'image/webp') {
             imagewebp($source_image, null, $quality);
+        } elseif ($this->mime == 'image/avif') {
+            imageavif($source_image, null, $quality);
+        } elseif ($this->mime == 'image/gif') {
+            imagegif($source_image, null);
+        } else {
+            echo $source_image;
         }
         $compressed_image = ob_get_clean();
         $compressed_size = strlen($compressed_image);
@@ -225,7 +244,7 @@ class Optimizer
         } elseif ($overwrite == false) {
             copy($this->source, $this->target);
         }
-        imagedestroy($source_image);
+        $source_image = null;
     }
 
     /**

@@ -5,19 +5,10 @@ define('ROOT_PATH', dirname(WEB_ROOT) . '/');
 require ROOT_PATH . 'base.php';
 require ROOT_PATH . 'helper.php';
 
-/*$source = WEB_ROOT . 'data/file/1.jpg';
-$originalSize = filesize($source);
-$image = imagecreatefromjpeg($source);
-ob_start();
-imagejpeg($image, null, 80);
-$compressedImage = ob_get_clean();
-$compressedSize = strlen($compressedImage);
-// 比较大小，决定是否需要压缩
-if ($compressedSize < $originalSize) {
-    echo "图片需要压缩，压缩后大小更小。";
-    file_put_contents($source, $compressedImage);
-} else {
-    echo "图片不需要压缩，压缩后大小未减小。";
-}*/
-//var_dump(getimagesize($source));
-(new Optimizer('http://175.178.217.190', 'AZxuJxfW1GVQBoGaepKzkO1qJU7cCROF'))->optimize(WEB_ROOT . 'data/file/1.jpg', false);
+$api_uri = 'http://192.168.31.5';
+$api_key = 'AZxuJxfW1GVQBoGaepKzkO1qJU7cCROF';
+$path = WEB_ROOT . 'data/file';
+$optimizer = new Optimizer($api_uri, $api_key);
+foreach (['jpg', 'png', 'webp', 'avif', 'gif', 'svg'] as $ext) {
+    $optimizer->optimize("{$path}/1.{$ext}", false);
+}
