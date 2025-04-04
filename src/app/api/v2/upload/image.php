@@ -31,45 +31,44 @@ return function () {
             // 压缩上传图片
             $optimizer = new Optimizer($_POST['optimizeapi_uri'], $_POST['optimizeapi_key']);
             $optimizer->optimize($file_path);
-            // 生成多种图片尺寸
-            $prefixs = explode(',', $_POST['image_prefix']);
-            $widths = explode(',', $_POST['image_width']);
-            $heights = explode(',', $_POST['image_height']);
-            foreach ($prefixs as $key => $prefix) {
-                $new_file_path = $upload_path . '/' . $prefix . $file_name;
-                if ($ext == 'svg' || $ext == 'gif' || $ext == 'avif') {
-                    copy($file_path, $new_file_path);
-                    continue;
-                }
-                $_width = $widths[$key];
-                $_height = $heights[$key];
-                $image = new ImageResize($file_path);
-                $image->quality_jpg = 100;
-                $image->quality_webp = 100;
-                $image->quality_png = 0;
-                $is_copy_file = true;
-                // 调整图片宽度
-                if ($_width) {
-                    if ($width > $_width) {
-                        $image->resizeToWidth($_width);
-                        $is_copy_file = false;
+            //
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'])) {
+                // 生成多种图片尺寸
+                $prefixs = explode(',', $_POST['image_prefix']);
+                $widths = explode(',', $_POST['image_width']);
+                $heights = explode(',', $_POST['image_height']);
+                foreach ($prefixs as $key => $prefix) {
+                    $new_file_path = $upload_path . '/' . $prefix . $file_name;
+                    $_width = $widths[$key];
+                    $_height = $heights[$key];
+                    $image = new ImageResize($file_path);
+                    $image->quality_jpg = 100;
+                    $image->quality_webp = 100;
+                    $image->quality_png = 0;
+                    $is_copy_file = true;
+                    // 调整图片宽度
+                    if ($_width) {
+                        if ($width > $_width) {
+                            $image->resizeToWidth($_width);
+                            $is_copy_file = false;
+                        }
                     }
-                }
-                // 调整图片高度
-                if ($_height) {
-                    if ($height > $_height) {
-                        $image->resizeToHeight($_height);
-                        $is_copy_file = false;
+                    // 调整图片高度
+                    if ($_height) {
+                        if ($height > $_height) {
+                            $image->resizeToHeight($_height);
+                            $is_copy_file = false;
+                        }
                     }
+                    // 可以调整图片大小
+                    if ($is_copy_file == false) {
+                        $image->save($new_file_path);
+                    } else {
+                        copy($file_path, $new_file_path);
+                    }
+                    // 压缩图片大小
+                    $optimizer->optimize($new_file_path);
                 }
-                // 可以调整图片大小
-                if ($is_copy_file == false) {
-                    $image->save($new_file_path);
-                } else {
-                    copy($file_path, $new_file_path);
-                }
-                // 压缩图片大小
-                $optimizer->optimize($new_file_path);
             }
 
             $result->confirm();
