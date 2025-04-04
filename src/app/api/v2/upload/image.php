@@ -8,6 +8,7 @@ use Sirius\Upload\Handler as UploadHandler;
 
 return function () {
     require_once VEN_PATH . 'autoload.php';
+
     $file = $_FILES['file'];
     $file_name = $file['name'];
     $image_path = $_POST['image_path'];
@@ -28,7 +29,7 @@ return function () {
         $ext = pathinfo($file_path, PATHINFO_EXTENSION);
         try {
             // 压缩上传图片
-            $optimizer = new Optimizer($_POST['caesium_uri'], $_POST['caesium_key']);
+            $optimizer = new Optimizer($_POST['optimizeapi_uri'], $_POST['optimizeapi_key']);
             $optimizer->optimize($file_path);
             // 生成多种图片尺寸
             $prefixs = explode(',', $_POST['image_prefix']);

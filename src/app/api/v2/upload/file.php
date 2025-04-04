@@ -7,11 +7,6 @@ return function ($request_data) {
         $resumableChunkNumber = $_POST['resumableChunkNumber'];
         $resumableIdentifier = $_POST['resumableIdentifier'];
 
-        $_FILES['file']['name'] = $_POST['file_name'];
-        $_FILES['file']['type'] = $_POST['file_type'];
-        $_FILES['file']['size'] = $_POST['file_size'];
-        $_FILES['file']['error'] = $_POST['file_error'];
-
         $file = $_FILES['file'];
         if ($file['error'] != 0) {
             debug('error ' . $file['error'] . ' in file ' . $resumableFilename);
