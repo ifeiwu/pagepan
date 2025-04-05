@@ -14,7 +14,7 @@ return function () {
     $image_path = $_POST['image_path'];
     $upload_path = WEB_ROOT . $image_path;
     $uploadHandler = new UploadHandler($upload_path);
-    $uploadHandler->addRule('extension', ['allowed' => ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'svg']], '{label}应为有效格式（jpg, jpeg, png, webp, avif, gif, svg）', '图片');
+    $uploadHandler->addRule('image', ['allowed' => ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']], '{label}应为有效格式（jpg, jpeg, png, webp, gif, svg）', '图片');
     $uploadHandler->addRule('size', ['size' => '20M'], '{label}应小于 {size}', '图片');
     $uploadHandler->setOverwrite(true);
 //    $uploadHandler->setAutoconfirm(true);
@@ -87,6 +87,6 @@ return function () {
             Response::error($e->getMessage());
         }
     } else {
-        Response::error('上传出错', $result->getMessages());
+        Response::error('不支持图片格式');
     }
 };
