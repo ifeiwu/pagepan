@@ -1,7 +1,6 @@
 <?php
-
 /**
- * 压缩图像。支持 JPEG、PNG 和 GIF。
+ * Image Optimize Api或本地压缩图片。支持JPEG、PNG、WebP、AVIF、GIF和SVG等。
  */
 class Optimizer
 {
@@ -11,9 +10,9 @@ class Optimizer
 
     public $overwrite;
 
-    public $mime;
+    public $file_mime;
 
-    public $ext;
+    public $file_ext;
 
     public $qualitys = ['jpg' => 90, 'png' => 100, 'webp' => 100, 'avif' => 63];
 
@@ -53,11 +52,10 @@ class Optimizer
      */
     public function buildRequest()
     {
-        $info = pathinfo($this->source);
-        $name = $info['basename'];
-        $output = new \CURLFile($this->source, $this->mime, $name);
+        $file_name = pathinfo($this->source, PATHINFO_BASENAME);
+        $curl_file = new \CURLFile($this->source, $this->file_mime, $file_name);
         return [
-            'files' => $output
+            'files' => $curl_file
         ];
     }
 
@@ -66,8 +64,8 @@ class Optimizer
      */
     public function isValidFile()
     {
-        $this->mime = mime_content_type($this->source);
-        if (!in_array($this->mime, $this->allowed_mime_types)) {
+        $this->file_mime = mime_content_type($this->source);
+        if (!in_array($this->file_mime, $this->allowed_mime_types)) {
             return false;
         }
         return true;
@@ -79,8 +77,8 @@ class Optimizer
      */
     public function isValidExtension()
     {
-        $this->ext = pathinfo($this->source, PATHINFO_EXTENSION);
-        if (!in_array(strtolower($this->ext), $this->allowed_file_exts)) {
+        $this->file_ext = pathinfo($this->source, PATHINFO_EXTENSION);
+        if (!in_array(strtolower($this->file_ext), $this->allowed_file_exts)) {
             return false;
         }
         return true;
@@ -116,12 +114,12 @@ class Optimizer
             throw new \Exception("源文件（{$this->source}）不是有效的扩展名。");
         }
 
-        $filesize = filesize($this->source);
-        if ($filesize >= 20971520) {
+        $file_size = filesize($this->source);
+        if ($file_size >= 20971520) {
             throw new \Exception("源文件（{$this->source}）超出了允许的最大限制，限制大小为 20MB。");
         }
 
-        $quality = $this->qualitys[$this->ext];
+        $quality = $this->qualitys[$this->file_ext];
         if ($this->api_uri) {
             $api_url = $this->api_uri . ':8091/compress?quality=' . $quality;
         } else {
@@ -140,9 +138,9 @@ class Optimizer
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $this->api_key
             ]);
+
             $content = curl_exec($ch);
             $info = curl_getinfo($ch);
-
             if ($info['http_code'] != 200) {
                 throw new \Exception("HTTP Error: {$info['http_code']}");
             } elseif (curl_errno($ch) != 0) {
@@ -154,12 +152,14 @@ class Optimizer
             if (empty($compress)) {
                 throw new \Exception("处理请求时出错：{$api_url}");
             }
-            // 数组必需要 file 属性
+            // 数组必需要有 file 属性
             if (array_key_exists('file', $compress)) {
-                // 压缩后的图片小于源图片才会保存图片
-                if ($compress['size'] < $filesize) {
+                // 只有当压缩后的图片小于原图片时，才会保存压缩图片。
+                if ($compress['size'] < $file_size) {
                     $this->saveImage("{$this->api_uri}:8092/image.php?filename={$compress['file']}");
-                } elseif ($overwrite == false) {
+                }
+                // 如果压缩后的图片大小未减小，且不覆盖原图，则会生成一个与原图一致的新图片。
+                elseif ($overwrite == false) {
                     copy($this->source, $this->target);
                 }
             } else {
@@ -193,9 +193,9 @@ class Optimizer
      */
     public function compressImage()
     {
-        $quality = $this->qualitys[$this->ext];
+        $quality = $this->qualitys[$this->file_ext];
         $source_size = filesize($this->source);
-        switch ($this->mime) {
+        switch ($this->file_mime) {
             case 'image/jpeg':
                 $source_image = imagecreatefromjpeg($this->source);
                 break;
@@ -221,17 +221,17 @@ class Optimizer
         }
         // 模拟压缩并获取压缩后的大小
         ob_start();
-        if ($this->mime == 'image/jpeg') {
+        if ($this->file_mime == 'image/jpeg') {
             imagejpeg($source_image, null, $quality);
-        } elseif ($this->mime == 'image/png') {
+        } elseif ($this->file_mime == 'image/png') {
             imagealphablending($source_image, false); // 关闭混合模式
             imagesavealpha($source_image, true); // 保留透明度
             imagepng($source_image, null, round(10 - ($quality / 10))); // PNG 质量为 0（最好）到 9（最差）
-        } elseif ($this->mime == 'image/webp') {
+        } elseif ($this->file_mime == 'image/webp') {
             imagewebp($source_image, null, $quality);
-        } elseif ($this->mime == 'image/avif') {
+        } elseif ($this->file_mime == 'image/avif') {
             imageavif($source_image, null, $quality);
-        } elseif ($this->mime == 'image/gif') {
+        } elseif ($this->file_mime == 'image/gif') {
             imagegif($source_image, null);
         } else {
             echo $source_image;
@@ -244,7 +244,10 @@ class Optimizer
         } elseif ($overwrite == false) {
             copy($this->source, $this->target);
         }
-        $source_image = null;
+        // 不是SVG图片
+        if ($source_image instanceof GdImage) {
+            imagedestroy($source_image);
+        }
     }
 
     /**
