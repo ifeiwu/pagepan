@@ -94,9 +94,10 @@ class Finder extends Base
         $i = 0;
         $files = [];
         foreach ($finder as $file) {
+            $real_path = $file->getRealPath();
             $name = $file->getFilename();
             $path = $filesystem->makePathRelative($file->getPath(), $this->source_path);
-            $mime = mime_content_type($this->source_path . $name);
+            $mime = mime_content_type($real_path);
             $ext = strtolower($file->getExtension());
 
             $files[$i]['path'] = $path != './' ? $path : '';
@@ -104,11 +105,11 @@ class Finder extends Base
             $files[$i]['ext'] = $ext;
             $files[$i]['size'] = $file->getSize();
             $files[$i]['type'] = $file->getType();
-            $files[$i]['mime'] = mime_content_type($this->source_path . $name);
+            $files[$i]['mime'] = $mime;
             $files[$i]['mtime'] = $file->getMTime();
 
             if (strpos($mime, 'image/') !== false) {
-                $imagesize = getimagesize($file->getRealPath());
+                $imagesize = getimagesize($real_path);
                 $files[$i]['width'] = $imagesize[0] ?: 0;
                 $files[$i]['height'] = $imagesize[1] ?: 0;
             }

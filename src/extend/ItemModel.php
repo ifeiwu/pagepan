@@ -92,12 +92,12 @@ class ItemModel
         }
         // 图片延迟加载，点击放大缩小效果。
         if (empty($thumb_query)) {
-            $pattern = '/<img(.*?)[^>]src=["\'](.+?\.(jpg|jpge|gif|svg|apng|png|webp))["\'][^>](.*?)>/i';
+            $pattern = '/<img(.*?)[^>]src=["\'](.+?\.(jpg|jpeg|png|webp|avif|bmp|gif|svg))["\'][^>](.*?)>/i';
             $replace = "<img class=\"lazyload zooming\" data-src=\"$2\" src=\"assets/image/loading.svg\" $1 $4>";
             $content = preg_replace($pattern, $replace, $content);
         } else {
             // 图片动态调整大小
-            $pattern = '/<img(.*?)[^>]src=["\'](.+?\.(jpg|jpge|png|webp))["\'][^>](.*?)>/i';
+            $pattern = '/<img(.*?)[^>]src=["\'](.+?\.(jpg|jpeg|png|webp|avif|bmp))["\'][^>](.*?)>/i';
             $replace = function ($matches) use ($thumb_query) {
                 $src = $matches[2];
                 // 检查是否是相对路径

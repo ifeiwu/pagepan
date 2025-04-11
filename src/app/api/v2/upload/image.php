@@ -1,9 +1,6 @@
 <?php
-
 use Gumlet\ImageResize;
-use Gumlet\ImageResizeException;
 use Verot\Upload\Upload;
-
 use Sirius\Upload\Handler as UploadHandler;
 
 return function () {
@@ -37,10 +34,10 @@ return function () {
                 $prefixs = explode(',', $_POST['image_prefix']);
                 $widths = explode(',', $_POST['image_width']);
                 $heights = explode(',', $_POST['image_height']);
-                foreach ($prefixs as $key => $prefix) {
+                foreach ($prefixs as $i => $prefix) {
                     $new_file_path = $upload_path . '/' . $prefix . $file_name;
-                    $_width = $widths[$key];
-                    $_height = $heights[$key];
+                    $_width = $widths[$i];
+                    $_height = $heights[$i];
                     $image = new ImageResize($file_path);
                     $image->quality_jpg = 100;
                     $image->quality_webp = 100;
