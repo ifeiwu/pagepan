@@ -1,11 +1,11 @@
 <?php
+require_once VEN_PATH . 'autoload.php';
+
 use Gumlet\ImageResize;
 use Verot\Upload\Upload;
 use Sirius\Upload\Handler as UploadHandler;
 
 return function () {
-    require_once VEN_PATH . 'autoload.php';
-
     $file = $_FILES['file'];
     $file_name = $file['name'];
     $image_path = $_POST['image_path'];

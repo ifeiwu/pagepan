@@ -14,7 +14,7 @@ class Optimizer
 
     public $file_ext;
 
-    public $qualitys = ['jpg' => 90, 'png' => 100, 'webp' => 100, 'avif' => 63];
+    public $qualitys = ['jpg' => 90, 'png' => 100, 'webp' => 100, 'avif' => 100];
 
     public $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif', 'image/svg+xml'];
 
@@ -121,7 +121,7 @@ class Optimizer
 
         $quality = $this->qualitys[$this->file_ext];
         if ($this->api_uri) {
-            $api_url = $this->api_uri . ':8091/compress?quality=' . $quality;
+            $api_url = $this->api_uri . ':8181/?quality=' . $quality;
         } else {
             $this->compressImage();
         }
@@ -156,7 +156,7 @@ class Optimizer
             if (array_key_exists('file', $compress)) {
                 // 只有当压缩后的图片小于原图片时，才会保存压缩图片。
                 if ($compress['size'] < $file_size) {
-                    $this->saveImage("{$this->api_uri}:8092/image.php?filename={$compress['file']}");
+                    $this->saveImage("{$this->api_uri}:8182/image.php?filename={$compress['file']}");
                 }
                 // 如果压缩后的图片大小未减小，且不覆盖原图，则会生成一个与原图一致的新图片。
                 elseif ($overwrite == false) {
@@ -166,7 +166,7 @@ class Optimizer
                 throw new \Exception($compress['message']);
             }
         } catch (\Exception $e) {
-            $this->compressImage();
+//            $this->compressImage();
         }
     }
 

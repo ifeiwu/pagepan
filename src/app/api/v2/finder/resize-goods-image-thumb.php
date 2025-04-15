@@ -1,6 +1,6 @@
 <?php
 /**
- * 重新生成 data/file/goods/ 目录下的缩略图片
+ * 重新生成商品缩略图片：data/file/goods/
  */
 
 use Gumlet\ImageResize;

@@ -187,22 +187,22 @@ class Finder extends Base
     // 删除文件/目录
     protected function postDelete($request_data)
     {
-        $names = $request_data['names'];
+        $paths = $request_data['paths'];
         $files = [];
         $data = ['failed' => []];
-        foreach ($names as $name) {
-            $file = $this->source_path . $name;
+        foreach ($paths as $path) {
+            $file = $this->source_path . $path;
             // 删除文件
             if (is_file($file)) {
                 if (unlink($file)) {
                     $files[] = $file;
                 } else {
-                    $data['failed'][] = $name . '：删除失败！';
+                    $data['failed'][] = $path . '：删除失败！';
                 }
             } // 删除目录
             else {
                 if (!rmdir($file)) {
-                    $data['failed'][] = $name . '：目录不是空的！';
+                    $data['failed'][] = $path . '：目录不是空的！';
                 }
             }
         }
