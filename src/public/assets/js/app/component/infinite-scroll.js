@@ -1,21 +1,26 @@
-define([], function () {
-    return function ($component, options) {
-        let $dataview = $component.find('.dataview');
-        let $loading = $component.find('.loading');
-        let $loadbtn = $component.find('.loadbtn');
-        let $loaded = $component.find('.loaded');
-        let template = $component.find('template').html();
-        let pagenum = 1;
+define(function () {
+    return function (config = {}) {
+        let $container = config.container;
+        let $pagination = config.pagination;
+        let $loadmore = $pagination.find('.loadmore');
+        let $loading = $pagination.find('.loading');
+        let $loaded = $pagination.find('.loaded');
+        let template = config.template;
+        let url = config.url;
+        let orderby = config.orderby;
+        let perpage = config.perpage;
+        let pagenum = config.pagenum;
         let ob = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
+                $loadmore.hide();
                 $loading.show();
                 pagenum += 1;
-                // let params = {
-                //     'orderby': '<?=$this->setting['dataview.orderby']?>',
-                //     'perpage': '<?=$this->setting['dataset.perpage']?>',
-                //     'pagenum': pagenum,
-                // };
-                $.post('m/shop/goods-list', options.params, function(res) {
+                let params = {
+                    orderby: orderby,
+                    perpage: perpage,
+                    pagenum: pagenum,
+                };
+                $.post(url, params, function(res) {
                     if (res.code == 0) {
                         let data = res.data;
                         let items = data.items;
@@ -26,22 +31,22 @@ define([], function () {
                                     _template = _template.replace(new RegExp('{{' + key + '}}', 'g'), item[key]);
                                 }
                             }
-                            $dataview.append(_template);
+                            $container.append(_template);
                         });
                         if (items.length < data.perpage) {
-                            $loadbtn.hide();
+                            $loadmore.hide();
                             $loaded.show();
                         } else {
-                            $loadbtn.show();
+                            $loadmore.show();
                         }
                     } else {
-                        $loadbtn.hide();
+                        $loadmore.hide();
                     }
                     $loading.hide();
                 });
             }
         }, { threshold: 1 });
 
-        ob.observe($loadbtn[0]);
+        ob.observe($loadmore[0]);
     };
 });
