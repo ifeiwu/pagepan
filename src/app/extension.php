@@ -12,6 +12,8 @@ return function ($module, $action = 'main') {
         exit;
     }
 
+    define('SITE', helper('site/kv'));
+
     $route_file = APP_PATH . "extension/{$module}/$action.php";
     if ( is_file($route_file) ) {
         (require $route_file)($module, $action);
