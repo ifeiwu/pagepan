@@ -1,5 +1,5 @@
 <?php
 return [
     'domain' => 'yun.pagepan.com',
-    'version' => '8.1'
+    'version' => '{{yun_version}}'
 ];
