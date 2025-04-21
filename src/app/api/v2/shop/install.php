@@ -15,7 +15,11 @@ return function ($request_data) {
     $new_file = DATA_PATH . 'sqlite/pagepan-shop.db';
     $result = cloneDB($old_file, $new_file);
     if ($result === true) {
-        $backup_dbfile = ROOT_PATH . 'data/backup/pagepan-' . date('YmdH') . '.db';
+        $backup_path = ROOT_PATH . 'data/backup';
+        if (!is_dir($backup_path)) {
+            mkdir($backup_path, 0755);
+        }
+        $backup_dbfile = $backup_path . '/pagepan-' . date('YmdH') . '.db';
         if (copy($old_file, $backup_dbfile)) {
             if (rename($new_file, $old_file) !== true) {
                 Response::error("重命名数据库文件失败：{$new_file}");
