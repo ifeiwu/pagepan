@@ -1,5 +1,7 @@
 <?php
-class Uikit {
+
+class Uikit
+{
 
     /**
      * 关联 View 对象
@@ -33,8 +35,7 @@ class Uikit {
 
     public static function new($path = null)
     {
-        if ( ! (self::$_instance instanceof self) )
-        {
+        if (!(self::$_instance instanceof self)) {
             self::$_instance = new self($path);
         }
 
@@ -55,7 +56,7 @@ class Uikit {
      */
     public function __call($name, $args)
     {
-        if ( ! isset(self::$funcs[$name]) ) {
+        if (!isset(self::$funcs[$name])) {
             self::$funcs[$name] = require EXT_PATH . "uikit/{$name}.php";
         }
 
@@ -83,12 +84,11 @@ class Uikit {
         $config['ukid'] = $ukid;
 
         // 动态组件写入文件
-        if ( $iswrite == true ) {
+        if ($iswrite == true) {
             $content = $this->getWriteCache($number_path, 'code');
             $default = $this->view->parse($content, $config);
             $content = $this->view->section($ukid, $default);
-        }
-        // 静态组件输出内容
+        } // 静态组件输出内容
         else {
             $content = $this->getRemoteCode($number_path, 'code');
             $default = $this->view->parse($content, $config);
@@ -104,15 +104,14 @@ class Uikit {
         $filepath = $this->basePath . $path;
         $filename = "{$filepath}/{$name}.php";
 
-        if ( $this->config['cache'] == false || ! is_file($filename) )
-        {
-            if ( ! is_dir($filepath) ) {
+        if ($this->config['cache'] == false || !is_file($filename)) {
+            if (!is_dir($filepath)) {
                 mkdir($filepath, 0755, true);
             }
 
             $content = $this->getRemoteCode($path, $name);
-            if ( $content ) {
-                if ( file_put_contents($filename, $content) === false ) {
+            if ($content) {
+                if (file_put_contents($filename, $content) === false) {
                     throw new Exception("写入文件失败：{$filename}");
                 }
             }
@@ -126,10 +125,10 @@ class Uikit {
     // 返回远程组件源代码
     public function getRemoteCode($path, $name)
     {
-        $url = $this->config['uri'] . 'file-code';
+        $url = rtrim("{$this->config['url']}{$this->config['version']}", '/') . '/file-code';
         $res = helper('curl/api', [$url, ['path' => $path, 'name' => $name]]);
 
-        if ( $res['code'] == 0 ) {
+        if ($res['code'] == 0) {
             return gzuncompr($res['data']);
         } else {
             return '';
@@ -164,15 +163,15 @@ class Uikit {
         $data = ['table' => $table, 'columns' => $columns, 'wheres' => $wheres, 'order' => $order, 'limit' => $limit, 'number' => $number];
         $res = helper('curl/api', [$url, $data, $token]);
 
-        if ( $res['code'] != 0 ) {
+        if ($res['code'] != 0) {
             throw new Exception($res['message']);
         }
 
         // 图片路径添加 uikit 链接地址
-        $uikit_uri = Config::file('uikit', 'uri');
+        $uikit_url = Config::file('uikit', 'url');
         $items = $res['data'];
         foreach ($items as $i => $item) {
-            $items[$i]['path'] = $uikit_uri . $item['path'];
+            $items[$i]['path'] = "{$uikit_url}{$item['path']}";
         }
 
         return $items;
@@ -181,37 +180,38 @@ class Uikit {
     // 返回组件资源链接
     public function assets($name = '', $placehold = null)
     {
+        $uikit_url = $this->config['url'];
         // 开启图片占位符
         if ($_GET['isplacehold'] && !empty($placehold)) {
-            return "{$this->config['uri']}{$placehold}";
+            return "{$uikit_url}{$placehold}";
         }
         // 返回站外资源链接
-        if ( preg_match('/^(https?:\/\/|\/\/)/i', $name) ) {
+        if (preg_match('/^(https?:\/\/|\/\/)/i', $name)) {
             return $name;
         }
         // 返回当前组件资源目录路径
-        if ( $name == '' ) {
-            return "{$this->config['uri']}assets/{$this->view->path}";
+        if ($name == '') {
+            return "{$uikit_url}assets/{$this->view->path}";
         }
-        // 动态生成占位图片：img?w=500&h=500
-        if ( strpos($name, 'img?') !== false ) {
-            return "{$this->config['uri']}{$name}";
+        // 动态生成占位图片：img?p=600
+        if (strpos($name, 'img?') !== false) {
+            return "{$uikit_url}{$name}";
         }
         // $name 只有文件名，加载当前组件资源文件
-        if ( preg_match('/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9]+$/', $name) === 1 ) {
-            return "{$this->config['uri']}assets/{$this->view->path}/{$name}";
+        if (preg_match('/^[a-zA-Z0-9_-]+\.[a-zA-Z0-9]+$/', $name) === 1) {
+            return "{$uikit_url}assets/{$this->view->path}/{$name}";
         }
         // $name 包含目录和文件名
-        if ( preg_match('/^.+\/[^\/]+\.[^\/]+$/', $name) ) {
+        if (preg_match('/^.+\/[^\/]+\.[^\/]+$/', $name)) {
             // 加载组件资源文件
-            return "{$this->config['uri']}assets/{$name}";
-//            $uikit_file_url = "{$this->config['uri']}assets/{$name}";
+            return "{$uikit_url}assets/{$name}";
+//            $uikit_file_url = "{$uikit_url}assets/{$name}";
 //            $local_file_path = "data/cache/uikit/assets/$name";
 //            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
 //            return ROOT_URL . $local_file_path;
         }
         // $name 只有目录路径，返回指定组件资源目录路径
-        return "{$this->config['uri']}assets/" . trim($name);
+        return "{$uikit_url}assets/" . trim($name);
     }
 
     // 保存远程资源文件到本地目录
@@ -236,11 +236,11 @@ class Uikit {
     public function getSettingClass($prefix, $default_class = '')
     {
         $user_class = $this->view->setting[$prefix . '.class'];
-        if ( $user_class && ! is_string($user_class) ) {
+        if ($user_class && !is_string($user_class)) {
             $user_class = helper('arr/toclass', [$user_class]);
             // 2023/3/3 前的网站用户需要给 dataview 合并默认样式代码
-            if ( strpos($default_class, 'dataview') !== false &&
-                strpos($user_class, 'dataview') === false ) {
+            if (strpos($default_class, 'dataview') !== false &&
+                strpos($user_class, 'dataview') === false) {
                 $user_class = 'dataview row ' . $user_class;
             }
         }
@@ -270,7 +270,7 @@ class Uikit {
     public function getSettingStyle($prefix, $default_style = '')
     {
         $user_style = $this->view->setting[$prefix . '.style'];
-        if ( $user_style && ! is_string($user_style) ) {
+        if ($user_style && !is_string($user_style)) {
             $user_style = helper('arr/tostyle', [$user_style]);
         }
         return $user_style ?: $default_style;
@@ -359,7 +359,7 @@ class Uikit {
     public function getSettingBeforeCode()
     {
         $beforecode = $this->view->setting['component.beforecode'];
-        if ( $beforecode ) {
+        if ($beforecode) {
             $beforecode = base64_decode($beforecode);
         }
         return $beforecode;
@@ -369,21 +369,22 @@ class Uikit {
     public function getSettingAfterCode()
     {
         $aftercode = $this->view->setting['component.aftercode'];
-        if ( $aftercode ) {
+        if ($aftercode) {
             $aftercode = base64_decode($aftercode);
         }
         return $aftercode;
     }
 
     // item 返回图片链接
-    public function item_image($path, $name, $utime = '', $isfull = false) {
-        if ( $name ) {
+    public function item_image($path, $name, $utime = '', $isfull = false)
+    {
+        if ($name) {
             $pattern = '/^(https?:\/\/|\/\/)/i';
-            if ( preg_match($pattern, $name) ) {
+            if (preg_match($pattern, $name)) {
                 $image = $name;
             } else {
                 $image = trim($path, '/') . "/$name";
-                if ( ! preg_match($pattern, $image) ) {
+                if (!preg_match($pattern, $image)) {
                     $image = $this->view->asset(trim($image . rtrim("?$utime", '?'), '/'), $isfull);
                 }
             }
@@ -395,14 +396,15 @@ class Uikit {
     }
 
     // 输出完整文件链接
-    public function item_file($path, $name, $utime = '', $isfull = false) {
-        if ( $name ) {
+    public function item_file($path, $name, $utime = '', $isfull = false)
+    {
+        if ($name) {
             $pattern = '/^(https?:\/\/|\/\/)/i';
-            if ( preg_match($pattern, $name) ) {
+            if (preg_match($pattern, $name)) {
                 $file = $name;
             } else {
                 $file = trim($path, '/') . "/$name";
-                if ( ! preg_match($pattern, $file) ) {
+                if (!preg_match($pattern, $file)) {
                     $file = $this->view->asset(trim($file . rtrim("?$utime", '?'), '/'), $isfull);
                 }
             }
@@ -414,40 +416,41 @@ class Uikit {
     }
 
     // item 返回图标图片，支持返回svg源代码
-    public function item_icon($path, $name, $title = '', $utime = '', $isfull = false) {
+    public function item_icon($path, $name, $title = '', $utime = '', $isfull = false)
+    {
         // 如果没有图片，则返回标题名称。
-        if ( ! $name = trim($name) ) return $title;
+        if (!$name = trim($name)) return $title;
         // 如果是svg源代码，则直接返回。
-        if ( preg_match('/\<svg.*?\>.*/i', $name) ) {
+        if (preg_match('/\<svg.*?\>.*/i', $name)) {
             return urldecode($name);
         }
         // 站外或站内图标
         $pattern = '/^(https?:\/\/|\/\/)/i';
-        if ( preg_match($pattern, $name) ) {
+        if (preg_match($pattern, $name)) {
             $image = $name;
         } else {
             $image = trim($path, '/') . "/$name";
-            if ( ! preg_match($pattern, $image) ) {
+            if (!preg_match($pattern, $image)) {
                 $image = $this->view->asset(trim($image . rtrim("?$utime", '?'), '/'), $isfull);
             }
         }
         // 如是是svg图片，则返回源代码
-        if ( preg_match('/.+?\.svg/i', $image) ) {
-            return '<img src="'.$image.'" style="display:none" alt="" onload="fetch(\''.$image.'\').then(response => response.text()).then(data => {this.parentNode.innerHTML=data})">';
-        }
-        // 其它图片格式，返回图片标签。
+        if (preg_match('/.+?\.svg/i', $image)) {
+            return '<img src="' . $image . '" style="display:none" alt="" onload="fetch(\'' . $image . '\').then(response => response.text()).then(data => {this.parentNode.innerHTML=data})">';
+        } // 其它图片格式，返回图片标签。
         else {
             return '<img src="' . $image . '" alt="' . $title . '" loading="lazy">';
         }
     }
 
     // item 返回链接数组
-    public function item_link($item, $default_url = null, $default_target = null) {
+    public function item_link($item, $default_url = null, $default_target = null)
+    {
         $link_url = '';
         $link_title = '';
         $link_target = '';
         // 数组链接
-        if ( isset($item['link_url']) ) {
+        if (isset($item['link_url'])) {
             $link_url = $item['link_url'];
             $link_title = $item['link_title'];
             $link_target = $item['link_target'];
@@ -455,14 +458,13 @@ class Uikit {
             // 未设置链接，自动添加关联的详情页面链接
             $link = $item['link'];
             // 外部链接
-            if ( preg_match('/^(https?:\/\/|\/\/)/i', $link) ) {
+            if (preg_match('/^(https?:\/\/|\/\/)/i', $link)) {
                 $link_url = $link;
-            }
-            // JSON链接
+            } // JSON链接
             else {
                 $link = json_decode($link, true);
-                if ( empty($link['url']) ) {
-                    if ( empty($default_url) ) {
+                if (empty($link['url'])) {
+                    if (empty($default_url)) {
                         $join_alias = $this->view->setting['join.alias'];
                         $link_url = $join_alias ? $this->parseUrlItemParams($join_alias . '/id/[item.id].html', $item) : 'javascript:;';
                     } else {
@@ -488,10 +490,11 @@ class Uikit {
     }
 
     // item 返回分类链接
-    public function item_category_url($category) {
+    public function item_category_url($category)
+    {
         $link_url = $this->view->setting['category.link.url'];
-        if ( $link_url !== false ) {
-            if ( is_string($link_url) ) {
+        if ($link_url !== false) {
+            if (is_string($link_url)) {
                 return $this->parseUrlGetParams($link_url);
             } else {
                 return helper('db/getPageAlias') . '/category/' . $category['id'] . '.html';
@@ -502,8 +505,9 @@ class Uikit {
     }
 
     // item 返回转换的内容
-    public function item_content($content, $content_type = 'md') {
-        if ( $content_type == 'md' ) {
+    public function item_content($content, $content_type = 'md')
+    {
+        if ($content_type == 'md') {
             $content = (new Parsedown())->text(html_decode($content));
             $content = preg_replace('/<a(.*?)>(.*?)<\/a>/i', "<a $1 target=\"_blank\">$2</a>", $content);
         } else {
@@ -518,10 +522,11 @@ class Uikit {
      * @param $url
      * @return string
      */
-    public function parseUrlGetParams($url) {
-        if ( ! empty($url) ) {
+    public function parseUrlGetParams($url)
+    {
+        if (!empty($url)) {
             preg_match_all("/\[get\.(\w*?)]/i", $url, $matches, PREG_SET_ORDER);
-            if ( ! empty($matches) ) {
+            if (!empty($matches)) {
                 foreach ($matches as $matche) {
                     $name = $matche[1];
                     $url = str_replace('[get.' . $name . ']', $_GET[$name], $url);
@@ -538,10 +543,11 @@ class Uikit {
      * @param $item
      * @return string
      */
-    public function parseUrlItemParams($url, $item) {
-        if ( ! empty($url) ) {
+    public function parseUrlItemParams($url, $item)
+    {
+        if (!empty($url)) {
             preg_match_all("/\[item\.(\w*?)]/i", $url, $matches, PREG_SET_ORDER);
-            if ( ! empty($matches) ) {
+            if (!empty($matches)) {
                 foreach ($matches as $value) {
                     $name = $value[1];
                     $url = str_replace("[item.{$name}]", $item[$name], $url);

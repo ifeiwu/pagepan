@@ -24,11 +24,13 @@ return function ($request_data) {
             exit;
         }
 
-        $uikit_uri = Config::file('uikit', 'uri');
+        $uikit_config = Config::file('uikit');
+        $uikit_url = $uikit_config['url'];
+        $uikit_version = $uikit_config['version'];
         $columns = '`' . implode('`,`', $dev_columns) . '`';
         $items = $demo_db->select($table);
         foreach ($items as $item) {
-            $item['path'] = $uikit_uri . $item['path'];
+            $item['path'] = rtrim("{$uikit_url}{$uikit_version}", '/') . $item['path'];
             $values = array_values($item);
             $values = "'" . implode("','", $values) . "'";
             $insert_sql = "INSERT INTO `item` ({$columns}) VALUES ({$values})";

@@ -1,5 +1,6 @@
 <?php
 return [
     'cache' => true,
-    'uri' => 'https://uikit.pagepan.com/{{uikit_version}}/'
+    'url' => 'https://uikit.pagepan.com/',
+    'version' => '{{uikit_version}}'
 ];
