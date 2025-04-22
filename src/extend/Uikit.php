@@ -125,7 +125,7 @@ class Uikit
     // 返回远程组件源代码
     public function getRemoteCode($path, $name)
     {
-        $url = rtrim("{$this->config['url']}{$this->config['version']}", '/') . '/file-code';
+        $url = $this->config['url'] . 'file-code';
         $res = helper('curl/api', [$url, ['path' => $path, 'name' => $name]]);
 
         if ($res['code'] == 0) {
@@ -168,10 +168,10 @@ class Uikit
         }
 
         // 图片路径添加 uikit 链接地址
-        $uikit_url = Config::file('uikit', 'url');
+        $uikit_host = Config::file('uikit', 'host');
         $items = $res['data'];
         foreach ($items as $i => $item) {
-            $items[$i]['path'] = "{$uikit_url}{$item['path']}";
+            $items[$i]['path'] = "{$uikit_host}{$item['path']}";
         }
 
         return $items;

@@ -94,11 +94,11 @@ foreach ($pagelist as $page) {
             }
         }
     }
-    var_dump($page_source);
-//    $page_content = base64_encode(gzcompress(serialize($page_content)));
-//    $page_source = base64_encode(gzcompress(serialize($page_source)));
 
-//    $db->update('page', "content = '$page_content', source = '$page_source'", "`id` = $id");
+    $page_content = base64_encode(gzcompress(serialize($page_content)));
+    $page_source = base64_encode(gzcompress(serialize($page_source)));
+
+    $db->update('page', "content = '$page_content', source = '$page_source'", "`id` = $id");
 }
 
 
