@@ -76,11 +76,11 @@ gulp.task('config', function (done) {
 	fs.writeFile('dist/base.php', Buffer.from(base), { flag: 'w' }, function(error, data) {});
 
 	var config_uikit = fs.readFileSync('dist/config/uikit.php', 'utf8');
-	config_uikit = config_uikit.replace("{{uikit_version}}", uikit_version);
+	config_uikit = config_uikit.replaceAll("{{uikit_version}}", uikit_version);
 	fs.writeFile('dist/config/uikit.php', Buffer.from(config_uikit), { flag: 'w' }, function(error, data) {});
 
 	var config_admin = fs.readFileSync('dist/config/admin.php', 'utf8');
-	config_admin = config_admin.replace("{{yun_version}}", yun_version);
+	config_admin = config_admin.replaceAll("{{yun_version}}", yun_version);
 	fs.writeFile('dist/config/admin.php', Buffer.from(config_admin), { flag: 'w' }, function(error, data) {});
 
 	done();

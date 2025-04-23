@@ -168,7 +168,7 @@ class Admin extends CRUD {
                     ->exclude('data/pack')
                     ->exclude('public/data/file')
                     ->exclude('public/data/pack')
-                    ->exclude('vendor')
+//                    ->exclude('vendor')
                     ->exclude('.git')
                     ->in(ROOT_PATH);
 
