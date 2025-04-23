@@ -38,6 +38,7 @@ gulp.task('copy', function () {
 		'src/data/sqlite/demo.db',
 		'!src/public/*',
 		'src/public/index.php',
+		'src/public/img.php',
 		'src/public/robots.txt',
 		'src/public/.htaccess',
 		'!src/public/data/file/**/*',
