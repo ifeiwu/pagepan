@@ -1,6 +1,7 @@
 <?php
 /**
- * Image Optimize Api或本地压缩图片。支持JPEG、PNG、WebP、AVIF、GIF和SVG等。
+ * 通过远程接口或本地压缩图片
+ * 支持 JPEG、PNG、WebP、AVIF、GIF 和 SVG 格式
  */
 class Optimizer
 {
@@ -26,8 +27,8 @@ class Optimizer
 
     public function __construct($api_uri = '', $api_key = '')
     {
-        if ($api_uri) {
-            $this->api_uri = rtrim($api_uri, '/');
+        if ($api_uri && $api_key) {
+            $this->api_uri = $api_uri;
             $this->api_key = $api_key;
         }
     }
@@ -121,7 +122,7 @@ class Optimizer
 
         $quality = $this->qualitys[$this->file_ext];
         if ($this->api_uri) {
-            $api_url = $this->api_uri . ':8181/?quality=' . $quality;
+            $api_url = $this->api_uri . '?quality=' . $quality;
         } else {
             $this->compressImage();
         }
@@ -156,7 +157,9 @@ class Optimizer
             if (array_key_exists('file', $compress)) {
                 // 只有当压缩后的图片小于原图片时，才会保存压缩图片。
                 if ($compress['size'] < $file_size) {
-                    $this->saveImage("{$this->api_uri}:8182/image.php?filename={$compress['file']}");
+                    $file_url = "{$this->api_uri}?filename={$compress['file']}";
+                    $file_url = file_get_contents($file_url); // 暂时使用
+                    $this->saveImage($file_url);
                 }
                 // 如果压缩后的图片大小未减小，且不覆盖原图，则会生成一个与原图一致的新图片。
                 elseif ($overwrite == false) {
@@ -166,7 +169,7 @@ class Optimizer
                 throw new \Exception($compress['message']);
             }
         } catch (\Exception $e) {
-//            $this->compressImage();
+            $this->compressImage();
         }
     }
 
