@@ -1,5 +1,5 @@
 <?php
-// http://192.168.31.5:8087/dev/demo-to-dev-db
+// https://uikit.pagepan.test/dev/demo-to-dev-db
 return function ($request_data) {
     echo '演示导入开发数据<br>-----------------------<br><br>';
 

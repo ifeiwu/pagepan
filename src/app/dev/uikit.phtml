@@ -3,7 +3,7 @@
 $isplacehold = $_GET['isplacehold']; // 使用图片占位符填充组件
 $path = $_GET['path'];
 
-$info = file_get_contents("http://192.168.31.5:8087/dev/import-uikit-db?path=$path&isplacehold=$isplacehold");
+$info = file_get_contents("http://uikit.pagepan.test/dev/import-uikit-db?path=$path&isplacehold=$isplacehold");
 $info = json_decode($info, true);
 
 $setting = json_decode($info['setting'], true);
@@ -29,4 +29,4 @@ if ($_GET['theme'] == 1) {
     echo "<script>$(function() { $('body>[uk]').addClass('theme-invert'); });</script>";
 }
 
-//echo '<script src="http://192.168.31.5:8087/build/skeleton.js"></script>';
+//echo '<script src="https://uikit.pagepan.test/build/skeleton.js"></script>';

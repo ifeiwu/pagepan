@@ -138,14 +138,14 @@ class Request
 
     public static function rootUrl($isfull = false)
     {
-        $root = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/';
+        $root = rtrim(dirname($_SERVER['SCRIPT_NAME']), DS) . DS;
 
         return $isfull === true ? self::domain() . $root : $root;
     }
 
     public static function routeUrl($isfull = false)
     {
-        return '/' . trim(substr(self::baseUrl($isfull), strlen(self::rootUrl($isfull))), '/');
+        return DS . trim(substr(self::baseUrl($isfull), strlen(self::rootUrl($isfull))), DS);
     }
 
     public static function method()

@@ -1,6 +1,6 @@
 <?php
 return [
-    'url' => 'http://192.168.31.5:8060/',
-    'host' => 'http://192.168.31.5:8060/',
+    'url' => 'https://yun.pagepan.test/',
+    'host' => 'https://yun.pagepan.test/',
     'version' => ''
 ];

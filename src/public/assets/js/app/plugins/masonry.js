@@ -62,10 +62,12 @@ define(function (require) {
             }
 
             const macy = Macy(options);
-            // 所有图像都加载完毕时重新计算位置
-            macy.runOnImageLoad(function () {
-                macy.recalculate(true, true);
-            });
+            // 每次图像加载时都运行回调重新计算位置
+            macy.runOnImageLoad(function (event) {
+                if (event.data.img) {
+                    macy.recalculate(true);
+                }
+            }, true);
 
             if (callback != null) {
                 callback(macy);

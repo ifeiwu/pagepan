@@ -11,13 +11,18 @@ return function () {
         ['shop_iconcaptcha', 'shop_delivery', 'shop_delivery_fields', 'shop_address', 'shop_limit_region']
     ]);
 
-    // 开启城市访问限制
+    // 开启地区访问限制
 //    $limit_region = $site['shop_limit_region'];
 //    if ($limit_region) {
-//        $ip_region = helper('ip/ip2region', [Request::ip()]);
-//        $ip_province = $ip_region[2];
-//        if (!empty($ip_region) && $ip_province != 0) {
-//            if ($ip_province != $limit_region) {
+//        $ip_info = helper('ip/info', [Request::ip()]);
+//        if ($ip_info) {
+//            if ($ip_info['prov'] != $limit_region) {
+//                Response::error('您所在的省份无法下订单');
+//            }
+//            if ($ip_info['city'] != $limit_region) {
+//                Response::error('您所在的城市无法下订单');
+//            }
+//            if ($ip_info['district'] != $limit_region) {
 //                Response::error('您所在的地区无法下订单');
 //            }
 //        }

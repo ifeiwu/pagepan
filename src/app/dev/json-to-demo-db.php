@@ -1,5 +1,5 @@
 <?php
-// http://192.168.31.5:8087/dev/json-to-demo-db
+// https://uikit.pagepan.test/dev/json-to-demo-db
 return function ($request_data) {
     echo '更新演示数据库<br>-----------------------<br><br>';
 
