@@ -8,12 +8,13 @@ use Sirius\Upload\Handler as UploadHandler;
 return function () {
     $file = $_FILES['file'];
     $file_name = $file['name'];
-    $image_path = $_POST['image_path'];
+    $image_path = $_POST['image_path']; // 图片路径
+    $overwrite = $_POST['overwrite'] ?? true; // 是否覆盖图片
     $upload_path = WEB_ROOT . $image_path;
     $uploadHandler = new UploadHandler($upload_path);
     $uploadHandler->addRule('image', ['allowed' => ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']], '{label}应为有效格式（jpg, jpeg, png, webp, gif, svg）', '图片');
     $uploadHandler->addRule('size', ['size' => '20M'], '{label}应小于 {size}', '图片');
-    $uploadHandler->setOverwrite(true);
+    $uploadHandler->setOverwrite($overwrite);
 //    $uploadHandler->setAutoconfirm(true);
     $result = $uploadHandler->process($file);
     if ($result->isValid()) {
@@ -28,7 +29,7 @@ return function () {
             // 压缩上传图片
             $optimizer = new Optimizer($_POST['optimizeapi_uri'], $_POST['optimizeapi_key']);
             $optimizer->optimize($file_path);
-            //
+            // 指定格式压缩图片
             if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'])) {
                 // 生成多种图片尺寸
                 $prefixs = explode(',', $_POST['image_prefix']);
@@ -87,3 +88,28 @@ return function () {
         Response::error('不支持图片格式');
     }
 };
+
+
+/**
+ * 生成唯一的文件名称
+ * @param $file
+ * @return string
+ */
+function _getUniqueFilename($file)
+{
+    $dir = pathinfo($file, PATHINFO_DIRNAME);
+    $name = pathinfo($file, PATHINFO_BASENAME);
+    $ext = pathinfo($file, PATHINFO_EXTENSION);
+    $ext = $ext ? '.' . $ext : '';
+    $number = '';
+    while (file_exists("{$dir}/{$name}")) {
+        $new_number = (int)$number + 1;
+        if ('' == "{$number}{$ext}") {
+            $name = "{$name}-{$new_number}";
+        } else {
+            $name = str_replace(["-{$number}{$ext}", "{$number}{$ext}"], "-{$new_number}{$ext}", $name);
+        }
+        $number = $new_number;
+    }
+    return "{$dir}/{$name}";
+}

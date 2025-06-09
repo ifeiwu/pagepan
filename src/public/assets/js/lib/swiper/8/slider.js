@@ -18,7 +18,8 @@ define(['swiper/8/swiper', 'mousewheel', 'mobile-events'], function (Swiper) {
         setting.centered = Boolean(setting[ukchildprefix + 'slider.centered']);
         setting.mousewheel = Boolean(setting[ukchildprefix + 'slider.mousewheel']);
         setting.autorelease = Boolean(setting[ukchildprefix + 'slider.autorelease']);
-        setting.touchmove = Boolean(setting[ukchildprefix + 'slider.touchmove']);
+        let _touchmove = setting[ukchildprefix + 'slider.touchmove'];
+        setting.touchmove = _touchmove === undefined ? true : Boolean(_touchmove);
 		setting.navigation = setting[ukchildprefix + 'slider.navigation'];
 		setting.direction = setting[ukchildprefix + 'slider.direction'];
 		setting.pagination = setting[ukchildprefix + 'slider.pagination'];
