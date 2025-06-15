@@ -55,81 +55,21 @@ return function () {
 
     // 全局配送方式
     $delivery = $site['shop_delivery'];
+
     // 商品独立设置的配送方式
     if ($delivery == 4) {
         $delivery = $order_items[0]['attributes']['delivery'];
     }
+
     // 联系方式字段
     $delivery_fields = json_decode2($site['shop_delivery_fields'] ?: '[]');
     $delivery_fields = $delivery_fields[$delivery];
-    foreach ($delivery_fields as $name => $field) {
-        if ($field['enabled'] == 0) {
-            continue;
-        }
-        $required = $field['required'];
-        switch ($name) {
-            case 'roads':
-                // 道路名
-                $road = post('road', 'escape');
-                if ($required == 1 && empty($road)) {
-                    Response::error('请选择道路名称', ['field' => $name]);
-                }
-                break;
-            case 'house':
-                // 门牌号
-                $house = post('house', 'escape');
-                if ($required == 1 || !empty($house)) {
-                    $house_length = mb_strlen($house, 'UTF-8');
-                    if ($house_length <= 2 || $house_length >= 30) {
-                        Response::error('门牌号长度 2-30 个字符', ['field' => $name]);
-                    }
-                }
-                break;
-            case 'linkman':
-                // 联系人
-                $linkman = post('linkman', 'escape');
-                if ($required == 1 || !empty($linkman)) {
-                    $linkman_length = mb_strlen($linkman, 'UTF-8');
-                    if ($linkman_length <= 1 || $linkman_length >= 5) {
-                        Response::error('联系人长度 1-5 个字符', ['field' => $name]);
-                    }
-                }
-                break;
-            case 'phone':
-                // 手机号
-                $phone = post('phone');
-                if ($required == 1 || !empty($phone)) {
-                    if (!preg_match('/^1[0-9]{10}$/', $phone)) {
-                        Response::error('手机号码格式错误', ['field' => $name]);
-                    }
-                }
-                break;
-            case 'wechat':
-                // 微信号
-                $wechat = post('wechat');
-                if ($required == 1 || !empty($wechat)) {
-                    if (!preg_match('/^[-_a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/', $wechat)) {
-                        Response::error('微信号格式错误', ['field' => $name]);
-                    }
-                }
-                break;
-            case 'qq':
-                // QQ号
-                $qq = post('qq');
-                if ($required == 1 || !empty($qq)) {
-                    if (!preg_match('/^[1-9][0-9]{4,12}$/', $qq)) {
-                        Response::error('QQ号格式错误', ['field' => $name]);
-                    }
-                }
-                break;
-            case 'email':
-                $email = post('email');
-                if ($required == 1 || !empty($email)) {
-                    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        Response::error('邮箱地址格式错误', ['field' => $name]);
-                    }
-                }
-                break;
+    $res = _verifyDeliveryFields($delivery_fields);
+    if (is_array($res)) {
+        if (!$res['err_msg']) {
+            list($roads, $house, $linkman, $phone, $wechat, $qq, $email, $doortime) = $res['data'];
+        } else {
+            Response::error($res['err_msg'], ['field' => $res['err_name']]);
         }
     }
 
@@ -160,9 +100,10 @@ return function () {
     $order['wechat'] = $wechat; // 微信号
     $order['qq'] = $qq; // QQ号
     $order['email'] = $email; // 邮箱地址
+    $order['doortime'] = $doortime; // 期望上门时间
     // 收货地址
-    if ($road || $house) {
-        $order['address'] = "$province,$city,$district,$road,$house";
+    if ($roads || $house) {
+        $order['address'] = "$province,$city,$district,$roads,$house";
     }
 
     try {
@@ -223,6 +164,87 @@ return function () {
     }
 };
 
-function _validation_fields() {
+// 验证表单字段
+function _verifyDeliveryFields($delivery_fields) {
+    $message = null;
+    $data = [];
+    foreach ($delivery_fields as $name => $field) {
+        if ($field['enabled'] == 0) {
+            continue;
+        }
+        $required = $field['required'];
+        $value = post($name, 'escape');
+        $data[$name] = $value;
+        switch ($name) {
+            case 'roads':
+                // 道路名
+                if ($required == 1 && empty($value)) {
+                    $message = '请选择道路名称';
+                }
+                break;
+            case 'house':
+                // 门牌号
+                if ($required == 1 || !empty($value)) {
+                    $house_length = mb_strlen($value, 'UTF-8');
+                    if ($house_length <= 2 || $house_length >= 30) {
+                        $message = '门牌号长度 2-30 个字符';
+                    }
+                }
+                break;
+            case 'linkman':
+                // 联系人
+                if ($required == 1 || !empty($value)) {
+                    $linkman_length = mb_strlen($value, 'UTF-8');
+                    if ($linkman_length <= 1 || $linkman_length >= 5) {
+                        $message = '联系人长度 1-5 个字符';
+                    }
+                }
+                break;
+            case 'phone':
+                // 手机号
+                if ($required == 1 || !empty($value)) {
+                    if (!preg_match('/^1[0-9]{10}$/', $value)) {
+                        $message = '手机号码格式错误';
+                    }
+                }
+                break;
+            case 'wechat':
+                // 微信号
+                if ($required == 1 || !empty($value)) {
+                    if (!preg_match('/^[-_a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/', $value)) {
+                        $message = '微信号格式错误';
+                    }
+                }
+                break;
+            case 'qq':
+                // QQ号
+                if ($required == 1 || !empty($value)) {
+                    if (!preg_match('/^[1-9][0-9]{4,12}$/', $value)) {
+                        $message = 'QQ号格式错误';
+                    }
+                }
+                break;
+            case 'email':
+                if ($required == 1 || !empty($value)) {
+                    if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        $message = '邮箱地址格式错误';
+                    }
+                }
+                break;
+            case 'doortime':
+                if ($required == 1 && empty($value)) {
+                    $message = '请选择期望上门时间';
+                }
+                break;
+        }
+        if ($message) {
+            break;
+        }
+    }
 
+    if ($message) {
+        return ['data' => $data, 'err_msg' => $message, 'err_name' => $name];
+    } else {
+        return null;
+    }
 }
