@@ -51,7 +51,7 @@ return function ($table, $request_data) {
         $upload_path = $request_data['$upload_path'];
         $upload_path2 = WEB_ROOT . $upload_path;
         if (!is_dir($upload_path2)) {
-            mkdir($upload_path2, true);
+            mkdir($upload_path2, 0755, true);
         }
         $data[$upload_name] = $upload_path;
     }

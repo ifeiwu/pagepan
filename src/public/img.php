@@ -7,15 +7,13 @@ require VEN_PATH . 'autoload.php';
 
 \Co\async(function () {
     $server = Helper::glide_server();
-
     // 清理指定图片缓存
     if (isset($_GET['dc'])) {
         $server->deleteCache($_GET['path']);
     }
-
     // 为了安全起见只能使用预设，避免生成过多尺寸的图片。
-    $filepath = preg_replace('/[<>:"|?*]+/', '', $_GET['path']);
+//    $path = preg_replace('/[<>:"|?*]+/', '', $_GET['path']);
     $preset = intval($_GET['p']);
-    $server->outputImage($filepath, ['p' => $preset]);
+    $server->outputImage($_GET['path'], ['p' => $preset]);
 });
 \Co\wait();

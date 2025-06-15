@@ -10,7 +10,12 @@ return function () {
     $file_name = $file['name'];
     $image_path = $_POST['image_path']; // 图片路径
     $overwrite = $_POST['overwrite'] ?? true; // 是否覆盖图片
+    // 上传路径
     $upload_path = WEB_ROOT . $image_path;
+    if (is_dir($upload_path) && !is_writable($upload_path)) {
+        chmod($upload_path, 0755);
+    }
+    // 上传程序
     $uploadHandler = new UploadHandler($upload_path);
     $uploadHandler->addRule('image', ['allowed' => ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']], '{label}应为有效格式（jpg, jpeg, png, webp, gif, svg）', '图片');
     $uploadHandler->addRule('size', ['size' => '20M'], '{label}应小于 {size}', '图片');

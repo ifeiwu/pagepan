@@ -44,63 +44,10 @@ register_shutdown_function(function () {
 $config = require ROOT_PATH . 'config/db.dev.php';
 $db = new Database($config);
 
-// 页面组件更新
-$pagelist = $db->select('page', "id IN (1001)");
-foreach ($pagelist as $page) {
-    $id = $page['id'];
+// 在这里输入测试代码 ---------------------------------------------------------
 
-    $page_content = unserialize(gzuncompress(base64_decode($page['content'])));
-    $page_source = unserialize(gzuncompress(base64_decode($page['source'])));
 
-    $page_content = preg_replace_callback(
-        '/<\?php \$this->uikit->load\(\'(.+)\', \'(.+)\'\); \?>/U',
-        function ($matches) {
-            $path = $matches[1];
-            $config = $matches[2];
-            if ($path == 'number/orderok/01') {
-                $path = 'number/order/ok';
-                $config = json_decode($config, true);
-                $config['setting']['userdata.image'] = 'https://uikit.pagepan.com/assets/number/order/ok/1.png';
-                $config['setting']['dataset.path'] = 'number/order/ok';
-                $config = json_encode($config, JSON_UNESCAPED_UNICODE);
-            }
-
-            return "<?php \$this->uikit->load('$path', '$config'); ?>";
-        },
-        $page_content
-    );
-
-    $dom = new DOMDocument();
-    @$dom->loadHTML($page_source);
-    $xpath = new DOMXPath($dom);
-    $divs = $xpath->query('//div[@component-path="number/orderok/01"]');
-    if ($divs->length > 0) {
-        foreach ($divs as $div) {
-            $path = $div->getAttribute('component-path');
-            if ($path == 'number/orderok/01') {
-                $config = $div->getAttribute('config');
-                $new_config = json_decode($config, true);
-                $new_config['name'] = 'orderok';
-                $new_config['path'] = 'number/order/ok';
-                $new_config['image_path'] = 'https://uikit.pagepan.com/assets/number/order/ok/';
-                $new_config['setting']['userdata.image'] = 'https://uikit.pagepan.com/assets/number/order/ok/1.png';
-                $new_config['setting']['dataset.path'] = 'number/order/ok';
-                $new_config = json_encode($new_config, JSON_UNESCAPED_UNICODE);
-
-                $page_source = str_replace('component-alias="orderok01"', 'component-alias="orderok"', $page_source);
-                $page_source = str_replace('component-path="number/orderok/01"', 'component-path="number/order/ok"', $page_source);
-                $page_source = str_replace('uk="number/orderok/01"', 'uk="number/order/ok"', $page_source);
-                $page_source = str_replace('config="' . htmlspecialchars($config) . '"', 'config="' . htmlspecialchars($new_config) . '"', $page_source);
-            }
-        }
-    }
-
-    $page_content = base64_encode(gzcompress(serialize($page_content)));
-    $page_source = base64_encode(gzcompress(serialize($page_source)));
-
-    $db->update('page', "content = '$page_content', source = '$page_source'", "`id` = $id");
-}
-
+// end --------------------------------------------------------------------
 
 // 数据库操作 -----------------------------------------------------------------------------------
 class Database {

@@ -24,7 +24,7 @@ define(['mobile-select/mobile-select', 'css!mobile-select/mobile-select'], funct
                 next = end
             }
             let hours = current.getHours().toString().padStart(2, '0')
-            let range = `${formatTime(current)} - ${formatTime(next)}`
+            let range = `${formatTime(current)}-${formatTime(next)}`
             ranges.push({ id: hours, value: range })
             current = next
         }
@@ -68,7 +68,6 @@ define(['mobile-select/mobile-select', 'css!mobile-select/mobile-select'], funct
     }
 
     let storage_key = $input.attr('name') + '-change-value';
-
     let ms = new MobileSelect({
         trigger: $input[0],
         title: '期望上门时间',
