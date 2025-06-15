@@ -14,7 +14,7 @@ class FS {
     /**
      * 删除目录中的所有文件和子目录
      * @param $dir 目录绝对路径
-     * @param $itself 是否保留目录本身
+     * @param $itself 是否删除目录本身
      * @return true
      * @throws Exception
      */

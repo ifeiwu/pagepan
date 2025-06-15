@@ -1,4 +1,5 @@
 <?php
+// 使用：helper('api/v2/addTrash', [$table, $item, $request_data]);
 return function ($table, $item, $request_data) {
     $data = [];
     $data['admin_id'] = $request_data['admin']['id'];
