@@ -10,13 +10,11 @@
 		"symfony/filesystem" : "^5.0",
 		"gumlet/php-image-resize": "^2.0",
 		"jbzoo/utils": "^2.3",
-		"wyrihaximus/html-compress": "^4.2",
+		"wyrihaximus/html-compress": "^4.3",
 		"php-curl-class/php-curl-class": "^11.0",
-		"overtrue/easy-sms": "^3.0",
 		"fabianwennink/iconcaptcha": "^4.0",
 		"siriusphp/upload": "^4.0",
 		"league/glide": "^3.0",
-		"league/flysystem-sftp-v3": "^3.29",
-		"cloudtay/ripple": "^1.0"
+		"league/flysystem-sftp-v3": "^3.29"
 	}
 }
