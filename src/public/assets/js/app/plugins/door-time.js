@@ -1,6 +1,6 @@
 // 下订单字段：期望上门时间
 define(['mobile-select/mobile-select', 'css!mobile-select/mobile-select'], function(MobileSelect) {
-    let $input = $('[data-mobile-select="visit-time"]')
+    let $input = $('[data-mobile-select="door-time"]')
 
     // 生成时间段
     function getTimeRanges(startTime, endTime, interval, isToday = false) {
