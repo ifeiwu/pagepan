@@ -37,20 +37,20 @@ $theme_screen = $theme['screen'];
         </script>
         <?php
         // 全局页头
-        if ( $site['open_header_php'] ) { include ROOT_PATH . 'data/php/header.inc'; }
+        if ($site['open_header_php']) { include ROOT_PATH . 'data/php/header.inc'; }
         // 网站图标
-        if ( $site['favicon'] ) { echo '<link rel="icon" href="' . assets($site['favicon']) . '">'; }
+        if ($site['favicon']) { echo '<link rel="icon" href="' . assets($site['favicon']) . '">'; }
         // 应用图标
-        if ( $site['touchicon'] ) { echo '<link rel="apple-touch-icon" href="' . assets($site['touchicon']) . '">'; }
+        if ($site['touchicon']) { echo '<link rel="apple-touch-icon" href="' . assets($site['touchicon']) . '">'; }
         // 应用清单
-        if ( $site['manifest'] ) { echo '<link rel="manifest" href="' . assets('manifest.json') . '">'; }
+        if ($site['manifest']) { echo '<link rel="manifest" href="' . assets('manifest.json') . '">'; }
 
         echo '<link href="' . assets('assets/css/pagepan.css') . '" rel="stylesheet">';
 		echo '<link href="' . assets('assets/css/theme.css') . '" rel="stylesheet">';
         echo '<link href="' . assets('assets/css/animate.css') . '" rel="stylesheet">';
         // 加载自定义字体
         $site_fonts_list = $site['fonts_list'];
-        if ( $site_fonts_list ) {
+        if ($site_fonts_list) {
             $site_fonts_list = json_decode($site_fonts_list, true);
             foreach ($site_fonts_list as $font) {
                 $fontid = $font['id'];
@@ -59,28 +59,28 @@ $theme_screen = $theme['screen'];
             }
         }
         // 图文样式
-        if ( $site['open_graphic_css'] && $pagevar['page_type'] == 'graphic' ) {
+        if ($site['open_graphic_css'] && $pagevar['page_type'] == 'graphic') {
             echo '<link href="' . assets('data/css/graphic.min.css') . '" rel="stylesheet">';
         }
         // 全局样式
-        if ( $site['open_global_css'] ) {
+        if ($site['open_global_css']) {
             echo '<link href="' . assets('data/css/global.min.css') . '" rel="stylesheet">';
         }
-        
-        echo '<script>var pagevar = ' . json_encode2($pagevar) . ';</script>';
-        echo '<script src="' . assets('assets/js/require.js') . '" type="text/javascript"></script>';
-        echo '<script src="' . assets('assets/js/config.js') . '" type="text/javascript"></script>';
-        echo '<script src="' . assets('assets/js/lib/jquery.js') . '" type="text/javascript"></script>';
         ?>
+        <script>const pagevar = <?=json_encode2($pagevar)?>;</script>
+        <script src="<?=assets('assets/js/require.js')?>"></script>
+        <script src="<?=assets('assets/js/config.js')?>"></script>
+        <script src="<?=assets('assets/js/lib/jquery.js')?>"></script>
     </head>
     <body <?=$page_body_attrs; ?>>
 
         <?=$this->section('content')?>
 
+        <script src="<?=assets('assets/js/app/main.js')?>"></script>
+
         <?php
-        echo '<script src="' . assets('assets/js/app/main.js') . '" type="text/javascript"></script>';
         // 全局脚本
-        if ($site['open_global_js']) { echo '<script src="' . assets('data/js/global.min.js') . '" type="text/javascript"></script>'; }
+        if ($site['open_global_js']) { echo '<script src="' . assets('data/js/global.min.js') . '"></script>'; }
         // 全局页脚
         if ($site['open_footer_php']) { include ROOT_PATH . 'data/php/footer.inc'; }
         // 在线客服

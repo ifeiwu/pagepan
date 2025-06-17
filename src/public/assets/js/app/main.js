@@ -125,6 +125,17 @@ require(['jquery', 'device', 'smoothscroll', 'picturefill'], function() {
         })
     }
 
+    // 页面访问和事件跟踪
+    /*require(['ahoy'], function(ahoy) {
+        ahoy.configure({
+            visitsUrl: 'm/act/ahoy-visits',
+            eventsUrl: 'm/act/ahoy-events'
+        })
+        ahoy.trackView()
+        ahoy.debug()
+        // ahoy.reset();
+    })*/
+
     // 手机页面前端调试面板
     if (/debug/.test(window.location)) {
         require(['eruda'], function(eruda) {
