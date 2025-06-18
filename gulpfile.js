@@ -10,6 +10,8 @@ const del = require('del'); // 删除文件
 const zip = require('gulp-zip');
 const fs = require('fs'); // 文件操作
 
+var phpv = 'D:\\software\\php-7.4\\php';
+
 // 获取小飞云版本号
 var yun_version = fs.readFileSync('D:/www/pagepanyun.com/src/version.php', 'utf8');
 yun_version = yun_version.match(/\d+\.\d+/g);
@@ -29,11 +31,12 @@ gulp.task('copy', function () {
 		'!src/app/dev/**',
 		'!src/config/db.php',
 		'!src/config/*.dev.php',
+		'!src/data/order/err/*.*',
+		'!src/data/order/new/*.*',
 		'!src/data/backup/**/*',
 		'!src/data/cache/**/*',
 		'!src/data/logs/**/*',
 		'!src/data/sqlite/**/*',
-		'src/data/sqlite/pagepan.db',
 		'src/data/sqlite/visit.db',
 		'src/data/sqlite/demo.db',
 		'!src/public/*',
@@ -69,6 +72,11 @@ gulp.task('html', function () {
 	return gulp.src(['src/public/assets/**/*.html'], { base: 'src' })
 		.pipe(htmlmin({collapseWhitespace: true}))
 		.pipe(gulp.dest('dist'));
+});
+
+gulp.task('db', function () {
+	return gulp.src(['build/db.php'], {base: 'src'})
+		.pipe(exec(file => `${phpv} -f ${file.path}`));
 });
 
 gulp.task('config', function (done) {
@@ -115,5 +123,5 @@ gulp.task('upgrade.zip', function () {
 });
 
 
-gulp.task('default', gulp.series('clean', 'copy', 'js', 'css', 'html', 'config'));
+gulp.task('default', gulp.series('clean', 'copy', 'js', 'css', 'html', 'db', 'config'));
 gulp.task('package', gulp.series('install.zip', 'upgrade.zip'));

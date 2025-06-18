@@ -9,8 +9,6 @@ ini_set('ignore_repeated_errors', true);
 ini_set('log_errors', true);
 ini_set('error_log', ROOT_PATH . 'data/logs/error.log');
 
-require ROOT_PATH . 'library/DB.php';
-
 if ($_POST) {
     $events = $_POST['events_json'];
     $events = json_decode($events, true);
@@ -25,16 +23,19 @@ if ($_POST) {
     $visitor_id = $data['visitor_token'];
 }
 
-$params = [
-    'visit_id' => $visit_id,
-    'visitor_id' => $visitor_id,
-    'get_id' => $data['get_id'] ?? '',
-    'page_id' => $data['page_id'] ?? '',
-    'page_url' => $data['page_url'] ?? '',
-    'page_alias' => $data['page_alias'] ?? '',
-    'referrer' => $data['referrer'] ?? '',
-    'visit_time' => time(),
-];
+if (!$visitor_id) {
+    exit;
+}
 
-$db = DB::new(['debug' => false, 'type' => 'sqlite', 'file' => 'data/sqlite/visit.db', 'prefix' => '']);
-$db->insert('event', $params);
+$db = new SQLite3(ROOT_PATH . 'data/sqlite/visit.db');
+$statement = $db->prepare('INSERT INTO "event" ("visit_time", "visit_id", "visitor_id", "get_id", "page_id", "page_alias", "page_url", "referrer") VALUES (:visit_time, :visit_id, :visitor_id, :get_id, :page_id, :page_alias, :page_url, :referrer)');
+$statement->bindValue(':visit_time', time());
+$statement->bindValue(':visit_id', $visit_id);
+$statement->bindValue(':visitor_id', $visitor_id);
+$statement->bindValue(':get_id', $data['get_id'] ?? '');
+$statement->bindValue(':page_id', $data['page_id'] ?? '');
+$statement->bindValue(':page_alias', $data['page_alias'] ?? '');
+$statement->bindValue(':page_url', $data['page_url'] ?? '');
+$statement->bindValue(':referrer', $data['referrer'] ?? '');
+$statement->execute();
+$db->close();
