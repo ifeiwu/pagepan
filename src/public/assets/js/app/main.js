@@ -125,11 +125,11 @@ require(['jquery', 'device', 'smoothscroll', 'picturefill'], function() {
         })
     }
 
-    if (RUN_MODE != 'dev') {
+    if (RUN_MODE == 'dev') {
         // 页面访问和事件跟踪
         require(['ahoy'], function(ahoy) {
             let params = {
-                'get_id': pagevar.get_id,
+                'item_id': pagevar.get_id,
                 'page_id': pagevar.page_id,
                 'page_alias': pagevar.page_alias,
                 'page_url': pagevar.baseurl

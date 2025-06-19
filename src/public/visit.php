@@ -28,11 +28,11 @@ if (!$visitor_id) {
 }
 
 $db = new SQLite3(ROOT_PATH . 'data/sqlite/visit.db');
-$statement = $db->prepare('INSERT INTO "event" ("visit_time", "visit_id", "visitor_id", "get_id", "page_id", "page_alias", "page_url", "referrer") VALUES (:visit_time, :visit_id, :visitor_id, :get_id, :page_id, :page_alias, :page_url, :referrer)');
+$statement = $db->prepare('INSERT INTO "event" ("visit_time", "visit_id", "visitor_id", "item_id", "page_id", "page_alias", "page_url", "referrer") VALUES (:visit_time, :visit_id, :visitor_id, :item_id, :page_id, :page_alias, :page_url, :referrer)');
 $statement->bindValue(':visit_time', time());
 $statement->bindValue(':visit_id', $visit_id);
 $statement->bindValue(':visitor_id', $visitor_id);
-$statement->bindValue(':get_id', $data['get_id'] ?? '');
+$statement->bindValue(':item_id', $data['item_id'] ?? '');
 $statement->bindValue(':page_id', $data['page_id'] ?? '');
 $statement->bindValue(':page_alias', $data['page_alias'] ?? '');
 $statement->bindValue(':page_url', $data['page_url'] ?? '');
