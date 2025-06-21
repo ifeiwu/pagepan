@@ -58,16 +58,16 @@ return function ($request_data) {
             'title' => $goods['title'],
             'price' => $goods['price'],
             'image' => "{$goods['path']}/{$goods['image']}",
-            'views' => $item_views
+            'views' => _formatNumberK($item_views)
         ];
     }
 
     $db->close();
     $db2->close();
 
-    $data['views'] = $views;
-    $data['visits'] = $visits;
-    $data['visitors'] = $visitors;
+    $data['views'] = _formatNumberK($views);
+    $data['visits'] = _formatNumberK($visits);
+    $data['visitors'] = _formatNumberK($visitors);
     $data['goods_list'] = $goods_list;
 
     Response::json(array_merge($data, ['chart_data' => $chart_data]));
@@ -91,45 +91,26 @@ function _getCharts($db, $sql)
         $all_hours[] = $hour;
     }
 
-//    $lables = [];
+    $lables = [];
+    $dates = [];
     $visitors = [];
     $views = [];
 
     // 5. 填充缺失的小时数
     foreach ($all_hours as $hour) {
         $lable = _convertTime($hour);
-//        $lables[] = _convertTime($hour);
-//        $lables_date[] = $hour;
+        $lables[] = $lable;
+        $dates[] = $hour;
         if (isset($hourly[$hour])) {
-//            $visitors[] = $hourly[$hour]['visitors'];
-//            $views[] = $hourly[$hour]['views'];
-            $visitors[] = [
-                'title' => $hour,
-                'lable' => $lable,
-                'count' => $hourly[$hour]['visitors'],
-            ];
-            $views[] = [
-                'title' => $hour,
-                'lable' => $lable,
-                'count' => $hourly[$hour]['views']
-            ];
+            $visitors[] = $hourly[$hour]['visitors'];
+            $views[] = $hourly[$hour]['views'];
         } else {
-//            $visitors[] = 0;
-//            $views[] = 0;
-            $visitors[] = [
-                'title' => $hour,
-                'lable' => $lable,
-                'count' => 0,
-            ];
-            $views[] = [
-                'title' => $hour,
-                'lable' => $lable,
-                'count' => 0,
-            ];
+            $visitors[] = 0;
+            $views[] = 0;
         }
     }
 
-    return ['visitors' => $visitors, 'views' => $views];//['lables' => $lables, 'lables_date' => $lables_date, 'visitors' => $visitors, 'views' => $views];
+    return ['lables' => $lables, 'dates' => $dates, 'visitors' => $visitors, 'views' => $views];
 }
 
 function _convertTime($timeString) {
@@ -137,4 +118,12 @@ function _convertTime($timeString) {
     $formattedTime = $date->format('a g:i');
     $formattedTime = str_replace(['am', 'pm'], ['上午', '下午'], $formattedTime);
     return $formattedTime;
+}
+
+function _formatNumberK(float $num): string
+{
+    if ($num >= 1000) {
+        return round($num / 1000, 2) . 'k';
+    }
+    return (string)$num;
 }
