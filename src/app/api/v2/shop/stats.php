@@ -3,18 +3,18 @@ return function ($request_data) {
     $unit = $request_data['unit'];
     $where = "page_url LIKE '/shop%'";
     switch ($unit) {
-        case 'today':
-            $today_start = strtotime('today');
-            $today_end = strtotime('tomorrow');
-            $where = "{$where} AND visit_time >= $today_start AND visit_time < $today_end";
+        case '24hour': // 获取 24 小时前的时间戳
+            $hour = time() - (24 * 60 * 60);
+            $where = "{$where} AND visit_time >= {$hour}";
             break;
         case 'yesterday':
             $yesterday = date('Y-m-d', strtotime('-1 day')); // 获取昨天的日期
             $where = "{$where} AND strftime('%Y-%m-%d', visit_time, 'unixepoch', 'localtime') = {$yesterday}";
             break;
-        default: // 获取 24 小时前的时间戳
-            $hour = time() - (24 * 60 * 60);
-            $where = "{$where} AND visit_time >= {$hour}";
+        default:
+            $today_start = strtotime('today');
+            $today_end = strtotime('tomorrow');
+            $where = "{$where} AND visit_time >= $today_start AND visit_time < $today_end";
             break;
     }
 
@@ -22,39 +22,23 @@ return function ($request_data) {
     $sql_visits = "SELECT COUNT(DISTINCT visit_id) FROM event WHERE {$where}";
     $sql_visitors = "SELECT COUNT(DISTINCT visitor_id) FROM event WHERE {$where}";
     $sql_items = "SELECT item_id, COUNT(*) AS item_views FROM event WHERE item_id != '' GROUP BY item_id ORDER BY item_views DESC LIMIT 0,10";
-
-    $sql_charts = "
-        SELECT
-            strftime('%Y-%m-%d %H:00', visit_time, 'unixepoch', 'localtime') AS hour,
-            COUNT(*) AS views,
-            COUNT(DISTINCT visitor_id) AS visitors
-        FROM
-            event
-        WHERE
-            visit_time >= strftime('%s', datetime('now', '-12 hours'))
-        GROUP BY
-            hour
-        ORDER BY
-            hour DESC;
-    ";
+    $sql_charts = "SELECT strftime('%Y-%m-%d %H:00', visit_time, 'unixepoch', 'localtime') AS hour, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE visit_time >= strftime('%s', datetime('now', '-12 hours')) GROUP BY hour ORDER BY hour DESC;";
 
     $db = new SQLite3(ROOT_PATH . 'data/sqlite/visit.db');
-    $views = $db->querySingle($sql_views);
-    $visits = $db->querySingle($sql_visits);
-    $visitors = $db->querySingle($sql_visitors);
-    $result_items = $db->query($sql_items);
-
-    $chart_data = _getCharts($db, $sql_charts);
+    $views = $db->querySingle($sql_views); // 浏览量
+    $visits = $db->querySingle($sql_visits); // 访问次数
+    $visitors = $db->querySingle($sql_visitors); // 独立访客
+    $items = $db->query($sql_items); // 商品浏览排行
+    $chart_data = _getCharts($db, $sql_charts); // 图表数据
 
     $db2 = new SQLite3(ROOT_PATH . 'data/sqlite/pagepan.db');
-    while ($row = $result_items->fetchArray(SQLITE3_ASSOC)) {
+    while ($row = $items->fetchArray(SQLITE3_ASSOC)) {
         $goods_id = $row['item_id'];
         $item_views = $row['item_views'];
-        // 查询 goods 表获取标题
         $sql_goods = "SELECT title,price,image,path FROM goods WHERE id = $goods_id";
         $goods = $db2->query($sql_goods)->fetchArray(SQLITE3_ASSOC);
         $goods_list[] = [
-            'goods_id' => $goods_id,
+            'id' => $goods_id,
             'title' => $goods['title'],
             'price' => $goods['price'],
             'image' => "{$goods['path']}/{$goods['image']}",
@@ -98,9 +82,8 @@ function _getCharts($db, $sql)
 
     // 5. 填充缺失的小时数
     foreach ($all_hours as $hour) {
-        $lable = _convertTime($hour);
-        $lables[] = $lable;
-        $dates[] = $hour;
+        $lables[] = strtotime($hour);
+        $dates[] = date('H点（Y年m月d日）', strtotime($hour));
         if (isset($hourly[$hour])) {
             $visitors[] = $hourly[$hour]['visitors'];
             $views[] = $hourly[$hour]['views'];
@@ -111,13 +94,6 @@ function _getCharts($db, $sql)
     }
 
     return ['lables' => $lables, 'dates' => $dates, 'visitors' => $visitors, 'views' => $views];
-}
-
-function _convertTime($timeString) {
-    $date = DateTime::createFromFormat('Y-m-d H:i', $timeString);
-    $formattedTime = $date->format('a g:i');
-    $formattedTime = str_replace(['am', 'pm'], ['上午', '下午'], $formattedTime);
-    return $formattedTime;
 }
 
 function _formatNumberK(float $num): string
