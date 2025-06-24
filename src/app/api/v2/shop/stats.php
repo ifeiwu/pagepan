@@ -16,8 +16,8 @@ return function ($request_data) {
             $sql_chart = "SELECT strftime('%Y-%m-%d', visit_time, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         case 'year':
-            $where = "{$where} AND strftime('%Y', datetime(timestamp, 'unixepoch')) = strftime('%Y', 'now')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d', visit_time, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $where = "{$where} AND strftime('%Y', datetime(visit_time, 'unixepoch', 'localtime')) = strftime('%Y', 'now')";
+            $sql_chart = "SELECT strftime('%Y-%m', visit_time, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         default:
             $where = "{$where} AND DATE(visit_time, 'unixepoch', 'localtime') = DATE('now', 'localtime')";
@@ -28,8 +28,7 @@ return function ($request_data) {
     $sql_views = "SELECT COUNT(*) FROM event WHERE {$where}";
     $sql_visits = "SELECT COUNT(DISTINCT visit_id) FROM event WHERE {$where}";
     $sql_visitors = "SELECT COUNT(DISTINCT visitor_id) FROM event WHERE {$where}";
-    $sql_items = "SELECT item_id, COUNT(*) AS item_views FROM event WHERE item_id != '' GROUP BY item_id ORDER BY item_views DESC LIMIT 0,10";
-
+    $sql_items = "SELECT item_id, COUNT(*) AS item_views, page_url FROM event WHERE item_id != '' GROUP BY item_id ORDER BY item_views DESC LIMIT 0,10";
 
     $db = new SQLite3(ROOT_PATH . 'data/sqlite/visit.db');
     $views = $db->querySingle($sql_views); // 浏览量
@@ -49,6 +48,7 @@ return function ($request_data) {
             'title' => $goods['title'],
             'price' => $goods['price'],
             'image' => "{$goods['path']}/{$goods['image']}",
+            'page_url' => ltrim($row['page_url'], '/'),
             'views' => _formatNumberK($item_views)
         ];
     }
@@ -56,6 +56,7 @@ return function ($request_data) {
     $db->close();
     $db2->close();
 
+    $data['tab'] = $tab;
     $data['views'] = _formatNumberK($views);
     $data['visits'] = _formatNumberK($visits);
     $data['visitors'] = _formatNumberK($visitors);
@@ -64,6 +65,7 @@ return function ($request_data) {
     Response::json(array_merge($data, ['chart_data' => $chart_data]));
 };
 
+// 获取图表数据
 function _getCharts($db, $sql_chart, $tab)
 {
     $unit = 'hour';
@@ -85,9 +87,9 @@ function _getCharts($db, $sql_chart, $tab)
     } elseif ($tab == 'yesterday') {
         $alltime = _getYesterdayHours();
     } elseif ($tab == 'week') {
-        $alltime = _getPastDaysOfWeek();
+        $alltime = _getWeekDays();
     } elseif ($tab == 'month') {
-        $alltime = _getDaysInMonth();
+        $alltime = _getMonthDays();
     } elseif ($tab == 'year') {
         $alltime = _getYearMonths();
     }
@@ -125,50 +127,46 @@ function _getYesterdayHours()
 {
     $yesterday = date('Y-m-d', strtotime('yesterday'));
     $hours = [];
-
     for ($i = 0; $i < 24; $i++) {
         $timestamp = strtotime($yesterday . " " . sprintf('%02d', $i) . ':00:00');
         $hours[] = date('Y-m-d H:00', $timestamp);
     }
-
     return array_reverse($hours);
 }
 
 // 获取本周已过天数的数组
-function _getPastDaysOfWeek()
+function _getWeekDays()
 {
     $dateTime = new DateTime('monday this week');
     $days = [];
-
     for ($i = 0; $i < 7; $i++) {
         $days[] = $dateTime->format('Y-m-d');
         $dateTime->modify('+1 day');
     }
-
     return $days;
 }
 
 // 获取本月已过天数
-function _getDaysInMonth()
+function _getMonthDays()
 {
     $today = new DateTime(); // 获取当前日期
     $year = (int)$today->format('Y'); // 获取年份
     $month = (int)$today->format('m'); // 获取月份
     $day = (int)$today->format('d');   // 获取当前是哪一天
-
     $days = [];
     for ($i = 1; $i <= $day; $i++) {
         $days[] = sprintf('%04d-%02d-%02d', $year, $month, $i); // 格式化日期
     }
-
     return array_reverse($days);
 }
 
+// 获取一年的月份
 function _getYearMonths()
 {
     $months = [];
+    $year = date('Y');
     for ($i = 1; $i <= 12; $i++) {
-        $months[] = date('F', mktime(0, 0, 0, $i, 1, date('Y')));
+        $months[] = sprintf('%04d-%02d', $year, $i); // 格式化日期;
     }
     return $months;
 }

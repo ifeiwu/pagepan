@@ -34,7 +34,7 @@ $statement = $db->prepare('INSERT INTO "event" ("visit_time", "visit_id", "visit
 $statement->bindValue(':visit_time', time());
 $statement->bindValue(':visit_id', $visit_id);
 $statement->bindValue(':visitor_id', $visitor_id);
-$statement->bindValue(':item_id', $data['get_id'] ?? '');
+$statement->bindValue(':item_id', $data['item_id'] ?? '');
 $statement->bindValue(':page_id', $data['page_id'] ?? '');
 $statement->bindValue(':page_alias', $data['page_alias'] ?? '');
 $statement->bindValue(':page_url', $data['page_url'] ?? '');
