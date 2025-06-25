@@ -4,24 +4,24 @@ return function ($request_data) {
     $where = "page_url LIKE '/shop%'";
     switch ($tab) {
         case 'yesterday':
-            $where = "{$where} AND DATE(visit_time, 'unixepoch') = DATE('now', '-1 day')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', visit_time, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $where = "{$where} AND DATE(ctime, 'unixepoch') = DATE('now', '-1 day')";
+            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         case 'week':
-            $where = "{$where} AND visit_time BETWEEN strftime('%s', 'now', 'weekday 0', '-7 days') AND strftime('%s', 'now', 'weekday 0', '-1 days')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d', visit_time, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $where = "{$where} AND ctime BETWEEN strftime('%s', 'now', 'weekday 0', '-7 days') AND strftime('%s', 'now', 'weekday 0', '-1 days')";
+            $sql_chart = "SELECT strftime('%Y-%m-%d', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         case 'month':
-            $where = "{$where} AND strftime('%Y-%m', datetime(visit_time, 'unixepoch')) = strftime('%Y-%m', 'now', 'localtime')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d', visit_time, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $where = "{$where} AND strftime('%Y-%m', datetime(ctime, 'unixepoch')) = strftime('%Y-%m', 'now', 'localtime')";
+            $sql_chart = "SELECT strftime('%Y-%m-%d', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         case 'year':
-            $where = "{$where} AND strftime('%Y', datetime(visit_time, 'unixepoch', 'localtime')) = strftime('%Y', 'now')";
-            $sql_chart = "SELECT strftime('%Y-%m', visit_time, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $where = "{$where} AND strftime('%Y', datetime(ctime, 'unixepoch', 'localtime')) = strftime('%Y', 'now')";
+            $sql_chart = "SELECT strftime('%Y-%m', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         default:
-            $where = "{$where} AND DATE(visit_time, 'unixepoch', 'localtime') = DATE('now', 'localtime')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', visit_time, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $where = "{$where} AND DATE(ctime, 'unixepoch', 'localtime') = DATE('now', 'localtime')";
+            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
     }
 
@@ -30,7 +30,7 @@ return function ($request_data) {
     $sql_visitors = "SELECT COUNT(DISTINCT visitor_id) FROM event WHERE {$where}";
     $sql_items = "SELECT item_id, COUNT(*) AS item_views, page_url FROM event WHERE item_id != '' GROUP BY item_id ORDER BY item_views DESC LIMIT 0,10";
 
-    $db = new SQLite3(ROOT_PATH . 'data/sqlite/visit.db');
+    $db = new SQLite3(ROOT_PATH . 'data/sqlite/stats.db');
     $views = $db->querySingle($sql_views); // 浏览量
     $visits = $db->querySingle($sql_visits); // 访问次数
     $visitors = $db->querySingle($sql_visitors); // 独立访客
@@ -119,7 +119,7 @@ function _getTodayHours()
         $hour = date('Y-m-d H:00', strtotime(date('Y-m-d ' . $i . ':00')));
         $hours[] = $hour;
     }
-    return array_reverse($hours);
+    return $hours;
 }
 
 // 获取昨天的时间段
@@ -131,7 +131,7 @@ function _getYesterdayHours()
         $timestamp = strtotime($yesterday . " " . sprintf('%02d', $i) . ':00:00');
         $hours[] = date('Y-m-d H:00', $timestamp);
     }
-    return array_reverse($hours);
+    return $hours;
 }
 
 // 获取本周已过天数的数组
@@ -157,7 +157,7 @@ function _getMonthDays()
     for ($i = 1; $i <= $day; $i++) {
         $days[] = sprintf('%04d-%02d-%02d', $year, $month, $i); // 格式化日期
     }
-    return array_reverse($days);
+    return $days;
 }
 
 // 获取一年的月份

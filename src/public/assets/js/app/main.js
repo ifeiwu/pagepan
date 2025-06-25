@@ -125,23 +125,21 @@ require(['jquery', 'device', 'smoothscroll', 'picturefill'], function() {
         })
     }
 
-    if (RUN_MODE == 'dev') {
-        // 页面访问和事件跟踪
-        require(['ahoy'], function(ahoy) {
-            let params = {
-                'item_id': pagevar.get_id,
-                'page_id': pagevar.page_id,
-                'page_alias': pagevar.page_alias,
-                'page_url': pagevar.baseurl
-            }
-            ahoy.configure({
-                visitsUrl: 'visit.php',
-                eventsUrl: 'visit.php',
-                visitParams: params
-            })
-            ahoy.track('$page', params)
+    // 页面访问和事件跟踪
+    require(['ahoy'], function(ahoy) {
+        let params = {
+            'item_id': pagevar.get_id,
+            'page_id': pagevar.page_id,
+            'page_url': pagevar.baseurl
+        }
+        ahoy.configure({
+            visitsUrl: 'stats.php',
+            eventsUrl: 'stats.php',
+            visitParams: params
         })
-    }
+        ahoy.track('$page', params)
+        // ahoy.reset()
+    })
 
     // 手机页面前端调试面板
     if (/debug/.test(window.location)) {
