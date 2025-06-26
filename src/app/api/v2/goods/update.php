@@ -5,7 +5,9 @@ return function ($request_data) {
     if ($inventory <= 0) {
         $request_data['state'] = 0;
     }*/
-//    $request_data['price'] = price_format($request_data['price']);
+    if (!isset($request_data['price'])) {
+        $request_data['price'] = 0;
+    }
     if (helper('api/v2/updateItem', ['goods', $request_data])) {
         $db = db();
         $db->debug = false;
