@@ -31,6 +31,12 @@ class ItemModel
         return number_format(self::$item['price'], 2, '.', ',');
     }
 
+    public static function getPriceTypeInfo()
+    {
+        $price_types = [1 => ['text' => '一口价', 'bg' => '#AA5B1F'], 2 => ['text' => '有优惠', 'bg' => '#BF27BF'], 3 => ['text' => '免费送', 'bg' => '#D4212D'], 4 => ['text' => '面议', 'bg' => '#336BE6']];
+        return $price_types[self::$item['price_type']];
+    }
+
     // 获取商品SKU
     public static function getGoodsSkus($goods_id)
     {

@@ -123,7 +123,10 @@ return function () {
             foreach ($order_items as $item) {
                 $quantity = $item['quantity'];
                 $attrs = $item['attributes'];
-                $specs = json_encode2($attrs['specs'] ?: '{}');
+                $specs = $attrs['specs'] ?? '';
+                if ($specs) {
+                    $specs = json_encode2($attrs['specs']);
+                }
                 $detail = [
                     'order_id' => $order_id,
                     'goods_id' => $item['id'],
@@ -131,6 +134,7 @@ return function () {
                     'title' => $attrs['title'],
                     'specs' => $specs,
                     'price' => $attrs['price'],
+                    'price_type' => $attrs['price_type'],
                     'image' => $attrs['image'],
                     'path' => $attrs['path'],
                 ];
