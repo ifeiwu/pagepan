@@ -65,10 +65,10 @@ class ItemModel
                 if ($type == 1) {
                     $result[] = $value;
                 } else {
-                    $result[] = $key . ": " . $value;
+                    $result[] = $key . ': ' . $value;
                 }
             }
-            return implode(";", $result);
+            return implode('; ', $result);
         } else {
             return '';
         }

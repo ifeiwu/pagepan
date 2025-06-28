@@ -44,6 +44,7 @@ define(function (require) {
             $.getJSON('./m/shop/cart-remove', {'id': id, 'hash': hash}, function (res) {
                 if (res.code == 0) {
                     $component.find('.total-price').text(res.data.totalPrice);
+                    $component.find('.total-item').text('(' + res.data.totalItem + ')');
                     $li.slideUp(200, function () {
                         let $ul = $li.closest('ul');
                         $li.remove();

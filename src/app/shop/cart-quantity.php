@@ -5,9 +5,11 @@ return function () {
     $quantity = get('quantity');
 
     $cart = cart();
-    if ($cart->update($id, $quantity, $hash)) {
-        Response::success('', ['totalPrice' => price_format($cart->getTotalWithDiscount(), 2)]);
+    $is_update = $cart->update($id, $quantity, $hash);
+    $data = ['totalPrice' => price_format($cart->getTotalWithDiscount())];
+    if ($is_update) {
+        Response::success('', $data);
     } else {
-        Response::error('', ['totalPrice' => price_format($cart->getTotalWithDiscount(), 2)]);
+        Response::error('', $data);
     }
 };

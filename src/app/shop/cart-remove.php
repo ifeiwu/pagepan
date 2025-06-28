@@ -4,9 +4,14 @@ return function () {
     $hash = get('hash');
 
     $cart = cart();
-    if ($cart->remove($id, $hash)) {
-        Response::success('', ['totalPrice' => $cart->getTotalWithDiscount()]);
+    $is_remove = $cart->remove($id, $hash);
+    $data = [
+        'totalPrice' => price_format($cart->getTotalWithDiscount()),
+        'totalItem' => $cart->getTotalItem()
+    ];
+    if ($is_remove) {
+        Response::success('', $data);
     } else {
-        Response::error('', ['totalPrice' => $cart->getTotalWithDiscount()]);
+        Response::error('', $data);
     }
 };
