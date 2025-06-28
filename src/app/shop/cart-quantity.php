@@ -6,8 +6,8 @@ return function () {
 
     $cart = cart();
     if ($cart->update($id, $quantity, $hash)) {
-        Response::success('', ['totalPrice' => price_format($cart->getTotalWithDiscount())]);
+        Response::success('', ['totalPrice' => price_format($cart->getTotalWithDiscount(), 2)]);
     } else {
-        Response::error('', ['totalPrice' => price_format($cart->getTotalWithDiscount())]);
+        Response::error('', ['totalPrice' => price_format($cart->getTotalWithDiscount(), 2)]);
     }
 };

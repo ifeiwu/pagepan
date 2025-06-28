@@ -17,6 +17,6 @@ return function ($request_data) {
 
     Response::success('订单统计', [], [
         'today_count' => $today_count ?? 0,
-        'today_total' => price_format($today_total) ?? 0,
+        'today_total' => $today_total ?? 0,
     ]);
 };

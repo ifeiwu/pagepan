@@ -5,7 +5,6 @@ define(function (require) {
     }
 
     const alerty = require('alerty');
-    const price_format = require('util/price-format');
 
     // 双击商品抽屉方式打开删除按钮
     const initDrawer = function () {
@@ -57,7 +56,7 @@ define(function (require) {
         });
     };
 
-    // 设置购物车商口数量
+    // 设置购物车商品数量
     const updateCartQuantity = function ($number) {
         let $li = $number.closest('li');
         let id = $li.find('input[name="id"]').val();

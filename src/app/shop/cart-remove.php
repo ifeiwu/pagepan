@@ -5,8 +5,8 @@ return function () {
 
     $cart = cart();
     if ($cart->remove($id, $hash)) {
-        Response::success('', ['totalPrice' => price_format($cart->getTotalWithDiscount())]);
+        Response::success('', ['totalPrice' => $cart->getTotalWithDiscount()]);
     } else {
-        Response::error('', ['totalPrice' => price_format($cart->getTotalWithDiscount())]);
+        Response::error('', ['totalPrice' => $cart->getTotalWithDiscount()]);
     }
 };

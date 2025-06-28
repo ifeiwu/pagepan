@@ -5,7 +5,6 @@ define(function (require) {
     }
 
     const alerty = require('alerty');
-    const price_format = require('util/price-format');
 
     // 规格选择初始化
     const initTabs = function (skus) {
@@ -90,7 +89,7 @@ define(function (require) {
                     let sku_specs = skus[skukey].specs;
                     if (JSON.stringify(ksort(selected_specs)) == JSON.stringify(ksort(sku_specs))) {
                         $component.find('#price').hide();
-                        $component.find('#spec_price').text(price_format(sku.price)).show();
+                        $component.find('#spec_price').text(sku.price).show();
                         let quantity = parseInt($number.val());
                         if (quantity > sku.stock) {
                             $number.val(sku.stock);
