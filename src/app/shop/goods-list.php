@@ -2,6 +2,8 @@
 define('SITE', helper('site/kv'));
 
 return function () {
+    $layout = Request::get('layout', 'escape');
+    $categoryid = Request::get('cid', 'int');
     $orderby = Request::post('orderby', 'escape');
     $orderby = $orderby ?: 'sortby DESC, ctime DESC';
     $pagenum = Request::post('pagenum', 'int') ?: 1;
@@ -9,6 +11,10 @@ return function () {
 
     $db = db();
     $where = [['state', '=', 1], 'AND', ['type', '=', 1]];
+    if ($categoryid) {
+        $where[] = 'AND';
+        $where[] = ['pid', '=', $categoryid];
+    }
     $column = ['id', 'title', 'image', 'path', 'price', 'price_type'];
     $total = $db->count('goods', $where);
     $items = $db->select('goods', $column, $where, $orderby, [($pagenum - 1) * $perpage, $perpage]);
@@ -17,10 +23,19 @@ return function () {
     foreach ($items as $i => $item) {
         ItemModel::setItem($item);
         $price_type_info = ItemModel::getPriceTypeInfo();
-        $price_type = '<div class="flex items-center justify-center w-11 h-11 r-5 bg-primary primary-20"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg></div>';
-        if ($item['price_type'] != 1) {
-            $price_type = '<span class="f-4 r-full py-1 px-4" style="--bg:'.$price_type_info['bg'].';--c:#fff">'.$price_type_info['text'].'</span>';
+        // 不同布局输出的价格类型不一样
+        if ($layout == 'grid') {
+            $price_type = '<div class="flex items-center justify-center w-11 h-11 r-5 bg-primary primary-20"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg></div>';
+            if ($item['price_type'] != 1) {
+                $price_type = '<span class="f-4 r-full py-1 px-4" style="--bg:'.$price_type_info['bg'].';--c:#fff">'.$price_type_info['text'].'</span>';
+            }
+        } else {
+            $price_type = '';
+            if ($item['price_type'] != 1) {
+                $price_type = '<div class="f-3 r-full py-1 px-4" style="--bg:'.$price_type_info['bg'].';--c:#fff">'.$price_type_info['text'].'</div>';
+            }
         }
+
         $_items[$i]['title'] = ItemModel::getTitle();
         $_items[$i]['image'] = ItemModel::getImage('m_');
         $_items[$i]['price'] = ItemModel::getPrice();
