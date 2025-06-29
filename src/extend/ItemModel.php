@@ -28,7 +28,7 @@ class ItemModel
 
     public static function getPrice()
     {
-        return price_format(self::$item['price']);
+        return self::$item['price'];
     }
 
     public static function getPriceTypeInfo()

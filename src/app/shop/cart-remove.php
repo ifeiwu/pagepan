@@ -6,7 +6,7 @@ return function () {
     $cart = cart();
     $is_remove = $cart->remove($id, $hash);
     $data = [
-        'totalPrice' => price_format($cart->getTotalWithDiscount()),
+        'totalPrice' => $cart->getTotalWithDiscount(),
         'totalItem' => $cart->getTotalItem()
     ];
     if ($is_remove) {

@@ -195,7 +195,7 @@ function html_encode($str)
 // 价格格式化
 function price_format($number)
 {
-    $price = number_format($number, 2, '.', ','); // 格式化为最多 2 位小数
+    $price = number_format($number, 2, '.', ''); // 格式化为最多 2 位小数
     $price = rtrim($price, '0'); // 移除尾部的 0
     $price = rtrim($price, '.'); // 如果小数部分全部是 0，移除小数点
 

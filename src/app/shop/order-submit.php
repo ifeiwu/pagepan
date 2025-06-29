@@ -49,7 +49,7 @@ return function () {
     } else {
         $cart = cart();
         $order_quantity = $cart->getTotalQuantity();
-        $order_total = price_format($cart->getTotalWithDiscount());
+        $order_total = $cart->getTotalWithDiscount();
         $order_items = $cart->getItems();
     }
 
