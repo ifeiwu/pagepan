@@ -5,23 +5,23 @@ return function ($request_data) {
     switch ($tab) {
         case 'yesterday':
             $where = "{$where} AND DATE(ctime, 'unixepoch') = DATE('now', '-1 day')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', ctime, 'unixepoch') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         case 'week':
             $where = "{$where} AND ctime BETWEEN strftime('%s', 'now', 'weekday 0', '-7 days') AND strftime('%s', 'now', 'weekday 0', '-1 days')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $sql_chart = "SELECT strftime('%Y-%m-%d', ctime, 'unixepoch') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         case 'month':
-            $where = "{$where} AND strftime('%Y-%m', datetime(ctime, 'unixepoch')) = strftime('%Y-%m', 'now', 'localtime')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $where = "{$where} AND strftime('%Y-%m', datetime(ctime, 'unixepoch')) = strftime('%Y-%m', 'now')";
+            $sql_chart = "SELECT strftime('%Y-%m-%d', ctime, 'unixepoch') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         case 'year':
-            $where = "{$where} AND strftime('%Y', datetime(ctime, 'unixepoch', 'localtime')) = strftime('%Y', 'now')";
-            $sql_chart = "SELECT strftime('%Y-%m', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $where = "{$where} AND strftime('%Y', datetime(ctime, 'unixepoch')) = strftime('%Y', 'now')";
+            $sql_chart = "SELECT strftime('%Y-%m', ctime, 'unixepoch') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         default:
-            $where = "{$where} AND DATE(ctime, 'unixepoch', 'localtime') = DATE('now', 'localtime')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $where = "{$where} AND DATE(ctime, 'unixepoch') = DATE('now')";
+            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', ctime, 'unixepoch') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
     }
 
@@ -47,7 +47,7 @@ return function ($request_data) {
             'id' => $goods_id,
             'title' => $goods['title'],
             'price' => $goods['price'],
-            'image' => "{$goods['path']}/{$goods['image']}",
+            'image' => "{$goods['path']}/s_{$goods['image']}",
             'page_url' => ltrim($row['page_url'], '/'),
             'views' => _formatNumberK($item_views)
         ];
@@ -56,13 +56,16 @@ return function ($request_data) {
     $db->close();
     $db2->close();
 
-    $data['tab'] = $tab;
-    $data['views'] = _formatNumberK($views);
-    $data['visits'] = _formatNumberK($visits);
-    $data['visitors'] = _formatNumberK($visitors);
-    $data['goods_list'] = $goods_list;
+    $data = [
+        'tab' => $tab,
+        'views' => _formatNumberK($views),
+        'visits' => _formatNumberK($visits),
+        'visitors' => _formatNumberK($visitors),
+        'goods_list' => $goods_list,
+        'chart_data' => $chart_data
+    ];
 
-    Response::json(array_merge($data, ['chart_data' => $chart_data]));
+    Response::json($data);
 };
 
 // 获取图表数据

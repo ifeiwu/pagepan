@@ -87,40 +87,28 @@ function _backupsql($sqlname = null)
 // 检测文件或目录是否具有写入权限
 function _check_writable($directory)
 {
-    // 打开目录句柄
     if ($handle = opendir($directory)) {
-        // 遍历目录中的所有文件和子目录
         while (($item = readdir($handle)) !== false) {
-            // 跳过当前目录(.)和上级目录(..)
             if ($item === '.' || $item === '..') {
                 continue;
             }
-
-            $filepath = $directory . '/' . $item; // 拼接完整的路径
-
-            // 检查是否是目录
+            $filepath = $directory . $item;
             if (is_dir($filepath)) {
-                // 递归检查子目录
                 if (!_check_writable($filepath)) {
-                    return false; // 如果子目录中任何一个文件或目录没有写入权限
+                    return false;
                 }
             } elseif (is_file($filepath)) {
-                // 检查文件是否可写
                 if (!is_writable($filepath)) {
-                    return false; // 文件不可写
+                    return false;
                 }
             }
         }
-
-        closedir($handle); // 关闭目录句柄
-
-        // 检查当前目录是否可写
+        closedir($handle);
         if (!is_writable($directory)) {
-            return false; // 当前目录不可写
+            return false;
         }
-
-        return true; // 如果所有文件和目录都可写
+        return true;
     } else {
-        return false; // 无法打开目录
+        return false;
     }
 }
