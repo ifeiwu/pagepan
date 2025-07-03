@@ -382,16 +382,17 @@ class DB
      * @param $wheres
      * @return mixed
      */
-    public function column($table, $column = '*', $wheres = [])
+    public function column($table, $column, $wheres = [], $order = null)
     {
-        $values = [];
-        $sql = 'SELECT ' . $this->quoteSelectColumn($column) . ' FROM ' . $this->getTableName($table);
-
-        if (!empty($wheres)) {
-            list($sql, $values) = $this->where($sql, $wheres);
-        }
-
-        return $this->query($sql, $values, 0);
+        return $this->find($table, $column, $wheres, $order, 0);
+//        $values = [];
+//        $sql = 'SELECT ' . $this->quoteSelectColumn($column) . ' FROM ' . $this->getTableName($table);
+//
+//        if (!empty($wheres)) {
+//            list($sql, $values) = $this->where($sql, $wheres);
+//        }
+//
+//        return $this->query($sql, $values, 0);
     }
 
     /**

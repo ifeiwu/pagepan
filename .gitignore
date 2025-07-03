@@ -1,12 +1,10 @@
 /dist/
 /package/
+/src/vendor/
 /node_modules/
 /src/data/logs/
 /src/data/cache/
-/src/public/data/file/
-/src/public/data/pack/
-/src/data/backup/
-/src/vendor/
-/togit.bat
-/src/data/ip2region.xdb
 /src/data/order/
+/src/data/backup/
+/src/public/data/pack/
+/togit.bat

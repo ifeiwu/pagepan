@@ -9,7 +9,8 @@ return function ($request_data) {
         $is_del_spec = $db->delete('goods_spec', ['goods_id', '=', $id]);
         $is_del_sku = $db->delete('goods_sku', ['goods_id', '=', $id]);
         if ($is_del_spec && $is_del_sku) {
-            if (FS::rrmdir(WEB_ROOT . $item['path'])) {
+            $path = WEB_ROOT . 'data/file/goods/' . $id;
+            if (FS::rrmdir($path)) {
                 $db->pdo->commit();
                 Response::success('删除商品成功');
             } else {

@@ -4,7 +4,8 @@ return function ($request_data) {
     $db->debug = false;
 
     $title = '重命名标题';
-    $goods_id = $db->insert('goods', ['title' => $title, 'ctime' => time()]);
+    $sortby = $db->column('goods', 'sortby', [], 'sortby DESC');
+    $goods_id = $db->insert('goods', ['title' => $title, 'sortby' => $sortby, 'ctime' => time()]);
     if ($goods_id) {
         $item = $db->find('goods', '*', ['id', '=', $goods_id]);
         Response::success('添加商品成功', $item);
