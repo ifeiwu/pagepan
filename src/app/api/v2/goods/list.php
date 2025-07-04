@@ -7,10 +7,8 @@ return function ($request_data) {
     $number = $request_data['number'];
 
     $db = db();
-    $db->debug = false;
     $total = $db->count('goods', $where);
     $items = $db->select('goods', $column, $where, $order, $limit, $number);
-
     foreach ($items as $i => $item) {
         $pid = $item['pid'];
         $path = $item['path'];

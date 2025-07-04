@@ -33,7 +33,6 @@ return function ($request_data) {
 
     try {
         $db = db();
-        $db->debug = false;
         $db->pdo->beginTransaction();
         // 添加页面分组“Soho店”如果存在不重复添加
         $page_group = $db->column('site', 'value', ['name', '=', 'page_group']);

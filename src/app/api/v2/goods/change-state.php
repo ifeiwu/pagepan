@@ -4,7 +4,6 @@ return function ($request_data) {
     $state = intval($request_data['state']);
 
     $db = db();
-    $db->debug = false;
     if ($db->update('goods', ['state' => $state], ['id', '=', $id])) {
         Response::success('改变商品状态成功');
     } else {

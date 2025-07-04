@@ -14,9 +14,7 @@ return function ($request_data) {
         $data['value'] = $spec_value;
     }
 
-    $db = db();
-    $db->debug = false;
-    if ($db->update('goods_spec', $data, $where)) {
+    if (db()->update('goods_spec', $data, $where)) {
         Response::success('更新商品规格成功');
     } else {
         Response::error('更新商品规格失败');

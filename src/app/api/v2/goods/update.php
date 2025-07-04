@@ -10,8 +10,6 @@ return function ($request_data) {
     }
     if (helper('api/v2/updateItem', ['goods', $request_data])) {
         $db = db();
-        $db->debug = false;
-
         $goods_id = $request_data['id'];
         $specs = $request_data['specs'];
         if (is_array($specs)) {

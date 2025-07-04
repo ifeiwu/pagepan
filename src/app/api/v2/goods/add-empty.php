@@ -1,8 +1,6 @@
 <?php
 return function ($request_data) {
     $db = db();
-    $db->debug = false;
-
     $title = '重命名标题';
     $sortby = $db->column('goods', 'sortby', [], 'sortby DESC');
     $goods_id = $db->insert('goods', ['title' => $title, 'sortby' => $sortby, 'ctime' => time()]);

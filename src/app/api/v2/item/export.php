@@ -6,7 +6,6 @@ return function ($request_data) {
     $order = $request_data['order'] ?: ['sortby' => 'DESC', 'ctime' => 'DESC'];
 
     $db = db();
-    $db->debug = false;
     $items = $db->select($table, $column, $where, $order);
     foreach ($items as $i => $item) {
         $pid = $item['pid'];

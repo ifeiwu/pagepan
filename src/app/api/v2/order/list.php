@@ -7,7 +7,6 @@ return function ($request_data) {
     $number = $request_data['number'];
 
     $db = db();
-    $db->debug = false;
     $total = $db->count('order', $where);
     $items = $db->select('order', $column, $where, $order, $limit, $number);
 

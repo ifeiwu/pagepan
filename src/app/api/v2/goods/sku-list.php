@@ -3,7 +3,6 @@ return function ($request_data) {
     $goods_id = intval($request_data['goodsid']);
 
     $db = db();
-    $db->debug = false;
     $specs = $db->select('goods_spec', ['id', 'name', 'value'], ['goods_id', '=', $goods_id], ['id' => 'ASC']);
     $gskus = $db->select('goods_sku', '*', ['goods_id', '=', $goods_id]);
 

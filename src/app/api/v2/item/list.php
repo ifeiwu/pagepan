@@ -7,7 +7,6 @@ return function ($request_data) {
     $perpage = $request_data['perpage'] ?: 0;
 
     $db = db();
-    $db->debug = false;
     // 数据分页
     if ( $perpage > 0 ) {
         $pagenum = $request_data['pagenum'] ?: 1;

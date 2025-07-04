@@ -8,7 +8,6 @@ return function ($request_data) {
     $number = $request_data['number'];
 
     $db = db();
-    $db->debug = false;
     $data = $db->select($table, $columns, $wheres, $order, $limit, $number);
 
     Response::success('', $data);

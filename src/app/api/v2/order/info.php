@@ -3,7 +3,6 @@ return function ($request_data) {
     $id = $request_data['id'];
 
     $db = db();
-    $db->debug = false;
     $order = $db->find('order', '*', ['id' , '=', $id]);
     $order['ctime'] = date('Y-m-d H:i', $order['ctime']);
     $address = explode(',', $order['address']);

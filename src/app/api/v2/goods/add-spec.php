@@ -4,7 +4,6 @@ return function ($request_data) {
     $data = ['goods_id' => $goods_id, 'name' => '重命名', 'value' => ''];
 
     $db = db();
-    $db->debug = false;
     $id = $db->insert('goods_spec', $data);
     if ($id) {
         Response::success('添加商品规格成功', ['id' => $id]);

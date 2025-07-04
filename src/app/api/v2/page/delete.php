@@ -1,7 +1,6 @@
 <?php
 return function ($request_data) {
     $db = db();
-    $db->debug = false;
 
     $table = 'page';
     $layouts = $datasets = [];

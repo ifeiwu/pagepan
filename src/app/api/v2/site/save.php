@@ -9,7 +9,6 @@ return function ($request_data) {
     }
 
     $db = db();
-    $db->debug = false;
 
     // 添加更新时间
     $request_data[] = [

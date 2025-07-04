@@ -4,7 +4,6 @@ return function ($request_data) {
     $status = intval($request_data['status']);
 
     $db = db();
-    $db->debug = false;
     if ($db->update('order', ['status' => $status], ['id', '=', $id])) {
         // 已确认：商品减去库存
         if ($status == 1) {
