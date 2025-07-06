@@ -1,7 +1,7 @@
 <?php
 return [
     'cache' => false,
-    'url' => 'http://uikit.pagepan.test/',
-    'host' => 'http://uikit.pagepan.test/',
+    'url' => 'https://uikit.pagepan.test/',
+    'host' => 'https://uikit.pagepan.test/',
     'version' => ''
 ];
