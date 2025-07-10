@@ -5,7 +5,7 @@ return function () {
     $layout = Request::get('layout', 'escape');
     $categoryid = Request::get('cid', 'int');
     $orderby = Request::post('orderby', 'escape');
-    $orderby = $orderby ?: 'sortby DESC, ctime DESC';
+    $orderby = $orderby ?: 'sortby DESC, id DESC';
     $pagenum = Request::post('pagenum', 'int') ?: 1;
     $perpage = Request::post('perpage', 'int') ?: 0;
 

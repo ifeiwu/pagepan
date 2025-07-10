@@ -80,7 +80,7 @@ function __uikit_article($view, $config) {
 	$where[] = 'AND';
 	$where[] = array('page_id', '=', $dataset_id);
 	
-	$item_id = db()->find($dataset_table, 'id', $where, ['sortby' => 'DESC', 'ctime' => 'DESC'], 0);
+	$item_id = db()->find($dataset_table, 'id', $where, ['sortby' => 'DESC', 'id' => 'DESC'], 0);
 	// 模拟页面参数
     $view->assign('pagevar', [
         'get_id' => $item_id,

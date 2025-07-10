@@ -3,7 +3,7 @@ return function ($request_data) {
     $table = $request_data['table'] ?: 'item';
     $column = $request_data['column'] ?: '*';
     $where = $request_data['where'] ?: '1 = 1';
-    $order = $request_data['order'] ?: ['sortby' => 'DESC', 'ctime' => 'DESC'];
+    $order = $request_data['order'] ?: ['sortby' => 'DESC', 'id' => 'DESC'];
 
     $db = db();
     $items = $db->select($table, $column, $where, $order);

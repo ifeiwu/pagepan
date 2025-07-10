@@ -2,7 +2,7 @@
 return function ($request_data) {
     $column = $request_data['column'] ?? ['id', 'title'];
     $where = $request_data['where'] ?? ['type', '=', 2] ;
-    $order = $request_data['order'] ?? ['sortby' => 'DESC', 'ctime' => 'DESC'];
+    $order = $request_data['order'] ?? ['sortby' => 'DESC', 'id' => 'DESC'];
 
     $db = db();
     $items = $db->select('goods', $column, $where, $order);

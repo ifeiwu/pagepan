@@ -5,7 +5,7 @@ return function ($columns = 'id,pid,title', $where = []) {
     $page_id = $setting['dataset.id'];
     $table = $setting['dataset.table'];
     $order = $setting['dataset.category.orderby'];
-    $order = $order ?: 'sortby DESC, ctime DESC';
+    $order = $order ?: 'sortby DESC, id DESC';
 
     if ( $page_id && $table )
     {
@@ -15,7 +15,7 @@ return function ($columns = 'id,pid,title', $where = []) {
         $where[] = 'AND';
         $where[] = ['page_id', '=', $page_id];
 
-        $order = $order ?: 'sortby DESC, ctime DESC';
+        $order = $order ?: 'sortby DESC, id DESC';
 
         return db()->select($table, '*', $where, $order);
     }

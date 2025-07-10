@@ -5,7 +5,7 @@ return function ($columns = [], $where = []) {
     $dataset_id = $setting['dataset.id'];
     $dataset_table = $setting['dataset.table'];
     $dataset_orderby = $setting['dataset.orderby'];
-    $dataset_orderby = $dataset_orderby ?: 'sortby DESC, ctime DESC';
+    $dataset_orderby = $dataset_orderby ?: 'sortby DESC, id DESC';
     $dataset_perpage = $setting['dataset.perpage'];
     $dataset_perpage = is_numeric($dataset_perpage) ? $dataset_perpage : 0;
 
