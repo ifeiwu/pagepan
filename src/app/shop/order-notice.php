@@ -31,10 +31,10 @@ function _pushwx($order_sn = '', $data = []) {
     $pushwx_url = helper('site/value', ['shop_pushwx']);
     if ($pushwx_url) {
         if ($order_sn) {
-            $title = "SOHO店有新的订单：{$order_sn}";
+            $title = "您有新的订单：{$order_sn}";
             $content = "订单号: {$order_sn}，请到后台查看订单详情。";
         } else {
-            $title = 'SOHO店有用户下单失败';
+            $title = '有用户下单失败';
             $content = '';
             foreach ($data as $key => $value) {
                 $content .= "{$key}: {$value}\n";
@@ -68,10 +68,10 @@ function _pushme($order_sn = '', $data = []) {
     $pushme_key = helper('site/value', ['shop_pushme']);
     if ($pushme_key) {
         if ($order_sn) {
-            $title = "[s]SOHO店有新的订单：{$order_sn}";
+            $title = "[s]您有新的订单：{$order_sn}";
             $content = "订单号: {$order_sn}，请到后台查看订单详情。";
         } else {
-            $title = '[f]SOHO店有用户下单失败';
+            $title = '[f]有用户下单失败';
             $content = '';
             foreach ($data as $key => $value) {
                 $content .= "{$key}: {$value}\n";

@@ -1,5 +1,5 @@
 <?php
-// 安装Soho店
+// 安装酷店
 return function ($request_data) {
     if (RUN_MODE == 'dev') {
         Response::error('开发模式无法使用此功能');
@@ -34,12 +34,12 @@ return function ($request_data) {
     try {
         $db = db();
         $db->pdo->beginTransaction();
-        // 添加页面分组“Soho店”如果存在不重复添加
+        // 添加页面分组“酷店”如果存在不重复添加
         $page_group = $db->column('site', 'value', ['name', '=', 'page_group']);
         $page_group = json_decode2($page_group);
         $ids = array_column($page_group, 'id');
         if (!in_array('9', $ids)) {
-            $page_group[] = ['id' => '9', 'type' => '', 'title' => 'Soho店'];
+            $page_group[] = ['id' => '9', 'type' => '', 'title' => '酷店'];
             $db->save('site', ['state' => 0, 'name' => 'page_group', 'value' => json_encode2($page_group)], ['name', '=', 'page_group']);
         }
         // 设置开店状态
@@ -52,14 +52,14 @@ return function ($request_data) {
             $tplsql = $request_data['tplsql'];
             if ($db->pdo->exec($tplsql) !== false) {
                 $db->pdo->commit();
-                Response::success('开通Soho店成功');
+                Response::success('开通酷店成功');
             } else {
                 $db->pdo->rollBack();
-                Response::error('开通Soho店失败');
+                Response::error('开通酷店失败');
             }
         } else {
             $db->pdo->commit();
-            Response::success('Soho店己开通');
+            Response::success('酷店己开通');
         }
     } catch (\Exception $e) {
         $db->pdo->rollBack();

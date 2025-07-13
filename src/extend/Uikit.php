@@ -285,6 +285,9 @@ class Uikit
         if ($prefix == 'component') {
             $_attrs .= 'uk="' . $this->view->path . '" ';
             $_attrs .= $this->view->ukid . ' ';
+            if (isset($setting['component.id'])) {
+                $_attrs .= 'id="' . $setting['component.id'] . '" ';
+            }
         } elseif (isset($setting[$prefix . '.alias'])) {
             $_attrs .= 'number="' . $setting[$prefix . '.alias'] . '" ';
         }
