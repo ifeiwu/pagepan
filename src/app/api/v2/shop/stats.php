@@ -5,23 +5,23 @@ return function ($request_data) {
     switch ($tab) {
         case 'yesterday':
             $where = "{$where} AND DATE(ctime, 'unixepoch') = DATE('now', '-1 day', 'localtime')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', ctime, 'unixepoch') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         case 'week':
-            $where = "{$where} AND ctime BETWEEN strftime('%s', 'now', 'weekday 0', '-7 days', 'localtime') AND strftime('%s', 'now', 'weekday 0', '-1 days', 'localtime')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d', ctime, 'unixepoch') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $where = "{$where} AND strftime('%W', datetime(ctime, 'unixepoch', 'localtime')) = strftime('%W', 'now', 'localtime')";
+            $sql_chart = "SELECT strftime('%Y-%m-%d', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         case 'month':
             $where = "{$where} AND strftime('%Y-%m', datetime(ctime, 'unixepoch')) = strftime('%Y-%m', 'now', 'localtime')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d', ctime, 'unixepoch') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $sql_chart = "SELECT strftime('%Y-%m-%d', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         case 'year':
             $where = "{$where} AND strftime('%Y', datetime(ctime, 'unixepoch')) = strftime('%Y', 'now', 'localtime')";
-            $sql_chart = "SELECT strftime('%Y-%m', ctime, 'unixepoch') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $sql_chart = "SELECT strftime('%Y-%m', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
         default:
             $where = "{$where} AND DATE(ctime, 'unixepoch') = DATE('now', 'localtime')";
-            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', ctime, 'unixepoch') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
+            $sql_chart = "SELECT strftime('%Y-%m-%d %H:00', ctime, 'unixepoch', 'localtime') AS vtime, COUNT(*) AS views, COUNT(DISTINCT visitor_id) AS visitors FROM event WHERE {$where} GROUP BY vtime ORDER BY vtime DESC";
             break;
     }
 
