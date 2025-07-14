@@ -1,18 +1,14 @@
-<?php
-return function () {
-?>
+<?php return function () {?>
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <base href="<?=ROOT_URL?>">
     <meta charset="UTF-8">
     <meta name="renderer" content="webkit">
     <meta name="force-rendering" content="webkit">
-
-    <title>PAGEPAN - 自助建站管理平台</title>
+    <title>小飞云 - 可视化建站平台</title>
 
     <link rel="icon" href="favicon.png">
-
     <link href="https://yun.pagepan.test/assets/uikit/uikit.css" rel="stylesheet">
     <link href="https://yun.pagepan.test/assets/uikit/theme.css" rel="stylesheet">
     <link href="https://yun.pagepan.test/assets/css/login.css" rel="stylesheet">
@@ -26,37 +22,29 @@ return function () {
 
     <div class="uk-container uk-padding-small uk-width-1-5 uk-margin-large-top">
         <form class="uk-form-stacked" id="loginForm">
-
             <input type="hidden" name="token" value="<?=md5(session('login_token'))?>">
-            <input type="hidden" name="domain" value="<?=session('login_domain')?>">
-
             <fieldset class="uk-fieldset">
-
                 <legend class="uk-legend uk-text-bold uk-text-center uk-margin-bottom">
                     <h2 class="logo-text" style="margin-bottom: 5px;">PAGE<span style="color: #ff1c37;">PAN</span></h2>
-                    <small class="uk-display-block uk-text-small uk-text-normal uk-text-muted">网站可视化管理平台</small>
+                    <small class="uk-display-block uk-text-small uk-text-normal uk-text-muted uk-text-bold">可视化建站平台</small>
                 </legend>
-
                 <div class="uk-margin">
                     <label class="uk-form-label">用户名</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" name="username" type="text" value="admin" required>
+                        <input class="uk-input" name="username" type="text" value="" required>
                     </div>
                 </div>
-
                 <div class="uk-margin">
                     <label class="uk-form-label">密码</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input" name="password" type="password" value="gb2312" data-key="<?=md5(session('pass_key'));?>" required>
+                        <input class="uk-input" name="password" type="password" value="" data-key="<?=md5(session('pass_key'));?>" required>
                     </div>
                 </div>
-
                 <div class="uk-margin uk-margin-medium-top uk-text-center">
                     <button class="uk-button uk-button-primary uk-padding-large uk-padding-remove-vertical" type="submit">登 录</button>
                 </div>
-
                 <div class="uk-margin uk-text-center">
-                    <a href="main/forget" class="uk-text-muted" style="font-size: 12px">忘记密码？</a>
+                    <a href="main/forget" class="uk-text-muted" style="font-size:13px">忘记密码？</a>
                 </div>
             </fieldset>
         </form>
@@ -65,8 +53,7 @@ return function () {
     <div class="uk-position-bottom uk-padding-small uk-text-center copyright">© PAGEPAN 2013, <?=date('Y')?></div>
 
     <script src="https://yun.pagepan.test/assets/js/lib/jquery.js"></script>
-    <script src="https://yun.pagepan.test/assets/uikit/uikit.js?>"></script>
-    <script src="https://yun.pagepan.test/assets/js/lib/crypt.js"></script>
+    <script src="https://yun.pagepan.test/assets/uikit/uikit.js"></script>
     <script src="assets/js/app/admin/login.js"></script>
     <script>
         let upgrade = "<?=$_GET['upgrade']?>";
@@ -76,5 +63,4 @@ return function () {
     </script>
 </body>
 </html>
-
 <?php }?>

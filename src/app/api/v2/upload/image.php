@@ -8,6 +8,7 @@ use Sirius\Upload\Handler as UploadHandler;
 return function () {
     $file = $_FILES['file'];
     $file_name = $file['name'];
+    $image_name = $_POST['image_name']; // 图片名称
     $image_path = $_POST['image_path']; // 图片路径
     $overwrite = $_POST['overwrite'] ?? true; // 是否覆盖图片
     // 上传路径
@@ -21,6 +22,13 @@ return function () {
     $uploadHandler->addRule('size', ['size' => '20M'], '{label}应小于 {size}', '图片');
     $uploadHandler->setOverwrite($overwrite);
 //    $uploadHandler->setAutoconfirm(true);
+
+    if ($image_name) {
+        $uploadHandler->setSanitizerCallback(function($name) use ($image_name) {
+            return $image_name.'.png';
+        });
+    }
+
     $result = $uploadHandler->process($file);
     if ($result->isValid()) {
         $file_name = $result->name;

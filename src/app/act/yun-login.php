@@ -1,6 +1,6 @@
 <?php
 return function () {
-    $domain = $_SERVER['HTTP_HOST'] ?: $_SERVER['SERVER_NAME'];
+    $domain = str_replace('www.', '', $_SERVER['HTTP_HOST'] ?: $_SERVER['SERVER_NAME']);
     if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) || isset($_SERVER['HTTP_X_REAL_IP'])) {
         // 请求通过反向代理发送
     } else {
@@ -13,13 +13,14 @@ return function () {
             }
         }
     }
-    // 拼接网站访问根域名
-    $rooturl = $_SERVER['SCRIPT_NAME'] ?: $_SERVER['PHP_SELF'];
-    $_POST['domain'] = str_replace('www.', '', dirname($domain . $rooturl));
 
+    // 拼接网站访问域名
+    $path = $_SERVER['SCRIPT_NAME'] ?: $_SERVER['PHP_SELF'];
+    $_POST['domain'] = dirname($domain . $path);
+
+    // 获取云后台链接
     $yun_url = Config::file('admin', 'url');
-    $yun_url = rtrim($yun_url, '/');
-    $yun_login_url = rtrim($yun_url, '/') . '/main/login.auth2';
+    $yun_login_url = "{$yun_url}main/login.auth2";
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $yun_login_url);
@@ -29,17 +30,18 @@ return function () {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
-    $response = curl_exec($ch);
+    $json = curl_exec($ch);
     if (curl_errno($ch)) {
-        Response::error('ok', curl_error($ch));
+        Response::error(curl_error($ch));
     }
     curl_close($ch);
 
-    $res = json_decode($response, true);
-    if ($res['code'] == 0) {
+    $res = json_decode($json, true);
+    if ($res['code'] === 0) {
         $data = $res['data'];
-        $res['login_token_url'] = "$yun_url/main/login.verify?token={$data['token']}&domain={$data['domain']}";
+        $res['login_token_url'] = "{$yun_url}main/login.verify?token={$data['token']}";
+        Response::json($res);
+    } else {
+        Response::error('无效的小飞云登录地址：' . $yun_url);
     }
-
-    Response::json($res);
 };
