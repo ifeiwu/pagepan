@@ -30,7 +30,7 @@ return function ($action) {
             <fieldset class="uk-fieldset">
                 <legend class="uk-legend uk-margin-bottom">重置密码</legend>
                 <div class="uk-margin" id="step1">
-                    <input type="text" id="email" name="email" class="uk-input" value="pagepan@qq.com" placeholder="网站邮箱" tabindex="1">
+                    <input type="text" id="email" name="email" class="uk-input" value="" placeholder="网站邮箱" tabindex="1">
                 </div>
                 <div class="uk-margin" id="step2" style="display: none">
                     <div class="uk-margin">
