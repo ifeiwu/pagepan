@@ -15,7 +15,7 @@ $router->map('GET|POST', '/api/[:version]/[:module]/[:action]', 'app/api');
 $router->map('GET|POST', '/[!|act]/[:action]?', 'app/act');
 $router->map('GET|POST', '/m/[:module]/[:action]', 'app/module');
 $router->map('GET|POST', '/extension/[:module]/[:action]?', 'app/extension');
-$router->map('GET', '/admin[/]?', 'app/admin');
+$router->map('GET|POST', '/admin[/]?[:action]?', 'app/admin');
 $router->map('GET', '/img/[**:name]', 'app/act/thumb');
 $router->map('GET', '/[:alias]/id/[i+:id]', 'app/pager/detail');
 $router->map('GET', '/[:alias]/category/[i+:cid]', 'app/pager/category');

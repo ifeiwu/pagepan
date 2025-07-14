@@ -22,13 +22,12 @@ return function () {
     $uploadHandler->addRule('size', ['size' => '20M'], '{label}应小于 {size}', '图片');
     $uploadHandler->setOverwrite($overwrite);
 //    $uploadHandler->setAutoconfirm(true);
-
+    // 修改名称
     if ($image_name) {
         $uploadHandler->setSanitizerCallback(function($name) use ($image_name) {
-            return $image_name.'.png';
+            return $image_name . '.' . pathinfo($name, PATHINFO_EXTENSION);
         });
     }
-
     $result = $uploadHandler->process($file);
     if ($result->isValid()) {
         $file_name = $result->name;

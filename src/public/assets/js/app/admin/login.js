@@ -24,14 +24,18 @@ $(function() {
         e.preventDefault()
         $submit.prop('disabled', true).text('请稍候...')
         // $password.val(encrypt($password.val(), $password.data('key')));
-        $.post('m/act/yun-login', $form.serialize(), function(res) {
+        $.post('admin/login-auth', $form.serialize(), function(res) {
             if (res.code == 0) {
                 localStorage.setItem('login_name', $username.val())
-                location.href = res.login_token_url;
+                location.href = res.login_token_url
             } else {
-                $submit.text('重 试').prop('disabled', false)
-                $password.val('')
-                UIkit.notification(res.message, { status: 'danger' })
+                if (res.data == 'reload') {
+                    alert(res.message)
+                    location.reload()
+                } else {
+                    $submit.text('重 试').prop('disabled', false)
+                    UIkit.notification(res.message, { status: 'danger' })
+                }
             }
         }, 'JSON')
     })

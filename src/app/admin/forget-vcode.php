@@ -1,5 +1,9 @@
 <?php
 return function () {
+    if (md5(session('forget_token')) !== $_POST['token']) {
+        Response::error('会话已失效，请刷新页面重试。', 'reload');
+    }
+
     $domain = str_replace('www.', '', $_SERVER['HTTP_HOST'] ?: $_SERVER['SERVER_NAME']);
     if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) || isset($_SERVER['HTTP_X_REAL_IP'])) {
         // 请求通过反向代理发送
@@ -20,7 +24,7 @@ return function () {
 
     // 获取云后台链接
     $yun_url = Config::file('admin', 'url');
-    $yun_login_url = "{$yun_url}main/login.auth2";
+    $yun_login_url = "{$yun_url}main/forget.vcode";
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $yun_login_url);
@@ -38,10 +42,11 @@ return function () {
 
     $res = json_decode($json, true);
     if ($res['code'] === 0) {
-        $data = $res['data'];
-        $res['login_token_url'] = "{$yun_url}main/login.verify?token={$data['token']}";
+        session('forget_vcode', $res['data']);
+        Response::json($res);
+    } elseif ($res['code'] === 1) {
         Response::json($res);
     } else {
-        Response::error('无效的小飞云登录地址：' . $yun_url);
+        Response::error('小飞云链接无效：' . $yun_url);
     }
 };
