@@ -19,8 +19,8 @@ return function () {
     }
 
     // 拼接网站访问域名
-    $path = $_SERVER['SCRIPT_NAME'] ?: $_SERVER['PHP_SELF'];
-    $_POST['domain'] = dirname($domain . $path);
+    $path = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+    $_POST['domain'] = $domain . $path;
 
     // 获取云后台链接
     $yun_url = Config::file('admin', 'url');
