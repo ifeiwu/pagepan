@@ -24,7 +24,7 @@ return function () {
 
     // 获取云后台链接
     $yun_url = Config::file('admin', 'url');
-    $yun_login_url = "{$yun_url}main/login.auth2";
+    $yun_login_url = "{$yun_url}main/login.auth";
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $yun_login_url);
@@ -43,8 +43,6 @@ return function () {
     $res = json_decode($json, true);
     if ($res['code'] === 0) {
         $data = $res['data'];
-//        $upgrade = intval($_POST['upgrade']);
-//        $query_upgrade = $upgrade === 1 ? '&upgrade=1' : '';
         $res['login_token_url'] = "{$yun_url}main/login.verify?token={$data['token']}";
         Response::json($res);
     } elseif ($res['code'] === 1) {

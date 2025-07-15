@@ -48,12 +48,12 @@ return function ($request_data) {
     $upgrade_code = file_get_contents('http://get.pagepan.com/install/' . $last_version2 . '/upgrade?t=' . time(), 0, $ctx);
 
     if ($upgrade_code === false) {
-        Response::error('无法远程访问升级文件。');
+        Response::error('无法获取远程升级文件。');
     }
 
     $upgrade_file = WEB_ROOT . 'upgrade.php';
     if (file_put_contents($upgrade_file, $upgrade_code) === false) {
-        Response::error("无法将数据写入文件【{$upgrade_file}】。");
+        Response::error("无法写入文件【{$upgrade_file}】。");
     }
 
     Response::success("文件【{$upgrade_file}】已经准备就绪，可以进行升级操作。");

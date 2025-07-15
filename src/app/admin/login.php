@@ -27,7 +27,6 @@ return function () {
     <div class="uk-container uk-padding-small uk-width-1-5 uk-margin-large-top">
         <form class="uk-form-stacked" id="loginForm">
             <input type="hidden" name="token" value="<?=md5(session('login_token'))?>">
-            <input type="hidden" name="upgrade" value="<?=$_GET['upgrade']?>">
             <fieldset class="uk-fieldset">
                 <legend class="uk-legend uk-text-bold uk-text-center uk-margin-bottom">
                     <h2 class="logo-text" style="margin-bottom: 5px;">PAGE<span style="color: #ff1c37;">PAN</span></h2>
