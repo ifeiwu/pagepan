@@ -1,4 +1,5 @@
 <?php
+
 /**
  * https://github.com/thephpleague/plates
  */
@@ -66,8 +67,7 @@ class View
 
     public static function new($path = null)
     {
-        if ( ! (self::$_instance instanceof self) )
-        {
+        if (!(self::$_instance instanceof self)) {
             self::$_instance = new self($path);
         }
 
@@ -82,7 +82,7 @@ class View
      */
     public function __call($name, $args)
     {
-        if ( ! isset(self::$funcs[$name]) ) {
+        if (!isset(self::$funcs[$name])) {
             self::$funcs[$name] = require LIB_PATH . "view/{$name}.php";
         }
 
@@ -124,10 +124,10 @@ class View
      */
     public function assign($name, $value = null)
     {
-        if ( is_array($name) ) {
+        if (is_array($name)) {
             $this->data = array_merge($this->data, $name);
         } else {
-            if ( strpos($name, '.') ) {
+            if (strpos($name, '.')) {
                 list($name1, $name2) = explode('.', $name, 2);
                 $this->data[$name1][$name2] = $value;
             } else {
@@ -144,21 +144,20 @@ class View
      */
     public function render($name, $data = null)
     {
-        if ( is_array($data) ) {
+        if (is_array($data)) {
             $this->data = array_merge($this->data, $data);
         }
 
         try {
             ob_start();
 
-            (function() {
+            (function () {
                 extract($this->data, EXTR_OVERWRITE);
                 include func_get_arg(0);
             })("{$this->basePath}{$name}{$this->extname}");
 
             return ob_get_clean();
-        }
-        catch (Throwable $ex) {
+        } catch (Throwable $ex) {
             ob_end_clean();
             throw $ex;
         }
@@ -172,21 +171,20 @@ class View
      */
     public function parse($content, $data = null)
     {
-        if ( is_array($data) ) {
+        if (is_array($data)) {
             $this->data = array_merge($this->data, $data);
         }
 
         try {
             ob_start();
 
-            (function() {
+            (function () {
                 extract($this->data, EXTR_OVERWRITE);
                 eval('?>' . func_get_arg(0));
             })($content);
 
             return ob_get_clean();
-        }
-        catch (Throwable $ex) {
+        } catch (Throwable $ex) {
             ob_end_clean();
             throw $ex;
         }
@@ -212,13 +210,19 @@ class View
      */
     public function display($name, $data = null)
     {
-        $content = $this->render($name, $data);
+        if (is_string($name)) {
+            $content = $this->render($name, $data);
+        } elseif (is_callable($name)) {
+            ob_start();
+            $name($this);
+            $content = ob_get_clean();
+        }
 
-        if ( $content ) {
+        if ($content) {
             $this->addSection('content', $content);
         }
 
-        if ( $this->layoutName ) {
+        if ($this->layoutName) {
             $content = $this->render($this->layoutName, $this->layoutData);
         }
 
@@ -227,7 +231,7 @@ class View
 
     /**
      * 开始当前内容块
-     * @param  string  $name
+     * @param string $name
      * @return null
      */
     public function start($name = null)
@@ -248,13 +252,13 @@ class View
 
     /**
      * 返回内容块的内容
-     * @param  string $name    块名称
-     * @param  string $default 默认块内容
+     * @param string $name 块名称
+     * @param string $default 默认块内容
      * @return string|null
      */
     public function section($name, $default = null)
     {
-        if ( ! isset($this->sections[$name]) ) {
+        if (!isset($this->sections[$name])) {
             return $default;
         }
 
@@ -285,8 +289,8 @@ class View
 
     /**
      * 页面插入模板内容
-     * @param  string $name
-     * @param  array  $data
+     * @param string $name
+     * @param array $data
      * @return null
      */
     public function insert($name, $data = [])
@@ -296,8 +300,8 @@ class View
 
     /**
      * 将多个函数应用于变量。
-     * @param  mixed  $var
-     * @param  string $functions
+     * @param mixed $var
+     * @param string $functions
      * @return mixed
      */
     public function batch($var, $functions)
@@ -317,13 +321,13 @@ class View
 
     /**
      * 转义字符串
-     * @param  string      $string
-     * @param  null|string $functions
+     * @param string $string
+     * @param null|string $functions
      * @return string
      */
     public function escape($string, $functions = null)
     {
-        if ( $functions ) {
+        if ($functions) {
             $string = $this->batch($string, $functions);
         }
 
@@ -332,8 +336,8 @@ class View
 
     /**
      * escape 函数的别名
-     * @param  string      $string
-     * @param  null|string $functions
+     * @param string $string
+     * @param null|string $functions
      * @return string
      */
     public function e($string, $functions = null)
