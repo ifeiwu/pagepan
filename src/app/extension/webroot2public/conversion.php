@@ -89,6 +89,9 @@ return function () {
     if (FS::rcopy(ROOT_PATH . 'robots.txt', $public_path . '/robots.txt') === true) {
         unlink(ROOT_PATH . 'robots.txt');
     }
+    if (FS::rcopy(ROOT_PATH . 'img.php', $public_path . '/img.php') === true) {
+        unlink(ROOT_PATH . 'img.php');
+    }
 
     $index_file = $public_path . '/index.php';
     if (FS::rcopy(ROOT_PATH . 'index.php', $index_file) === true) {
