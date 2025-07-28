@@ -18,7 +18,7 @@ return function () {
     }
     // 上传程序
     $uploadHandler = new UploadHandler($upload_path);
-    $uploadHandler->addRule('image', ['allowed' => ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']], '{label}应为有效格式（jpg, jpeg, png, webp, gif, svg）', '图片');
+//    $uploadHandler->addRule('image', ['allowed' => ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']], '{label}应为有效格式（jpg, jpeg, png, webp, gif, svg）', '图片');
     $uploadHandler->addRule('size', ['size' => '20M'], '{label}应小于 {size}', '图片');
     $uploadHandler->setOverwrite($overwrite);
 //    $uploadHandler->setAutoconfirm(true);
@@ -83,7 +83,7 @@ return function () {
 
             $result->confirm();
 
-            Response::success('上传成功', [
+            Response::success('上传图片成功', [
                 'path' => $image_path,
                 'image' => $result->name,
                 'size' => filesize($file_path),

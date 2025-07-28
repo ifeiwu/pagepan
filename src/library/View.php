@@ -224,6 +224,8 @@ class View
 
         if ($this->layoutName) {
             $content = $this->render($this->layoutName, $this->layoutData);
+            $this->layoutName = null;
+            $this->layoutData = null;
         }
 
         echo $content;
