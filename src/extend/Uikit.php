@@ -205,32 +205,32 @@ class Uikit
         if (preg_match('/^.+\/[^\/]+\.[^\/]+$/', $name)) {
             // 加载组件资源文件
             return "{$uikit_url}assets/{$name}";
-//            $uikit_file_url = "{$uikit_url}assets/{$name}";
-//            $local_file_path = "data/cache/uikit/assets/$name";
-//            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
-//            return ROOT_URL . $local_file_path;
+            /*$uikit_file_url = "{$uikit_url}assets/{$name}";
+            $local_file_path = "data/cache/uikit/assets/$name";
+            $this->saveAssets(WEB_ROOT . $local_file_path, $uikit_file_url);
+            return ROOT_URL . $local_file_path;*/
         }
         // $name 只有目录路径，返回指定组件资源目录路径
         return "{$uikit_url}assets/" . trim($name);
     }
 
     // 保存远程资源文件到本地目录
-//    public function saveAssets($local_file_path, $remote_file_url) {
-//        $path_info = pathinfo($local_file_path);
-//        $path = $path_info['dirname'];
-//        $name = $path_info['basename'];
-//
-//        if ( ! is_dir($path) ) {
-//            mkdir($path, 0755, true);
-//        }
-//
-//        if ( ! is_file($local_file_path) ) {
-//            $content = file_get_contents($remote_file_url);
-//            return file_put_contents($local_file_path, $content);
-//        }
-//
-//        return true;
-//    }
+    /*public function saveAssets($local_file_path, $remote_file_url) {
+        $path_info = pathinfo($local_file_path);
+        $path = $path_info['dirname'];
+        $name = $path_info['basename'];
+
+        if ( ! is_dir($path) ) {
+            mkdir($path, 0755, true);
+        }
+
+        if ( ! is_file($local_file_path) ) {
+            $content = file_get_contents($remote_file_url);
+            return file_put_contents($local_file_path, $content);
+        }
+
+        return true;
+    }*/
 
     // 外联样式输出
     public function getSettingClass($prefix, $default_class = '')
