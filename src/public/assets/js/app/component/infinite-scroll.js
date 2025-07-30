@@ -10,6 +10,7 @@ define(function () {
         let orderby = config.orderby;
         let perpage = config.perpage;
         let pagenum = config.pagenum;
+        let deletes = config.deletes;
         let ob = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 $loadmore.hide();
