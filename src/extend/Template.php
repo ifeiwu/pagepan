@@ -5,36 +5,37 @@ class Template
     /**
      * @param $html HTML模板
      * @param $data 替换的数据
-     * @param $delete 删除的元素
+     * @param $ifs 元素属性条件
      * @return string
      */
-    public static function render($html, $data = [], $deletes = [])
+    public static function render($html, $data = [], $ifs = [])
     {
-        foreach ($data as $key => $value) {
-            $html = str_replace('{{' . $key . '}}', $value, $html);
-        }
-
-        // 要删除的元素属性[data-delete]数组值：$deletes = ['test']
-        // HTML示例：<div data-delete="test"></div>
-        if (!empty($deletes)) {
+        // 实现条件显示元素
+        // 元素属性条件[data-if]数组值：$ifs = ['value=1']
+        // HTML示例：<div data-if="value=1"></div>
+        if (!empty($ifs)) {
             $html = '<?xml encoding="UTF-8"?>' . $html;
             $dom = new DOMDocument();
             libxml_use_internal_errors(true); // 忽略 HTML5 错误
             $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
             libxml_clear_errors();
             $xpath = new DOMXPath($dom);
-            $elements = $xpath->query('//*[@data-delete]');
+            $elements = $xpath->query('//*[@data-if]');
             if ($elements->length > 0) {
                 foreach ($elements as $element) {
-                    $value = $element->getAttribute('data-delete');
-                    if (in_array($value, $deletes)) {
-                        $element->parentNode->removeChild($element);
+                    $value = $element->getAttribute('data-if');
+                    if (in_array($value, $ifs)) {
+                        $element->removeAttribute('data-if');
                     } else {
-                        $element->removeAttribute('data-delete');
+                        $element->parentNode->removeChild($element);
                     }
                 }
             }
             $html = $dom->saveHTML($dom->documentElement);
+        }
+
+        foreach ($data as $key => $value) {
+            $html = str_replace('{{' . $key . '}}', $value, $html);
         }
 
         return $html;
