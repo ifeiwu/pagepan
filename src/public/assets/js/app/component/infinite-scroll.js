@@ -31,14 +31,14 @@ define(function() {
                             let _template = template
                             // 实现条件显示元素，对应PHP的方法Template::render($template, $data, $ifs);
                             let $_template = $(_template)
-                            $els = $_template.find('[data-if]')
+                            $els = $_template.find('[php-if]')
                             if ($els.length) {
                                 let ifs = item.ifs
                                 $els.each(function() {
                                     let $el = $(this)
-                                    let value = $el.attr('data-if')
+                                    let value = $el.attr('php-if')
                                     if (ifs.includes(value)) {
-                                        $el.removeAttr('data-if')
+                                        $el.removeAttr('php-if')
                                     } else {
                                         $el.remove()
                                     }

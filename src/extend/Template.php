@@ -11,8 +11,8 @@ class Template
     public static function render($html, $data = [], $ifs = [])
     {
         // 实现条件显示元素
-        // 元素属性条件[data-if]数组值：$ifs = ['value=1']
-        // HTML示例：<div data-if="value=1"></div>
+        // 元素属性条件[php-if]数组值：$ifs = ['value=1']
+        // HTML示例：<div php-if="value=1"></div>
         if (!empty($ifs)) {
             $html = '<?xml encoding="UTF-8"?>' . $html;
             $dom = new DOMDocument();
@@ -20,12 +20,12 @@ class Template
             $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
             libxml_clear_errors();
             $xpath = new DOMXPath($dom);
-            $elements = $xpath->query('//*[@data-if]');
+            $elements = $xpath->query('//*[@php-if]');
             if ($elements->length > 0) {
                 foreach ($elements as $element) {
-                    $value = $element->getAttribute('data-if');
+                    $value = $element->getAttribute('php-if');
                     if (in_array($value, $ifs)) {
-                        $element->removeAttribute('data-if');
+                        $element->removeAttribute('php-if');
                     } else {
                         $element->parentNode->removeChild($element);
                     }
