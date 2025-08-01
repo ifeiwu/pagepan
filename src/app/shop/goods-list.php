@@ -15,7 +15,7 @@ return function () {
         $where[] = 'AND';
         $where[] = ['pid', '=', $categoryid];
     }
-    $column = ['id', 'title', 'image', 'path', 'price', 'price_type'];
+    $column = ['id', 'title', 'summary', 'image', 'path', 'price', 'price_type'];
     $total = $db->count('goods', $where);
     $items = $db->select('goods', $column, $where, $orderby, [($pagenum - 1) * $perpage, $perpage]);
 
@@ -30,6 +30,7 @@ return function () {
         }
 
         $_items[$i]['title'] = ItemModel::getTitle();
+        $_items[$i]['summary'] = ItemModel::getSummary();
         $_items[$i]['image'] = ItemModel::getImage('m_');
         $_items[$i]['price'] = ItemModel::getPrice();
         $_items[$i]['price_type_bg'] = $price_type_info['bg'];
