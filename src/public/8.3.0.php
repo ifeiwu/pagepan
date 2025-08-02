@@ -45,17 +45,23 @@ $config = require ROOT_PATH . 'config/db.dev.php';
 $db = new Database($config);
 
 // 在这里输入测试代码 ---------------------------------------------------------
-
+if ($db->has_table('goods')) {
+    if (!$db->has_column('goods', 'images')) {
+        $db->add_column('`goods`', 'images', "text DEFAULT ''", '');
+    }
+}
 // end --------------------------------------------------------------------
 
 // 数据库操作 -----------------------------------------------------------------------------------
-class Database {
+class Database
+{
 
     public $db = null;
 
     public $prefix = null;
 
-    function __construct($config) {
+    function __construct($config)
+    {
         $this->debug = $config['debug'];
         $this->prefix = $config['prefix'];
         $this->dbname = $config['name'];
@@ -84,12 +90,14 @@ class Database {
     }
 
     // 执行SQL
-    function execute($sql) {
+    function execute($sql)
+    {
         $this->pdo->exec($sql);
     }
 
     // 添加字段
-    function add_column($table, $cname, $ctype, $after_cname = '') {
+    function add_column($table, $cname, $ctype, $after_cname = '')
+    {
         $_table = $this->prefix . $table;
         if ($this->dbtype == 'sqlite') {
             $_after = ''; // 不支持在指定字段插入新字段
@@ -100,84 +108,106 @@ class Database {
         }
         $sql = 'ALTER TABLE ' . $_table . ' ADD ' . $_cname . ' ' . $ctype . $_after;
         $bool = true;
-        if ( ! $this->has_column($table, $cname) ) {
+        if (!$this->has_column($table, $cname)) {
             $bool = $this->pdo->exec($sql);
         }
         return $bool;
     }
 
     // 修改字段名称
-    function change_column($table, $oldname, $newname, $newtype) {
+    function change_column($table, $oldname, $newname, $newtype)
+    {
         $_table = $this->prefix . $table;
         $sql = 'ALTER TABLE ' . $_table . ' CHANGE `' . $oldname . '` `' . $newname . '` ' . $newtype;
         $bool = true;
-        if ( $this->has_column($table, $oldname) ) {
+        if ($this->has_column($table, $oldname)) {
             $bool = $this->pdo->exec($sql);
         }
         return $bool;
     }
 
     // 修改字段类型
-    function modify_column($table, $cname, $ctype) {
+    function modify_column($table, $cname, $ctype)
+    {
         $table = $this->prefix . $table;
         $bool = true;
-        if ( $this->query('Describe ' . $table . ' ' . $cname)->fetch() ) {
+        if ($this->query('Describe ' . $table . ' ' . $cname)->fetch()) {
             $bool = $this->pdo->exec('ALTER TABLE ' . $table . ' MODIFY COLUMN `' . $cname . '` ' . $ctype);
         }
         return $bool;
     }
 
     // 删除字段
-    function drop_column($table, $cname) {
+    function drop_column($table, $cname)
+    {
         $table = $this->prefix . $table;
         $bool = true;
-        if ( $this->query('Describe ' . $table . ' ' . $cname)->fetch() ) {
+        if ($this->query('Describe ' . $table . ' ' . $cname)->fetch()) {
             $bool = $this->pdo->exec('ALTER TABLE ' . $table . ' DROP COLUMN `' . $cname . '`');
         }
         return $bool;
     }
 
     // 是否有字段
-    function has_column($table, $cname) {
+    function has_column($table, $cname)
+    {
         $table = $this->prefix . $table;
-        if ( $this->dbtype == 'sqlite' ) {
+        if ($this->dbtype == 'sqlite') {
             return $this->pdo->query("SELECT * FROM sqlite_master WHERE name='{$table}' AND sql like '%\"{$cname}\"%'")->fetch() ? true : false;
         } else {
             return $this->pdo->query('Describe ' . $table . ' ' . $cname)->fetch() ? true : false;
         }
     }
 
-    function has($table, $where) {
+    // 是否有表名
+    function has_table($table)
+    {
+        $table = $this->prefix . $table;
+        if ($this->dbtype == 'sqlite') {
+            return $this->pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name = '{$table}'")->fetch() ? true : false;
+        } else {
+            return $this->pdo->query("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='{$table}' AND TABLE_NAME ='{$table}'")->fetch() ? true : false;
+        }
+    }
+
+    function has($table, $where)
+    {
         return $this->pdo->query('SELECT * FROM ' . $this->prefix . $table . ' WHERE ' . $where)->fetch() ? true : false;
     }
 
-    function find($table, $where) {
+    function find($table, $where)
+    {
         return $this->pdo->query('SELECT * FROM ' . $this->prefix . $table . ' WHERE ' . $where)->fetch();
     }
 
     // 查询
-    function query($sql) {
+    function query($sql)
+    {
         return $this->pdo->query($sql);
     }
 
     // 查询返回数据列表
-    function select($table, $where = '') {
+    function select($table, $where = '')
+    {
         $where = $where ? ' WHERE ' . $where : '';
         return $this->pdo->query('SELECT * FROM ' . $this->prefix . $table . $where)->fetchAll();
     }
 
     // 添加数据
-    function insert($table, $column, $data) {
+    function insert($table, $column, $data)
+    {
         $this->pdo->exec('INSERT INTO ' . $this->prefix . $table . ' (' . $column . ') VALUES (' . $data . ')');
     }
 
     // 更新数据
-    function update($table, $data, $where) {
+    function update($table, $data, $where)
+    {
         $this->pdo->exec('UPDATE ' . $this->prefix . $table . ' SET ' . $data . ' WHERE ' . $where);
     }
 
     // 删除数据
-    function delete($table, $where) {
+    function delete($table, $where)
+    {
         $this->pdo->exec('DELETE FROM ' . $this->prefix . $table . ' WHERE ' . $where);
     }
 }
