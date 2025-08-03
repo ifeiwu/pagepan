@@ -5,7 +5,7 @@ define(function() {
         let $loadmore = $pagination.find('.loadmore')
         let $loading = $pagination.find('.loading')
         let $loaded = $pagination.find('.loaded')
-        let template = config.template
+        let template = config.template.html()
         let url = config.url
         let orderby = config.orderby
         let perpage = config.perpage
