@@ -101,10 +101,10 @@ class Uikit
     // 组件源代码，写入本地缓存目录
     public function getWriteCache($path, $name)
     {
-        $filepath = $this->basePath . $path;
-        $filename = "{$filepath}/{$name}.php";
+        $filename = "{$this->basePath}{$path}/{$name}.php";
 
         if ($this->config['cache'] == false || !is_file($filename)) {
+            $filepath = dirname($filename);
             if (!is_dir($filepath)) {
                 mkdir($filepath, 0755, true);
             }
@@ -114,6 +114,8 @@ class Uikit
                 if (file_put_contents($filename, $content) === false) {
                     throw new Exception("写入文件失败：{$filename}");
                 }
+            } else {
+                throw new Exception("远程文件没有内容或不存在：{$this->config['url']}{$path}/{$name}.php");
             }
 
             return $content;
