@@ -1164,6 +1164,25 @@ $o['GET']['api/v1/site/php/source/:name']=array (
 	  'method_flag' => 3,
 	);
 
+#==== GET api/v1/site/i18n/json
+
+$o['GET']['api/v1/site/i18n/json']=array (
+	  'class_name' => 'site\\I18n',
+	  'method_name' => 'getJson',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
 
 ############### POST ###############
 
@@ -2972,6 +2991,82 @@ $o['POST']['api/v1/site/css/save']=array (
 
 $o['POST']['api/v1/site/php/save']=array (
 	  'class_name' => 'site\\Php',
+	  'method_name' => 'postSave',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/site/i18n/texts
+
+$o['POST']['api/v1/site/i18n/texts']=array (
+	  'class_name' => 'site\\I18n',
+	  'method_name' => 'postTexts',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/site/i18n/savekv
+
+$o['POST']['api/v1/site/i18n/savekv']=array (
+	  'class_name' => 'site\\I18n',
+	  'method_name' => 'postSaveKV',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/site/i18n/removekey
+
+$o['POST']['api/v1/site/i18n/removekey']=array (
+	  'class_name' => 'site\\I18n',
+	  'method_name' => 'postRemoveKey',
+	  'arguments' => 
+	  array (
+	    'request_data' => 0,
+	  ),
+	  'defaults' => 
+	  array (
+	    0 => NULL,
+	  ),
+	  'metadata' => 
+	  array (
+	  ),
+	  'method_flag' => 3,
+	);
+
+#==== POST api/v1/site/i18n/save
+
+$o['POST']['api/v1/site/i18n/save']=array (
+	  'class_name' => 'site\\I18n',
 	  'method_name' => 'postSave',
 	  'arguments' => 
 	  array (

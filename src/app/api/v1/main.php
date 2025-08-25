@@ -27,7 +27,7 @@ return function () {
     $r->addAPIClass('site\Js', 'api/v1/site/js');
     $r->addAPIClass('site\Css', 'api/v1/site/css');
     $r->addAPIClass('site\Php', 'api/v1/site/php');
-//    $r->addAPIClass('site\I18n', 'api/v1/site/i18n');
+    $r->addAPIClass('site\I18n', 'api/v1/site/i18n');
 //    $r->addAPIClass('site\CosSync', 'api/v1/site/cossync');
 //    $r->addAPIClass('site\Sitemap', 'api/v1/site/sitemap');
 
