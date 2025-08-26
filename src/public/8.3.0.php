@@ -45,39 +45,13 @@ $config = require ROOT_PATH . 'config/db.dev.php';
 $db = new Database($config);
 
 // 在这里输入测试代码 ---------------------------------------------------------
-//$uikit_config = require ROOT_PATH . 'config/uikit.dev.php';
-//$url = $uikit_config['url'] . 'get-setting';
-//$curl_api = include ROOT_PATH . 'helper/curl/api.php';
-//$res = $curl_api($url, ['path' => 'number/d1/01']);
-//if ($res['code'] === 0) {
-//    var_dump($res['data']);
-//}
 
-// 页面组件更新
-$pagelist = $db->select('page', "content IS NOT NULL AND content!=''");
-foreach ($pagelist as $page)
-{
-    $id = $page['id'];
-
-    $page_content = unserialize(gzuncompress(base64_decode($page['content'])));
-    $page_source = unserialize(gzuncompress(base64_decode($page['source'])));
-
-    $page_content = get_updated_setting_page_content($page_content);
-    $page_source = get_updated_setting_page_source($page_source);
-
-    $page_content = base64_encode(gzcompress(serialize($page_content)));
-    $page_source = base64_encode(gzcompress(serialize($page_source)));
-
-    $db->update('page', "content = '$page_content', source = '$page_source'", "`id` = $id");
-}
 
 // end --------------------------------------------------------------------
 
 // 获取已更新的动态组件设置页面内容
 function get_updated_setting_page_content($content)
 {
-    $uikit_config = require ROOT_PATH . 'config/uikit.dev.php';
-    /*    preg_match_all('/<\?php \$this\-\>uikit\-\>load\(\'(.+)\', \'(.+)\'\); \?>/U', $content, $matches);*/
     $pattern = "/\\\$this->uikit->load\(\s*'([^']+)'\s*,\s*'({(?:[^{}]*|(?2))*})'\s*\)/";
     preg_match_all($pattern, $content, $matches, PREG_SET_ORDER);
 
@@ -88,17 +62,12 @@ function get_updated_setting_page_content($content)
         $config_array = json_decode($config, true);
         $config_setting_array = $config_array['setting'];
         // 远程获取组件设置
-        $url = $uikit_config['url'] . 'get-setting';
-        $curl_api = include ROOT_PATH . 'helper/curl/api.php';
-        $res = $curl_api($url, ['path' => $number]);
-        if ($res['code'] === 0) {
-            $uikit_setting_array = json_decode($res['data'], true);
-            // 当前页面组件设置【合并到】远程获取组件设置
-            if (is_array($config_setting_array) && is_array($uikit_setting_array)) {
-                $config_array['setting'] = array_merge($uikit_setting_array, $config_setting_array);
-                $new_config = json_encode($config_array, JSON_UNESCAPED_UNICODE);
-                $content = str_replace("<?php \$this->uikit->load('{$number}', '{$config}'); ?>", "<?php \$this->uikit->load('{$number}', '{$new_config}'); ?>", $content);
-            }
+        $uikit_setting_array = get_uikit_setting($number);
+        // 当前页面组件设置【合并到】远程获取组件设置
+        if (is_array($config_setting_array) && is_array($uikit_setting_array)) {
+            $config_array['setting'] = array_merge($uikit_setting_array, $config_setting_array);
+            $new_config = json_encode($config_array, JSON_UNESCAPED_UNICODE);
+            $content = str_replace("<?php \$this->uikit->load('{$number}', '{$config}'); ?>", "<?php \$this->uikit->load('{$number}', '{$new_config}'); ?>", $content);
         }
     }
 
@@ -108,8 +77,6 @@ function get_updated_setting_page_content($content)
 // 获取已更新的动态组件设置页面源码
 function get_updated_setting_page_source($source)
 {
-    $uikit_config = require ROOT_PATH . 'config/uikit.dev.php';
-//    preg_match_all('/<div.*component-path="(.+)".*config="(.+)".*>/U', $source, $matches);
     $pattern = '/<div\b[^>]*\bcomponent-path="([^"]*)"[^>]*\bconfig="([^"]*)"[^>]*>/i';
     preg_match_all($pattern, $source, $matches, PREG_SET_ORDER);
 
@@ -120,21 +87,29 @@ function get_updated_setting_page_source($source)
         $config_array = json_decode(htmlspecialchars_decode($config), true);
         $config_setting_array = $config_array['setting'];
         // 远程获取组件设置
-        $url = $uikit_config['url'] . 'get-setting';
-        $curl_api = include ROOT_PATH . 'helper/curl/api.php';
-        $res = $curl_api($url, ['path' => $number]);
-        if ($res['code'] === 0) {trigger_error($res['data']);
-            $uikit_setting_array = json_decode($res['data'], true);
-            // 当前页面组件设置【合并到】远程获取组件设置
-            if (is_array($config_setting_array) && is_array($uikit_setting_array)) {
-                $config_array['setting'] = array_merge($uikit_setting_array, $config_setting_array);
-                $new_config = json_encode($config_array, JSON_UNESCAPED_UNICODE);
-                $source = str_replace('config="' . $config . '"', 'config="' . htmlspecialchars($new_config) . '"', $source);
-            }
+        $uikit_setting_array = get_uikit_setting($number);
+        // 当前页面组件设置【合并到】远程获取组件设置
+        if (is_array($config_setting_array) && is_array($uikit_setting_array)) {
+            $config_array['setting'] = array_merge($uikit_setting_array, $config_setting_array);
+            $new_config = json_encode($config_array, JSON_UNESCAPED_UNICODE);
+            $source = str_replace('config="' . $config . '"', 'config="' . htmlspecialchars($new_config) . '"', $source);
         }
     }
 
     return $source;
+}
+
+// 远程获取组件设置
+function get_uikit_setting($number) {
+    $uikit_config = require ROOT_PATH . 'config/uikit.dev.php';
+    $url = $uikit_config['url'] . 'get-setting';
+    $curlApi = include ROOT_PATH . 'helper/curl/api.php';
+    $res = $curlApi($url, ['path' => $number]);
+    if ($res['code'] === 0) {
+        return json_decode($res['data'], true);
+    } else {
+        return [];
+    }
 }
 
 // 数据库操作 -----------------------------------------------------------------------------------
