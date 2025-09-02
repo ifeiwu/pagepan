@@ -2,9 +2,9 @@
 
 class ItemModel
 {
-    private static $item;
+    protected static $item = [];
 
-    private static $setting;
+    protected static $setting = [];
 
     public static function setItem($item)
     {
@@ -31,13 +31,21 @@ class ItemModel
         return self::$item['price'];
     }
 
+    /**
+     * 获取价格类型信息
+     * @return string[]
+     */
     public static function getPriceTypeInfo()
     {
         $price_types = [1 => ['text' => '一口价', 'bg' => '#AA5B1F'], 2 => ['text' => '有优惠', 'bg' => '#BF27BF'], 3 => ['text' => '免费送', 'bg' => '#D4212D'], 4 => ['text' => '面议', 'bg' => '#336BE6'], 5 => ['text' => '预售', 'bg' => '#8455E4']];
         return $price_types[self::$item['price_type']];
     }
 
-    // 获取商品SKU
+    /**
+     * 获取商品 SKU
+     * @param $goods_id
+     * @return array
+     */
     public static function getGoodsSkus($goods_id)
     {
         $goods_skus = db()->select('goods_sku', '*', ['goods_id', '=', $goods_id]);
@@ -49,13 +57,22 @@ class ItemModel
         return $goods_skus;
     }
 
-    // 获取商品规格
+    /**
+     * 获取商品规格
+     * @param $goods_id
+     * @return array
+     */
     public static function getGoodsSpecs($goods_id)
     {
         return db()->select('goods_spec', '*', ['goods_id', '=', $goods_id]);
     }
 
-    // 返回商品规格格式化的字符串，如：(白色;M) 或 (颜色:白色;尺寸:M)
+    /**
+     * 返回商品规格格式化的字符串
+     * @param $type integer 格式：1(白色;M)，2(颜色:白色;尺寸:M)
+     * @param $specs array 指定规格
+     * @return string
+     */
     public static function getGoodsSpecsFormatStr($type = 1, $specs = null)
     {
         $specs = $specs ?? self::$item['specs'];
@@ -74,6 +91,10 @@ class ItemModel
         }
     }
 
+    /**
+     * 获取 summary 字段值，并自动实体转换html或\n转<br>换行
+     * @return string
+     */
     public static function getSummary()
     {
         $summary = html_decode(self::$item['summary']);
@@ -84,12 +105,16 @@ class ItemModel
         return $summary;
     }
 
-    // 返回转换的内容
+    /**
+     * 返回转换后的内容
+     * @param $thumb_query
+     * @return string
+     */
     public static function getContent($thumb_query = null)
     {
         $item = self::$item;
         $content = $item['content'];
-        $content_type = json_decode($item['_more'], true)['content_type'];
+        $content_type = self::getMore('content_type');
         if ($content_type == 'md') {
             $content = (new Parsedown())->text(html_decode($content));
             $content = preg_replace('/<a(.*?)>(.*?)<\/a>/i', "<a $1 target=\"_blank\">$2</a>", $content);
@@ -122,10 +147,27 @@ class ItemModel
         return $content;
     }
 
-    // item 返回分类链接
+    /**
+     * 获取 _more 字段值并把 json 转为数组
+     * @param $key 取对应的 key 的值
+     * @return array|string
+     */
+    public static function getMore($key = null)
+    {
+        $more = json_decode(self::$item['_more'], true);
+        if ($key != null) {
+            return $more[$key];
+        }
+        return $more;
+    }
+
+    /**
+     * 返回分类链接
+     * @return string
+     */
     public static function getCategoryUrl()
     {
-        $link_url = self::setting['category.link.url'];
+        $link_url = self::$setting['category.link.url'];
         if ($link_url !== false) {
             if (is_string($link_url)) {
                 return self::parseUrlGetParams($link_url);
@@ -137,7 +179,10 @@ class ItemModel
         }
     }
 
-    // 标签数组
+    /**
+     * 标签数组
+     * @return array
+     */
     public static function getTags()
     {
         $tags = self::$item['tags'];
@@ -164,7 +209,11 @@ class ItemModel
         return $image;
     }
 
-    // 返回图片缩略图链接
+    /**
+     * 返回图片缩略图链接
+     * @param $query
+     * @return string
+     */
     public static function getThumb($query = '')
     {
         $item = self::$item;
@@ -182,8 +231,12 @@ class ItemModel
         return $image;
     }
 
-    // 返回图标图片，支持返回svg源代码
-    public static function getIcon($image = null, $isfull = false)
+    /**
+     * 返回图标 html 标签 <img ...>
+     * @param $image string 图标地址
+     * @return string
+     */
+    public static function getIcon($image = null)
     {
         $item = self::$item;
         $image = $image ?: $item['icon'] ?: $item['image'];
@@ -205,11 +258,21 @@ class ItemModel
         }
     }
 
+    /**
+     * 返回视频链接
+     * @param $isfull boolean 是否带域名
+     * @return string
+     */
     public static function getVideo($isfull = false)
     {
         return self::getFileURL(self::$item['video']);
     }
 
+    /**
+     * 返回文件链接
+     * @param $isfull boolean 是否带域名
+     * @return string
+     */
     public static function getFile($isfull = false)
     {
         return self::getFileURL(self::$item['file']);
@@ -217,11 +280,11 @@ class ItemModel
 
     /**
      * 返回文件链接路径
-     * @param $name 文件名称
-     * @param $prefix 文件名前缀，一般图片才有。如：s_,m_
-     * @param $iscache 是否添加时间缓存控制
-     * @param $isfull 是否带域名
-     * @return mixed|string
+     * @param $name string 文件名称
+     * @param $prefix string 文件名前缀，一般图片才有。如：s_,m_
+     * @param $iscache boolean 是否添加时间缓存控制
+     * @param $isfull boolean 是否带域名
+     * @return string
      */
     public static function getFileURL($name, $prefix = '', $iscache = true, $isfull = false)
     {
@@ -243,7 +306,10 @@ class ItemModel
         return $filepath;
     }
 
-    // item 返回链接数组
+    /**
+     * 返回链接数组
+     * @return array
+     */
     public static function getLink()
     {
         $item = self::$item;
@@ -293,9 +359,8 @@ class ItemModel
     }
 
     /**
-     * URL模板 $_GET 参数替换。
-     * 格式：products?cid=[get.cid]&title=[get.title]
-     * @param $url
+     * URL 模板 $_GET 参数替换。
+     * @param $url string products?cid=[get.cid]&title=[get.title]
      * @return string
      */
     public static function parseUrlGetParams($url)
@@ -314,9 +379,7 @@ class ItemModel
 
     /**
      * URL 字符串模板 $item 参数替换。
-     * 格式：product/id/[item.id].html
-     * @param $url
-     * @param $item
+     * @param $url string product/id/[item.id].html
      * @return string
      */
     public static function parseUrlItemParams($url)
