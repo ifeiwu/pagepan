@@ -14,6 +14,9 @@ class Template
         // 元素属性条件[php-if]数组值：$ifs = ['value=1']
         // HTML示例：<div php-if="value=1"></div>
         if (!empty($ifs)) {
+            // 把 {{ 和 }} 先换成不会触发 URI 编码的占位符
+            $placeholders = ['{{' => '___LB___', '}}' => '___RB___'];
+            $html = strtr($html, $placeholders);
             $html = '<?xml encoding="UTF-8"?>' . $html;
             $dom = new DOMDocument();
             libxml_use_internal_errors(true); // 忽略 HTML5 错误
@@ -31,7 +34,9 @@ class Template
                     }
                 }
             }
-            $html = $dom->saveHTML($dom->documentElement);
+            $html = $dom->saveHTML();
+            // 把占位符恢复成 {{ }}
+            $html = strtr($html, array_flip($placeholders));
         }
 
         foreach ($data as $key => $value) {
