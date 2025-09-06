@@ -12,7 +12,7 @@ return function () {
     $image_path = $_POST['image_path']; // 图片路径
     $overwrite = $_POST['overwrite'] ?? true; // 是否覆盖图片
     // 上传路径
-    $upload_path = WEB_ROOT . $image_path;
+    $upload_path = rtrim(WEB_ROOT . $image_path, '/');
     if (is_dir($upload_path) && !is_writable($upload_path)) {
         chmod($upload_path, 0755);
     }

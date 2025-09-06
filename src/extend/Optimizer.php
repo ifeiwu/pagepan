@@ -17,9 +17,9 @@ class Optimizer
 
     public $qualitys = ['jpg' => 100, 'png' => 100, 'webp' => 100, 'avif' => 100];
 
-    public $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif', 'image/svg+xml'];
+    public $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif', 'image/svg+xml', 'image/x-icon'];
 
-    public $allowed_file_exts = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'svg'];
+    public $allowed_file_exts = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'svg', 'ico'];
 
     public $api_uri;
 
@@ -104,20 +104,20 @@ class Optimizer
         }
 
         if (!file_exists($this->source)) {
-            throw new \Exception("源文件（{$this->source}）不存在。");
+            throw new \Exception('文件不存在。');
         }
 
         if (!$this->isValidFile()) {
-            throw new \Exception("源文件（{$this->source}）不是有效的图像。");
+            throw new \Exception('不是有效的图像。');
         }
 
         if (!$this->isValidExtension()) {
-            throw new \Exception("源文件（{$this->source}）不是有效的扩展名。");
+            throw new \Exception('不是有效的扩展名。');
         }
 
         $file_size = filesize($this->source);
         if ($file_size >= 20971520) {
-            throw new \Exception("源文件（{$this->source}）超出了允许的最大限制，限制大小为 20MB。");
+            throw new \Exception('超出了允许的最大限制，限制大小为 20MB。');
         }
 
         $quality = $this->qualitys[$this->file_ext];

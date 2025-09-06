@@ -1,7 +1,7 @@
 <?php
 return function ($request_data) {
     $tab = $request_data['tab'];
-    $where = "page_url LIKE '/shop%'";
+    $where = "page_url LIKE '%/shop%'";
     switch ($tab) {
         case 'yesterday':
             $where = "{$where} AND DATE(ctime, 'unixepoch') = DATE('now', '-1 day', 'localtime')";
