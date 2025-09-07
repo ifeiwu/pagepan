@@ -17,7 +17,7 @@ class Optimizer
 
     public $qualitys = ['jpg' => 100, 'png' => 100, 'webp' => 100, 'avif' => 100];
 
-    public $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif', 'image/svg+xml', 'image/x-icon'];
+    public $allowed_mime_types = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif', 'image/svg+xml', 'image/x-icon', 'image/vnd.microsoft.icon'];
 
     public $allowed_file_exts = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'svg', 'ico'];
 
