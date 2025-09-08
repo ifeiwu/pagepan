@@ -5,33 +5,24 @@ define(function (require) {
     }
 
     const alerty = require('alerty');
+    const Hammer = require('hammer');
 
-    // 双击商品抽屉方式打开删除按钮
+    // 商品抽屉方式打开删除按钮
     const initDrawer = function () {
         let $drawers = $('.drawer');
-        $drawers.dblclick(function (e) {
-            e.preventDefault();
-            let $target = $(e.target);
-            // 排除双击商品内的元素
-            if ($target.closest('.quantity').length || $target.closest('img').length) {
-                return false;
-            }
-            // 打开当前双击商品的删除按钮
-            $target.closest('li').addClass('open');
-        });
-        // 点击任何一个商品删除
-        $('body').click(function (e) {
-            let $target = $(e.target);
-            // 排除双击商品内的元素
-            if ($target.closest('.quantity').length || $target.closest('.remove').length) {
-                return false;
-            }
-            $drawers.each(function () {
-                let $li = $(this).closest('li');
-                if ($li.is('.open') && $li.find('input[name="number"]').val() > 0) {
-                    $li.removeClass('open');
-                    $li.find('.minus').attr('disabled', false);
-                }
+        $drawers.each(function() {
+            let $target = $(this);
+            let hammer = new Hammer(this);
+            // 长按/左边滑动打开抽屉
+            hammer.on('press swipeleft', function(e) {
+                let $li = $target.closest('li');
+                $li.siblings().removeClass('open');
+                $li.addClass('open');
+            });
+            // 轻触/点击/右边滑动关闭抽屉
+            hammer.on('tap swiperight', function(e) {
+                let $li = $target.closest('li');
+                $li.removeClass('open');
             });
         });
 
@@ -96,7 +87,9 @@ define(function (require) {
                     updateCartQuantity($number);
                 } else {
                     $(this).attr('disabled', true);
-                    $number.closest('li').addClass('open');
+                    let $li = $number.closest('li');
+                    $li.siblings().removeClass('open');
+                    $li.addClass('open');
                 }
             });
             // 数量加 1
