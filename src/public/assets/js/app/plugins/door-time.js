@@ -82,7 +82,6 @@ define(['mobile-select/mobile-select', 'css!mobile-select/mobile-select'], funct
         },
         onChange: function(data, indexArr) {
             $input.val(`${data[0].value} ${data[1].value}`)
-            console.log(JSON.stringify(data))
             localStorage.setItem(storage_key, JSON.stringify(data));
         }
     })
