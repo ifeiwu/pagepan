@@ -1,4 +1,15 @@
-require(['jquery', 'device', 'smoothscroll', 'picturefill'], function() {
+require(['jquery', 'device'], function() {
+    // 检测浏览器是否支持 CSS @layer 特性。
+    if (typeof CSSLayerBlockRule !== 'undefined') {
+        let link = document.createElement('link')
+        link.href = 'assets/css/pagepan-polyfill.css'
+        link.rel = 'stylesheet'
+        document.head.appendChild(link)
+        if (sessionStorage.getItem('pagepan-base-not-layer') !== 'true') {
+            alert('当前浏览器版本较低，为保证您的使用体验，建议使用最新版本的浏览器访问。')
+            sessionStorage.setItem('pagepan-base-not-layer', 'true')
+        }
+    }
 
     // 记录滚动条宽度在 CSS 变量，用于 .w-expand-screen 计算。
     const setScrollbarWidth = function() {

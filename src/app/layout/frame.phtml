@@ -23,32 +23,24 @@ $theme_screen = $theme['screen'];
         <meta name="keywords" content="<?=$seo['keywords']?>">
         <meta name="description" content="<?=$seo['description']?>">
 
-        <script>
-            if (typeof CSSLayerBlockRule === "undefined") {
-                let link = document.createElement("link");
-                link.href = "<?=assets('assets/css/pagepan-polyfill.css')?>";
-                link.rel = "stylesheet";
-                document.head.appendChild(link);
-                if (sessionStorage.getItem('pagepan-base-not-layer') !== 'true') {
-                    alert('当前浏览器版本较低，为保证您的使用体验，建议使用最新版本的浏览器访问。');
-                    sessionStorage.setItem('pagepan-base-not-layer', 'true');
-                }
-            }
-        </script>
         <?php
-        // 全局页头
-        if ($site['open_header_php']) { include ROOT_PATH . 'data/php/header.inc'; }
         // 网站图标
-        if ($site['favicon']) { echo '<link rel="icon" href="' . assets($site['favicon']) . '">'; }
+        if ($site['favicon']) {
+            echo '<link rel="icon" href="' . assets($site['favicon']) . '">';
+        }
         // 应用图标
-        if ($site['touchicon']) { echo '<link rel="apple-touch-icon" href="' . assets($site['touchicon']) . '">'; }
+        if ($site['touchicon']) {
+            echo '<link rel="apple-touch-icon" href="' . assets($site['touchicon']) . '">';
+        }
         // 应用清单
-        if ($site['manifest']) { echo '<link rel="manifest" href="' . assets('manifest.json') . '">'; }
-
+        if ($site['manifest']) {
+            echo '<link rel="manifest" href="' . assets('manifest.json') . '">';
+        }
+        // 样式文件
         echo '<link href="' . assets('assets/css/pagepan.css') . '" rel="stylesheet">';
 		echo '<link href="' . assets('assets/css/theme.css') . '" rel="stylesheet">';
         echo '<link href="' . assets('assets/css/animate.css') . '" rel="stylesheet">';
-        // 加载自定义字体
+        // 自定义字体
         $site_fonts_list = $site['fonts_list'];
         if ($site_fonts_list) {
             $site_fonts_list = json_decode($site_fonts_list, true);
@@ -67,28 +59,45 @@ $theme_screen = $theme['screen'];
             echo '<link href="' . assets('data/css/global.min.css') . '" rel="stylesheet">';
         }
         ?>
-        <script>const pagevar = <?=json_encode2($pagevar)?>;const RUN_MODE = '<?=RUN_MODE?>';</script>
+        <script>
+            const pagevar = <?=json_encode2($pagevar)?>;
+            const RUN_MODE = '<?=RUN_MODE?>';
+        </script>
         <script src="<?=assets('assets/js/require.js')?>"></script>
         <script src="<?=assets('assets/js/config.js')?>"></script>
         <script src="<?=assets('assets/js/lib/jquery.js')?>"></script>
+        <script src="<?=assets('assets/js/app/main.js')?>"></script>
     </head>
     <body <?=$page_body_attrs; ?>>
-
-        <?=$this->section('content')?>
-
-        <script src="<?=assets('assets/js/app/main.js')?>"></script>
-
         <?php
-        // 全局脚本
-        if ($site['open_global_js']) { echo '<script src="' . assets('data/js/global.min.js') . '"></script>'; }
+        // 全局页头
+        if ($site['open_header_php']) {
+            include ROOT_PATH . 'data/php/header.inc';
+        }
+
+        // 页面内容
+        echo $this->section('content');
+
         // 全局页脚
-        if ($site['open_footer_php']) { include ROOT_PATH . 'data/php/footer.inc'; }
+        if ($site['open_footer_php']) {
+            include ROOT_PATH . 'data/php/footer.inc';
+        }
+        // 全局脚本
+        if ($site['open_global_js']) {
+            echo '<script src="' . assets('data/js/global.min.js') . '"></script>';
+        }
         // 在线客服
-        if ($site['service3_open'] == 1) { echo html_decode(base64_decode($site['service3_code'])); }
+        if ($site['service3_open'] == 1) {
+            echo html_decode(base64_decode($site['service3_code']));
+        }
         // 社交分享
-        if ($site['share3_open'] == 1) { echo html_decode(base64_decode($site['share3_code'])); }
+        if ($site['share3_open'] == 1) {
+            echo html_decode(base64_decode($site['share3_code']));
+        }
         // 流量统计
-        if ($site['stats3_open'] == 1) { echo html_decode(base64_decode($site['stats3_code'])); }
+        if ($site['stats3_open'] == 1) {
+            echo html_decode(base64_decode($site['stats3_code']));
+        }
         ?>
     </body>
 </html>
