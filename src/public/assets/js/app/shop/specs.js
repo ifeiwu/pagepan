@@ -117,6 +117,7 @@ define(function (require) {
         });
         $drawer.find('.close').click(function () {
             $drawer.removeClass('open');
+            $('body').css('overflow', '');
         });
         let $content = $drawer.find('>div');
         $content.css('--specs-box-height', $content.outerHeight() + 'px');
