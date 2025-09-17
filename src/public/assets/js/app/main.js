@@ -1,6 +1,6 @@
 require(['jquery', 'device'], function() {
     // 检测浏览器是否支持 CSS @layer 特性。
-    if (typeof CSSLayerBlockRule !== 'undefined') {
+    if (typeof CSSLayerBlockRule === 'undefined') {
         let link = document.createElement('link')
         link.href = 'assets/css/pagepan-polyfill.css'
         link.rel = 'stylesheet'
@@ -46,6 +46,26 @@ require(['jquery', 'device'], function() {
             require(['app/plugins/scrollnav'])
         }
     }
+
+/*    // 文章内容排版
+    const $typography = $('[data-typography]')
+    if ($typography.length) {
+        let typography = $typography.data('typography')
+        if (typography) {
+            $typography.addClass(typography + '-body')
+            require(['css!app/typography/' + typography])
+            if (typography == 'heti') {
+                require(['app/typography/heti'], function(Heti) {
+                    setTimeout(function() {
+                        (new Heti('.heti-body')).autoSpacing()
+                    }, 0)
+                })
+            }
+        } else {
+            $typography.addClass('heti-body')
+            require(['css!data/css/article.min'])
+        }
+    }*/
 
     // gif图片hover播放动画
     if ($('.freezeframe').length) {
