@@ -43,10 +43,13 @@ return function ($request_data) {
             $db->save('site', ['state' => 0, 'name' => 'page_group', 'value' => json_encode2($page_group)], ['name', '=', 'page_group']);
         }
         // 设置开店状态
-        $db->save('site', ['state' => 1, 'name' => 'shop_open', 'value' => 1], ['name', '=', 'shop_open']);
-        $db->save('site', ['state' => 1, 'name' => 'shop_delivery', 'value' => 1], ['name', '=', 'shop_delivery']);
-        $db->save('site', ['state' => 1, 'name' => 'shop_opening', 'value' => 1], ['name', '=', 'shop_opening']);
         $db->save('site', ['state' => 1, 'name' => 'shop_name', 'value' => ''], ['name', '=', 'shop_name']);
+        $db->save('site', ['state' => 1, 'name' => 'shop_open', 'value' => 1], ['name', '=', 'shop_open']);
+        $db->save('site', ['state' => 1, 'name' => 'shop_opening', 'value' => 1], ['name', '=', 'shop_opening']);
+        $db->save('site', ['state' => 1, 'name' => 'shop_delivery', 'value' => 1], ['name', '=', 'shop_delivery']);
+        $db->save('site', ['state' => 1, 'name' => 'shop_address', 'value' => '{}'], ['name', '=', 'shop_address']);
+        $db->save('site', ['state' => 1, 'name' => 'shop_opening_weeks', 'value' => '[]'], ['name', '=', 'shop_opening_weeks']);
+        $db->save('site', ['state' => 1, 'name' => 'shop_delivery_fields', 'value' => '{}'], ['name', '=', 'shop_delivery_fields']);
 
         if ($db->count('page', ['alias', '=', 'shop']) == 0) {
             $tplsql = $request_data['tplsql'];

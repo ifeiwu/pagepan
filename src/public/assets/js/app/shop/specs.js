@@ -108,7 +108,7 @@ define(function (require) {
 
     // 抽屉方式显示选择规格
     const initDrawer = function (skus) {
-        let $drawer = $component.find('#drawer').show();
+        let $drawer = $component.find('#drawer');
         $drawer.click(function (e) {
             if ($(e.target).is(this)) {
                 $(this).removeClass('open');
@@ -119,8 +119,6 @@ define(function (require) {
             $drawer.removeClass('open');
             $('body').css('overflow', '');
         });
-        let $content = $drawer.find('>div');
-        $content.css('--specs-box-height', $content.outerHeight() + 'px');
     }
 
     return {

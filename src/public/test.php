@@ -5,10 +5,16 @@ define('ROOT_PATH', dirname(WEB_ROOT) . '/');
 require ROOT_PATH . 'base.php';
 require ROOT_PATH . 'helper.php';
 
-$api_uri = 'http://192.168.31.5';
-$api_key = 'your_api_key';
-$path = WEB_ROOT . 'data/file';
-$optimizer = new Optimizer($api_uri, $api_key);
-foreach (['jpg', 'png', 'webp', 'avif', 'gif', 'svg'] as $ext) {
-    $optimizer->optimize("{$path}/1.{$ext}", false);
+//$api_uri = 'http://192.168.31.5';
+//$api_key = 'your_api_key';
+//$path = WEB_ROOT . 'data/file';
+//$optimizer = new Optimizer($api_uri, $api_key);
+//foreach (['jpg', 'png', 'webp', 'avif', 'gif', 'svg'] as $ext) {
+//    $optimizer->optimize("{$path}/1.{$ext}", false);
+//}
+$_GET['q'] = '';
+$files = array_diff(scandir(WEB_DATA_PATH . 'file'), array('..', '.'));
+if (isset($_GET['q'])) {
+    $files = array_filter($files, fn($file) => str_contains($file, $_GET['q']));
 }
+dump($files);

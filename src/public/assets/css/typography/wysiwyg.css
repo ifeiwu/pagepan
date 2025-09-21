@@ -1,26 +1,26 @@
 /*! wysiwyg.css v0.0.3 | MIT License | github.com/jgthms/wysiwyg.css */
-.wysiwyg-body {
+.article-body {
     line-height: 1.6
 }
 
-.wysiwyg-body a {
+.article-body a {
     text-decoration: none
 }
 
-.wysiwyg-body a:hover {
+.article-body a:hover {
     border-bottom: 1px solid
 }
 
-.wysiwyg-body abbr {
+.article-body abbr {
     border-bottom: 1px dotted;
     cursor: help
 }
 
-.wysiwyg-body cite {
+.article-body cite {
     font-style: italic
 }
 
-.wysiwyg-body hr {
+.article-body hr {
     background: #e6e6e6;
     border: none;
     display: block;
@@ -29,165 +29,165 @@
     margin-top: 1.4em
 }
 
-.wysiwyg-body img {
+.article-body img {
     vertical-align: text-bottom
 }
 
-.wysiwyg-body ins {
+.article-body ins {
     background-color: lime;
     text-decoration: none
 }
 
-.wysiwyg-body mark {
+.article-body mark {
     background-color: #ff0
 }
 
-.wysiwyg-body small {
+.article-body small {
     font-size: 0.8em
 }
 
-.wysiwyg-body strong {
+.article-body strong {
     font-weight: 700
 }
 
-.wysiwyg-body sub, .wysiwyg-body sup {
+.article-body sub, .article-body sup {
     font-size: 0.8em
 }
 
-.wysiwyg-body sub {
+.article-body sub {
     vertical-align: sub
 }
 
-.wysiwyg-body sup {
+.article-body sup {
     vertical-align: super
 }
 
-.wysiwyg-body p, .wysiwyg-body dl, .wysiwyg-body ol, .wysiwyg-body ul, .wysiwyg-body blockquote, .wysiwyg-body pre, .wysiwyg-body table {
+.article-body p, .article-body dl, .article-body ol, .article-body ul, .article-body blockquote, .article-body pre, .article-body table {
     margin-bottom: 1.4em
 }
 
-.wysiwyg-body p:last-child, .wysiwyg-body dl:last-child, .wysiwyg-body ol:last-child, .wysiwyg-body ul:last-child, .wysiwyg-body blockquote:last-child, .wysiwyg-body pre:last-child, .wysiwyg-body table:last-child {
+.article-body p:last-child, .article-body dl:last-child, .article-body ol:last-child, .article-body ul:last-child, .article-body blockquote:last-child, .article-body pre:last-child, .article-body table:last-child {
     margin-bottom: 0
 }
 
-.wysiwyg-body p:empty {
+.article-body p:empty {
     display: none
 }
 
-.wysiwyg-body h1, .wysiwyg-body h2, .wysiwyg-body h3, .wysiwyg-body h4, .wysiwyg-body h5, .wysiwyg-body h6 {
+.article-body h1, .article-body h2, .article-body h3, .article-body h4, .article-body h5, .article-body h6 {
     font-weight: 700;
     line-height: 1.2
 }
 
-.wysiwyg-body h1:first-child, .wysiwyg-body h2:first-child, .wysiwyg-body h3:first-child, .wysiwyg-body h4:first-child, .wysiwyg-body h5:first-child, .wysiwyg-body h6:first-child {
+.article-body h1:first-child, .article-body h2:first-child, .article-body h3:first-child, .article-body h4:first-child, .article-body h5:first-child, .article-body h6:first-child {
     margin-top: 0
 }
 
-.wysiwyg-body h1 {
+.article-body h1 {
     font-size: 2.4em;
     margin-bottom: .58333em;
     margin-top: .58333em;
     line-height: 1
 }
 
-.wysiwyg-body h2 {
+.article-body h2 {
     font-size: 1.6em;
     margin-bottom: .875em;
     margin-top: 1.75em;
     line-height: 1.1
 }
 
-.wysiwyg-body h3 {
+.article-body h3 {
     font-size: 1.3em;
     margin-bottom: 1.07692em;
     margin-top: 1.07692em
 }
 
-.wysiwyg-body h4 {
+.article-body h4 {
     font-size: 1.2em;
     margin-bottom: 1.16667em;
     margin-top: 1.16667em
 }
 
-.wysiwyg-body h5 {
+.article-body h5 {
     font-size: 1.1em;
     margin-bottom: 1.27273em;
     margin-top: 1.27273em
 }
 
-.wysiwyg-body h6 {
+.article-body h6 {
     font-size: 1em;
     margin-bottom: 1.4em;
     margin-top: 1.4em
 }
 
-.wysiwyg-body dd {
+.article-body dd {
     margin-left: 1.4em
 }
 
-.wysiwyg-body ol, .wysiwyg-body ul {
+.article-body ol, .article-body ul {
     list-style-position: outside;
     margin-left: 1.4em
 }
 
-.wysiwyg-body ol {
+.article-body ol {
     list-style-type: decimal
 }
 
-.wysiwyg-body ol ol {
+.article-body ol ol {
     list-style-type: lower-alpha
 }
 
-.wysiwyg-body ol ol ol {
+.article-body ol ol ol {
     list-style-type: lower-roman
 }
 
-.wysiwyg-body ol ol ol ol {
+.article-body ol ol ol ol {
     list-style-type: lower-greek
 }
 
-.wysiwyg-body ol ol ol ol ol {
+.article-body ol ol ol ol ol {
     list-style-type: decimal
 }
 
-.wysiwyg-body ol ol ol ol ol ol {
+.article-body ol ol ol ol ol ol {
     list-style-type: lower-alpha
 }
 
-.wysiwyg-body ul {
+.article-body ul {
     list-style-type: disc
 }
 
-.wysiwyg-body ul ul {
+.article-body ul ul {
     list-style-type: circle
 }
 
-.wysiwyg-body ul ul ul {
+.article-body ul ul ul {
     list-style-type: square
 }
 
-.wysiwyg-body ul ul ul ul {
+.article-body ul ul ul ul {
     list-style-type: circle
 }
 
-.wysiwyg-body ul ul ul ul ul {
+.article-body ul ul ul ul ul {
     list-style-type: disc
 }
 
-.wysiwyg-body ul ul ul ul ul ul {
+.article-body ul ul ul ul ul ul {
     list-style-type: circle
 }
 
-.wysiwyg-body blockquote {
+.article-body blockquote {
     border-left: 4px solid #e6e6e6;
     padding: 0.6em 1.2em
 }
 
-.wysiwyg-body blockquote p {
+.article-body blockquote p {
     margin-bottom: 0
 }
 
-.wysiwyg-body code, .wysiwyg-body kbd, .wysiwyg-body samp, .wysiwyg-body pre {
+.article-body code, .article-body kbd, .article-body samp, .article-body pre {
     -moz-osx-font-smoothing: auto;
     -webkit-font-smoothing: auto;
     background-color: #f2f2f2;
@@ -195,70 +195,70 @@
     font-size: 0.9em
 }
 
-.wysiwyg-body code, .wysiwyg-body kbd, .wysiwyg-body samp {
+.article-body code, .article-body kbd, .article-body samp {
     border-radius: 3px;
     line-height: 1.77778;
     padding: 0.1em 0.4em 0.2em;
     vertical-align: baseline
 }
 
-.wysiwyg-body pre {
+.article-body pre {
     overflow: auto;
     padding: 1em 1.2em
 }
 
-.wysiwyg-body pre code {
+.article-body pre code {
     background: none;
     font-size: 1em;
     line-height: 1em
 }
 
-.wysiwyg-body figure {
+.article-body figure {
     margin-bottom: 2.8em;
     text-align: center
 }
 
-.wysiwyg-body figure:first-child {
+.article-body figure:first-child {
     margin-top: 0
 }
 
-.wysiwyg-body figure:last-child {
+.article-body figure:last-child {
     margin-bottom: 0
 }
 
-.wysiwyg-body figcaption {
+.article-body figcaption {
     font-size: 0.8em;
     margin-top: .875em
 }
 
-.wysiwyg-body table {
+.article-body table {
     width: 100%
 }
 
-.wysiwyg-body table pre {
+.article-body table pre {
     white-space: pre-wrap
 }
 
-.wysiwyg-body th, .wysiwyg-body td {
+.article-body th, .article-body td {
     font-size: 1em;
     padding: .7em;
     border: 1px solid #e6e6e6;
     line-height: 1.4
 }
 
-.wysiwyg-body thead tr, .wysiwyg-body tfoot tr {
+.article-body thead tr, .article-body tfoot tr {
     background-color: #f5f5f5
 }
 
-.wysiwyg-body thead th, .wysiwyg-body thead td, .wysiwyg-body tfoot th, .wysiwyg-body tfoot td {
+.article-body thead th, .article-body thead td, .article-body tfoot th, .article-body tfoot td {
     font-size: .9em;
     padding: .77778em
 }
 
-.wysiwyg-body thead th code, .wysiwyg-body thead td code, .wysiwyg-body tfoot th code, .wysiwyg-body tfoot td code {
+.article-body thead th code, .article-body thead td code, .article-body tfoot th code, .article-body tfoot td code {
     background-color: #fff
 }
 
-.wysiwyg-body tbody tr {
+.article-body tbody tr {
     background-color: #fff
 }

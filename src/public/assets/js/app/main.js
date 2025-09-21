@@ -47,25 +47,14 @@ require(['jquery', 'device'], function() {
         }
     }
 
-/*    // 文章内容排版
-    const $typography = $('[data-typography]')
-    if ($typography.length) {
-        let typography = $typography.data('typography')
-        if (typography) {
-            $typography.addClass(typography + '-body')
-            require(['css!app/typography/' + typography])
-            if (typography == 'heti') {
-                require(['app/typography/heti'], function(Heti) {
-                    setTimeout(function() {
-                        (new Heti('.heti-body')).autoSpacing()
-                    }, 0)
-                })
-            }
-        } else {
-            $typography.addClass('heti-body')
-            require(['css!data/css/article.min'])
-        }
-    }*/
+    // 文章内容排版
+    if ($('.heti').length) {
+        require(['../../css/typography/heti'], function(Heti) {
+            setTimeout(function() {
+                (new Heti('.heti')).autoSpacing()
+            }, 0)
+        })
+    }
 
     // gif图片hover播放动画
     if ($('.freezeframe').length) {

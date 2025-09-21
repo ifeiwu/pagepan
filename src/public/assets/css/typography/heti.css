@@ -194,8 +194,7 @@
     src: local("Kaiti SC Black"), local("Kaiti TC Black"), local("STKaiti"), local("Kaiti")
 }
 
-.heti-body {
-    max-width: 42em;
+.heti {
     font-size: 16px;
     font-weight: 400;
     -webkit-font-smoothing: subpixel-antialiased;
@@ -215,15 +214,15 @@
     clear: both
 }
 
-.heti-body > *:first-child, .heti-body section > *:first-child, .heti-body td > *:first-child {
+.heti > *:first-child, .heti section > *:first-child, .heti td > *:first-child {
     margin-block-start: 0 !important
 }
 
-.heti-body > *:last-child, .heti-body section > *:last-child, .heti-body td > *:last-child {
+.heti > *:last-child, .heti section > *:last-child, .heti td > *:last-child {
     margin-block-end: 0 !important
 }
 
-.heti-body blockquote {
+.heti blockquote {
     margin-block-start: 12px;
     margin-block-end: 24px;
     margin-inline-start: 32px;
@@ -236,23 +235,23 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .heti-body blockquote {
+    .heti blockquote {
         background-color: rgba(255, 255, 255, .054)
     }
 }
 
-.heti-body figure {
+.heti figure {
     display: block;
     text-align: center
 }
 
-.heti-body figure > img {
+.heti figure > img {
     display: block;
     margin-inline-start: auto;
     margin-inline-end: auto
 }
 
-.heti-body hr {
+.heti hr {
     inline-size: 30%;
     block-size: 1px;
     margin-block-start: 48px;
@@ -264,22 +263,22 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .heti-body hr {
+    .heti hr {
         background-color: #404040
     }
 }
 
-.heti-body p {
+.heti p {
     margin-block-start: 12px;
     margin-block-end: 24px;
     text-align: justify
 }
 
-.heti-body p:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body p:not(:lang(zh)) {
+.heti p:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti p:not(:lang(zh)) {
     text-align: start
 }
 
-.heti-body pre {
+.heti pre {
     margin-block-start: 12px;
     margin-block-end: 12px;
     margin-inline-start: 0;
@@ -297,12 +296,12 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .heti-body pre {
+    .heti pre {
         background-color: rgba(255, 255, 255, .054)
     }
 }
 
-.heti-body pre code {
+.heti pre code {
     margin: 0;
     padding: 0;
     border: 0;
@@ -315,11 +314,11 @@
     letter-spacing: 0
 }
 
-.heti-body a, .heti-body abbr, .heti-body code, .heti-body heti-spacing, .heti-body [lang=en-US] {
+.heti a, .heti abbr, .heti code, .heti heti-spacing, .heti [lang=en-US] {
     letter-spacing: normal
 }
 
-.heti-body h1, .heti-body h2, .heti-body h3, .heti-body h4, .heti-body h5, .heti-body h6 {
+.heti h1, .heti h2, .heti h3, .heti h4, .heti h5, .heti h6 {
     position: relative;
     margin: 0;
     margin-block-start: 24px;
@@ -327,84 +326,84 @@
     font-weight: 600
 }
 
-.heti-body h1 {
+.heti h1 {
     margin-block-end: 24px;
     font-size: 32px;
     line-height: 48px
 }
 
-.heti-body h2 {
+.heti h2 {
     font-size: 24px;
     line-height: 36px
 }
 
-.heti-body h3 {
+.heti h3 {
     font-size: 20px;
     line-height: 36px
 }
 
-.heti-body h4 {
+.heti h4 {
     font-size: 18px;
     line-height: 24px
 }
 
-.heti-body h5 {
+.heti h5 {
     font-size: 16px;
     line-height: 24px
 }
 
-.heti-body h6 {
+.heti h6 {
     font-size: 14px;
     line-height: 24px
 }
 
-.heti-body h1, .heti-body h2, .heti-body h3 {
+.heti h1, .heti h2, .heti h3 {
     letter-spacing: .05em
 }
 
-.heti-body h1:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body h1:not(:lang(zh)), .heti-body h2:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body h2:not(:lang(zh)), .heti-body h3:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body h3:not(:lang(zh)) {
+.heti h1:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti h1:not(:lang(zh)), .heti h2:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti h2:not(:lang(zh)), .heti h3:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti h3:not(:lang(zh)) {
     letter-spacing: 0
 }
 
-.heti-body h1 + h2, .heti-body h2 + h3, .heti-body h3 + h4, .heti-body h4 + h5, .heti-body h5 + h6 {
+.heti h1 + h2, .heti h2 + h3, .heti h3 + h4, .heti h4 + h5, .heti h5 + h6 {
     margin-block-start: 12px
 }
 
-.heti-body ul, .heti-body ol, .heti-body dl {
+.heti ul, .heti ol, .heti dl {
     margin-block-start: 12px;
     margin-block-end: 24px
 }
 
-.heti-body ul, .heti-body ol {
+.heti ul, .heti ol {
     padding-inline-start: 32px
 }
 
-.heti-body ul ul, .heti-body ul ol, .heti-body ol ul, .heti-body ol ol {
+.heti ul ul, .heti ul ol, .heti ol ul, .heti ol ol {
     margin-block-start: 0;
     margin-block-end: 0
 }
 
-.heti-body ul {
+.heti ul {
     list-style-type: disc
 }
 
-.heti-body ol {
+.heti ol {
     list-style-type: decimal
 }
 
-.heti-body ul ul, .heti-body ol ul {
+.heti ul ul, .heti ol ul {
     list-style-type: circle
 }
 
-.heti-body ul ul ul, .heti-body ul ol ul, .heti-body ol ul ul, .heti-body ol ol ul {
+.heti ul ul ul, .heti ul ol ul, .heti ol ul ul, .heti ol ol ul {
     list-style-type: square
 }
 
-.heti-body li {
+.heti li {
     list-style-type: unset
 }
 
-.heti-body table {
+.heti table {
     box-sizing: border-box;
     table-layout: fixed;
     margin-block-start: 12px;
@@ -419,12 +418,12 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .heti-body table {
+    .heti table {
         border-color: #404040
     }
 }
 
-.heti-body th, .heti-body td {
+.heti th, .heti td {
     padding-block-start: 6px;
     padding-block-end: 6px;
     padding-inline-start: 8px;
@@ -435,12 +434,12 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .heti-body th, .heti-body td {
+    .heti th, .heti td {
         border-color: #404040
     }
 }
 
-.heti-body caption {
+.heti caption {
     caption-side: bottom;
     margin-block-start: 2px;
     margin-block-end: -4px;
@@ -448,64 +447,64 @@
     line-height: 24px
 }
 
-.heti-body a {
+.heti a {
     text-decoration: none
 }
 
-.heti-body a:hover {
+.heti a:hover {
     padding-block-end: 1px;
     border-block-end: 1px solid currentColor;
     text-decoration: none
 }
 
-.heti-body abbr[title] {
+.heti abbr[title] {
     padding-block-end: 1px;
     border-block-end: 1px dotted;
     text-decoration: none;
     cursor: help
 }
 
-.heti-body b, .heti-body strong {
+.heti b, .heti strong {
     font-weight: 600
 }
 
-.heti-body code {
+.heti code {
     margin-inline-start: .25em;
     margin-inline-end: .25em;
     font-family: "SFMono-Regular", consolas, "Liberation Mono", menlo, courier, monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: .875em
 }
 
-.heti-body dfn {
+.heti dfn {
     font-weight: 600
 }
 
-.heti-body dfn:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body dfn:not(:lang(zh)) {
+.heti dfn:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti dfn:not(:lang(zh)) {
     font-weight: 400
 }
 
-.heti-body em {
+.heti em {
     font-weight: 600
 }
 
-.heti-body figcaption {
+.heti figcaption {
     display: inline-block;
     vertical-align: top;
     font-size: 14px;
     text-align: start
 }
 
-.heti-body i {
+.heti i {
     font-style: italic
 }
 
-.heti-body ins, .heti-body u {
+.heti ins, .heti u {
     padding-block-end: 1px;
     border-block-end: 1px solid;
     text-decoration: none
 }
 
-.heti-body mark {
+.heti mark {
     padding-block-start: 2px;
     padding-block-end: 2px;
     padding-inline-start: 1px;
@@ -517,34 +516,34 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .heti-body mark {
+    .heti mark {
         background-color: rgba(77, 74, 0, .88)
     }
 }
 
-.heti-body q {
+.heti q {
     quotes: "「" "」" "『" "』"
 }
 
-.heti-body q:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body q:not(:lang(zh)) {
+.heti q:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti q:not(:lang(zh)) {
     quotes: initial;
     quotes: auto
 }
 
-.heti-body rt {
+.heti rt {
     font-size: .875em;
     font-weight: 400
 }
 
-.heti-body small {
+.heti small {
     font-size: .875em
 }
 
-.heti-body strong {
+.heti strong {
     font-weight: 600
 }
 
-.heti-body sub, .heti-body sup {
+.heti sub, .heti sup {
     position: relative;
     margin-inline-start: .25em;
     margin-inline-end: .25em;
@@ -555,36 +554,36 @@
     vertical-align: baseline
 }
 
-.heti-body sub {
+.heti sub {
     bottom: -0.25em
 }
 
-.heti-body sup {
+.heti sup {
     top: -0.5em
 }
 
-.heti-body sup:target, .heti-body sup a:target {
+.heti sup:target, .heti sup a:target {
     background-color: #dbedff
 }
 
 @media (prefers-color-scheme: dark) {
-    .heti-body sup:target, .heti-body sup a:target {
+    .heti sup:target, .heti sup a:target {
         background-color: #3a6188
     }
 }
 
-.heti-body summary {
+.heti summary {
     padding-inline-start: 1em;
     outline: 0;
     cursor: pointer
 }
 
-.heti-body summary::-webkit-details-marker {
+.heti summary::-webkit-details-marker {
     width: .6em;
     margin-inline-end: .4em
 }
 
-.heti-body u[title] {
+.heti u[title] {
     cursor: help;
     border-block-end-width: 3px;
     border-block-end-style: double;
@@ -592,25 +591,25 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .heti-body u[title] {
+    .heti u[title] {
         border-block-end-color: rgba(255, 255, 255, .54)
     }
 }
 
-.heti-body address, .heti-body cite, .heti-body dfn, .heti-body dt, .heti-body em {
+.heti address, .heti cite, .heti dfn, .heti dt, .heti em {
     font-style: normal
 }
 
-.heti-body address:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body address:not(:lang(zh)), .heti-body cite:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body cite:not(:lang(zh)), .heti-body dfn:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body dfn:not(:lang(zh)), .heti-body dt:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body dt:not(:lang(zh)), .heti-body em:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body em:not(:lang(zh)) {
+.heti address:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti address:not(:lang(zh)), .heti cite:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti cite:not(:lang(zh)), .heti dfn:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti dfn:not(:lang(zh)), .heti dt:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti dt:not(:lang(zh)), .heti em:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti em:not(:lang(zh)) {
     font-style: italic
 }
 
-.heti-body abbr[title], .heti-body del, .heti-body ins, .heti-body s, .heti-body u {
+.heti abbr[title], .heti del, .heti ins, .heti s, .heti u {
     margin-inline-start: 1px;
     margin-inline-end: 1px
 }
 
-.heti-body, .heti--sans {
+.heti, .heti--sans {
     font-family: "Helvetica Neue", helvetica, arial, "Heti Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
 }
 
@@ -647,12 +646,12 @@
     font-family: "Times New Roman", times, "Heti Kai", serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
 }
 
-.heti--columns-1, .heti--columns-2, .heti--columns-3, .heti--columns-4, .heti--columns-16em, .heti--columns-20em, .heti--columns-24em, .heti--columns-28em, .heti--columns-32em, .heti--columns-36em, .heti--columns-40em, .heti--columns-44em, .heti--columns-48em, .heti-body comma {
+.heti--columns-1, .heti--columns-2, .heti--columns-3, .heti--columns-4, .heti--columns-16em, .heti--columns-20em, .heti--columns-24em, .heti--columns-28em, .heti--columns-32em, .heti--columns-36em, .heti--columns-40em, .heti--columns-44em, .heti--columns-48em, .heti comma {
     max-width: none;
     column-gap: 2em
 }
 
-.heti--columns-1 p, .heti--columns-2 p, .heti--columns-3 p, .heti--columns-4 p, .heti--columns-16em p, .heti--columns-20em p, .heti--columns-24em p, .heti--columns-28em p, .heti--columns-32em p, .heti--columns-36em p, .heti--columns-40em p, .heti--columns-44em p, .heti--columns-48em p, .heti-body comma p {
+.heti--columns-1 p, .heti--columns-2 p, .heti--columns-3 p, .heti--columns-4 p, .heti--columns-16em p, .heti--columns-20em p, .heti--columns-24em p, .heti--columns-28em p, .heti--columns-32em p, .heti--columns-36em p, .heti--columns-40em p, .heti--columns-44em p, .heti--columns-48em p, .heti comma p {
     margin-block-start: 6px;
     margin-block-end: 12px;
     text-indent: 2em
@@ -790,62 +789,62 @@
     margin-block-end: 24px
 }
 
-.heti-body .heti-meta {
+.heti .heti-meta {
     display: block;
     text-indent: 0
 }
 
-.heti-body .heti-verse {
+.heti .heti-verse {
     text-align: center;
     text-indent: 0
 }
 
-.heti-body .heti-large {
+.heti .heti-large {
     font-size: 18px;
     line-height: 24px
 }
 
-.heti-body .heti-x-large {
+.heti .heti-x-large {
     font-size: 20px;
     line-height: 30px;
     letter-spacing: .05em
 }
 
-.heti-body .heti-small {
+.heti .heti-small {
     font-size: 14px;
     line-height: 24px
 }
 
-.heti-body .heti-x-small {
+.heti .heti-x-small {
     font-size: 12px;
     line-height: 18px
 }
 
-.heti-body .heti-list-latin {
+.heti .heti-list-latin {
     list-style-type: upper-latin
 }
 
-.heti-body .heti-list-latin ol {
+.heti .heti-list-latin ol {
     list-style-type: lower-roman
 }
 
-.heti-body .heti-list-latin ol ol {
+.heti .heti-list-latin ol ol {
     list-style-type: lower-latin
 }
 
-.heti-body .heti-list-han {
+.heti .heti-list-han {
     list-style-type: cjk-ideographic
 }
 
-.heti-body .heti-list-han ol {
+.heti .heti-list-han ol {
     list-style-type: decimal
 }
 
-.heti-body .heti-list-han ol ol {
+.heti .heti-list-han ol ol {
     list-style-type: decimal-leading-zero
 }
 
-.heti-body .heti-fn {
+.heti .heti-fn {
     margin-block-start: 59px;
     border-block-start: 1px solid;
     border-block-start-color: #ccc;
@@ -855,84 +854,84 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .heti-body .heti-fn {
+    .heti .heti-fn {
         border-block-start-color: #404040
     }
 }
 
-.heti-body .heti-fn ol {
+.heti .heti-fn ol {
     margin-block-start: 12px;
     margin-block-end: 0
 }
 
-.heti-body .heti-fn li:target {
+.heti .heti-fn li:target {
     background-color: #dbedff
 }
 
 @media (prefers-color-scheme: dark) {
-    .heti-body .heti-fn li:target {
+    .heti .heti-fn li:target {
         background-color: #3a6188
     }
 }
 
-.heti-body .heti-hang {
+.heti .heti-hang {
     position: absolute;
     line-height: inherit;
     text-indent: 0
 }
 
-.heti-body .heti-em {
+.heti .heti-em {
     -webkit-text-emphasis: filled circle;
     -webkit-text-emphasis-position: under;
     text-emphasis: filled circle;
     text-emphasis-position: under right
 }
 
-.heti-body .heti-em:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti-body .heti-em:not(:lang(zh)) {
+.heti .heti-em:not(:lang(zh)):not(:lang(ja)):not(:lang(ko)), .heti .heti-em:not(:lang(zh)) {
     -webkit-text-emphasis: none;
     text-emphasis: none
 }
 
-.heti-body .heti-ruby--inline {
+.heti .heti-ruby--inline {
     display: inline-flex;
     flex-direction: column-reverse;
     height: 1.5em;
     vertical-align: top
 }
 
-.heti-body .heti-ruby--inline rt {
+.heti .heti-ruby--inline rt {
     display: inline;
     margin-bottom: -0.25em;
     line-height: 1;
     text-align: center
 }
 
-.heti-body heti-spacing {
+.heti heti-spacing {
     display: inline
 }
 
-.heti-body heti-spacing + sup, .heti-body heti-spacing + sub {
+.heti heti-spacing + sup, .heti heti-spacing + sub {
     margin-inline-start: 0
 }
 
-.heti-body .heti-spacing-start {
+.heti .heti-spacing-start {
     margin-inline-end: .25em
 }
 
-.heti-body .heti-spacing-end {
+.heti .heti-spacing-end {
     margin-inline-start: .25em
 }
 
-.heti-body heti-adjacent {
+.heti heti-adjacent {
     display: inline;
     text-spacing-trim: space-all;
     unicode-bidi: isolate
 }
 
-.heti-body .heti-adjacent-half {
+.heti .heti-adjacent-half {
     margin-inline-end: -0.5em
 }
 
-.heti-body .heti-adjacent-quarter {
+.heti .heti-adjacent-quarter {
     margin-inline-end: -0.25em
 }
