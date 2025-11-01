@@ -218,11 +218,12 @@ class View
             $content = ob_get_clean();
         }
 
-        if ($content) {
-            $this->addSection('content', $content);
-        }
+//        if ($content) {
+//            $this->addSection('content', $content);
+//        }
 
         if ($this->layoutName) {
+            $this->addSection('content', $content);
             $content = $this->render($this->layoutName, $this->layoutData);
             $this->layoutName = null;
             $this->layoutData = null;
