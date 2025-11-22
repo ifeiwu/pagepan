@@ -1,0 +1,131 @@
+<?php
+$this->assign('setting', [
+    'dataset.id' => 11009,
+    'dataset.table' => 'item',
+    'dataset.perpage' => 10,
+    'ukid' => 'lfxmwrlb'
+]);
+include $this->uikit->file('include', 'list-start');
+?>
+
+<section <?=$this->uikit->getSettingAttrs('component', ['style'=>'--bgc-lg:var(--mix-39)'])?>>
+    <div <?=$this->uikit->getSettingAttrs('container', ['class'=>'container container-2xl'])?>>
+        <style>
+            @layer {
+                [<?=$ukid?>] .table th {
+                    padding: .25rem .5rem;
+                }
+
+                [<?=$ukid?>] .table td {
+                    padding: .5rem;
+                }
+
+                [<?=$ukid?>] .table-border thead th {
+                    border-bottom: 1px solid var(--mix-35);
+                    font-size: 12px;
+                    color: var(--secondary);
+                }
+
+                [<?=$ukid?>] .table tbody td {
+                    vertical-align: middle;
+                    font-size: 14px;
+                }
+
+                [<?=$ukid?>] .table tbody tr {
+                    cursor: pointer;
+                }
+
+                [<?=$ukid?>] .table-stripe tbody tr:nth-of-type(odd) {
+                    background-color: var(--mix-39);
+                }
+
+                [<?=$ukid?>] .pagination {
+                    --hover-color: var(--secondary) !important;
+                    --active-color: var(--secondary-20) !important;
+                    --active-bgcolor: var(--secondary) !important;
+                }
+            }
+        </style>
+
+        <?=$this->uikit->getSettingBeforeCode()?>
+
+        <?php
+        // 分类没有图片就使用动态配置图片
+        $level0 = $levels[0];
+        if ( $level0 && ! empty($level0['image']) ) {
+            $banner_image = $this->uikit->item_image($level0['path'], $level0['image']);
+        } else {
+            $banner_image = $this->setting['userdata.banner'];
+        }
+        ?>
+        <div class="banner w-expand-screen bg-cover bg-norepeat bg-center h-25 h-32-lg w-full" style="--bgi:url(<?=$this->asset($banner_image, true)?>)"></div>
+
+        <div class="grid">
+            <div class="col-span-12 col-span-3-lg hidden block-lg">
+
+                <?php if ( $alias = $this->setting['category.alias'] ) { include $this->uikit->file('category', $alias); } ?>
+
+            </div>
+            <div class="col-span-12 col-span-9-lg">
+                <div <?=$this->uikit->getSettingAttrs('dataview', ['class'=>'bg-mix-40 px-12-md py-15 mt-n23-lg', 'style'=>'--minh:60rem'])?>>
+
+                    <div class="mb-15 mb-18-lg">
+                        <?php if ( count($levels) == 2 ): ?>
+                            <h6 class="normal"><?=$levels[0]['title']?></h6>
+                            <h2><?=$levels[1]['title']?></h2>
+                        <?php elseif ( count($levels) == 1 ): ?>
+                            <h2><?=$levels[0]['title']?></h2>
+                        <?php else: ?>
+                            <h2><?=$page_title?></h2>
+                        <?php endif?>
+                    </div>
+
+                    <div class="scroll-x">
+                        <table class="table table-border table-stripe table-hover" data-markjs="<?=$this->pagevar['get_keyword']?>">
+                            <thead>
+                            <tr>
+                                <th>IMAGE .</th>
+                                <th>PART NUMBER .</th>
+                                <th>Φ</th>
+                                <th>HEIGHT</th>
+                                <th>LENGTH</th>
+                                <th>WIDTH</th>
+                                <th>MOUNTING TYPE</th>
+                                <th>SPL [DB]</th>
+                                <th>RATED VOLTAGE</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            foreach ($items as $item):
+                                include INCLUDE_LIST_ITEM_PHP;
+                                $_more = json_decode($item['_more'], true);
+                                $params = $_more['params'];
+                                ?>
+                                <tr onclick="window.open('<?=$url?>');">
+                                    <td>
+                                        <img src="<?=$b_image?>" loading="lazy" style="--maxh:3.5rem" />
+                                    </td>
+                                    <td><?=$title?></td>
+                                    <td><?=$params['diatemer']?></td>
+                                    <td><?=$params['height']?></td>
+                                    <td><?=$params['length']?></td>
+                                    <td><?=$params['width']?></td>
+                                    <td><?=$params['mounting_type']?></td>
+                                    <td><?=$params['spl']?></td>
+                                    <td><?=$params['rated_voltage']?></td>
+                                </tr>
+                            <?php endforeach?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <?php if ( $alias = $this->setting['pagination.alias'] ) { include $this->uikit->file('pagination', $alias); } ?>
+
+                </div>
+            </div>
+        </div>
+
+        <?=$this->uikit->getSettingAfterCode()?>
+    </div>
+</section>
