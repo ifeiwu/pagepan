@@ -17,21 +17,21 @@ $router->map('GET|POST', '/m/[:module]/[:action]', 'app/module');
 $router->map('GET|POST', '/extension/[:module]/[:action]?', 'app/extension');
 $router->map('GET|POST', '/admin[/]?[:action]?', 'app/admin');
 $router->map('GET', '/img/[**:name]', 'app/act/thumb');
-$router->map('GET', '/[:alias]/id/[i+:id]', 'app/pager/detail');
-$router->map('GET', '/[:alias]/category/[i+:cid]', 'app/pager/category');
-$router->map('GET', '/[:alias]/category/[i+:cid]/page/[i+:pagenum]', 'app/pager/category-page');
-$router->map('GET', '/[:alias]/tag/[:tag]', 'app/pager/tag');
-$router->map('GET|POST', '/[a:alias]/search', 'app/pager/search');
+$router->map('GET', '/[*:alias]/id/[i+:id]', 'app/pager/detail');
+$router->map('GET', '/[*:alias]/category/[i+:cid]', 'app/pager/category');
+$router->map('GET', '/[*:alias]/category/[i:cid]/page/[i+:pagenum]', 'app/pager/category-page');
+$router->map('GET', '/[*:alias]/tag/[:tag]', 'app/pager/tag');
+$router->map('GET|POST', '/[*:alias]/search', 'app/pager/search');
 $router->map('GET|POST', '/[+:alias]', 'app/pager/name');
 //$router->map('GET|POST', '@(?:/(?P<alias>.*))(?:\.html)?', 'app/page/name');
 
 // 匹配当前请求参数
 $match = $router->match();
 // 调用文件匿名函数
-if ( is_array($match) ) {
+if (is_array($match)) {
     try {
         $callback = include ROOT_PATH . "{$match['target']}.php";
-        if ( is_callable($callback) ) {
+        if (is_callable($callback)) {
             call_user_func_array($callback, $match['params']);
         }
     } catch (Throwable $e) {

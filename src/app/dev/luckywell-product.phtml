@@ -1,9 +1,11 @@
 <?php
+$ukid = 'lfxmwrlb';
+$this->assign('ukid', $ukid);
 $this->assign('setting', [
     'dataset.id' => 11009,
     'dataset.table' => 'item',
     'dataset.perpage' => 10,
-    'ukid' => 'lfxmwrlb'
+    'ukid' => $ukid
 ]);
 include $this->uikit->file('include', 'list-start');
 ?>
@@ -31,10 +33,6 @@ include $this->uikit->file('include', 'list-start');
                     font-size: 14px;
                 }
 
-                [<?=$ukid?>] .table tbody tr {
-                    cursor: pointer;
-                }
-
                 [<?=$ukid?>] .table-stripe tbody tr:nth-of-type(odd) {
                     background-color: var(--mix-39);
                 }
@@ -47,29 +45,129 @@ include $this->uikit->file('include', 'list-start');
             }
         </style>
 
-        <?=$this->uikit->getSettingBeforeCode()?>
+        <div class="banner relative w-expand-screen bg-cover bg-norepeat bg-center h-25 h-35-lg w-full" style="--bgi:url(<?=$this->asset('data/file/product-banner.jpg', true)?>)">
+            <div class="absolute" style="bottom:40%;left:10%;">
+                <h2 class="f-13 mix-40">PRODUCT</h2>
+                <h1 class="normal f-21 mix-40">产品中心</h1>
+            </div>
+        </div>
 
-        <?php
-        // 分类没有图片就使用动态配置图片
-        $level0 = $levels[0];
-        if ( $level0 && ! empty($level0['image']) ) {
-            $banner_image = $this->uikit->item_image($level0['path'], $level0['image']);
-        } else {
-            $banner_image = $this->setting['userdata.banner'];
-        }
-        ?>
-        <div class="banner w-expand-screen bg-cover bg-norepeat bg-center h-25 h-32-lg w-full" style="--bgi:url(<?=$this->asset($banner_image, true)?>)"></div>
-
-        <div class="grid">
+        <div class="grid relative z-10">
             <div class="col-span-12 col-span-3-lg hidden block-lg">
+                <?php
+                if ( $categorys ):
+                    // 如果是详情页就使用上级页面别名
+                    $page_alias = $get_id ? $join_alias : $page_alias;
+                ?>
+                    <div <?=$this->uikit->getSettingAttrs('category', $_setting_category['root'])?>>
+                        <style>
+                            @import 'assets/js/lib/metismenu/metismenu.css' layer(lib);
+                            @import 'assets/js/lib/metismenu/vertical.css' layer(lib);
+                            @layer {
+                                [<?=$ukid?>] .sidebar-nav .metismenu {
+                                    --hover-color: var(--mix);
+                                    --active-color: var(--secondary)
+                                }
 
-                <?php if ( $alias = $this->setting['category.alias'] ) { include $this->uikit->file('category', $alias); } ?>
+                                [<?=$ukid?>] .sidebar-nav .metismenu > li > a {
+                                    padding: 1.2rem 2rem;
+                                }
 
+                                [<?=$ukid?>] .sidebar-nav .metismenu > li > a:hover {
+                                    padding-left: 2.2rem;
+                                }
+
+                                [<?=$ukid?>] .sidebar-nav .metismenu > li.mm-active > a {
+                                    font-weight: bold;
+                                }
+
+                                [<?=$ukid?>] .sidebar-nav .metismenu .mm-active > a:before {
+                                    width: 12px;
+                                    height: 12px;
+                                    left: 10px;
+                                    border: 0.25rem solid var(--secondary);
+                                }
+
+                                [<?=$ukid?>] .sidebar-nav .metismenu > li > a:before {
+                                    content: "";
+                                    position: absolute;
+                                    width: 10px;
+                                    height: 10px;
+                                    left: 12px;
+                                    top: 50%;
+                                    border: 0.25rem solid var(--mix-30);
+                                    border-radius: 50%;
+                                    transform: translateY(-50%);
+                                    transition: all 0.35s;
+                                }
+
+                                [<?=$ukid?>] .sidebar-nav .metismenu > li:not(.mm-active) > a:hover:before {
+                                    border: 0.25rem solid var(--mix-15);
+                                    border-radius: 50%;
+                                    transform: translateY(-50%);
+                                }
+
+                                [<?=$ukid?>] .sidebar-nav .metismenu > li > a:after {
+                                    content: "";
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    right: 0;
+                                    height: 1px;
+                                    background-color: var(--mix-32);
+                                    transition: all 0.2s;
+                                }
+
+                                [<?=$ukid?>] .sidebar-nav .metismenu ul li a:hover {
+                                    padding-left: 1.5rem;
+                                    background-color: var(--mix-38);
+                                }
+
+                                [<?=$ukid?>] .sidebar-nav .metismenu ul li.mm-active a {
+                                    background-color: var(--secondary);
+                                    color: var(--secondary-20);
+                                }
+                            }
+                        </style>
+                        <div class="flex items-center justify-between bg-primary f-14 py-8 px-8 primary-20" style="margin-top:-4.48rem;">
+                            <div>悦福科技产品分类</div>
+                            <div>
+                                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 15m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M18.5 18.5l2.5 2.5" /><path d="M4 6h16" /><path d="M4 12h4" /><path d="M4 18h4" /></svg>
+                            </div>
+                        </div>
+                        <div class="category sidebar-nav">
+                            <ul class="metismenu invisible list-none mb-0 f-8" data-id="<?=$this->pagevar['get_cid'] ?: $item['pid']?>">
+                                <?php
+                                $categorys = helper('arr/tree', [$categorys]);
+                                $tree_menu_options = ['url' => $page_alias . '/category/{id}.html', 'arrow' => 'arrow', 'arrow_add_url' => true];
+                                $tree_menu_html = '';
+                                helper('arr/tree_menu', [$categorys, &$tree_menu_html, 0, 3, 0, $tree_menu_options]);
+                                echo $tree_menu_html;
+                                ?>
+                            </ul>
+                        </div>
+
+                        <script>
+                            require(['metismenu/metismenu'], function () {
+                                const $component = $('[<?=$ukid?>]');
+                                const $metismenu = $component.find('.metismenu');
+                                const category_id = $metismenu.data('id');
+                                const $category = $metismenu.find('[data-id="' + category_id + '"]')
+                                const category_pid = $category.data('pid');
+
+                                $metismenu.find('[data-id="' + category_pid + '"]').addClass('mm-active');
+                                $category.addClass('mm-active');
+                                $metismenu.metisMenu();
+                                $metismenu.removeClass('invisible');
+                            });
+                        </script>
+                    </div>
+                <?php endif?>
             </div>
             <div class="col-span-12 col-span-9-lg">
                 <div <?=$this->uikit->getSettingAttrs('dataview', ['class'=>'bg-mix-40 px-12-md py-15 mt-n23-lg', 'style'=>'--minh:60rem'])?>>
 
-                    <div class="mb-15 mb-18-lg">
+                    <div class="mb-12 pb-8 bb-1 b-mix-30">
                         <?php if ( count($levels) == 2 ): ?>
                             <h6 class="normal"><?=$levels[0]['title']?></h6>
                             <h2><?=$levels[1]['title']?></h2>
@@ -78,6 +176,32 @@ include $this->uikit->file('include', 'list-start');
                         <?php else: ?>
                             <h2><?=$page_title?></h2>
                         <?php endif?>
+                    </div>
+
+                    <div class="flex flex-col gy-10 mb-15">
+                        <?php
+                        $menu_attrs = SITE["menu_attrs_pid_{$get_cid}"];
+                        $menu_attrs = array_filter(json_decode2($menu_attrs),fn($o) => $o['state'] === 1);
+                        ?>
+                        <?php foreach ($menu_attrs as $attr1):?>
+                            <div class="flex gx-8">
+                                <div class="primary bold"><?=$attr1['title']?>></div>
+                                <div>
+                                    <ul class="flex gx-8">
+                                        <?php foreach (array_filter($attr1['children'], fn($o) => $o['state'] === 1) as $attr2): ?>
+                                            <li>
+                                                <label class="flex gx-1 items-center lh-1">
+                                                    <div>
+                                                        <input type="checkbox" class="form-checkbox" value="<?="{$attr1['id']}:{$attr2['id']}"?>">
+                                                    </div>
+                                                    <div><?=$attr2['title']?></div>
+                                                </label>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
 
                     <div class="scroll-x">
@@ -102,11 +226,15 @@ include $this->uikit->file('include', 'list-start');
                                 $_more = json_decode($item['_more'], true);
                                 $params = $_more['params'];
                                 ?>
-                                <tr onclick="window.open('<?=$url?>');">
+                                <tr>
                                     <td>
-                                        <img src="<?=$b_image?>" loading="lazy" style="--maxh:3.5rem" />
+                                        <a href="<?=$url?>">
+                                            <img src="<?=$b_image?>" loading="lazy" style="--maxh:3.5rem" />
+                                        </a>
                                     </td>
-                                    <td><?=$title?></td>
+                                    <td>
+                                        <a href="<?=$url?>"><?=$title?></a>
+                                    </td>
                                     <td><?=$params['diatemer']?></td>
                                     <td><?=$params['height']?></td>
                                     <td><?=$params['length']?></td>
@@ -120,12 +248,74 @@ include $this->uikit->file('include', 'list-start');
                         </table>
                     </div>
 
-                    <?php if ( $alias = $this->setting['pagination.alias'] ) { include $this->uikit->file('pagination', $alias); } ?>
+                    <?php
+                    $paginator = new \Paginator($total, $perpage, $pagenum, $page_alias . '/category/' . $get_cid . '/page/(:num).html');
+                    $paginator->setMaxPagesToShow(5);
+                    $paginator_numpages = $paginator->getNumPages();
+                    $paginator_pages = $paginator->getPages();
+                    if ( $paginator_numpages > 1 ):
+                        $prev_url = $paginator->getPrevUrl();
+                        $next_url = $paginator->getNextUrl();
+                        ?>
+                        <div <?=$this->uikit->getSettingAttrs('pagination', ['class'=>'flex justify-end mt-15 bg-mix-39 p-6'])?>>
+                            <style>
+                                @layer {
+                                    [<?=$ukid?>] .pagination {
+                                        --hover-color: var(--primary);
+                                        --active-color: var(--primary-20);
+                                        --active-bgcolor: var(--primary);
+                                    }
+
+                                    [<?=$ukid?>] .pagination .prev a,
+                                    [<?=$ukid?>] .pagination .next a {
+                                        padding: .25rem 0;
+                                    }
+
+                                    [<?=$ukid?>] .pagination li:not(.active) a {
+                                        color: var(--mix-15);
+                                    }
+
+                                    [<?=$ukid?>] .pagination li.active a {
+                                        color: var(--active-color);
+                                        background-color: var(--active-bgcolor);
+                                    }
+
+                                    [<?=$ukid?>] .pagination li:not(.active) a:hover {
+                                        color: var(--hover-color);
+                                    }
+                                }
+                            </style>
+
+                            <ul class="pagination flex-wrap items-center">
+                                <?php if ( $prev_url ): ?>
+                                    <li class="prev">
+                                        <a href="<?=$prev_url?>" class="r-2"><?=$this->setting['pagination.prevtext'] ?: '<svg width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path fill="currentColor" d="M10.83 12l4.95 4.95-1.42 1.41L8 12l6.36-6.36 1.42 1.41z"/></svg>'?></a>
+                                    </li>
+                                <?php endif?>
+
+                                <?php foreach ($paginator_pages as $page):?>
+                                    <?php if ( $page['url'] ): ?>
+                                        <li class="mx-1 mx-2-md<?=$page['isCurrent'] ? ' active' : ''?>">
+                                            <a href="<?=$page['url']?>" class="f-4 f-7-sm r-2"><?=$page['num']?></a>
+                                        </li>
+                                    <?php else: ?>
+                                        <li class="disabled">
+                                            <a href="#" class="f-4 f-7-sm" tabindex="-1"><?=$page['num']?></a>
+                                        </li>
+                                    <?php endif?>
+                                <?php endforeach?>
+
+                                <?php if ( $next_url ): ?>
+                                    <li class="next">
+                                        <a href="<?=$next_url?>" class="r-2"><?=$this->setting['pagination.nexttext'] ?: '<svg width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path fill="currentColor" d="M13.17 12L8.22 7.05l1.42-1.41L16 12l-6.36 6.36-1.42-1.41z"/></svg>'?></a>
+                                    </li>
+                                <?php endif?>
+                            </ul>
+                        </div>
+                    <?php endif?>
 
                 </div>
             </div>
         </div>
-
-        <?=$this->uikit->getSettingAfterCode()?>
     </div>
 </section>
