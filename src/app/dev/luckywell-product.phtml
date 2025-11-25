@@ -1,26 +1,48 @@
 <?php
+$get_cid = $this->pagevar['get_cid'] ?: 'all';
+$dataset_id = 11009;
+
+$db = db();
+// 获取产品数据分页列表
 if (Request::isAjax()) {
-    $data = [
-        [
-            "id" =>1,
-            "name" =>"Billy Bob",
-        ],
-        [
-            "id" =>2,
-            "name" =>"Mary May",
-        ]
-    ];
+    $data = [];
+    $items = $db->select('item', '*', [['state', '=', 1], 'AND', ['type', '=', 1], 'AND', ['page_id', '=', $dataset_id]], 'sortby DESC, id DESC');
+    foreach ($items as $item) {
+        ItemModel::setItem($item);
+        $image = ItemModel::getImage('m_');
+        $params = ItemModel::getMore('params');
+        $data[] = [
+            'image' => $image,
+            'title' => $item['title'],
+            'diatemer' => $params['diatemer'],
+            'height' => $params['height'],
+            'length' => $params['length'],
+            'width' => $params['width'],
+            'mounting_type' => $params['mounting_type'],
+            'spl' => $params['spl'],
+            'rated_voltage' => $params['rated_voltage'],
+        ];
+    }
     exit(json_encode(['data'=>$data]));
 }
+
+// 组件配置
 $ukid = 'lfxmwrlb';
 $this->assign('ukid', $ukid);
 $this->assign('setting', [
-    'dataset.id' => 11009,
+    'dataset.id' => $dataset_id,
     'dataset.table' => 'item',
-    'dataset.perpage' => 10,
     'ukid' => $ukid
 ]);
-include $this->uikit->file('include', 'list-start');
+
+// 分类列表
+$categorys = $db->select('item', '*', [['state', '=', 1], 'AND', ['type', '=', 2], 'AND', ['page_id', '=', $dataset_id]], 'sortby DESC, id DESC');
+
+// 当前分类多层级别
+$levels = [];
+if (!empty($categorys) && $get_cid != 'all') {
+    $levels = helper('db/getItemLevels', [$get_cid]);
+}
 ?>
 <section <?=$this->uikit->getSettingAttrs('component', ['style'=>'--bgc-lg:var(--mix-39)'])?>>
     <div <?=$this->uikit->getSettingAttrs('container', ['class'=>'container container-2xl'])?>>
@@ -58,7 +80,7 @@ include $this->uikit->file('include', 'list-start');
         </style>
 
         <div class="banner relative w-expand-screen bg-cover bg-norepeat bg-center h-25 h-35-lg w-full" style="--bgi:url(<?=$this->asset('data/file/product-banner.jpg', true)?>)">
-            <div class="absolute" style="bottom:40%;left:10%;">
+            <div class="absolute" style="bottom:40%;left:7%;">
                 <h2 class="f-13 mix-40">PRODUCT</h2>
                 <h1 class="normal f-21 mix-40">产品中心</h1>
             </div>
@@ -141,7 +163,7 @@ include $this->uikit->file('include', 'list-start');
                                 }
                             }
                         </style>
-                        <div class="flex items-center justify-between bg-primary f-14 py-8 px-8 primary-20" style="margin-top:-4.48rem;">
+                        <div class="flex items-center justify-between bg-primary f-13 py-8 px-8 primary-20" style="margin-top:-4.48rem;">
                             <div>悦福科技产品分类</div>
                             <div>
                                 <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 15m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M18.5 18.5l2.5 2.5" /><path d="M4 6h16" /><path d="M4 12h4" /><path d="M4 18h4" /></svg>
@@ -175,6 +197,7 @@ include $this->uikit->file('include', 'list-start');
                         </script>
                     </div>
                 <?php endif?>
+
             </div>
             <div class="col-span-12 col-span-9-lg">
                 <div <?=$this->uikit->getSettingAttrs('dataview', ['class'=>'bg-mix-40 px-12-md py-15 mt-n23-lg', 'style'=>'--minh:60rem'])?>>
@@ -194,19 +217,19 @@ include $this->uikit->file('include', 'list-start');
                         <?php
                         $menu_attrs = SITE["menu_attrs_pid_{$get_cid}"];
                         $menu_attrs = array_filter(json_decode2($menu_attrs),fn($o) => $o['state'] === 1);
+                        foreach ($menu_attrs as $attr1):
                         ?>
-                        <?php foreach ($menu_attrs as $attr1):?>
                             <div class="flex gx-8">
-                                <div class="primary bold"><?=$attr1['title']?>></div>
+                                <div class="primary bold nowrap"><?=$attr1['title']?>></div>
                                 <div>
-                                    <ul class="flex gx-8">
+                                    <ul class="flex flex-wrap gx-8 gy-4">
                                         <?php foreach (array_filter($attr1['children'], fn($o) => $o['state'] === 1) as $attr2): ?>
                                             <li>
                                                 <label class="flex gx-1 items-center lh-1">
                                                     <div>
                                                         <input type="checkbox" class="form-checkbox" value="<?="{$attr1['id']}:{$attr2['id']}"?>">
                                                     </div>
-                                                    <div><?=$attr2['title']?></div>
+                                                    <div class="nowrap"><?=$attr2['title']?></div>
                                                 </label>
                                             </li>
                                         <?php endforeach; ?>
@@ -219,7 +242,6 @@ include $this->uikit->file('include', 'list-start');
                     <div class="scroll-x">
                         <div id="datatable"></div>
                         <script>
-
                             require(['lib/tabulator/tabulator', 'css!lib/tabulator/tabulator'], function(Tabulator) {
                                 const tabulator = new Tabulator('#datatable', {
                                     pagination: true,
@@ -260,7 +282,7 @@ include $this->uikit->file('include', 'list-start');
                                 })
                             })
                         </script>
-                        <table class="table table-border table-stripe table-hover" data-markjs="<?=$this->pagevar['get_keyword']?>">
+                        <table class="table table-border table-stripe table-hover">
                             <thead>
                             <tr>
                                 <th>IMAGE .</th>
@@ -275,99 +297,10 @@ include $this->uikit->file('include', 'list-start');
                             </tr>
                             </thead>
                             <tbody>
-                            <?php
-                            foreach ($items as $item):
-                                include INCLUDE_LIST_ITEM_PHP;
-                                $_more = json_decode($item['_more'], true);
-                                $params = $_more['params'];
-                                ?>
-                                <tr>
-                                    <td>
-                                        <a href="<?=$url?>">
-                                            <img src="<?=$b_image?>" loading="lazy" style="--maxh:3.5rem" />
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="<?=$url?>"><?=$title?></a>
-                                    </td>
-                                    <td><?=$params['diatemer']?></td>
-                                    <td><?=$params['height']?></td>
-                                    <td><?=$params['length']?></td>
-                                    <td><?=$params['width']?></td>
-                                    <td><?=$params['mounting_type']?></td>
-                                    <td><?=$params['spl']?></td>
-                                    <td><?=$params['rated_voltage']?></td>
-                                </tr>
-                            <?php endforeach?>
+
                             </tbody>
                         </table>
                     </div>
-
-                    <?php
-                    $paginator = new \Paginator($total, $perpage, $pagenum, $page_alias . '/category/' . $get_cid . '/page/(:num).html');
-                    $paginator->setMaxPagesToShow(5);
-                    $paginator_numpages = $paginator->getNumPages();
-                    $paginator_pages = $paginator->getPages();
-                    if ( $paginator_numpages > 1 ):
-                        $prev_url = $paginator->getPrevUrl();
-                        $next_url = $paginator->getNextUrl();
-                        ?>
-                        <div <?=$this->uikit->getSettingAttrs('pagination', ['class'=>'flex justify-end mt-15 bg-mix-39 p-6'])?>>
-                            <style>
-                                @layer {
-                                    [<?=$ukid?>] .pagination {
-                                        --hover-color: var(--primary);
-                                        --active-color: var(--primary-20);
-                                        --active-bgcolor: var(--primary);
-                                    }
-
-                                    [<?=$ukid?>] .pagination .prev a,
-                                    [<?=$ukid?>] .pagination .next a {
-                                        padding: .25rem 0;
-                                    }
-
-                                    [<?=$ukid?>] .pagination li:not(.active) a {
-                                        color: var(--mix-15);
-                                    }
-
-                                    [<?=$ukid?>] .pagination li.active a {
-                                        color: var(--active-color);
-                                        background-color: var(--active-bgcolor);
-                                    }
-
-                                    [<?=$ukid?>] .pagination li:not(.active) a:hover {
-                                        color: var(--hover-color);
-                                    }
-                                }
-                            </style>
-
-                            <ul class="pagination flex-wrap items-center">
-                                <?php if ( $prev_url ): ?>
-                                    <li class="prev">
-                                        <a href="<?=$prev_url?>" class="r-2"><?=$this->setting['pagination.prevtext'] ?: '<svg width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path fill="currentColor" d="M10.83 12l4.95 4.95-1.42 1.41L8 12l6.36-6.36 1.42 1.41z"/></svg>'?></a>
-                                    </li>
-                                <?php endif?>
-
-                                <?php foreach ($paginator_pages as $page):?>
-                                    <?php if ( $page['url'] ): ?>
-                                        <li class="mx-1 mx-2-md<?=$page['isCurrent'] ? ' active' : ''?>">
-                                            <a href="<?=$page['url']?>" class="f-4 f-7-sm r-2"><?=$page['num']?></a>
-                                        </li>
-                                    <?php else: ?>
-                                        <li class="disabled">
-                                            <a href="#" class="f-4 f-7-sm" tabindex="-1"><?=$page['num']?></a>
-                                        </li>
-                                    <?php endif?>
-                                <?php endforeach?>
-
-                                <?php if ( $next_url ): ?>
-                                    <li class="next">
-                                        <a href="<?=$next_url?>" class="r-2"><?=$this->setting['pagination.nexttext'] ?: '<svg width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path fill="currentColor" d="M13.17 12L8.22 7.05l1.42-1.41L16 12l-6.36 6.36-1.42-1.41z"/></svg>'?></a>
-                                    </li>
-                                <?php endif?>
-                            </ul>
-                        </div>
-                    <?php endif?>
 
                 </div>
             </div>
