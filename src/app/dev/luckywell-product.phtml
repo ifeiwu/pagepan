@@ -1,4 +1,17 @@
 <?php
+if (Request::isAjax()) {
+    $data = [
+        [
+            "id" =>1,
+            "name" =>"Billy Bob",
+        ],
+        [
+            "id" =>2,
+            "name" =>"Mary May",
+        ]
+    ];
+    exit(json_encode(['data'=>$data]));
+}
 $ukid = 'lfxmwrlb';
 $this->assign('ukid', $ukid);
 $this->assign('setting', [
@@ -9,7 +22,6 @@ $this->assign('setting', [
 ]);
 include $this->uikit->file('include', 'list-start');
 ?>
-
 <section <?=$this->uikit->getSettingAttrs('component', ['style'=>'--bgc-lg:var(--mix-39)'])?>>
     <div <?=$this->uikit->getSettingAttrs('container', ['class'=>'container container-2xl'])?>>
         <style>
@@ -205,6 +217,49 @@ include $this->uikit->file('include', 'list-start');
                     </div>
 
                     <div class="scroll-x">
+                        <div id="datatable"></div>
+                        <script>
+
+                            require(['lib/tabulator/tabulator', 'css!lib/tabulator/tabulator'], function(Tabulator) {
+                                const tabulator = new Tabulator('#datatable', {
+                                    pagination: true,
+                                    paginationMode: 'remote',
+                                    ajaxURL: location.href,
+                                    ajaxConfig: 'POST',
+                                    ajaxParams: { cid: '<?=$get_cid?>' },
+                                    dataSendParams: {
+                                        'page': 'pagenum',
+                                        'size': 'perpage'
+                                    },
+                                    paginationSize: 10,
+                                    paginationInitialPage: 1,
+                                    paginationSizeSelector: [10, 20, 30, 40, 50],
+                                    paginationCounter: 'rows',
+                                    selectableRows: true,
+                                    selectableRowsRangeMode: 'click',
+                                    height: '100%',
+                                    filterMode: 'remote',
+                                    layout: 'fitColumns',
+                                    addRowPos: 'top',
+                                    rowHeader: {
+                                        resizable: false,
+                                        frozen: true,
+                                        width: 45,
+                                        hozAlign: 'center',
+                                        formatter: 'rownum',
+                                        editor: false,
+                                        headerSort: false
+                                    },
+                                    columnDefaults: {
+                                        resizable: false,
+                                        headerSort: false
+                                    },
+                                    columns:[
+                                        {title:"Name", field:"name"},
+                                    ],
+                                })
+                            })
+                        </script>
                         <table class="table table-border table-stripe table-hover" data-markjs="<?=$this->pagevar['get_keyword']?>">
                             <thead>
                             <tr>
