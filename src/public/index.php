@@ -23,7 +23,7 @@ $router->map('GET|POST', '/[*:alias]/category/[i:cid]/page/[i+:pagenum]', 'app/p
 $router->map('GET|POST', '/[*:alias]/tag/[:tag]', 'app/pager/tag');
 $router->map('GET|POST', '/[*:alias]/search', 'app/pager/search');
 $router->map('GET|POST', '/[+:alias]', 'app/pager/name');
-//$router->map('GET|POST', '@(?:/(?P<alias>.*))(?:\.html)?', 'app/page/name');
+//$router->map('GET|POST', '@(?:/(?P<alias>.*))(?:\.html)?', 'app/pager/name');
 
 // 匹配当前请求参数
 $match = $router->match();

@@ -1,17 +1,54 @@
 <?php
 $get_cid = $this->pagevar['get_cid'] ?: 'all';
+$page_alias = $this->pagevar['page_alias'];
+$page_title = $this->pagevar['page_title'];
+// 组件配置
 $dataset_id = 11009;
+$ukid = 'lfxmwrlb';
+$this->assign('ukid', $ukid);
+$this->assign('setting', [
+    'dataset.id' => $dataset_id,
+    'dataset.table' => 'item',
+    'join.id' => 10,
+    'join.alias' => 'products-detail',
+    'ukid' => $ukid
+]);
 
 $db = db();
-// 获取产品数据分页列表
+// 异步获取产品数据分页列表
 if (Request::isAjax()) {
+    $attrs = $_POST['attrs'];
+    $perpage = $_POST['perpage'];
+    $pagenum = $_POST['pagenum'];
+    $pagenum = $pagenum ? $pagenum - 1 : 0;
     $data = [];
-    $items = $db->select('item', '*', [['state', '=', 1], 'AND', ['type', '=', 1], 'AND', ['page_id', '=', $dataset_id]], 'sortby DESC, id DESC');
+    $where = [['page_id', '=', $dataset_id], 'AND', ['state', '=', 1], 'AND', ['type', '=', 1]];
+    // 选择分类查询
+    if ($get_cid != 'all') {
+        $where[] = 'AND';
+        $where[] = ['pid', '=', $get_cid];
+    }
+    // 勾选属性查询
+    if ($attrs) {
+        $where[] = 'AND';
+        $where[] = '(';
+        foreach ($attrs as $val) {
+            $where[] = ['attrs', 'like', '%"' . $val . '"%'];
+            $where[] = 'AND';
+        }
+        array_pop($where);
+        $where[] = ')';
+    }
+    $total = $db->count('item', $where);
+    $items = $db->select('item', '*', $where, 'sortby DESC, id DESC', [($pagenum - 1) * $perpage, $perpage]);
+    ItemModel::setSetting($this->setting);
     foreach ($items as $item) {
         ItemModel::setItem($item);
-        $image = ItemModel::getImage('m_');
+        $image = ItemModel::getImage('s_');
+        $link_url = ItemModel::getLink()['link_url'];
         $params = ItemModel::getMore('params');
         $data[] = [
+            'link_url' => $link_url,
             'image' => $image,
             'title' => $item['title'],
             'diatemer' => $params['diatemer'],
@@ -21,19 +58,15 @@ if (Request::isAjax()) {
             'mounting_type' => $params['mounting_type'],
             'spl' => $params['spl'],
             'rated_voltage' => $params['rated_voltage'],
+            'utime' => $item['utime']
         ];
     }
-    exit(json_encode(['data'=>$data]));
+    exit(json_encode([
+        'last_page' => ceil($total / $perpage),
+        'last_row' => $total,
+        'data' => $data
+    ]));
 }
-
-// 组件配置
-$ukid = 'lfxmwrlb';
-$this->assign('ukid', $ukid);
-$this->assign('setting', [
-    'dataset.id' => $dataset_id,
-    'dataset.table' => 'item',
-    'ukid' => $ukid
-]);
 
 // 分类列表
 $categorys = $db->select('item', '*', [['state', '=', 1], 'AND', ['type', '=', 2], 'AND', ['page_id', '=', $dataset_id]], 'sortby DESC, id DESC');
@@ -45,7 +78,7 @@ if (!empty($categorys) && $get_cid != 'all') {
 }
 ?>
 <section <?=$this->uikit->getSettingAttrs('component', ['style'=>'--bgc-lg:var(--mix-39)'])?>>
-    <div <?=$this->uikit->getSettingAttrs('container', ['class'=>'container container-2xl'])?>>
+    <div <?=$this->uikit->getSettingAttrs('container', ['class'=>'container container-3xl'])?>>
         <style>
             @layer {
                 [<?=$ukid?>] .table th {
@@ -213,9 +246,9 @@ if (!empty($categorys) && $get_cid != 'all') {
                         <?php endif?>
                     </div>
 
-                    <div class="flex flex-col gy-10 mb-15">
+                    <div id="menu_attrs" class="flex flex-col gy-10 mb-15">
                         <?php
-                        $menu_attrs = SITE["menu_attrs_pid_{$get_cid}"];
+                        $menu_attrs = SITE["menu_attrs_pid_{$get_cid}"] ?? '[]';
                         $menu_attrs = array_filter(json_decode2($menu_attrs),fn($o) => $o['state'] === 1);
                         foreach ($menu_attrs as $attr1):
                         ?>
@@ -239,13 +272,21 @@ if (!empty($categorys) && $get_cid != 'all') {
                         <?php endforeach; ?>
                     </div>
 
-                    <div class="scroll-x">
-                        <div id="datatable"></div>
+                    <div class="scroll-xx">
+                        <style>
+                            /*.tabulator .product-image {
+                                object-fit: cover;
+                                object-position: center;
+                                height: 60px;
+                                width: 60px;
+                            }*/
+                        </style>
+
+                        <div id="datatable" style="width:100%"></div>
+
                         <script>
                             require(['lib/tabulator/tabulator', 'css!lib/tabulator/tabulator'], function(Tabulator) {
                                 const tabulator = new Tabulator('#datatable', {
-                                    pagination: true,
-                                    paginationMode: 'remote',
                                     ajaxURL: location.href,
                                     ajaxConfig: 'POST',
                                     ajaxParams: { cid: '<?=$get_cid?>' },
@@ -253,53 +294,100 @@ if (!empty($categorys) && $get_cid != 'all') {
                                         'page': 'pagenum',
                                         'size': 'perpage'
                                     },
+                                    pagination: true,
                                     paginationSize: 10,
                                     paginationInitialPage: 1,
-                                    paginationSizeSelector: [10, 20, 30, 40, 50],
-                                    paginationCounter: 'rows',
-                                    selectableRows: true,
-                                    selectableRowsRangeMode: 'click',
+                                    // paginationSizeSelector: [10, 20, 30, 40, 50],
+                                    paginationMode: 'remote',
+                                    // paginationCounter: 'rows',
+                                    // selectableRows: true,
+                                    // selectableRowsRangeMode: 'click',
+                                    layout: 'fitDataFill',
                                     height: '100%',
                                     filterMode: 'remote',
-                                    layout: 'fitColumns',
                                     addRowPos: 'top',
-                                    rowHeader: {
-                                        resizable: false,
-                                        frozen: true,
-                                        width: 45,
-                                        hozAlign: 'center',
-                                        formatter: 'rownum',
-                                        editor: false,
-                                        headerSort: false
-                                    },
+                                    rowHeight: 85,
                                     columnDefaults: {
+                                        vertAlign: 'middle',
+                                        hozAlign: 'center',
                                         resizable: false,
                                         headerSort: false
                                     },
-                                    columns:[
-                                        {title:"Name", field:"name"},
+                                    columns: [
+                                        { title: 'IMAGE .', field: 'image', width: 85, frozen: true, formatter: function(cell) {
+                                                let data = cell.getData()
+                                                let title = cell.getValue()
+                                                let image = data.image
+                                                if (image) {
+                                                    image = `${image}?${data.utime}`
+                                                    return `<a href="${data.link_url}"><img src="${image}" alt=""></a>`
+                                                } else {
+                                                    return title
+                                                }
+                                            }
+                                        },
+                                        { title: 'PART NUMBER .', field: 'title', hozAlign: 'left', formatter: function(cell) {
+                                                let data = cell.getData()
+                                                let title = cell.getValue()
+                                                return `<a href="${data.link_url}">${title}</a>`
+                                            }
+                                        },
+                                        { title: 'Φ', field: 'diatemer' },
+                                        { title: 'HEIGHT', field: 'height' },
+                                        { title: 'LENGTH', field: 'length' },
+                                        { title: 'WIDTH', field: 'width' },
+                                        { title: 'MOUNTING TYPE', field: 'mounting_type' },
+                                        { title: 'SPL [DB]', field: 'spl' },
+                                        { title: 'RATED VOLTAGE', field: 'rated_voltage' },
                                     ],
+                                    locale: true,
+                                    langs: {
+                                        'zh-cn': {
+                                            'data': {
+                                                'loading': '产品列表加载中...',
+                                                'error': '加载产品列表出错~'
+                                            },
+                                            'groups': {
+                                                'item': 'item',
+                                                'items': 'items'
+                                            },
+                                            'pagination': {
+                                                'page_size': '页码',
+                                                'page_title': '',
+                                                'first': '首页',
+                                                'first_title': '',
+                                                'last': '尾页',
+                                                'last_title': '',
+                                                'prev': '上一页',
+                                                'prev_title': '',
+                                                'next': '下一页',
+                                                'next_title': '',
+                                                'all': 'All',
+                                                'counter': {
+                                                    'showing': '显示',
+                                                    'of': '共',
+                                                    'rows': '个产品',
+                                                    'pages': 'pages'
+                                                }
+                                            }
+                                        }
+                                    }
+                                })
+
+                                tabulator.on('rowClick', function(e, row) {
+                                    let data = row.getData()
+                                    location.href = data.link_url
+                                })
+
+                                const $menu_attrs = $('#menu_attrs')
+                                $menu_attrs.on('change', 'input[type="checkbox"]', function() {
+                                    let values = $('input[type="checkbox"]:checked').map(function() {
+                                        return $(this).val();
+                                    }).get();
+                                    tabulator.setData(location.href, { cid: '<?=$get_cid?>', attrs: values }, 'POST');
                                 })
                             })
                         </script>
-                        <table class="table table-border table-stripe table-hover">
-                            <thead>
-                            <tr>
-                                <th>IMAGE .</th>
-                                <th>PART NUMBER .</th>
-                                <th>Φ</th>
-                                <th>HEIGHT</th>
-                                <th>LENGTH</th>
-                                <th>WIDTH</th>
-                                <th>MOUNTING TYPE</th>
-                                <th>SPL [DB]</th>
-                                <th>RATED VOLTAGE</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
                     </div>
 
                 </div>

@@ -1,6 +1,8 @@
 <?php
+
 // 网站页面解析输出
-class Pager {
+class Pager
+{
 
     private $db;
 
@@ -12,20 +14,23 @@ class Pager {
      */
     private static $_instance;
 
-    public static function new() {
-        if ( ! (self::$_instance instanceof self) ) {
+    public static function new()
+    {
+        if (!(self::$_instance instanceof self)) {
             self::$_instance = new self();
         }
         return self::$_instance;
     }
 
-    private function __construct() {
+    private function __construct()
+    {
         $this->db = db();
         $this->view = view();
     }
 
     // 显示页面内容
-    function display($data = []) {
+    function display($data = [])
+    {
         // 站点信息
         $site = helper('site/kv');
         $this->view->assign('site', $site); // 这里要改为常量输出 define('SITE', $site)
@@ -54,9 +59,9 @@ class Pager {
         ]);// 这里要改为配置属性输出，这样可以修改值： Config::set('pagevar', []);
 
         // 没有找到页面，尝试执行/app/目录下定义的文件回调函数。
-        if ( ! $page ) {
+        if (!$page) {
             $route_file = APP_PATH . "{$page['alias']}.php";
-            if ( is_file($route_file) ) {
+            if (is_file($route_file)) {
                 (require $route_file)();
             } else {
                 $this->error(404);
@@ -64,10 +69,10 @@ class Pager {
         }
 
         // 缓存配置
-        if ( $page['cache'] == 1 ) {
+        if ($page['cache'] == 1) {
             $cache_path = CACHE_PATH . "page/$alias"; // 缓存路径
             $cache_file = $cache_path . '/' . md5(Request::url()); // 缓存文件
-            if ( is_file($cache_file) ) {
+            if (is_file($cache_file)) {
                 echo file_get_contents($cache_file);
             } else {
                 echo $content = $this->getPageContent($page);
@@ -79,12 +84,13 @@ class Pager {
     }
 
     // 返回完整的页面内容
-    function getPageContent($page) {
+    function getPageContent($page)
+    {
         // SEO 变量设置
         $this->setPageSEO($page);
 
         // 除了专页以外的页面
-        if ( $page['type'] != 'pro' ) {
+        if ($page['type'] != 'pro') {
             $page_content = gzuncompr($page['content']);
         } else {
             $page_content = file_get_contents(APP_PATH . "{$page['alias']}.phtml");
@@ -92,25 +98,24 @@ class Pager {
 
         // 使用页面布局
         $layout_alias = $page['layout'];
-        if ( $layout_alias ) {
+        if ($layout_alias) {
             $layout = $this->db->find('page', ['body', 'content'], [['state', '=', 1], 'AND', ['alias', '=', $layout_alias]]);
             $layout_content = $layout['content'];
             $layout_content = gzuncompr($layout_content);
 
             // 兼容之前网站布局
-            if ( strpos($layout_content, '{__CONTENT__}') !== false ) {
+            if (strpos($layout_content, '{__CONTENT__}') !== false) {
                 $layout_content = str_replace('{__CONTENT__}', '<?=$this->section(\'content\')?>', $layout_content);
             }
 
             $page_content = $this->view->parse($page_content);
             // 默认页面内容，表示页面有部分组件没有添加布局属性，如: <div layout-section="content"></div>
-            if ( $page_content ) {
+            if ($page_content) {
                 $this->view->addSection('content', $page_content);
             }
             // 页面内容添加到布局页面
             $page_content = $this->view->parse($layout_content);
-        }
-        // 未使用页面布局
+        } // 未使用页面布局
         else {
             $page_content = $this->view->parse($page_content);
         }
@@ -118,7 +123,7 @@ class Pager {
         $this->view->assign('page_body_attrs', $this->getPageBodyAttrs($page, $layout));
 
         // 页面内容添加到页面框架
-        if ( $page_content ) {
+        if ($page_content) {
             $this->view->addSection('content', $page_content);
         }
 
@@ -126,22 +131,22 @@ class Pager {
     }
 
     // 返回查询的页面内容
-    function getPageInfo($alias) {
+    function getPageInfo($alias)
+    {
         $columns = 'id,type,cache,layout,alias,title,seo,body,content';
         // 指定页面别名
-        if ( $alias ) {
+        if ($alias) {
             $page = $this->db->find('page', $columns, [['state', '=', 1], 'AND', ['alias', '=', $alias], 'AND', ['type', '!=', 'dataset']]);
-        }
-        // 未指定页面别名自动寻找页面
+        } // 未指定页面别名自动寻找页面
         else {
             // 引导页
             $page = $this->db->find('page', $columns, [['state', '=', 1], 'AND', ['type', '=', 'guide']]);
             // 首页
-            if ( ! $page ) {
+            if (!$page) {
                 $page = $this->db->find('page', $columns, [['state', '=', 1], 'AND', ['type', '=', 'home']]);
             }
             // 专页
-            if ( ! $page ) {
+            if (!$page) {
                 // 查询专页首页，别名可以是空字符串或 index
                 $page = $this->db->find('page', $columns, [['state', '=', 1], 'AND', ['type', '=', 'pro'], 'AND', ['alias', 'IN', ['index', '']]]);
                 $page['alias'] = 'index';
@@ -153,13 +158,14 @@ class Pager {
 
 
     // 设置页面 SEO 标签
-    function setPageSEO($page) {
-        if ( $seo = $page['seo'] ) {
+    function setPageSEO($page)
+    {
+        if ($seo = $page['seo']) {
             $seo = json_decode($seo, true);
             $seo_title = $seo['title'];
             $seo_subtitle = '';
             // 首页站点名称放在前面
-            if ( $page['type'] == 'home' ) {
+            if ($page['type'] == 'home') {
                 $seo_subtitle = false;
                 $seo_title = $this->view->site['name'] . ' - ' . $seo_title;
             }
@@ -169,18 +175,18 @@ class Pager {
     }
 
     // 显示 404 页面
-    function error($code = 404) {
+    function error($code = 404)
+    {
         Response::status($code);
         // 只有 GET 请求才会显示页面
-        if ( Request::isGet() ) {
+        if (Request::isGet()) {
             $page = $this->db->find('page', ['seo', 'content'], [['state', '=', 1], 'AND', ['type', '=', '404']]);
             // 定制 404 页面
-            if ( $page ) {
+            if ($page) {
                 $this->setPageSEO($page);
                 $this->view->addSection('content', gzuncompr($page['content']));
                 echo $this->view->render('layout/frame');
-            }
-            // 默认 404 页面
+            } // 默认 404 页面
             else {
                 $this->view->layout('layout/frame');
                 $this->view->display('error/404');
@@ -190,23 +196,24 @@ class Pager {
     }
 
     // 获取布局+页面<body>标签属性
-    function getPageBodyAttrs($page, $layout) {
+    function getPageBodyAttrs($page, $layout)
+    {
         $page_body = $page['body'];
         $layout_body = $layout['body'];
 
-        if ( $page_body ) {
+        if ($page_body) {
             $page_body = json_decode(html_decode($page_body), true);
         }
 
-        if ( $layout_body ) {
+        if ($layout_body) {
             $layout_body = json_decode(html_decode($layout_body), true);
         }
 
         // 合并布局+页面<body>标签属性
-        if ( is_array($page_body) && is_array($layout_body) ) {
+        if (is_array($page_body) && is_array($layout_body)) {
             $page_body = array_merge_recursive($layout_body, $page_body);
             foreach ($page_body as $name => $value) {
-                if ( is_array($value) ) {
+                if (is_array($value)) {
                     $value = array_unique($value);
                 } else {
                     $value = explode(' ', $value);
@@ -214,15 +221,14 @@ class Pager {
 
                 $page_body[$name] = implode(' ', $value);
             }
-        }
-        // 只有布局页面设置<body>标签属性
-        elseif ( is_array($layout_body) ) {
+        } // 只有布局页面设置<body>标签属性
+        elseif (is_array($layout_body)) {
             $page_body = $layout_body;
         }
 
         // 拼接标签属性
         $page_body_attrs = '';
-        if ( is_array($page_body) ) {
+        if (is_array($page_body)) {
             foreach ($page_body as $key => $value) {
                 $page_body_attrs .= $key . '="' . str_replace('"', '\'', $value) . '" ';
             }
@@ -232,9 +238,10 @@ class Pager {
     }
 
     // 缓存页面内容
-    function cachePage($cache_path, $cache_file, $html) {
-        if ( ! is_dir($cache_path) ) {
-            if ( ! mkdir($cache_path, 0755, true) ) {
+    function cachePage($cache_path, $cache_file, $html)
+    {
+        if (!is_dir($cache_path)) {
+            if (!mkdir($cache_path, 0755, true)) {
                 exit("Permission denied: {$cache_path}");
             }
         }
