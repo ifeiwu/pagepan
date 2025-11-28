@@ -51,13 +51,13 @@ if (Request::isAjax()) {
             'link_url' => $link_url,
             'image' => $image,
             'title' => $item['title'],
-            'diatemer' => $params['diatemer'],
-            'height' => $params['height'],
-            'length' => $params['length'],
-            'width' => $params['width'],
-            'mounting_type' => $params['mounting_type'],
-            'spl' => $params['spl'],
-            'rated_voltage' => $params['rated_voltage'],
+            'diatemer' => $params['diatemer'] ?: '/',
+            'height' => $params['height'] ?: '/',
+            'length' => $params['length'] ?: '/',
+            'width' => $params['width'] ?: '/',
+            'mounting_type' => $params['mounting_type'] ?: '/',
+            'spl' => $params['spl'] ?: '/',
+            'rated_voltage' => $params['rated_voltage'] ?: '/',
             'utime' => $item['utime']
         ];
     }
@@ -79,38 +79,6 @@ if (!empty($categorys) && $get_cid != 'all') {
 ?>
 <section <?=$this->uikit->getSettingAttrs('component', ['style'=>'--bgc-lg:var(--mix-39)'])?>>
     <div <?=$this->uikit->getSettingAttrs('container', ['class'=>'container container-3xl'])?>>
-        <style>
-            @layer {
-                [<?=$ukid?>] .table th {
-                    padding: .25rem .5rem;
-                }
-
-                [<?=$ukid?>] .table td {
-                    padding: .5rem;
-                }
-
-                [<?=$ukid?>] .table-border thead th {
-                    border-bottom: 1px solid var(--mix-35);
-                    font-size: 12px;
-                    color: var(--secondary);
-                }
-
-                [<?=$ukid?>] .table tbody td {
-                    vertical-align: middle;
-                    font-size: 14px;
-                }
-
-                [<?=$ukid?>] .table-stripe tbody tr:nth-of-type(odd) {
-                    background-color: var(--mix-39);
-                }
-
-                [<?=$ukid?>] .pagination {
-                    --hover-color: var(--secondary) !important;
-                    --active-color: var(--secondary-20) !important;
-                    --active-bgcolor: var(--secondary) !important;
-                }
-            }
-        </style>
 
         <div class="banner relative w-expand-screen bg-cover bg-norepeat bg-center h-25 h-35-lg w-full" style="--bgi:url(<?=$this->asset('data/file/product-banner.jpg', true)?>)">
             <div class="absolute" style="bottom:40%;left:7%;">
@@ -123,8 +91,7 @@ if (!empty($categorys) && $get_cid != 'all') {
             <div class="col-span-12 col-span-3-lg hidden block-lg">
                 <?php
                 if ( $categorys ):
-                    // 如果是详情页就使用上级页面别名
-                    $page_alias = $get_id ? $join_alias : $page_alias;
+                    $page_alias = $get_id ? $join_alias : $page_alias; // 如果是详情页就使用上级页面别名
                 ?>
                     <div <?=$this->uikit->getSettingAttrs('category', $_setting_category['root'])?>>
                         <style>
@@ -235,15 +202,20 @@ if (!empty($categorys) && $get_cid != 'all') {
             <div class="col-span-12 col-span-9-lg">
                 <div <?=$this->uikit->getSettingAttrs('dataview', ['class'=>'bg-mix-40 px-12-md py-15 mt-n23-lg', 'style'=>'--minh:60rem'])?>>
 
-                    <div class="mb-12 pb-8 bb-1 b-mix-30">
-                        <?php if ( count($levels) == 2 ): ?>
-                            <h6 class="normal"><?=$levels[0]['title']?></h6>
-                            <h2><?=$levels[1]['title']?></h2>
-                        <?php elseif ( count($levels) == 1 ): ?>
-                            <h2><?=$levels[0]['title']?></h2>
-                        <?php else: ?>
-                            <h2><?=$page_title?></h2>
-                        <?php endif?>
+                    <div class="flex justify-between mb-12 pb-8 bb-1 b-mix-30">
+                        <div class="">
+                            <?php if ( count($levels) == 2 ): ?>
+                                <h6 class="normal"><?=$levels[0]['title']?></h6>
+                                <h2><?=$levels[1]['title']?></h2>
+                            <?php elseif ( count($levels) == 1 ): ?>
+                                <h2><?=$levels[0]['title']?></h2>
+                            <?php else: ?>
+                                <h2><?=$page_title?></h2>
+                            <?php endif?>
+                        </div>
+                        <div>
+                            <a href="javascript:location.reload()" class="btn btn-secondary">重置</a>
+                        </div>
                     </div>
 
                     <div id="menu_attrs" class="flex flex-col gy-10 mb-15">
@@ -272,18 +244,8 @@ if (!empty($categorys) && $get_cid != 'all') {
                         <?php endforeach; ?>
                     </div>
 
-                    <div class="scroll-xx">
-                        <style>
-                            /*.tabulator .product-image {
-                                object-fit: cover;
-                                object-position: center;
-                                height: 60px;
-                                width: 60px;
-                            }*/
-                        </style>
-
+                    <div>
                         <div id="datatable" style="width:100%"></div>
-
                         <script>
                             require(['lib/tabulator/tabulator', 'css!lib/tabulator/tabulator'], function(Tabulator) {
                                 const tabulator = new Tabulator('#datatable', {
