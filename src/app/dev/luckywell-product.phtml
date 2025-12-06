@@ -26,7 +26,7 @@ if (Request::isAjax()) {
     // 选择分类查询
     if ($get_cid != 'all') {
         $where[] = 'AND';
-        $where[] = ['pid', '=', $get_cid];
+        $where[] = ['level', 'like', '%,' . $get_cid . ',%'];
     }
     // 勾选属性查询
     if ($attrs) {
@@ -100,7 +100,7 @@ if (!empty($categorys) && $get_cid != 'all') {
                             @layer {
                                 [<?=$ukid?>] .sidebar-nav .metismenu {
                                     --hover-color: var(--mix);
-                                    --active-color: var(--secondary)
+                                    --active-color: var(--primary)
                                 }
 
                                 [<?=$ukid?>] .sidebar-nav .metismenu > li > a {
@@ -119,7 +119,7 @@ if (!empty($categorys) && $get_cid != 'all') {
                                     width: 12px;
                                     height: 12px;
                                     left: 10px;
-                                    border: 0.25rem solid var(--secondary);
+                                    border: 0.25rem solid var(--primary);
                                 }
 
                                 [<?=$ukid?>] .sidebar-nav .metismenu > li > a:before {
@@ -158,8 +158,8 @@ if (!empty($categorys) && $get_cid != 'all') {
                                 }
 
                                 [<?=$ukid?>] .sidebar-nav .metismenu ul li.mm-active a {
-                                    background-color: var(--secondary);
-                                    color: var(--secondary-20);
+                                    background-color: var(--primary);
+                                    color: var(--primary-20);
                                 }
                             }
                         </style>
