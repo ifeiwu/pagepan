@@ -68,7 +68,7 @@ function __uikit_article($view, $config)
         foreach ($settings as $setting) {
             if ($setting['join.id'] == $page_id) {
                 $dataset_id = $setting['dataset.id'];
-                $dataset_table = $setting['dataset.table'];
+                $dataset_table = $setting['dataset.table'] ?: 'item';
                 break;
             }
         }

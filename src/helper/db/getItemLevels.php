@@ -1,8 +1,7 @@
 <?php
 // 返回当前 item 的 level 对象层级数组
 return function ($id) {
-    $dataset_table = view()->setting['dataset.table'];
-
+    $dataset_table = view()->setting['dataset.table'] ?: 'item';
     $item = db()->find($dataset_table, 'id,pid,type,level,title', [['state', '=', 1], 'AND', ['id', '=', $id]]);
     $level_ids = explode(',', $item['level']);
     $levels = [];
