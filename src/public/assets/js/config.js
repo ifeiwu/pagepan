@@ -47,5 +47,7 @@ require.onError = function (err) {
 };
 
 window.onerror = function (message, source, lineno, colno, error) {
-    console.error(error.stack);
+    if (error) {
+        console.error(message)
+    }
 };
