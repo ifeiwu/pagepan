@@ -228,7 +228,10 @@ if (!empty($categorys) && $get_cid != 'all') {
                                 <div class="primary bold nowrap"><?=$attr1['title']?>></div>
                                 <div>
                                     <ul class="flex flex-wrap gx-8 gy-4">
-                                        <?php foreach (array_filter($attr1['children'], fn($o) => $o['state'] === 1) as $attr2): ?>
+                                        <?php
+                                        $children = $attr1['children'] ?? [];
+                                        foreach (array_filter($children, fn($o) => $o['state'] === 1) as $attr2):
+                                        ?>
                                             <li>
                                                 <label class="flex gx-1 items-center lh-1">
                                                     <div>

@@ -3,7 +3,7 @@ $theme = json_decode($site['theme'], true);
 $theme_screen = $theme['screen'];
 ?>
 <!DOCTYPE html>
-<html lang="<?=$theme['base']['lang']?>" class="-<?=str_replace('/', '-', $page['page_alias'] ?: 'index'); ?>">
+<html lang="<?=$theme['base']['lang']?>" class="-<?=str_replace('/', '-', $pagevar['page_alias'] ?: 'index')?>">
     <head>
         <base href="<?=ROOT_URL?>">
         <meta charset="utf-8">
