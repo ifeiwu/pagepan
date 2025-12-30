@@ -24,12 +24,13 @@ return function () {
 //    $uploadHandler->setAutoconfirm(true);
     // 修改名称
     if ($image_name) {
-        $uploadHandler->setSanitizerCallback(function($name) use ($image_name) {
+        $uploadHandler->setSanitizerCallback(function ($name) use ($image_name) {
             return $image_name . '.' . pathinfo($name, PATHINFO_EXTENSION);
         });
     }
     $result = $uploadHandler->process($file);
     if ($result->isValid()) {
+        debug($result);
         $file_name = $result->name;
         $file_path = $upload_path . '/' . $file_name;
         $info = getimagesize($file_path);
@@ -45,10 +46,16 @@ return function () {
             if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'])) {
                 // 生成多种图片尺寸
                 $prefixs = explode(',', $_POST['image_prefix']);
+                $suffixs = explode(',', $_POST['image_suffix']);
                 $widths = explode(',', $_POST['image_width']);
-                $heights = explode(',', $_POST['image_height']);
-                foreach ($prefixs as $i => $prefix) {
-                    $new_file_path = $upload_path . '/' . $prefix . $file_name;
+                $heights = explode(',', $_POST['image_height']);debug($_POST);
+                $maxLen = max(count($prefixs), count($suffixs));
+                for ($i = 0; $i <= $maxLen; $i++) {
+                    $prefix = $prefixs[$i] ?? '';
+                    $suffix = $suffixs[$i] ?? '';
+                    $file_info = pathinfo($file_name);
+                    $new_file_path = "{$upload_path}/{$prefix}{$file_info['filename']}{$suffix}.{$file_info['extension']}";
+
                     $_width = $widths[$i];
                     $_height = $heights[$i];
                     $image = new ImageResize($file_path);
