@@ -1,6 +1,6 @@
 <?php
 return function ($request_data) {
-    /*unset($request_data['admin']);
+    unset($request_data['admin']);
     // 删除上传的文件
     if (isset($request_data['_removefiles'])) {
         helper('api/v2/removeFiles', [$request_data['_removefiles']]);
@@ -44,13 +44,12 @@ return function ($request_data) {
         if ($db->save('site', $data, ['name', '=', $data['name']]) === false) {
             $error[] = $name;
         }
-    }*/
+    }
 
     // 响应数据
-    $callback = require '_save.php';
-    if ($callback($request_data) === true) {
-        Response::success('保存成功');
+    if (count($error) === 0) {
+        return true;
     } else {
-        Response::error('保存失败');
+        return false;
     }
 };

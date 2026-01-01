@@ -33,10 +33,10 @@ return function ($request_data) {
     }
 
     if ( ! empty($layouts) ) {
-        return Response::error('【' . implode(',', $layouts) . '】布局与其他页面有关联，请先取消关联，然后再进行删除操作。');
+        Response::error('【' . implode(',', $layouts) . '】布局与其他页面有关联，请先取消关联，然后再进行删除操作。');
     } elseif ( ! empty($datasets) ) {
-        return Response::error('【' . implode(',', $datasets) . '】数据源中还包含其他数据，请在删除之前先清空。');
+        Response::error('【' . implode(',', $datasets) . '】数据源中还包含其他数据，请在删除之前先清空。');
     } else {
-        return Response::success('删除页面');
+        Response::success('删除页面');
     }
 };

@@ -3,7 +3,11 @@
 return function ($action = 'login') {
     $route_file = APP_PATH . "admin/{$action}.php";
     if (is_file($route_file)) {
-        (require $route_file)($action);
+        $callback = require $route_file;
+        $response = $callback($action);
+        if ($response) {
+            echo $response;
+        }
     } else {
         Response::status(404);
     }

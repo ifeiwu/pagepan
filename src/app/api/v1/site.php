@@ -95,7 +95,6 @@ class Site extends Base
             // 例子：<input type="hidden" name="{state=0}" value="cdn_sftp_config">
             if ($name == '{state=0}') {
                 $names = explode(',', $value);
-
                 foreach ($names as $name) {
                     $save_data[$name]['state'] = 0;
                 }
@@ -104,10 +103,8 @@ class Site extends Base
             // 例子：<input type="hidden" name="{value=base64}" value="cdn_sftp_config">
             elseif ($name == '{value=base64}') {
                 $names = explode(',', $value);
-
                 foreach ($names as $name) {
                     $value = base64_encode($save_data[$name]['value']);
-
                     $save_data[$name]['value'] = $value;
                 }
             } else {
@@ -124,7 +121,6 @@ class Site extends Base
         ];
         foreach ($save_data as $name => $data) {
             $is_save = db_save($this->table, $data, array('name', '=', $name));
-
             if ($is_save === false) {
                 $error[] = $name;
             }

@@ -1,30 +1,8 @@
 <?php
 return function ($request_data) {
-//    unset($request_data['admin']);
-//
-//    // 添加更新时间
-//    $request_data[] = [
-//        'name' => 'timestamp',
-//        'value' => time()
-//    ];
-//
-//    // 保存站点数据
-//    $db = db();
-//    $error = [];
-//    foreach ($request_data as $key => $vo) {
-//        if (!is_numeric($key)) {
-//            continue;
-//        }
-//        $is_save = $db->save('site', $vo, array('name', '=', $vo['name']));
-//        if ($is_save === false) {
-//            $error[] = $name;
-//        }
-//    }
-    $res = call_user_func_array(require 'save.php', [$request_data]);
-//    $res = $save($request_data);
-    debug($res);
+    $callback = require '_save.php';
     // 响应数据
-    if (count($error) === 0) {
+    if ($callback($request_data) === true) {
         $request_data['manifest']["display"] = "standalone";
         $request_data['manifest']["oriention"] = "landscape";
         $request_data['manifest']["icons"] = [
@@ -40,11 +18,12 @@ return function ($request_data) {
             ]
         ];
 
+        // 写入文件
         $manifest = json_encode($request_data['manifest'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         file_put_contents(WEB_DATA_PATH . 'manifest/manifest.json', $manifest);
 
-        return Response::success('保存数据成功');
+        Response::success('保存成功');
     } else {
-        return Response::error('保存数据失败');
+        Response::error('保存失败');
     }
 };

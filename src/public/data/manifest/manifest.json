@@ -1,8 +1,8 @@
 {
-    "name": "酷店",
-    "short_name": "测试sss",
-    "start_url": "/",
-    "theme_color": "#ef6944",
+    "name": "测试123w",
+    "short_name": "测试",
+    "start_url": "/shop",
+    "theme_color": "#EF6944",
     "background_color": "#ffffff",
     "display": "standalone",
     "oriention": "landscape",
