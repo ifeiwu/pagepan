@@ -2,7 +2,6 @@
 require_once VEN_PATH . 'autoload.php';
 
 use Gumlet\ImageResize;
-use Verot\Upload\Upload;
 use Sirius\Upload\Handler as UploadHandler;
 
 return function () {
@@ -10,16 +9,31 @@ return function () {
     $file_name = $file['name'];
     $image_name = $_POST['image_name']; // 图片名称
     $image_path = $_POST['image_path']; // 图片路径
+    $image_maxsize = $_POST['image_maxsize']; // 最大大小
+    $image_allowed = $_POST['image_allowed']; // 允许格式
+    $image_convert = $_POST['image_convert']; // 转换格式
     $overwrite = $_POST['overwrite'] ?? true; // 是否覆盖图片
     // 上传路径
     $upload_path = rtrim(WEB_ROOT . $image_path, '/');
     if (is_dir($upload_path) && !is_writable($upload_path)) {
         chmod($upload_path, 0755);
     }
+    // 格式验证
+    $allowed = $image_allowed ? explode(',', $image_allowed) : ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($ext, $allowed, true)) {
+        Response::error('只允许上传的图片格式：' . implode('，', $allowed));
+    }
+    // 大小验证
+    $maxsize = floatval($image_maxsize ?: 20) * 1024 * 1024;
+    if ($file['size'] > $maxsize) {
+        $sizemb = round($maxsize / (1024 * 1024), 2);
+        Response::error("图片大小不能超过 {$sizemb}MB");
+    }
     // 上传程序
     $uploadHandler = new UploadHandler($upload_path);
 //    $uploadHandler->addRule('image', ['allowed' => ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']], '{label}应为有效格式（jpg, jpeg, png, webp, gif, svg）', '图片');
-    $uploadHandler->addRule('size', ['size' => '20M'], '{label}应小于 {size}', '图片');
+//    $uploadHandler->addRule('size', ['size' => '20M'], '{label}应小于 {size}', '图片');
     $uploadHandler->setOverwrite($overwrite);
 //    $uploadHandler->setAutoconfirm(true);
     // 修改名称
@@ -28,9 +42,8 @@ return function () {
             return $image_name . '.' . pathinfo($name, PATHINFO_EXTENSION);
         });
     }
-    $result = $uploadHandler->process($file);
+    $result = $uploadHandler->process($_FILES);
     if ($result->isValid()) {
-        debug($result);
         $file_name = $result->name;
         $file_path = $upload_path . '/' . $file_name;
         $info = getimagesize($file_path);
@@ -48,13 +61,14 @@ return function () {
                 $prefixs = explode(',', $_POST['image_prefix']);
                 $suffixs = explode(',', $_POST['image_suffix']);
                 $widths = explode(',', $_POST['image_width']);
-                $heights = explode(',', $_POST['image_height']);debug($_POST);
+                $heights = explode(',', $_POST['image_height']);
                 $maxLen = max(count($prefixs), count($suffixs));
                 for ($i = 0; $i <= $maxLen; $i++) {
                     $prefix = $prefixs[$i] ?? '';
                     $suffix = $suffixs[$i] ?? '';
                     $file_info = pathinfo($file_name);
-                    $new_file_path = "{$upload_path}/{$prefix}{$file_info['filename']}{$suffix}.{$file_info['extension']}";
+                    $file_ext = $image_convert ?? $file_info['extension'];
+                    $new_file_path = "{$upload_path}/{$prefix}{$file_info['filename']}{$suffix}.{$file_ext}";
 
                     $_width = $widths[$i];
                     $_height = $heights[$i];
@@ -62,27 +76,30 @@ return function () {
                     $image->quality_jpg = 100;
                     $image->quality_webp = 100;
                     $image->quality_png = 0;
-                    $is_copy_file = true;
                     // 调整图片宽度
                     if ($_width) {
                         if ($width > $_width) {
                             $image->resizeToWidth($_width);
-                            $is_copy_file = false;
                         }
                     }
                     // 调整图片高度
                     if ($_height) {
                         if ($height > $_height) {
                             $image->resizeToHeight($_height);
-                            $is_copy_file = false;
                         }
                     }
-                    // 可以调整图片大小
-                    if ($is_copy_file == false) {
-                        $image->save($new_file_path);
-                    } else {
-                        copy($file_path, $new_file_path);
+                    // 转换格式
+                    if ($image_convert) {
+                        if ($image_convert == 'png') {
+                            $image->output(IMAGETYPE_PNG);
+                        } elseif ($image_convert == 'webp') {
+                            $image->output(IMAGETYPE_WEBP);
+                        } elseif ($image_convert == 'jpg' || $image_convert == 'jpeg') {
+                            $image->output(IMAGETYPE_JPEG);
+                        }
                     }
+                    // 保存图片
+                    $image->save($new_file_path);
                     // 压缩图片大小
                     $optimizer->optimize($new_file_path);
                 }
@@ -104,7 +121,7 @@ return function () {
             Response::error($e->getMessage());
         }
     } else {
-        Response::error('不支持图片格式');
+        Response::error('上传失败');
     }
 };
 
