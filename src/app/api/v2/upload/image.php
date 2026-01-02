@@ -32,31 +32,28 @@ return function () {
     }
     // 上传程序
     $uploadHandler = new UploadHandler($upload_path);
-//    $uploadHandler->addRule('image', ['allowed' => ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']], '{label}应为有效格式（jpg, jpeg, png, webp, gif, svg）', '图片');
-//    $uploadHandler->addRule('size', ['size' => '20M'], '{label}应小于 {size}', '图片');
     $uploadHandler->setOverwrite($overwrite);
-//    $uploadHandler->setAutoconfirm(true);
     // 修改名称
     if ($image_name) {
         $uploadHandler->setSanitizerCallback(function ($name) use ($image_name) {
             return $image_name . '.' . pathinfo($name, PATHINFO_EXTENSION);
         });
     }
-    $result = $uploadHandler->process($_FILES);
+    // 开始上传
+    $result = $uploadHandler->process($file);
     if ($result->isValid()) {
-        $file_name = $result->name;
-        $file_path = $upload_path . '/' . $file_name;
-        $info = getimagesize($file_path);
-        $width = $info[0];
-        $height = $info[1];
-        $mime = $info['mime'];
-        $ext = pathinfo($file_path, PATHINFO_EXTENSION);
+        $upload_name = $result->name;
+        $upload_info = pathinfo($upload_name);
+        $upload_name = $upload_info['filename'];
+        $upload_ext = $upload_info['extension'];
+        $convert_ext = $image_convert ?: $upload_ext;
+        $upload_filepath = "{$upload_path}/{$upload_name}.{$upload_ext}";
         try {
             // 压缩上传图片
             $optimizer = new Optimizer($_POST['optimizeapi_uri'], $_POST['optimizeapi_key']);
-            $optimizer->optimize($file_path);
+            $optimizer->optimize($upload_filepath);
             // 指定格式压缩图片
-            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'])) {
+            if (in_array($upload_ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'])) {
                 // 生成多种图片尺寸
                 $prefixs = explode(',', $_POST['image_prefix']);
                 $suffixs = explode(',', $_POST['image_suffix']);
@@ -66,16 +63,14 @@ return function () {
                 for ($i = 0; $i <= $maxLen; $i++) {
                     $prefix = $prefixs[$i] ?? '';
                     $suffix = $suffixs[$i] ?? '';
-                    $file_info = pathinfo($file_name);
-                    $file_ext = $image_convert ?? $file_info['extension'];
-                    $new_file_path = "{$upload_path}/{$prefix}{$file_info['filename']}{$suffix}.{$file_ext}";
-
                     $_width = $widths[$i];
                     $_height = $heights[$i];
-                    $image = new ImageResize($file_path);
+
+                    $image = new ImageResize($upload_filepath);
                     $image->quality_jpg = 100;
                     $image->quality_webp = 100;
                     $image->quality_png = 0;
+
                     // 调整图片宽度
                     if ($_width) {
                         if ($width > $_width) {
@@ -88,18 +83,19 @@ return function () {
                             $image->resizeToHeight($_height);
                         }
                     }
-                    // 转换格式
+                    // 转换格式保存
+                    $new_file_path = "{$upload_path}/{$prefix}{$upload_name}{$suffix}.{$convert_ext}";
                     if ($image_convert) {
                         if ($image_convert == 'png') {
-                            $image->output(IMAGETYPE_PNG);
+                            $image->save($new_file_path, IMAGETYPE_PNG);
                         } elseif ($image_convert == 'webp') {
-                            $image->output(IMAGETYPE_WEBP);
+                            $image->save($new_file_path, IMAGETYPE_WEBP);
                         } elseif ($image_convert == 'jpg' || $image_convert == 'jpeg') {
-                            $image->output(IMAGETYPE_JPEG);
+                            $image->save($new_file_path, IMAGETYPE_JPEG);
                         }
+                    } else {
+                        $image->save($new_file_path);
                     }
-                    // 保存图片
-                    $image->save($new_file_path);
                     // 压缩图片大小
                     $optimizer->optimize($new_file_path);
                 }
@@ -107,14 +103,17 @@ return function () {
 
             $result->confirm();
 
+            $convert_filepath = "{$upload_path}/{$upload_name}.{$convert_ext}";
+            $info = getimagesize($convert_filepath);
             Response::success('上传图片成功', [
                 'path' => $image_path,
-                'image' => $result->name,
-                'size' => filesize($file_path),
-                'width' => $width,
-                'height' => $height,
-                'mime' => $mime,
-                'ext' => $ext,
+                'name' => $upload_name,
+                'image' => "{$upload_name}.{$convert_ext}",
+                'size' => filesize($convert_filepath),
+                'width' => $info[0],
+                'height' => $info[1],
+                'mime' => $info['mime'],
+                'ext' => $convert_ext,
             ]);
         } catch (\Exception $e) {
             $result->clear();

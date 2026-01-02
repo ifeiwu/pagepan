@@ -17,10 +17,7 @@ return function ($module, $action = 'main') {
     $route_file = APP_PATH . "extension/{$module}/$action.php";
     if ( is_file($route_file) ) {
         $callback = require $route_file;
-        $response = $callback($module, $action);
-        if ($response) {
-            echo $response;
-        }
+        $callback($module, $action);
     } else {
         Response::status(404);
     }

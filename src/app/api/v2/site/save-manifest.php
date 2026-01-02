@@ -1,6 +1,8 @@
 <?php
 return function ($request_data) {
+    unset($request_data['_removefiles']);
     $callback = require '_save.php';
+
     // 响应数据
     if ($callback($request_data) === true) {
         $request_data['manifest']["display"] = "standalone";

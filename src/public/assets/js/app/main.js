@@ -47,7 +47,7 @@ require(['jquery', 'device'], function() {
                 require(['app/plugins/scrollnav'])
             }
             // 安装网站到桌面
-            if ($('[data-install="webapp"]').length) {
+            if ($('[data-webapp="install"]').length) {
                 require(['../pwa'], function() {
                     if ('serviceWorker' in navigator) {
                         navigator.serviceWorker.register('assets/js/sw.js').then(function(registration) {

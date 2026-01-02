@@ -1,8 +1,12 @@
 define(function(require) {
     let installPromptEvent
-    let installBlock = document.querySelector('[data-install="webapp"]')
-    let installLink = installBlock.querySelector('[data-install="button"]')
-    installBlock.style.display = 'none'
+    let installLink = document.querySelector('[data-webapp="install"]')
+    installLink.style.display = 'none'
+
+    let installBlock = installLink.closest('[data-webapp="section"]')
+    if (installBlock) {
+        installBlock.style.display = 'none'
+    }
 
     // Install App functionality
     window.addEventListener('beforeinstallprompt', event => {
@@ -13,13 +17,13 @@ define(function(require) {
         installPromptEvent = event
 
         // Show the (hidden-by-default) install link
-        installBlock.style.display = 'block'
+        installLink.style.display = 'inline-block'
+        if (installBlock) {
+            installBlock.style.display = 'block'
+        }
 
         installLink.addEventListener('click', event => {
             event.preventDefault()
-
-            // Update the install UI to remove the install button
-            installBlock.style.display = 'none'
 
             // Show the modal add to home screen dialog
             installPromptEvent.prompt()

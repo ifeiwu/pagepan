@@ -23,10 +23,7 @@ return function ($version, $module, $action) {
     if (is_file($route_file)) {
         $request_data = Request::body() + $_GET;
         $callback = require $route_file;
-        $response = $callback($request_data);
-        if ($response) {
-            echo $response;
-        }
+        $callback($request_data);
     } else {
         Response::status(404);
     }
