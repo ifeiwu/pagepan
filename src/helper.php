@@ -181,15 +181,15 @@ function json_decode2($json, $associative = null, $depth = 512, $flags = 0)
 }
 
 // html实体转换为字符
-function html_decode($str)
+function html_decode($encoded)
 {
-    return htmlspecialchars_decode($str, ENT_QUOTES);
+    return html_entity_decode($encoded, ENT_QUOTES, 'UTF-8');
 }
 
 // 字符转换为html实体
-function html_encode($str)
+function html_encode($html)
 {
-    return htmlspecialchars($str, ENT_QUOTES);
+    return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
 // 价格格式化
