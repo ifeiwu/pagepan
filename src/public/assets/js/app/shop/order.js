@@ -18,7 +18,8 @@ define(function (require) {
             let $form = $(this);
             let token = $form.data('token');
             let formData = $form.serializeArray();
-            $submit.attr('disabled', true).text('正在提交...');
+            console.log(formData)
+            /*$submit.attr('disabled', true).text('正在提交...');
             $.ajax({
                 url: 'm/shop/order-submit?_token=' + token,
                 type: 'POST',
@@ -53,7 +54,7 @@ define(function (require) {
                 error: function(error) {
                     console.error(error);
                 }
-            });
+            });*/
         });
         // 保存填写表单数据
         require(['form-storage'], function (FormStorage) {

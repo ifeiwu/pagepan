@@ -67,7 +67,7 @@ return function () {
     $order_fields = [];
     $res = _getVerifyDeliveryFields($delivery_fields);
     if (is_array($res)) {
-        if (isset($res['fields'])) {debug($res['fields']);
+        if (isset($res['fields'])) {
             $order_fields = $res['fields'];
         } else {
             Response::error($res['message'], ['field' => $res['field_name']]);
@@ -95,16 +95,27 @@ return function () {
     $order['remark'] = $remark; // 买家备注
 
     // 店铺地址
-    $shop_address = $site['shop_address'];
-    $shop_address = json_decode($shop_address, true);
-    $province = $shop_address['province'];
-    $city = $shop_address['city'];
-    $district = $shop_address['district'];
+    $address = post('address');
+    if ($address) {
+        $province = $address['province'];
+        $city = $address['city'];
+        $district = $address['district'];
+        $house = $order['house'];
+    } // 本地订单地址，注：后台服务范围添加了街道
+    elseif (isset($order['roads'])) {
+        $shop_address = $site['shop_address'];
+        $shop_address = json_decode($shop_address, true);
+        $province = $shop_address['province'];
+        $city = $shop_address['city'];
+        $district = $shop_address['district'];
+        $house = "{$order['roads']}{$order['house']}";
+        unset($order['roads']);
+    }
 
     // 收货地址
-    if (isset($order['roads']) || isset($order['house'])) {
-        $order['address'] = "$province,$city,$district,{$order['roads']},{$order['house']}";
-        unset($order['roads'], $order['house']);
+    if ($district) {
+        $order['address'] = "$province,$city,$district,{$house}";
+        unset($order['house']);
     }
 
     try {
