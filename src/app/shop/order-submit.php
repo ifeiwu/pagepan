@@ -94,28 +94,27 @@ return function () {
     $order['total'] = $order_total; // 实付总额
     $order['remark'] = $remark; // 买家备注
 
-    // 店铺地址
-    $address = post('address');
-    if ($address) {
-        $province = $address['province'];
-        $city = $address['city'];
-        $district = $address['district'];
-        $house = $order['house'];
-    } // 本地订单地址，注：后台服务范围添加了街道
-    elseif (isset($order['roads'])) {
-        $shop_address = $site['shop_address'];
-        $shop_address = json_decode($shop_address, true);
-        $province = $shop_address['province'];
-        $city = $shop_address['city'];
-        $district = $shop_address['district'];
-        $house = "{$order['roads']}{$order['house']}";
-        unset($order['roads']);
-    }
-
-    // 收货地址
-    if ($district) {
-        $order['address'] = "$province,$city,$district,{$house}";
-        unset($order['house']);
+    if (isset($order['roads'])) {
+        $province = post('province', 'escape');
+        if ($province) {
+            // 全国地址都可以选择
+            $city = post('city', 'escape');
+            $district = post('district', 'escape');
+            $roads = '';
+            $house = $order['house'];
+        } else {
+            // 本地下单，只能选择街道，注：后台服务范围添加了街道
+            $shop_address = $site['shop_address']; // 店铺地址
+            $shop_address = json_decode($shop_address, true);
+            $province = $shop_address['province'];
+            $city = $shop_address['city'];
+            $district = $shop_address['district'];
+            $roads = $order['roads'];
+            $house = $order['house'];
+        }
+        // 收货地址
+        $order['address'] = "$province,$city,$district,{$roads},{$house}";
+        unset($order['roads'], $order['house']);
     }
 
     try {
