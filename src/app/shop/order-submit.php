@@ -43,10 +43,12 @@ return function () {
     // 提取会话信息
     $buynow = session('shop-buynow');
     if ($buynow != null) {
+        // 单个商品订单
         $order_quantity = $buynow['quantity'];
         $order_total = $buynow['total'];
         $order_items = $buynow['items'];
     } else {
+        // 购物车订单
         $cart = cart();
         $order_quantity = $cart->getTotalQuantity();
         $order_total = $cart->getTotalWithDiscount();
@@ -97,13 +99,13 @@ return function () {
     if (isset($order['roads'])) {
         $province = post('province', 'escape');
         if ($province) {
-            // 全国地址都可以选择
+            // 全国地区，都可以选择，注：后台服务范围不要添加街道
             $city = post('city', 'escape');
             $district = post('district', 'escape');
             $roads = '';
             $house = $order['house'];
         } else {
-            // 本地下单，只能选择街道，注：后台服务范围添加了街道
+            // 本地街道，只能选择街道，注：后台服务范围需要添加街道
             $shop_address = $site['shop_address']; // 店铺地址
             $shop_address = json_decode($shop_address, true);
             $province = $shop_address['province'];
