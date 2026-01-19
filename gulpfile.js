@@ -48,6 +48,7 @@ gulp.task('copy', function () {
 		'!src/public/data/font/**/*',
 		'!src/public/data/json/**/*',
 		'!src/public/data/pack/**/*',
+		'!src/public/data/manifest/**/*',
 		'!src/public/assets/font/**/*',
 		'!src/public/assets/i18n/**/*',
 		'!src/public/assets/**/*.{css,js,html,md}',
