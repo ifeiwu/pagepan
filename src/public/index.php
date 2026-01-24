@@ -19,7 +19,7 @@ $router->map('GET|POST', '/admin[/]?[:action]?', 'app/admin');
 $router->map('GET|POST', '/img/[**:name]', 'app/act/thumb');
 $router->map('GET|POST', '/[*:alias]/id/[i+:id]', 'app/pager/detail');
 $router->map('GET|POST', '/[*:alias]/category/[i+:cid]', 'app/pager/category');
-$router->map('GET|POST', '/[*:alias]/category/[i:cid]/page/[i+:pagenum]', 'app/pager/category-page');
+$router->map('GET|POST', '/[*:alias]/category/[a:cid]/page/[i+:pagenum]', 'app/pager/category-page');
 $router->map('GET|POST', '/[*:alias]/tag/[:tag]', 'app/pager/tag');
 $router->map('GET|POST', '/[*:alias]/search', 'app/pager/search');
 $router->map('GET|POST', '/[+:alias]', 'app/pager/name');
