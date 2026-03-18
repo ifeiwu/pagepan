@@ -518,7 +518,10 @@ class Uikit
         } else {
             $content = html_decode($content);
         }
-        return preg_replace('/<img.+?src=[\'"](.+?\.(jpg|jpeg|png|webp|avif|bmp|gif|svg))[\'"](.*?)>/i', "<img class=\"lazyload zooming\" data-src=\"$1\" src=\"assets/image/loading.svg\" $3>", $content);
+        $pattern = '/<img(.*?)[^>]src=["\'](.+?\.(jpg|jpeg|png|webp|avif|bmp|gif|svg))["\'][^>](.*?)>/i';
+        $replace = "<img class=\"lazyload zooming\" data-src=\"$2\" src=\"assets/image/loading.svg\" $1 $4>";
+        return preg_replace($pattern, $replace, $content);
+//        return preg_replace('/<img.+?src=[\'"](.+?\.(jpg|jpeg|png|webp|avif|bmp|gif|svg))[\'"](.*?)>/i', "<img class=\"lazyload zooming\" data-src=\"$1\" src=\"assets/image/loading.svg\" $3>", $content);
     }
 
     /**
