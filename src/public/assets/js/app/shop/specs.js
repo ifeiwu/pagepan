@@ -102,6 +102,9 @@ define(function (require) {
                         $component.find('#spec_price').hide();
                     }
                 }
+            } else {
+                $component.find('#price').show();
+                $component.find('#spec_price').hide();
             }
         });
     }
