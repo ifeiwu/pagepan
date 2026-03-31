@@ -19,7 +19,7 @@ return function () {
         chmod($upload_path, 0755);
     }
     // 格式验证
-    $allowed = $image_allowed ? explode(',', $image_allowed) : ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
+    $allowed = $image_allowed ? explode(',', $image_allowed) : ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif', 'svg'];
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     if (!in_array($ext, $allowed, true)) {
         Response::error('只允许上传的图片格式：' . implode('，', $allowed));
@@ -67,8 +67,9 @@ return function () {
                     $_height = $heights[$i];
 
                     $image = new ImageResize($upload_filepath);
-                    $image->quality_jpg = 100;
-                    $image->quality_webp = 100;
+                    $image->quality_jpg = 95;
+                    $image->quality_webp = 95;
+//                    $image->quality_avif = 95;
                     $image->quality_png = 0;
 
                     // 调整图片宽度
@@ -90,7 +91,9 @@ return function () {
                             $image->save($new_file_path, IMAGETYPE_PNG);
                         } elseif ($image_convert == 'webp') {
                             $image->save($new_file_path, IMAGETYPE_WEBP);
-                        } elseif ($image_convert == 'jpg' || $image_convert == 'jpeg') {
+                        }/* elseif ($image_convert == 'avif') { // 目前发现有异常
+                            $image->save($new_file_path, IMAGETYPE_AVIF);
+                        }*/ elseif ($image_convert == 'jpg' || $image_convert == 'jpeg') {
                             $image->save($new_file_path, IMAGETYPE_JPEG);
                         }
                     } else {
