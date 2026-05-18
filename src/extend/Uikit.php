@@ -520,8 +520,9 @@ class Uikit
         }
 
         $utime = $utime ? "?$utime" : '';
+        $domain = SITE['domain3'] ?: '';
         $pattern = '/<img(.*?)[^>]src=["\'](.+?\.(jpg|jpeg|png|webp|avif|bmp|gif|svg))["\'][^>](.*?)>/i';
-        $replace = "<img class=\"zooming\" loading=\"lazy\" src=\"$2{$utime}\" $1 $4>";
+        $replace = "<img class=\"zooming\" loading=\"lazy\" src=\"{$domain}$2{$utime}\" $1 $4>";
 
         return preg_replace($pattern, $replace, $content);
 //        return preg_replace('/<img.+?src=[\'"](.+?\.(jpg|jpeg|png|webp|avif|bmp|gif|svg))[\'"](.*?)>/i', "<img class=\"lazyload zooming\" data-src=\"$1\" src=\"assets/image/loading.svg\" $3>", $content);

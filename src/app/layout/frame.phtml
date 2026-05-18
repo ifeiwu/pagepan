@@ -34,7 +34,7 @@ $theme_screen = $theme['screen'];
         }
         // 应用清单
         if ($site['manifest']) {
-            echo '<link rel="manifest" href="' . assets('data/manifest/manifest.json') . '">';
+            echo '<link rel="manifest" href="data/manifest/manifest.json?' . SITE['timestamp'] . '">';
         }
         // 样式文件
         echo '<link href="' . assets('assets/css/pagepan.css') . '" rel="stylesheet">';
