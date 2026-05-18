@@ -46,7 +46,7 @@ $theme_screen = $theme['screen'];
             $site_fonts_list = json_decode($site_fonts_list, true);
             foreach ($site_fonts_list as $font) {
                 $fontid = $font['id'];
-                $site_fonts_css = "data/font/$fontid/$fontid.css";
+                $site_fonts_css = assets("data/font/$fontid/$fontid.css");
                 echo '<link href="' . $site_fonts_css . '" rel="preload" as="style" onload="this.rel=\'stylesheet\'">';
             }
         }
