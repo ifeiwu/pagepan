@@ -2,7 +2,7 @@
 return  [
     'default' => 'sqlite',
     'connections' => [
-        'sqlite' => [
+        'default' => [
             'driver'   => 'sqlite',
             'database' => base_path('storage/database/pagepan.db'),// storage_path('database/kushop.sqlite'),
             'prefix'   => '',

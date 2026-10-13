@@ -17,6 +17,11 @@ function view2(): \support\View2
     return new \support\View2();
 }
 
+function db($conn_name = 'default'): \Illuminate\Database\Connection
+{
+    return DB::connection($conn_name);
+}
+
 function datastar(array $headers = [])
 {
     return new \support\Datastar($headers);
@@ -75,4 +80,65 @@ function json_error(string $message = '', array $data = [], ...$params)
 function json_success(string $message = '', mixed $data = null, ...$params)
 {
     return json(array_merge(['code' => 0, 'message' => $message, 'data' => $data], ...$params));
+}
+
+// 获取类型的文字
+function getTypeText($type) {
+    $text = '其它';
+    switch ($type) {
+        case 'guide':
+            $text = '引导';
+            break;
+        case 'home':
+            $text = '主页';
+            break;
+        case 'inside':
+            $text = '内页';
+            break;
+        case 'pro':
+            $text = '专页';
+            break;
+        case 'graphic':
+            $text = '图文';
+            break;
+        case 'layout':
+            $text = '布局';
+            break;
+        case 'dataset':
+            $text = '数据源';
+            break;
+        case '404':
+            $text = '404';
+            break;
+    }
+    return $text;
+}
+
+// 获取类型的颜色
+function getTypeColor($type) {
+    $color = '#e7f6ff';
+    switch ($type) {
+        case 'guide':
+            $color = '#f8ffe7';
+            break;
+        case 'home':
+            $color = '#e7efff';
+            break;
+        case 'pro':
+            $color = '#ffe7fd';
+            break;
+        case 'graphic':
+            $color = '#ebf4fa';
+            break;
+        case 'layout':
+            $color = '#fff2e7';
+            break;
+        case 'dataset':
+            $color = '#eeffe7';
+            break;
+        case '404':
+            $color = '#ffe7e7';
+            break;
+    }
+    return $color;
 }
