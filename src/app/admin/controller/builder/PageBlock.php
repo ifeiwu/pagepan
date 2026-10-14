@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controller\admin\builder;
+namespace app\admin\controller\builder;
 
 use support\Db;
 use support\Request;
@@ -21,37 +21,38 @@ class PageBlock
                 return json_error('获取页面信息失败');
             }
 
+            // 把页面块内容添加到数据库
             $html = '';
             foreach ($blocks as $block) {
                 $content = $block['content'];
-                $db->table('page_block')->delete($block['id']);
-                $db->table('page_block')->insert([
-                    'id' => $block['id'],
-                    'page_id' => $page_id,
-                    'content' => $content,
-                    'setting' => $block['setting']
+                $block_id = $block['id'];
+                $db->table('page_block')
+                    ->where('id', '=', $block_id)
+                    ->update([
+                        'id' => $block_id,
+                        'page_id' => $page_id,
+                        'content' => $content,
+                        'setting' => $block['setting']
                 ]);
                 $html .= $content;
             }
 
+            // 保存代码到文件
             $page_type = $page->type;
             $page_alias = $page->alias;
             if (empty($page_alias) && $page_type == 'home') {
                 $page_alias = 'index';
             }
             $file = app_path("view/page/{$page_alias}.php");
-            var_export($file);
             if (file_put_contents($file, $html) === false) {
                 Db::rollBack();
                 return json_error('保存页面文件失败');
             }
 
             Db::commit();
-
             return json_success();
         } catch (\Throwable $ex) {
             Db::rollBack();
-
             return json_error($ex->getMessage());
         }
     }

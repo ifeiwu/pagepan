@@ -8,8 +8,15 @@ use support\Request;
 
 class Index
 {
-    #[Get('/')]
+//    #[Get('/[{alias:\w+}]')]
     public function index(Request $request)
+    {
+        var_export('index');
+//        return view('index/view', ['name' => 'webman']);
+    }
+
+//    #[Get('[/{alias:\w+}/id/{id:\d+}')]
+    /*public function index2(Request $request, $alias)
     {
         return view('index/view', ['name' => 'webman']);
     }
@@ -22,6 +29,6 @@ class Index
     public function json(Request $request)
     {
         return json(['code' => 0, 'msg' => 'ok']);
-    }
+    }*/
 
 }

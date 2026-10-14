@@ -1,6 +1,10 @@
 <?php
 
-use support\Db;
+function multi_app_path(string $path = ''): string
+{
+    $app_name = request()->app;
+    return path_combine(BASE_PATH . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . $app_name, $path);
+}
 
 function storage_path(string $path = ''): string
 {
@@ -19,7 +23,7 @@ function view2(): \support\View2
 
 function db($conn_name = 'default'): \Illuminate\Database\Connection
 {
-    return DB::connection($conn_name);
+    return \support\Db::connection($conn_name);
 }
 
 function datastar(array $headers = [])

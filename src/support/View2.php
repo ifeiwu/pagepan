@@ -56,7 +56,7 @@ class View2
     public function __call(string $name, array $args = [])
     {
         if (!isset($this->funcs[$name])) {
-            $this->funcs[$name] = require app_path() . "/helper/view/{$name}.php";
+            $this->funcs[$name] = require app_path("/helper/view/{$name}.php");
         }
 
         return $this->funcs[$name](...$args);
@@ -64,7 +64,7 @@ class View2
 
     public function __construct(string|null $path = null)
     {
-        $this->basePath = $path ?? app_path() . '/view';
+        $this->basePath = $path ?? multi_app_path('view');
     }
 
     public function __get(string $name)
