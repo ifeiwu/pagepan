@@ -72,8 +72,6 @@ function json_decode2(string $json, ?bool $associative = null, int $depth = 512,
 // JSON 响应
 function json_error(string $message = '', array $data = [], ...$params)
 {
-    logging_error($message, array_merge($data, ...$params));
-
     return json(array_merge(['code' => 1, 'message' => $message, 'data' => $data], ...$params));
 }
 

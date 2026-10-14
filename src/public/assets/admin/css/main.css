@@ -1,0 +1,31 @@
+:root {
+    --ui-primary-light: #111111;
+    --ui-primary-dark: #ffffff;
+    --ui-neutral-light: #919191;
+    --ui-neutral-dark: #8b8b8b;
+    --ui-rounded-scale: 0.5;
+    font-size: 1rem;
+}
+
+body {
+    font-size: 14px;
+}
+
+a {
+    text-decoration: none
+}
+
+iframe {
+    display: block;
+    border-width: 0;
+}
+
+.badge {
+    padding: 4px 8px 3px;
+}
+
+.container {
+    max-width: 64rem;
+    padding: 0 0.75rem;
+    margin: 0 auto;
+}
