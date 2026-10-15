@@ -14,8 +14,12 @@ class Index
 
     public function page(Request $request)
     {
-        $id = $request->get('id');
-        return view2()->response('builder/page');
+        $page_id = $request->get('id');
+        $blocks = db()->table('page_block')->where('page_id', $page_id)->get();
+
+        return view2()->response('builder/page', [
+            'blocks' => $blocks
+        ]);
     }
 
 }

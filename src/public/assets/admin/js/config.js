@@ -12,7 +12,9 @@ require.config({
         showmore: 'show-more/show-more',
         swiper: 'swiper/swiper',
         popover: 'popover/popover',
-        toast: ['toast/toast', 'https://cdn.jsdmirror.com/npm/not-a-toast@1.1.5/dist/not-a-toast.umd']
+        toast: ['toast/toast', 'https://cdn.jsdmirror.com/npm/not-a-toast@1.1.5/dist/not-a-toast.umd'],
+
+        vs: './monaco/vs'
     },
     shim: {
         vselect: { exports: 'VirtualSelect', deps: ['css!vselect'] },
