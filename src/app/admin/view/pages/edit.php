@@ -18,7 +18,7 @@
 </style>
 <div class="split" style="height:100%">
     <div id="split-view">
-        <iframe id="PageInFrame" src="about:blank" class="w:full h:full"></iframe>
+        <iframe id="PageIFrame" src="about:blank" class="w:full h:full"></iframe>
     </div>
     <div id="split-code">
         <div id="editor" style="width:100%;height:100%"></div>
@@ -28,14 +28,7 @@
 
 <!--<script src="/assets/admin/lib/jquery.js"></script>-->
 <script>
-    const PageInFrame = document.getElementById('PageInFrame');
-
-    function toBase64(str) {
-        const bytes = new TextEncoder().encode(str);
-        let binary = '';
-        for (const byte of bytes) binary += String.fromCharCode(byte);
-        return btoa(binary);
-    }
+    const PageIFrame = document.getElementById('PageIFrame');
 
     function getPageBlocks(html) {
         const phpBlocks = [];
@@ -63,9 +56,10 @@
             );
             const config = $(content).data();
             blocks.push({
+                id: config['blockId'] || '',
                 type: config['blockType'] || '',
                 path: config['blockPath'] || '',
-                setting: config['blockSetting'] || '',
+                setting: config['blockSetting'] ? JSON.stringify(config['blockSetting']) : '',
                 content,
             });
         });
@@ -89,47 +83,43 @@
             language: 'php',
         });
 
-        let initializing = true;
+        let page_iframe_loading = true;
         let timer;
 
-        $(PageInFrame).on('load', function () {
-            if (initializing === false) return;
-
-            const page_source_code = $(this).contents().find('#__page_source_code__').text();
-
-            initializing = true;
-            editor.setValue(page_source_code);
-            initializing = false;
+        $(PageIFrame).on('load', function () {
+            page_iframe_loading = false;
         }).attr('src', '/admin/builder/page?id=<?= $this->id ?>')
 
+        function updateEditorValue() {
+            $.get('/admin/builder/page-block/page-code', {'page_id':1}, function (res) {
+                if (res.code === 0) {
+                    editor.setValue(res.data);
+                } else {
+                    alert(res.message)
+                }
+            })
+        }
+
+        updateEditorValue();
+
         editor.onDidChangeModelContent(() => {
-            if (initializing) return;
+            if (page_iframe_loading) return;
 
             clearTimeout(timer);
             timer = setTimeout(() => {
                 const blocks = getPageBlocks(editor.getValue())
-                console.log(blocks)
                 // 保存页面
                 $.post('/admin/builder/page-block/save-code', {'page_id':1, 'blocks':blocks, 'html':editor.getValue()}, function(res) {
                     if (res.code === 0) {
-                        PageInFrame.src = PageInFrame.src
+                        PageIFrame.src = PageIFrame.src
+                        if (res.data) {
+                            page_iframe_loading = true;
+                            editor.setValue(res.data);
+                        }
                     } else {
                         console.log(res.message)
                     }
                 })
-                /*$.ajax({
-                    url: '/admin/builder/page-block/save-code',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ html: editor.getValue() }),
-                    success: function (res) {
-                        if (res.code === 0) {
-                            PageInFrame.src = PageInFrame.src
-                        } else {
-                            console.log(res.message)
-                        }
-                    }
-                });*/
             }, 1000);
         });
 
@@ -152,7 +142,7 @@
 </script>
 <script>
     /*$(document).ready(function () {
-        $('#PageInFrame').on('load', function () {
+        $('#PageIFrame').on('load', function () {
             const $body = $(this).contents().find('body');
             const $blocks = $body.children(':not(script, style, link)')
             const blocks = [];

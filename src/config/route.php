@@ -15,6 +15,9 @@
 use Webman\Route;
 use support\Request;
 
+
+Route::any('/imgph', [app\controller\Imgph::class, 'index']);
+
 Route::group('/{path:(?!admin(?:/|$)|shop(?:/|$)).*}', function () {
 
     Route::any('/id/{id:\d+}', function (Request $request, $id) {

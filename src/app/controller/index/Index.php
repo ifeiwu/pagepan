@@ -15,13 +15,12 @@ class Index
 //        return view('index/view', ['name' => 'webman']);
     }
 
-//    #[Get('[/{alias:\w+}/id/{id:\d+}')]
-    /*public function index2(Request $request, $alias)
+    public function index2(Request $request, $alias)
     {
         return view('index/view', ['name' => 'webman']);
     }
 
-    public function view(Request $request)
+    /*public function view(Request $request)
     {
         return view('index/view', ['name' => 'webman']);
     }

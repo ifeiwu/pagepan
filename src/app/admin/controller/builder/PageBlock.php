@@ -7,28 +7,82 @@ use support\Request;
 
 class PageBlock
 {
+    public function pageCode(Request $request)
+    {
+        $page_id = $request->get('page_id');
+        $page_code = $this->getPageCode($page_id);
+
+        return json_success('ok', $page_code);
+    }
+
+    private function getPageCode($page_id): string
+    {
+        $blocks = db()->table('page_block')->where('page_id', $page_id)->orderBy('sort')->get();
+
+        $dom = new \IvoPetkov\HTML5DOMDocument();
+        $page_code = '';
+
+        foreach ($blocks as $block) {
+            $content = $block->content;
+
+            // 保护 PHP 代码，避免注释
+            $php = [];
+            $content = preg_replace_callback('/<\?(?:php|=)[\s\S]*?\?>/', function ($matches) use (&$php) {
+                $key = 'PHP_BLOCK_' . count($php) . '_TOKEN';
+                $php[$key] = $matches[0];
+                return $key;
+            }, $content);
+
+            // 内容块添加属性
+            $dom->loadHTML("<!DOCTYPE html><html><body>{$content}</body></html>");
+            $node = $dom->querySelector('body>*');
+            $node->setAttribute('data-block-id', $block->block_id);
+            $block->type && $node->setAttribute('data-block-type', $block->type);
+            $block->path && $node->setAttribute('data-block-path', $block->path);
+            $block->setting && $node->setAttribute('data-block-setting', $block->setting);
+
+            // 还原 PHP 代码
+            $content = strtr($node->outerHTML, $php);
+
+            // 拼接页面源代码
+            $page_code .= $content . "\n\n";
+        }
+
+        return $page_code;
+    }
+
     public function saveCode(Request $request)
     {
-        $page_id = $request->post('page_id');
-        $blocks = $request->post('blocks');
-
         Db::beginTransaction();
         try {
             $db = db();
 
+            $page_id = $request->post('page_id');
             $page = $db->table('page')->where('id', '=', $page_id)->first();
             if (empty($page)) {
                 return json_error('获取页面信息失败');
             }
 
-            $db->table('page_block')->where('page_id', '=', $page_id)->delete();
-
-            // 把页面块内容添加到数据库
-            $html = $request->post('html');
+            // 把页面块内容重新添加到数据库
+            $blocks = $request->post('blocks');
             $rows = $this->getRows($page_id, $blocks);
-            $db->table('page_block')->insert($rows);
 
-            /*// 保存代码到文件
+            $db->table('page_block')->where('page_id', '=', $page_id)->delete();
+            if ($db->table('page_block')->insert($rows)) {
+                Db::commit();
+            }
+
+            // 有新内容块增加，前端代码编辑器（monaco）需要重新获取源代码
+            $page_code = '';
+            foreach ($blocks as $block) {
+                if (!$block['id']) {
+                    $page_code = $this->getPageCode($page_id);
+                    break;
+                }
+            }
+
+
+            // 保存代码到文件
             $page_type = $page->type;
             $page_alias = $page->alias;
             if (empty($page_alias) && $page_type == 'home') {
@@ -39,10 +93,8 @@ class PageBlock
             if (file_put_contents($file, $file_html) === false) {
                 Db::rollBack();
                 return json_error('保存页面文件失败');
-            }*/
-
-            Db::commit();
-            return json_success();
+            }
+            return json_success('ok', $page_code);
         } catch (\Throwable $ex) {
             Db::rollBack();
             return json_error($ex->getMessage());
@@ -53,29 +105,52 @@ class PageBlock
     {
         $rows = [];
 
-        foreach ($blocks as $block) {
-            $type = $block['type'];
-            $path = $block['path'];
-            $setting = $block['setting'];
-            $content = $block['content'];
+        foreach ($blocks as $i => $block) {
+            $id = $block['id'] ?: "p{$page_id}b" . ++$i;
+            $type = $block['type'] ?? '';
+            $path = $block['path'] ?? '';
+            $setting = $block['setting'] ?? '';
+            $content = $block['content'] ?? '';
 
-            if ($type && $path) {
+            if ($path) {
                 $block_file = storage_path("blocks/$path/code.php");
                 if (is_file($block_file)) {
                     $content = file_get_contents($block_file);
                 }
-                ob_start();
-                eval('?>' . $setting);
-                $setting = ob_get_clean();
             }
 
-            $rows[] = [
+            $variables = '';
+            if ($setting) {
+                $variables = '<?php' . PHP_EOL;
+                $config = [
+                    'id' => $id,
+                    'type' => $type,
+                    'path' => $path,
+                    'setting' => json_decode($setting, true),
+                ];
+                $variables .= '$config = ' . var_export($config, true) . ';?>' . PHP_EOL;
+            }
+
+            // 删除内容块演示定义的变量
+            $content = preg_replace(
+                '/<!-- delete-block:start -->.*?<!-- delete-block:end -->\s*/s',
+                '',
+                $content
+            );
+
+            $content = $variables . $content . PHP_EOL . PHP_EOL;
+
+            $row = [
+                'block_id' => $id,
                 'page_id' => $page_id,
+                'sort' => $i,
                 'type' => $type,
                 'path' => $path,
                 'setting' => $setting,
                 'content' => $content,
             ];
+
+            $rows[] = $row;
         }
 
         return $rows;
