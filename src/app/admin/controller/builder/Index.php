@@ -18,6 +18,7 @@ class Index
         $blocks = db()->table('page_block')->where('page_id', $page_id)->get();
 
         return view2()->response('builder/page', [
+            'title' => '首页',
             'blocks' => $blocks
         ]);
     }

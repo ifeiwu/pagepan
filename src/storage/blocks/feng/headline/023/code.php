@@ -1,4 +1,4 @@
-<!-- delete-block:start -->
+<!-- delete-test-block:start -->
 <?php
 $config = $config ?? [
         'id' => 'p1',
@@ -7,7 +7,7 @@ $config = $config ?? [
         'setting' => ['a'=>1, 'b'=>2, 'c'=>3, 'd'=>4],
 ];
 ?>
-<!-- delete-block:end -->
+<!-- delete-test-block:end -->
 
 <section class="py-18" data-block-id="<?=$config['id']?>">
 	<script>

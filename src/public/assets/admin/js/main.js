@@ -40,99 +40,6 @@ document.addEventListener('datastar-fetch', ({ detail }) => {
     }
 });
 
-// 调用浏览器分享功能
-async function shareUrl(title, text, url = null) {
-    try {
-        if (navigator.share) {
-            await navigator.share({
-                title: title,
-                text: text,
-                url: url || location.href
-            })
-            return true
-        }
-    } catch (err) {
-        if (err.name !== 'AbortError') { // 用户取消不算错误
-            console.error('分享失败:', err)
-        }
-    }
-
-    // 降级：复制链接到剪贴板
-    if (url) {
-        await navigator.clipboard.writeText(url)
-        alert('链接已复制到剪贴板')
-    }
-    return false
-}
-
-// 分享文件（图片/视频等）
-// async function shareImage() {
-//     const response = await fetch('https://example.com/image.jpg');
-//     const blob = await response.blob();
-//     const file = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
-//
-//     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-//         await navigator.share({
-//             files: [file],
-//             title: '分享图片',
-//             text: '看看这张照片'
-//         });
-//     }
-// }
-
-/**
- * 返回上一页
- * @param fallback
- */
-function goBack(fallback = null) {
-    // 进入页面时记录：sessionStorage.setItem('prevPage', location.href);
-    let prev = sessionStorage.getItem('prevPage')
-    let current = location.href
-
-    if (prev && prev !== current) {
-        location.replace(prev) // 防止历史污染
-        return
-    }
-
-    if (fallback) {
-        location.replace(fallback)
-        return
-    }
-
-    if (history.length > 1) {
-        history.back()
-        return
-    }
-
-    location.replace('/')
-}
-
-// 登录页返回上一页并刷新
-if (location.pathname == '/auth/login') {
-    let prevurl = document.referrer || ''
-    // 必须同域
-    if (!prevurl.startsWith(location.origin)) {
-        prevurl = '/'
-    }
-    // 过滤不允许返回的页面
-    let blockedPaths = ['/auth']
-    if (blockedPaths.some(path => prevurl.startsWith(location.origin + path))) {
-        prevurl = '/'
-    }
-    // 防止记录当前页（避免循环）
-    if (prevurl === location.href) {
-        prevurl = '/'
-    }
-    sessionStorage.setItem('prevPage', prevurl)
-}
-
-/*require(['lazy-image'], function(LazyImage) {
-    new LazyImage({
-        threshold: 0.01,
-        rootMargin: '50px'
-    })
-})*/
-
 // 打开模态窗口 <ku-modal>，并监听关闭事件
 // 用户关闭窗口还原 <template> 标签
 new MutationObserver((mutations) => {
@@ -204,31 +111,6 @@ require(['jquery'], function() {
         }
     })
 
-    // 图片灯箱
-    window.scrollbarGutter = window.getComputedStyle(document.documentElement).scrollbarGutter
-    window.lightboxInit = function() {
-        require(['lightbox'], function(Lightbox) {
-            let lb = Lightbox.init()
-            let scrollTopButton = $('ku-scroll-top')[0].shadowRoot.querySelector('button');
-            // 修复页面在保留滚动条宽度情况下，自动切换。
-            lb.on('open', (e) => {
-                if (scrollbarGutter == 'stable') {
-                    document.documentElement.style.scrollbarGutter = 'auto'
-                    $('.topnav').css('right', scrollbarWidth)
-                    scrollTopButton.style.right = (parseInt(scrollbarWidth) + 20) +'px'
-                }
-            }).on('closed', (e) => {
-                document.documentElement.style.scrollbarGutter = scrollbarGutter
-                $('.topnav').css('right', '')
-                scrollTopButton.style.right = '';
-            })
-        })
-    }
-
-    if ($('[data-lightbox]').length) {
-        window.lightboxInit()
-    }
-
     // 通用浮动窗口
     if ($('[data-popover-ele=""]').length) {
         require(['popover'], function() {
@@ -243,26 +125,6 @@ require(['jquery'], function() {
                 }
             })
         })
-    }
-
-    // 通用导航菜单
-    if ($('.navmenu').length || $('.dropdown').length) {
-        require(['navmenu'], function(navmenu) {
-            if ($('.navmenu').length) {
-                navmenu.initCollapse('.navmenu')
-            }
-            navmenu.initDropdown('.dropdown')
-        })
-    }
-
-    // 回到顶部
-    if ($('ku-scroll-top').length) {
-        require(['ku-scroll-top'])
-    }
-
-    // 安装网站到桌面
-    if ($('[data-install="webapp"]').length) {
-        require(['pwa-install'])
     }
 })
 

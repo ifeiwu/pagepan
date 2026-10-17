@@ -3,12 +3,12 @@
 
 <title><?=$head_title ?? ''?> - 后台管理</title>
 
-<link rel="icon" href="/favicon.ico" sizes="any">
+<link href="/favicon.ico" rel="icon" sizes="any">
 <link href="/assets/admin/css/ui.css" rel="stylesheet">
 <link href="/assets/admin/css/main.css" rel="stylesheet">
 
 <script>
-    const appvar = <?=json_encode2([
+    const appVar = <?=json_encode([
             'user' => session('user') ?? [],
             'ver' => APP_VER
     ])?>;

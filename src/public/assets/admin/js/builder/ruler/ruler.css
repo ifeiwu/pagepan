@@ -1,0 +1,190 @@
+.ruler {
+    flex-grow: 0;
+    flex-shrink: 0;
+    position: relative;
+    height: 25px;
+    line-height: 26px;
+    font-size: 12px;
+    font-family: Consolas;
+    /* background: linear-gradient(90deg, #fafafa 0%, #f1f1f1 50%, #fafafa 100%); */
+    transition: all .25s .05s;
+    z-index: 7;
+}
+
+.ruler.active {
+    background: #ffc078;
+}
+
+.ruler:hover {
+    /* background: linear-gradient(90deg, #f5f5f5 0%, #eee 50%, #f5f5f5 100%); */
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+}
+
+.ruler:hover .size {
+    color: transparent;
+    transition-delay: .05s;
+}
+
+.ruler>div {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    height: 100%;
+    width: 50%;
+}
+
+.ruler>div:before  {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background: #000;
+}
+
+.ruler>div:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: transparent;
+    background: transparent;
+    cursor: pointer;
+    transition-delay: .05s;
+    pointer-events: none;
+}
+
+.ruler>div:hover:after {
+    background: #ffe8cc !important;
+    color: #d9480f;
+}
+
+.ruler>div.active:after {
+    background: #ffe8cc;
+    z-index: -1;
+}
+
+.ruler:hover>div.active:after {
+    background: transparent;
+}
+
+.ruler>div>.left,
+.ruler>div>.right {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.ruler>div>.left {
+    left: 0;
+}
+
+.ruler>div>.right {
+    right: 0;
+}
+
+.ruler>div>.left:before,
+.ruler>div>.right:before,
+.ruler>div>.left:after,
+.ruler>div>.right:after {
+    content: "";
+    position: absolute;
+    height: 100vh;
+    width: 2px;
+    background: #fff;
+}
+
+.ruler>div.active>.left:after,
+.ruler>div.active>.right:after {
+    background: #ffc078;
+    z-index: 1;
+}
+
+.ruler>div.active2>.left:before,
+.ruler>div.active2>.right:before {
+    height: 100%;
+    background: #fd7e14;
+    z-index: 2;
+}
+
+.ruler>div>.left:before,
+.ruler>div>.left:after {
+    right: 100%;
+}
+
+.ruler>div>.right:before,
+.ruler>div>.right:after {
+    left: 100%;
+}
+
+.ruler>div>.size {
+    position: absolute;
+    width: 100%;
+    color: #e8590c;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* .ruler .fluid {
+    width: 100%;
+    z-index: 1;
+}
+.ruler .fluid:hover:after {
+    content: '100% - Full';
+} */
+/* .ruler .xxl {
+    width: 1680px;
+    z-index: 3;
+}
+.ruler .xxl:hover:after {
+    content: 'Desktop - 1680px';
+} */
+.ruler .xl {
+    width: 1280px;
+    z-index: 3;
+}
+
+.ruler .xl:hover:after {
+    content: '台式电脑 >= 1280px';
+}
+
+.ruler .lg {
+    width: 1024px;
+    z-index: 4;
+}
+
+.ruler .lg:hover:after {
+    content: '笔记本 >= 1024px';
+}
+
+.ruler .md {
+    width: 768px;
+    z-index: 5;
+}
+
+.ruler .md:hover:after {
+    content: '平板电脑 >= 768px';
+}
+
+.ruler .sm {
+    width: 560px;
+    z-index: 6;
+}
+
+.ruler .sm:hover:after {
+    content: '大屏手机 >= 560px';
+}
+
+.ruler .xs {
+    width: 360px;
+    z-index: 7;
+}
+
+.ruler .xs:hover:after {
+    content: '小屏手机 > 360px';
+}
