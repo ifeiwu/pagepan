@@ -8,9 +8,6 @@ class Index
 {
     public function index(Request $request)
     {
-//        var_export($request->app);
-//        return view('pages/index');
-        var_export($request->get('id'));
         return view2()->response('pages/index');
     }
 

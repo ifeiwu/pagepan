@@ -20,8 +20,11 @@ define(['split', 'vs/editor/editor.main'], function (Split) {
 
     const editor = monaco.editor.create(document.getElementById('coder'), {
         theme: 'vs-dark',
-        minimap: {enabled: true},
-        language: 'php'
+        language: 'php',
+        minimap: { enabled: true },
+        stickyScroll: {
+            enabled: false
+        },
     });
 
     editor.onDidAttemptReadOnlyEdit(() => {
@@ -51,17 +54,17 @@ define(['split', 'vs/editor/editor.main'], function (Split) {
 
 
     // Ctrl + S 保存
-    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, saveCode);
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, savePageBlocks);
 
     $('#save_code').on('click', function () {
-        saveCode()
+        savePageBlocks()
     })
 
     // 保存代码
-    function saveCode() {
+    function savePageBlocks() {
         const blocks = getPageBlocks(editor.getValue())
         // 保存页面
-        $.post('/admin/builder/page-block/save-code', {'page_id': 1, 'blocks': blocks}, function (res) {
+        $.post('/admin/builder/page-block/save', {'page_id': 1, 'blocks': blocks}, function (res) {
             if (res.code === 0) {
                 iframe.contentWindow.location.reload();
                 if (res.data) {
@@ -112,18 +115,14 @@ define(['split', 'vs/editor/editor.main'], function (Split) {
         return blocks;
     }
 
-    // 更新代码编辑器内容
-    function updateEditorValue() {
-        $.get('/admin/builder/page-block/page-code', {'page_id': 1}, function (res) {
-            if (res.code === 0) {
-                editor.setValue(res.data);
-            } else {
-                editor.updateOptions({readOnly: true});
-                editor_readonly_message = res.message
-                alert(editor_readonly_message)
-            }
-        })
-    }
-
-    updateEditorValue();
+    // 初始化代码编辑器内容
+    $.get('/admin/builder/page-block/page-code', {'page_id': appVar.page.id}, function (res) {
+        if (res.code === 0) {
+            editor.setValue(res.data);
+        } else {
+            editor.updateOptions({readOnly: true});
+            editor_readonly_message = res.message
+            alert(editor_readonly_message)
+        }
+    })
 })

@@ -59,7 +59,7 @@ class PageBlock
         return $page_code;
     }
 
-    public function saveCode(Request $request)
+    public function save(Request $request)
     {
         Db::beginTransaction();
         try {
@@ -74,44 +74,18 @@ class PageBlock
             // 把页面块内容重新添加到数据库
             $blocks = $request->post('blocks');
             $rows = $this->getRows($page_id, $blocks);
-            /*foreach ($rows as $row) {
-                if ($db->table('page_block')->where('block_id', '=', $row['id'])->exists()) {
-                    $db->table('page_block')->where('block_id', '=', $row['id'])->update($row);
-                } else {
-                    $db->table('page_block')->insert($row);
-                }
-            }
-            Db::commit();*/
             $db->table('page_block')->where('page_id', '=', $page_id)->delete();
             if ($db->table('page_block')->insert($rows)) {
                 Db::commit();
             }
 
-            // 有新内容块增加，前端代码编辑器（monaco）需要重新获取源代码
+            // 有新内容块增加，前端代码编辑器（monaco）需要更新内容
             $page_code = '';
             foreach ($blocks as $block) {
                 if (!$block['id']) {
                     $page_code = $this->getPageCode($page_id);
                     break;
                 }
-            }
-
-
-            // 保存代码到文件
-            $page_type = $page->type;
-            $page_alias = $page->alias;
-            if (empty($page_alias) && $page_type == 'home') {
-                $page_alias = 'index';
-            }
-            $file = app_path("view/page/{$page_alias}.php");
-            $content = implode('', array_column($rows, 'content'));
-            $content = preg_replace('/\s+data-block-(?:setting|type)="[^"]*"/', '', $content);
-            // 删除测试内容块
-            $content = preg_replace('/<!-- delete-test-block:start -->.*?<!-- delete-test-block:end -->\s*/s', '', $content);
-            $content = preg_replace('/<delete-test-block\b[^>]*>.*?<\/delete-test-block>/s', '', $content);
-            if (file_put_contents($file, $content) === false) {
-                Db::rollBack();
-                return json_error('保存页面文件失败');
             }
 
             return json_success('ok', $page_code);
