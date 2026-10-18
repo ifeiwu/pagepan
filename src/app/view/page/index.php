@@ -1,4 +1,4 @@
-<header class="bg-white dark:bg-gray-900">
+<header class="bg-white dark:bg-gray-900" data-block-id="p1b1">
   <div class="mx-auto flex h-16 max-w-7xl items-center gap-8 px-4 sm:px-6 lg:px-8">
     <a class="block text-teal-600 dark:text-teal-300" href="#">
       <span class="sr-only">Home</span>
@@ -12,7 +12,7 @@
         <ul class="flex items-center gap-6 text-sm">
           <li>
             <a class="text-gray-500 transition hover:text-gray-500/75 dark:text-white dark:hover:text-white/75" href="#">
-              About
+              About3
             </a>
           </li>
 

@@ -1,10 +1,8 @@
 define([], function () {
 
-
-
-
 })
-/*;(function($) {
+/*
+;(function($) {
     // 设置标尺大小和iframe宽度
     const resize = function(el, size, width) {
         // 响应式断点后缀
@@ -149,6 +147,6 @@ define([], function () {
 
     $.PubSub.subscribe('ruler.update-size-text', function(msg, data) {
         updateSizeText()
-    })*/
+    })
 
-})(jQuery)
+})(jQuery)*/

@@ -51,8 +51,19 @@ define(['interact'], function (interact) {
         resize(this, '', '360')
     })
 
+    // 初始化屏幕尺的大小
+    if (sessionStorage.getItem('ruler-width')) {
+        let ruler_size = sessionStorage.getItem('ruler-size');
+        let $ruler_size = $ruler.find('>.' + (ruler_size || 'xs'))
+        let $ruler_left = $ruler_size.find('>.left')
+        let ruler_width = $ruler_size.width()
+        resize($ruler_left[0], ruler_size, ruler_width, 0)
+    } else {
+        resize($ruler.find('>.xs>.left')[0], '', '360')
+    }
+
     // 设置标尺大小和iframe宽度
-    const resize = function (el, size, width) {
+    function resize(el, size, width, delay = 400) {
         // 响应式断点后缀
         // window.breakpoint = size ? '-' + size : ''
         // window.breakpointSize = size || ''
@@ -62,6 +73,8 @@ define(['interact'], function (interact) {
 
         // store('ruler-size', size)
         // store('ruler-width', width)
+        sessionStorage.setItem('ruler-size', size)
+        sessionStorage.setItem('ruler-width', width)
 
         $resize.width(width)
 
@@ -72,13 +85,14 @@ define(['interact'], function (interact) {
             $ruler.addClass('active')
             // $.PFrame.triggerTargetel()
             updateRulerSizeText()
-        }, 400)
+        }, delay)
     }
 
     // 更新当前尺寸文字
-    const updateRulerSizeText = function () {
-        let width = $resize.width()
+    function updateRulerSizeText() {
+        let width = $resize.width().toString()
         // store('ruler-width', width.toString())
+        sessionStorage.setItem('ruler-width', width)
         $ruler.find('>.xs>.size').text(width + ' x ' + $resize.height())
     }
 });

@@ -32,7 +32,7 @@ foreach ($this->items as $item):
             break;
     }
 ?>
-<li>
+<li class="bg:<?=getTypeColor($type)?>">
     <!--<a href="#" data-on:click="@get('/admin/pages/edit/dialog?id=<?php /*=$id*/?>')">
         <img src="/assets/admin/img/page-cover-demo.png" class="h:120 w:full obj:cover obj:top">
     </a>-->

@@ -19,31 +19,41 @@
 
     <div class="split" style="height:100vh">
         <div id="split-view" class="rel overflow:hidden">
-
             <div class="pb-header">
-                <div class="history">
-                    <button class="ghost" popovertarget="history-dropdown" aria-label="历史记录" data-tooltip="bottom">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw-clock preview-icon"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
-                    </button>
-                    <div id="history-dropdown" popover>
-                        <menu>
-                            <li>2026/10/17 16:23:07</li>
-                            <li>2026/10/17 15:35:53</li>
-                            <li>2026/10/17 15:35:35</li>
-                        </menu>
+                <div class="flex-basis:300 flex ai:center">
+                    <div>
+                        <button class="ghost" popovertarget="file-menu">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu preview-icon"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+                            菜单
+                        </button>
+                        <div id="file-menu" popover>
+                            <menu>
+                                <li><button class="ghost">页面设置</button></li>
+                                <li>
+                                    <button class="ghost" popovertarget="find-menu">历史记录</button>
+                                    <div id="find-menu" popover data-placement="right top">
+                                        <menu>
+                                            <li><button class="ghost">2026/10/17 16:23:07</button></li>
+                                            <li><button class="ghost">2026/10/17 15:35:53</button></li>
+                                            <li><button class="ghost">2026/10/17 15:35:35</button></li>
+                                        </menu>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a class="button ghost" href="https://support.qq.com/products/65308" target="_blank">意见反馈</a>
+                                </li>
+                            </menu>
+                        </div>
+                    </div>
+                    <div class="ml:20">
+                        <nav class="tab-links editmode">
+                            <a href="/overview">设计</a>
+                            <a href="/activity" aria-current="page">代码</a>
+                        </nav>
                     </div>
                 </div>
-                <a class="button ghost" href="https://support.qq.com/products/65308" target="_blank" aria-label="意见反馈" data-tooltip="bottom">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-text preview-icon"><path d="M3.086 17.509a2 2 0 00-.094-1.167 10 10 0 114.777 4.719 2 2 0 00-1.099-.092l-3.413.998a1 1 0 01-1.236-1.168z"/><path d="M8 12h9"/><path d="M8 16h5"/><path d="M8 8h7"/></svg>
-                </a>
-                <div class="title">test</div>
-                <div class="ml:auto flex gap:5">
-                    <div class="preview pr:10">
-                        <a class="button ghost" id="preview" href="https://site.pagepan.test/test" target="_blank" aria-label="预览效果" data-tooltip="bottom">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play preview-icon"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></svg>
-                        </a>
-                        <div class="qrcode-open"></div>
-                    </div>
+                <div class="flex-grow:1 flex jc:center">首页</div>
+                <div class="flex-basis:300 flex jc:right gap:5">
                     <button id="publish">发布</button>
                     <button id="close_modal" data-on:click="parent.EditDialog.close()">关闭</button>
                 </div>
@@ -67,7 +77,7 @@
                 </div>
                 <div class="xs active">
                     <div class="left"></div>
-                    <div class="size">768 x 836</div>
+                    <div class="size"></div>
                     <div class="right"></div>
                 </div>
             </div>
@@ -91,7 +101,7 @@
                             </a>
                         </div>
                     </div>
-                    <iframe id="PageIFrame" src="about:blank" class="w:full h:full"></iframe>
+                    <iframe id="iframe" src="about:blank" class="w:full h:full"></iframe>
                     <div class="resize-right"></div>
                 </div>
             </div>
@@ -99,20 +109,20 @@
         </div>
         <div id="split-code">
             <div class="flex w:full h:full">
-                <div class="p:3 bg:gray-80">
-                    <button class="ghost">
+                <div class="p:10|3 bg:gray-30">
+                    <button id="save_code">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save preview-icon"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg>
                     </button>
                 </div>
                 <div class="flex-grow:1">
-                    <div id="editor" style="width:100%;height:100%"></div>
+                    <div id="coder" style="width:100%;height:100%"></div>
                 </div>
             </div>
         </div>
     </div>
 
 <script>
-    const PageIFrame = document.getElementById('PageIFrame');
+    /*const PageIFrame = document.getElementById('PageIFrame');
 
     function getPageBlocks(html) {
         const phpBlocks = [];
@@ -127,7 +137,7 @@
         const $container = $('<div>').html(html);
         const blocks = [];
 
-        $container.children(/*':not(script, style, link)'*/).each(function () {
+        $container.children(/!*':not(script, style, link)'*!/).each(function () {
             const $block = $(this).clone(true);
             $block.find('[contenteditable]').removeAttr('contenteditable');
             $block.find('lottie-player').html('');
@@ -218,24 +228,9 @@
 
 
 
-        /*// 父窗口获取值
-        window.getValue = function() {
-            return editor.getValue();
-        };
+    });*/
 
-        // 父窗口设置值
-        window.setValue = function(content) {
-            if ( content ) {
-                editor.setValue(content);
-            }
-        };
-
-        setTimeout(function() {
-            window.parent.postMessage({ loaded: true }, '*')
-        }, 200)*/
-    });
-
-    require(['js/builder/resize'], function() {
+    require(['js/builder'], function() {
 
     })
 </script>

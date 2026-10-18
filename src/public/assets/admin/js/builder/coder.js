@@ -1,0 +1,129 @@
+define(['split', 'vs/editor/editor.main'], function (Split) {
+    const iframe = document.getElementById('iframe');
+
+    Split(['#split-view', '#split-code'], {
+        direction: 'vertical',
+        minSize: 0,
+        gutterSize: 20,
+        onDrag: function (sizes) {
+            editor.layout();
+        },
+    })
+
+    let iframe_loading = true;
+    let editor_change_timer;
+    let editor_readonly_message = '';
+
+    $(iframe).on('load', function () {
+        iframe_loading = false;
+    }).attr('src', '/admin/builder/page?id=1')
+
+    const editor = monaco.editor.create(document.getElementById('coder'), {
+        theme: 'vs-dark',
+        minimap: {enabled: true},
+        language: 'php'
+    });
+
+    editor.onDidAttemptReadOnlyEdit(() => {
+        alert(editor_readonly_message);
+    });
+
+    editor.onDidChangeModelContent(() => {
+        /*if (iframe_loading) return;
+
+        clearTimeout(editor_change_timer);
+        editor_change_timer = setTimeout(() => {
+            const blocks = getPageBlocks(editor.getValue())
+            // 保存页面
+            $.post('/admin/builder/page-block/save-code', {'page_id':1, 'blocks':blocks}, function(res) {
+                if (res.code === 0) {
+                    iframe.src = iframe.src
+                    if (res.data) {
+                        iframe_loading = true;
+                        editor.setValue(res.data);
+                    }
+                } else {
+                    alert(res.message);
+                }
+            })
+        }, 3000);*/
+    });
+
+
+    // Ctrl + S 保存
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, saveCode);
+
+    $('#save_code').on('click', function () {
+        saveCode()
+    })
+
+    // 保存代码
+    function saveCode() {
+        const blocks = getPageBlocks(editor.getValue())
+        // 保存页面
+        $.post('/admin/builder/page-block/save-code', {'page_id': 1, 'blocks': blocks}, function (res) {
+            if (res.code === 0) {
+                iframe.contentWindow.location.reload();
+                if (res.data) {
+                    iframe_loading = true;
+                    editor.setValue(res.data);
+                }
+            } else {
+                alert(res.message);
+            }
+        })
+    }
+
+    // 获取页面内容块数组
+    function getPageBlocks(html) {
+        const phpBlocks = [];
+
+        // 保护 PHP 代码，避免被浏览器解析
+        html = html.replace(/<\?php[\s\S]*?\?>|<\?=[\s\S]*?\?>/g, match => {
+            const token = `PHP_BLOCK_${phpBlocks.length}_TOKEN`;
+            phpBlocks.push(match);
+            return token;
+        });
+
+        const $container = $('<div>').html(html);
+        const blocks = [];
+
+        $container.children(/*':not(script, style, link)'*/).each(function () {
+            const $block = $(this).clone(true);
+            $block.find('[contenteditable]').removeAttr('contenteditable');
+            $block.find('lottie-player').html('');
+
+            // 还原 PHP 代码
+            let content = $block[0].outerHTML;
+            content = content.replace(
+                /PHP_BLOCK_(\d+)_TOKEN/g,
+                (_, index) => phpBlocks[Number(index)]
+            );
+            const config = $(content).data();
+            blocks.push({
+                id: config['blockId'] || '',
+                type: config['blockType'] || '',
+                path: config['blockPath'] || '',
+                setting: config['blockSetting'] ? JSON.stringify(config['blockSetting']) : '',
+                content,
+            });
+        });
+
+        return blocks;
+    }
+
+    // 更新代码编辑器内容
+    function updateEditorValue() {
+        $.get('/admin/builder/page-block/page-code', {'page_id': 1}, function (res) {
+            if (res.code === 0) {
+                editor.setValue(res.data);
+            } else {
+                editor.updateOptions({readOnly: true});
+                editor_readonly_message = res.message
+                alert(editor_readonly_message)
+            }
+        })
+    }
+
+    updateEditorValue();
+})
