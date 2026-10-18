@@ -1,4 +1,4 @@
-<?php $this->layout('admin-iframe') ?>
+<?php $this->layout('iframe') ?>
 
 <style>
     html, body {

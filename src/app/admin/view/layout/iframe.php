@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <?=$this->insert('layout/admin-head')?>
+    <?=$this->insert('layout/head')?>
     <style>html{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}</style>
 </head>
 <body>

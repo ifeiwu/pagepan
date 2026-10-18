@@ -6,7 +6,6 @@
 <link href="/favicon.ico" rel="icon" sizes="any">
 <link href="/assets/admin/css/ui.css" rel="stylesheet">
 <link href="/assets/admin/css/main.css" rel="stylesheet">
-
 <script>
     const appVar = <?=json_encode([
             'user' => session('user') ?? [],
