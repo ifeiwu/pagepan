@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\pages;
 
+use app\exception\DatastarAlertException;
 use app\exception\DatastarToastException;
 use support\Request;
 
@@ -20,7 +21,9 @@ class Index
             ->get();
 
         $ds = datastar();
-        $html = view2()->fetch('pages/item-li', ['items' => $items]);
+        $html = view2()->fetch('pages/item-li', [
+            'items' => $items
+        ]);
         $ds->append($html, '#pages');
         $ds->close();
     }
@@ -29,14 +32,27 @@ class Index
     {
         $id = get('id', 'int');
 
-        $page = db()->table('page')->where('id', '=', $id)->first();
-        if (empty($page)) {
+        $page = $id
+            ? db()->table('page')->where('id', $id)->first()
+            : new class {
+                public function __get($name) {
+                    return '';
+                }
+            };
+
+        if ($id && !$page) {
             throw new DatastarToastException('获取页面信息失败');
         }
 
-        $layouts = db()->table('page')->where('type', '=', 'layout')->get(['path', 'title']);
+        $layouts = db()->table('page')
+            ->where('type', 'layout')
+            ->get(['path', 'title']);
 
-        $html = view2()->fetch('pages/edit', ['page' => $page, 'layouts' => $layouts]);
+        $html = view2()->fetch('pages/edit', [
+            'page' => $page,
+            'layouts' => $layouts,
+        ]);
+
         $ds = datastar();
         $ds->replace($html);
         $ds->script('EditDialog.show()');
@@ -46,54 +62,56 @@ class Index
     public function save(Request $request)
     {
         $id = post('id', 'int');
-        $state = post('state', 'text', 0);
-        $type = post('type', 'alnum', 'home');
-        $layout = post('layout', 'text', '');
-        $title = post('title', 'text', '页面名称');
-        $path = post('path', 'text', '');
-
-        if ($path && !preg_match('#\A[a-zA-Z0-9][a-zA-Z0-9/_-]*\z#', $path)) {
-            throw new DatastarToastException('页面路径格式不正确');
-        }
-
         $row = [
-            'id' => $id,
-            'state' => $state,
-            'type' => $type,
-            'layout' => $layout,
-            'title' => $title,
-            'path' => $path,
+            'state' => post('state', 'text', 0),
+            'type' => post('type', 'alnum', 'home'),
+            'layout' => post('layout', 'text', ''),
+            'title' => post('title', 'text', '页面名称'),
+            'path' => post('path', 'text', ''),
         ];
 
-        $ds = datastar();
-
-        if ($id) {
-            db()->table('page')->where('id', '=', $id)->update($row);
-            $page = db()->table('page')->where('id', '=', $id)->first();
-            $html = view2()->fetch('pages/item-li', ['items' => [$page]]);
-            $ds->replace($html, "#page_$id");
-        } else {
-            $id = db()->table('page')->insertGetId($row);
+        if (in_array($row['path'], ['admin', 'shop', 'api'])) {
+            throw new DatastarAlertException("页面路径「{$row['path']}」为系统保留路径，请更换其他路径。");
         }
 
+        if ($row['path'] && !preg_match('#\A[a-zA-Z0-9][a-zA-Z0-9/_-]*\z#', $row['path'])) {
+            throw new DatastarAlertException('页面路径格式不正确');
+        }
 
+        $db = db();
+
+        if ($id) {
+            $db->table('page')->where('id', $id)->update($row);
+            $target = "#page_$id";
+            $action = 'replace';
+        } else {
+            $page = $db->table('page')->where('path', $row['path'])->first(['title', 'path']);
+            if ($page) {
+                throw new DatastarAlertException("路径 {$row['path']} 已被「{$page->title}」页面占用，请更换其它路径。");
+            }
+            $id = $db->table('page')->insertGetId($row);
+            $target = '#pages';
+            $action = 'prepend';
+        }
+
+        $page = $db->table('page')->where('id', $id)->first();
+        $html = view2()->fetch('pages/item-li', ['items' => [$page]]);
+
+        $ds = datastar();
+        $ds->$action($html, $target);
         $ds->script('EditDialog.close()');
         $ds->close();
     }
 
-    /*public function dialog(Request $request)
-    {
-        $id = $request->get('id');
-        $ds = datastar();
+    public function delete(Request $request) {
+        $id = get('id', 'int');
 
-        $html = view2()->fetch('pages/dialog', [
-            'id' => $id,
-            'title' => ''
-        ]);
-        $ds->replace($html);
-
-        $ds->script('EditDialog.show()');
-
-        $ds->close();
-    }*/
+        if (db()->table('page')->where('id', $id)->delete()) {
+            $ds = datastar();
+            $ds->remove("#page_$id");
+            $ds->close();
+        } else {
+            throw new DatastarToastException('删除页面失败');
+        }
+    }
 }

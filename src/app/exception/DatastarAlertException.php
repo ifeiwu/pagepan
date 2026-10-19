@@ -21,7 +21,7 @@ class DatastarAlertException extends LoggingException
     {
         parent::render($request);
 
-        $script = "dialog(`{$this->getMessage()}`);";
+        $script = "alert(`{$this->getMessage()}`);";
         if ($this->field) {
             $script .= "document.querySelector('[name={$this->field}]').focus();";
         }

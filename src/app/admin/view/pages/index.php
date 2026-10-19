@@ -17,7 +17,7 @@
                     </button>
                 </div>
                 <div>
-                    <button>
+                    <button data-on:click="@get('/admin/pages/edit')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-plus preview-icon"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
                         添加页面
                     </button>
@@ -26,10 +26,10 @@
         </div>
     </div>
     <div class="flex:1 min-h:0 overflow-y:auto px:20 pt:10 pb:30">
-        <ul id="pages" class="grid-cols:4 gap:30 jc:space-between mb:20 {rel;flex;flex:col;shadow:0|1|2|#ddd;r:10;overflow:hidden}>li"
+        <ul id="pages" class="grid-cols:4 gap:30 jc:space-between mb:20 {rel;flex;flex:col;b:1|solid|gray-86;r:10;overflow:hidden}>li {b:gray-70}>li:hover {opacity:1}>li:hover_.more {opacity:1}>li:has([popover]:popover-open)_.more"
             data-init="@get('/admin/pages/query')"></ul>
     </div>
 </div>
 
-<template id="EditDialog" data-init__delay.500ms="@get('/admin/pages/edit?id=1')"></template>
+<template id="EditDialog"></template>
 <!--<template id="BuilderDialog" data-init="@get('/admin/builder/dialog?id=1')"></template>-->

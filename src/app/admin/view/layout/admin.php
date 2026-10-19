@@ -110,7 +110,7 @@ $route = request()->path();
             </div>
         </header>
 
-        <main class="bg:white rt:20">
+        <main class="bg:gray-96 rt:20">
                 <?=$this->section('content')?>
         </main>
     </div>

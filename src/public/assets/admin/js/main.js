@@ -22,18 +22,18 @@ const DataStarHelper = {
 document.addEventListener('datastar-fetch', ({ detail }) => {
     let el = detail.el
     let tagname = el.tagName.toLowerCase()
-    if (tagname == 'button' || tagname == 'a') {
-        detail.type == 'started' && el.classList.add('ds-fetch-started', el.dataset.loading)
-        detail.type == 'finished' && el.classList.remove('ds-fetch-started')
+    if (tagname === 'button' || tagname === 'a') {
+        detail.type === 'started' && el.classList.add('ds-fetch-started', el.dataset.loading)
+        detail.type === 'finished' && el.classList.remove('ds-fetch-started')
     } else if (tagname === 'form') {
         let submit = Array.from(el.elements).find(e => e.type === 'submit');
         if (!submit || !submit.innerText) return
         // 请求开始
-        if (detail.type == 'started') {
+        if (detail.type === 'started') {
             sessionStorage.setItem('form-submit-text', submit.innerText)
             submit.setAttribute('disabled', true)
             submit.innerText = '提交中'
-        } else if (detail.type == 'finished') {
+        } else if (detail.type === 'finished') {
             submit.removeAttribute('disabled')
             submit.innerText = sessionStorage.getItem('form-submit-text')
         }

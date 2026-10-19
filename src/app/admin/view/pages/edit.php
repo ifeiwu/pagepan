@@ -1,16 +1,19 @@
 <?php $page = $this->page; ?>
 
 <ku-modal id="EditDialog" style="" static-backdrop hidden>
-    <div slot="header" class="f:bold f:17"><?=$page->title?></div>
+    <div slot="header" class="flex ai:center gap:10 f:bold f:17">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen preview-icon"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
+        <?=$page->title ?: '新增页面'?>
+    </div>
 
     <form id="form" class="flex flex:col gap:15 mt:10 mb:20"
-          data-signals="{type:'<?=$page->type?>',layout:'<?=$page->layout?>',state:'<?=$page->state?>'}"
+          data-signals="{type:'<?=$page->type ?: 'home'?>',layout:'<?=$page->layout?>',state:'<?=$page->state?>'}"
           data-on:submit="@post('/admin/pages/save',{contentType:'form',openWhenHidden:true})">
         <input type="hidden" name="id" value="<?=$page->id?>">
             <label class="field">
                 <span>页面类型</span>
                 <select name="type" data-bind:type>
-                    <button>
+                    <button type="button">
                         <selectedcontent></selectedcontent>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down preview-icon"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
@@ -25,7 +28,7 @@
             <label class="field">
                 <span>页面布局</span>
                 <select name="layout" data-bind:layout data-attr:disabled="$type=='layout'">
-                    <button>
+                    <button type="button">
                         <selectedcontent></selectedcontent>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down preview-icon"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
