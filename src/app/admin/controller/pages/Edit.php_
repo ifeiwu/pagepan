@@ -31,6 +31,6 @@ class Edit
 
         $ds->script('EditDialog.show()');
 
-        return $ds->close();
+        $ds->close();
     }
 }

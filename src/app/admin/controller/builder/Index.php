@@ -12,6 +12,29 @@ class Index
         return view2()->response('pages/index');
     }
 
+    public function dialog(Request $request)
+    {
+        $id = $request->get('id');
+        $ds = datastar();
+
+        $html = view2()->fetch('builder/dialog', [
+            'id' => $id,
+            'title' => ''
+        ]);
+        $ds->replace($html);
+        $ds->script('BuilderDialog.show()');
+
+        $ds->close();
+    }
+
+    public function edit(Request $request)
+    {
+        $id = $request->get('id');
+        return view2()->response('builder/edit', [
+            'id' => $id,
+        ]);
+    }
+
     public function page(Request $request)
     {
         $page_id = $request->get('id');

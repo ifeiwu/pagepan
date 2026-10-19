@@ -1,10 +1,21 @@
+/*@font-face {
+    font-family: 'BreeSerif';
+    src: url('../font/BreeSerif.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}*/
+
 :root {
     --ui-primary-light: #111111;
     --ui-primary-dark: #ffffff;
-    --ui-neutral-light: #919191;
-    --ui-neutral-dark: #8b8b8b;
     --ui-rounded-scale: 0.5;
+
+    --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+    --font-serif: ui-serif, Georgia, Cambria, Times New Roman, Times, serif;
+
     font-size: 1rem;
+    font-family: "DM Sans", system-ui;
     scroll-behavior: smooth;
 }
 
@@ -26,12 +37,18 @@ iframe {
     border-width: 0;
 }
 
-.badge {
-    padding: 4px 8px 3px;
-}
-
 .container {
     max-width: 64rem;
     padding: 0 0.75rem;
     margin: 0 auto;
+}
+
+@layer ui {
+    .badge {
+        padding: 4px 8px 3px;
+    }
+
+    .field {
+        gap: var(--ui-spacing-1);
+    }
 }

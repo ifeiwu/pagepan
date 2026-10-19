@@ -61,7 +61,7 @@
                 <div class="flex-grow:1 flex jc:center">首页</div>
                 <div class="flex-basis:300 flex jc:right gap:5">
                     <button id="publish">发布</button>
-                    <button id="close_modal rounded" aria-label="关闭" data-tooltip="bottom" data-on:click="parent.EditDialog.close()">
+                    <button id="close_modal rounded" aria-label="关闭" data-tooltip="bottom" data-on:click="parent.BuilderDialog.close()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                     </button>
                 </div>
