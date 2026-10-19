@@ -51,4 +51,16 @@ iframe {
     .field {
         gap: var(--ui-spacing-1);
     }
+
+    select {
+        &:disabled {
+            opacity: 1;
+        }
+    }
+
+    input {
+        &:disabled {
+            opacity: .6;
+        }
+    }
 }

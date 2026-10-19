@@ -1,6 +1,7 @@
 <?php
 foreach ($this->items as $item):
     $item = (array)$item;
+    $state = $item['state'];
     $id = $item['id'];
     $type = $item['type'];
     $layout = $item['layout'];
@@ -29,14 +30,18 @@ foreach ($this->items as $item):
             break;
     }
 ?>
-<li class="bg:<?=getTypeColor($type)?>">
+<li id="page_<?=$id?>" class="bg:<?=getTypeColor($type)?>" style="<?=$state === 0 ? 'opacity:.6' : ''?>">
     <!--<a href="#" data-on:click="@get('/admin/pages/edit/dialog?id=<?php /*=$id*/?>')">
         <img src="/assets/admin/img/page-cover-demo.png" class="h:120 w:full obj:cover obj:top">
     </a>-->
     <div class="flex flex:col p:15 pt:10">
         <div class="flex ai:center">
             <div>
+                <?php if ($state === 1):?>
                 <span class="badge bg:#32d296 f:white"><?=getTypeText($type)?></span>
+                <?php else:?>
+                <span class="badge bg:#faa05a f:white"><?=getTypeText($type)?></span>
+                <?php endif;?>
             </div>
             <div class="ml:auto">
                 <div class="more ">

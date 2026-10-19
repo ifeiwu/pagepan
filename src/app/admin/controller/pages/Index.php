@@ -34,7 +34,7 @@ class Index
             throw new DatastarToastException('获取页面信息失败');
         }
 
-        $layouts = db()->table('page')->where('type', '=', 'layout')->get(['id', 'title']);
+        $layouts = db()->table('page')->where('type', '=', 'layout')->get(['path', 'title']);
 
         $html = view2()->fetch('pages/edit', ['page' => $page, 'layouts' => $layouts]);
         $ds = datastar();
@@ -46,28 +46,37 @@ class Index
     public function save(Request $request)
     {
         $id = post('id', 'int');
-        $type = post('type', 'lower');
-        $title = post('title', 'text');
-        $path = post('path', '/[^0-9a-zA-Z\/_-]/');
+        $state = post('state', 'text', 0);
+        $type = post('type', 'alnum', 'home');
+        $layout = post('layout', 'text', '');
+        $title = post('title', 'text', '页面名称');
+        $path = post('path', 'text', '');
+
+        if ($path && !preg_match('#\A[a-zA-Z0-9][a-zA-Z0-9/_-]*\z#', $path)) {
+            throw new DatastarToastException('页面路径格式不正确');
+        }
 
         $row = [
             'id' => $id,
+            'state' => $state,
             'type' => $type,
+            'layout' => $layout,
             'title' => $title,
             'path' => $path,
         ];
 
+        $ds = datastar();
+
         if ($id) {
             db()->table('page')->where('id', '=', $id)->update($row);
+            $page = db()->table('page')->where('id', '=', $id)->first();
+            $html = view2()->fetch('pages/item-li', ['items' => [$page]]);
+            $ds->replace($html, "#page_$id");
         } else {
             $id = db()->table('page')->insertGetId($row);
         }
 
-        $page = db()->table('page')->where('id', '=', $id)->first();
 
-        $ds = datastar();
-        $html = view2()->fetch('pages/item-li', ['items' => [$page]]);
-        $ds->prepend($html, '#pages');
         $ds->script('EditDialog.close()');
         $ds->close();
     }
