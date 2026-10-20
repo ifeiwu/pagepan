@@ -32,7 +32,7 @@ class Index
         $path = preg_replace('/\.git$/', '', $path);
         $save_path = storage_path("blocks/$path");
 
-        /*try {
+        try {
             $git = new Git;
 
 //            exec('git ls-remote --heads ' . escapeshellarg($url) . ' 2>&1', $output, $code);
@@ -50,7 +50,7 @@ class Index
             }
         } catch (\Throwable $e) {
             throw new DatastarAlertException($e->getMessage());
-        }*/
+        }
 
         Db::beginTransaction();
 
