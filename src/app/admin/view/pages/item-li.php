@@ -44,6 +44,10 @@ foreach ($this->items as $item):
                 <?php else:?>
                 <span class="badge bg:#faa05a f:white"><?=getTypeText($type)?></span>
                 <?php endif;?>
+
+                <?php if ($layout):?>
+                    <span class="badge f:#c36922 f:12" style="--bg:white" aria-label="<?=$layout?>" data-tooltip="right">布局</span>
+                <?php endif;?>
             </div>
             <div class="ml:auto">
                 <div class="more opacity:0">
@@ -75,15 +79,9 @@ foreach ($this->items as $item):
                 </svg>
             </div>-->
         </a>
-        <div class="f:12 f:gray f:bold mt:10 mb:20 font:mono">
-            <?=$item['path']?>
-        </div>
-        <div class="f:gray f:12 mt:auto">
-            <?=$layout ? "<span class=\"badge f:#ff7238 font:mono\" style=\"--bg:#fee1d5\">$layout</span>" : ''?>
-        </div>
+        <div class="f:13 f:gray f:bold mt:10 mb:20 font:mono"><?=$item['path']?></div>
+        <div class="mt:auto"></div>
     </div>
-    <div class="abs bottom:-2 right:-2 lh:0">
-        <?=$type_icon?>
-    </div>
+    <div class="abs bottom:-2 right:-2 lh:0"><?=$type_icon?></div>
 </li>
 <?php endforeach; ?>

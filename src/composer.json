@@ -29,13 +29,15 @@
     "monolog/monolog": "^2.0",
     "webman/console": "^2.2",
     "webman/database": "^2.1",
-    "illuminate/pagination": "^13.35",
     "illuminate/events": "^13.35",
     "symfony/var-dumper": "^7.4",
     "webman/validation": "^2.2",
     "starfederation/datastar-php": "^1.0",
     "czproject/git-php": "^4.6",
-    "ivopetkov/html5-dom-document-php": "2.*"
+    "ivopetkov/html5-dom-document-php": "2.*",
+    "symfony/filesystem": "^7.4",
+    "jasongrimes/paginator": "^1.0",
+    "illuminate/pagination": "^13.38"
   },
   "suggest": {
     "ext-event": "For better performance. "

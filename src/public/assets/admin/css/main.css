@@ -63,4 +63,10 @@ iframe {
             opacity: .6;
         }
     }
+
+    [data-tooltip][aria-label]:not(input,select,textarea) {
+        &:before {
+            font-size: 0.8125rem;
+        }
+    }
 }

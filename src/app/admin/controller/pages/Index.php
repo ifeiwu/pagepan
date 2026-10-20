@@ -10,7 +10,11 @@ class Index
 {
     public function index(Request $request)
     {
-        return view2()->response('pages/index');
+        $page_count = db()->table('page')->count();
+
+        return view2()->response('pages/index', [
+            'page_count' => $page_count
+        ]);
     }
 
     public function query(Request $request)
