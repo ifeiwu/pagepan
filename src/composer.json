@@ -37,7 +37,9 @@
     "ivopetkov/html5-dom-document-php": "2.*",
     "symfony/filesystem": "^7.4",
     "jasongrimes/paginator": "^1.0",
-    "illuminate/pagination": "^13.38"
+    "illuminate/pagination": "^13.38",
+    "chrome-php/chrome": "^1.16",
+    "revolt/event-loop": "^1.0"
   },
   "suggest": {
     "ext-event": "For better performance. "

@@ -8,7 +8,7 @@ class Datasets
 {
     public function index(Request $request)
     {
-        return view2()->response('datasets/index', [
+        return view2()->display('datasets/index', [
             'id' => $request->get('id')
         ]);
     }

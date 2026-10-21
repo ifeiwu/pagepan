@@ -10,7 +10,7 @@ class Dashboard
 {
     public function index(Request $request)
     {
-        return view2()->response('admin/dashboard/index');
+        return view2()->display('admin/dashboard/index');
     }
 
 }

@@ -1,0 +1,141 @@
+pre code[theme="agate"].hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code[theme="agate"].hljs {
+    padding: 3px 5px
+}
+
+/*!
+   Theme: Agate
+   Author: (c) Taufik Nurrohman <hi@taufik-nurrohman.com>
+   Maintainer: @taufik-nurrohman
+   Updated: 2021-04-24
+
+   #333
+   #62c8f3
+   #7bd694
+   #888
+   #a2fca2
+   #ade5fc
+   #b8d8a2
+   #c6b4f0
+   #d36363
+   #fc9b9b
+   #fcc28c
+   #ffa
+   #fff
+*/
+[theme="agate"].hljs {
+    background: #333;
+    color: #fff
+}
+
+[theme="agate"] .hljs-doctag,
+[theme="agate"] .hljs-meta-keyword,
+[theme="agate"] .hljs-name,
+[theme="agate"] .hljs-strong {
+    font-weight: 700
+}
+
+[theme="agate"] .hljs-code,
+[theme="agate"] .hljs-emphasis {
+    font-style: italic
+}
+
+[theme="agate"] .hljs-section,
+[theme="agate"] .hljs-tag {
+    color: #62c8f3
+}
+
+[theme="agate"] .hljs-selector-class,
+[theme="agate"] .hljs-selector-id,
+[theme="agate"] .hljs-template-variable,
+[theme="agate"] .hljs-variable {
+    color: #ade5fc
+}
+
+[theme="agate"] .hljs-meta-string,
+[theme="agate"] .hljs-string {
+    color: #a2fca2
+}
+
+[theme="agate"] .hljs-attr,
+[theme="agate"] .hljs-quote,
+[theme="agate"] .hljs-selector-attr {
+    color: #7bd694
+}
+
+[theme="agate"] .hljs-tag .hljs-attr {
+    color: inherit
+}
+
+[theme="agate"] .hljs-attribute,
+[theme="agate"] .hljs-title,
+[theme="agate"] .hljs-type {
+    color: #ffa
+}
+
+[theme="agate"] .hljs-number,
+[theme="agate"] .hljs-symbol {
+    color: #d36363
+}
+
+[theme="agate"] .hljs-bullet,
+[theme="agate"] .hljs-template-tag {
+    color: #b8d8a2
+}
+
+[theme="agate"] .hljs-built_in,
+[theme="agate"] .hljs-keyword,
+[theme="agate"] .hljs-literal,
+[theme="agate"] .hljs-selector-tag {
+    color: #fcc28c
+}
+
+[theme="agate"] .hljs-code,
+[theme="agate"] .hljs-comment,
+[theme="agate"] .hljs-formula {
+    color: #888
+}
+
+[theme="agate"] .hljs-link,
+[theme="agate"] .hljs-regexp,
+[theme="agate"] .hljs-selector-pseudo {
+    color: #c6b4f0
+}
+
+[theme="agate"] .hljs-meta {
+    color: #fc9b9b
+}
+
+[theme="agate"] .hljs-deletion {
+    background: #fc9b9b;
+    color: #333
+}
+
+[theme="agate"] .hljs-addition {
+    background: #a2fca2;
+    color: #333
+}
+
+[theme="agate"] .hljs-subst {
+    color: #fff
+}
+
+[theme="agate"] .hljs a {
+    color: inherit
+}
+
+[theme="agate"] .hljs a:focus,
+[theme="agate"] .hljs a:hover {
+    color: inherit;
+    text-decoration: underline
+}
+
+[theme="agate"] .hljs mark {
+    background: #555;
+    color: inherit
+}

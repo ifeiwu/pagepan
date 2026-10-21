@@ -15,6 +15,9 @@
 use Webman\Route;
 use support\Request;
 
+Route::get('/test-chrome', function () {
+    return response('OK');
+});
 
 Route::any('/imgph', [app\controller\Imgph::class, 'index']);
 
@@ -41,16 +44,95 @@ Route::group('/{path:(?!admin(?:/|$)|shop(?:/|$)).*}', function () {
     });
 
     Route::any('', function (Request $request) {
-        $path = $request->route->param('path') ?: 'index';
-        $page_path = "page/$path";
-        var_export($request->app);
-        if (!is_file(app_path("view/{$page_path}.php"))) {
+        $db = db();
+        $path = $request->route->param('path');
+
+        // 指定页面别名
+        if ($path) {
+            $page = $db->table('page')->where([['state', '=', 1], ['path', '=', $path]])->first();
+        }
+        // 未指定页面别名自动寻找页面
+        else {
+            $page = $db->table('page')->where([['state', '=', 1], ['type', '=', 'guide']])->first(); // 引导页
+            if (!$page) {
+                $page = $db->table('page')->where([['state', '=', 1], ['type', '=', 'home']])->first(); // 首页
+            }
+            // 专页
+            if (!$page) {
+                // 查询专页首页，别名可以是空字符串或 index
+                $page = $db->table('page')->where([['state', '=', 1], ['type', '=', 'pro'], ['path', 'IN', ['index', '']]])->first();
+                $page->path = 'index';
+            }
+        }
+
+        $page_path = "page/{$page->path}";
+        if (!is_file(app_path("view/{$page_path}.phtml"))) {
             if ($request->expectsJson()) {
                 return json(['code' => 404, 'msg' => '404 not found']);
             }
             return response()->withStatus(404);
         }
 
-        return view2()->response($page_path);
+        $view = view2();
+        $view->setExtname('.phtml');
+
+        // 站点信息
+        $site_list = $db->table('site')->where('state', 1)->get();
+        $site = [];
+        foreach ($site_list as $obj) {
+            $value = $obj->value;
+            if ($value) {
+                $site[$obj->name] = $value;
+            }
+        }
+
+        $view->assign('site', $site);
+        $view->assign('seo', []);
+        $view->assign('pagevar', [
+            'root_url' => '',
+            'base_url' => '',
+            'domain' => $request->host(),
+            'domain3' => '',
+            'timestamp' => $site['timestamp'],
+            'page_id' => $page->id,
+            'page_type' => $page->type,
+            'page_path' => $page->path,
+            'page_title' => $page->title,
+//            'get_alias' => $data['alias'] ?: '',
+//            'get_id' => $data['id'] ?: '',
+//            'get_cid' => $data['cid'] ?: '', // 分类 id
+//            'get_tag' => $data['tag'] ?: '',
+//            'get_keyword' => $data['keyword'] ?: '',
+//            'get_pagenum' => $data['pagenum'] ?: '',
+        ]);
+
+        $layout_path = $page->layout;
+        // 使用页面布局
+        if ($layout_path) {
+            $layout_path = app_path("view/layout/{$layout_path}.phtml");
+            $layout_content = file_get_contents($layout_path);
+            $page_content = $view->render($page_path);
+            // 默认页面内容，表示页面有些内容块没有添加布局属性，如: <div layout-content></div>
+            if ($page_content) {
+                $view->addSection('content', $page_content);
+            }
+            // 页面内容添加到布局页面
+            $page_content = $view->parse($layout_content);
+        }
+        else {
+            $page_content = $view->render($page_path);
+        }
+
+        // 页面内容添加到页面框架布局
+        if ($page_content) {
+            $view->addSection('content', $page_content);
+        }
+
+        return response($view->render('layout/frame'));
     });
 });
+
+function page_main()
+{
+
+}

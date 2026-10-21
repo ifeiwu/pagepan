@@ -11,7 +11,7 @@ class Index
     public function index(Request $request)
     {
         var_export($request->app);
-//        return view2()->response('shop/index');
+//        return view2()->display('shop/index');
     }
 
 }

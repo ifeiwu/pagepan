@@ -2,17 +2,12 @@
 
 function multi_app_path(string $path = ''): string
 {
-    $app_name = request()->app;
-    return path_combine(BASE_PATH . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . $app_name, $path);
+    return app_path(rtrim(request()->app . DIRECTORY_SEPARATOR . $path, DIRECTORY_SEPARATOR));
 }
 
 function storage_path(string $path = ''): string
 {
-    static $storagePath = '';
-    if (!$storagePath) {
-        $storagePath = \config('app.storage_path') ?: run_path('storage');
-    }
-    return path_combine($storagePath, $path);
+    return base_path(rtrim('storage' . DIRECTORY_SEPARATOR . $path, DIRECTORY_SEPARATOR));
 }
 
 // post 请求
@@ -234,7 +229,8 @@ function filter(mixed $value, string|callable $type = '*', bool $trim = true): m
 }
 
 // 获取类型的文字
-function getTypeText($type) {
+function getTypeText($type)
+{
     $text = '其它';
     switch ($type) {
         case 'guide':
@@ -266,7 +262,8 @@ function getTypeText($type) {
 }
 
 // 获取类型的颜色
-function getTypeColor($type) {
+function getTypeColor($type)
+{
     $color = '#e7f6ff';
     switch ($type) {
         case 'guide':

@@ -49,8 +49,8 @@ class View2
 
     /**
      * 调用扩展函数
-     * @param $name 名称
-     * @param $args 参数
+     * @param string $name
+     * @param array $args
      * @return mixed
      */
     public function __call(string $name, array $args = [])
@@ -62,9 +62,9 @@ class View2
         return $this->funcs[$name](...$args);
     }
 
-    public function __construct(string|null $path = null)
+    public function __construct(string $path = '')
     {
-        $this->basePath = $path ?? multi_app_path('view');
+        $this->basePath = $path ?: multi_app_path('view');
     }
 
     public function __get(string $name)
@@ -79,21 +79,21 @@ class View2
 
     /**
      * 设置模板扩展名称
-     * @param $value
+     * @param string $value
      * @return void
      */
-    public function setExtname(string $value)
+    public function setExtname(string $value): void
     {
         $this->extname = $value;
     }
 
     /**
      * 设置模板数据
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      * @return void
      */
-    public function assign(string $name, mixed $value = null)
+    public function assign(string $name, mixed $value): void
     {
         if (is_array($name)) {
             $this->data = array_merge($this->data, $name);
@@ -109,11 +109,11 @@ class View2
 
     /**
      * 获取模板内容
-     * @param $name 模板名称
-     * @param $data 模板数据
+     * @param string $name 模板名称
+     * @param array $data 模板数据
      * @return false|string
      */
-    public function render(string $name, array $data = [])
+    public function render(string $name, array $data = []): bool|string
     {
         if (!empty($data)) {
             $this->data = array_merge($this->data, $data);
@@ -128,7 +128,7 @@ class View2
             })("{$this->basePath}/{$name}{$this->extname}");
 
             return ob_get_clean();
-        } catch (Throwable $ex) {
+        } catch (\Throwable $ex) {
             while (ob_get_level()) ob_end_clean();
             throw $ex;
         }
@@ -136,11 +136,11 @@ class View2
 
     /**
      * 获取解析的内容
-     * @param $content
-     * @param $data
+     * @param string $content
+     * @param array $data
      * @return false|string
      */
-    public function parse(string $content, array $data = [])
+    public function parse(string $content, array $data = []): bool|string
     {
         if (!empty($data)) {
             $this->data = array_merge($this->data, $data);
@@ -155,7 +155,7 @@ class View2
             })($content);
 
             return ob_get_clean();
-        } catch (Throwable $ex) {
+        } catch (\Throwable $ex) {
             while (ob_get_level()) ob_end_clean();
             throw $ex;
         }
@@ -163,24 +163,27 @@ class View2
 
     /**
      * 设置模板的布局
-     * @param $name
-     * @param $data
+     * @param string $name
+     * @param array $data
      * @return void
      */
-    public function layout(string $name, array $data = [])
+    public function layout(string $name, array $data = []): void
     {
         $this->layoutName = $name;
         $this->layoutData = $data;
     }
 
     /**
-     * 响应输出
+     * 支持布局响应输出
      * @param mixed $name
      * @param array $data
      * @return Response
+     * @throws \Throwable
      */
-    public function response(mixed $name, array $data = []): Response
+    public function display(mixed $name, array $data = []): Response
     {
+        $content = '';
+
         if (is_string($name)) {
             $content = $this->render($name, $data);
         } elseif (is_callable($name)) {
@@ -202,20 +205,20 @@ class View2
     /**
      * 开始当前内容块
      * @param string $name
-     * @return null
+     * @return void
      */
-    public function start(string $name = null)
+    public function start(string $name = ''): void
     {
-        $this->sectionName = $name ?? 'content';
+        $this->sectionName = $name ?: 'content';
 
         ob_start();
     }
 
     /**
      * 停止当前内容块
-     * @return null
+     * @return void
      */
-    public function stop()
+    public function stop(): void
     {
         $this->sections[$this->sectionName] = ob_get_clean();
     }
@@ -226,7 +229,7 @@ class View2
      * @param string $default 默认块内容
      * @return string|null
      */
-    public function section(string $name, string $default = '')
+    public function section(string $name, string $default = ''): ?string
     {
         if (!isset($this->sections[$name])) {
             return $default;
@@ -237,22 +240,22 @@ class View2
 
     /**
      * 添加内容块
-     * @param $name
-     * @param $content
+     * @param string $name
+     * @param string $content
      * @return void
      */
-    public function addSection(string $name, string $content)
+    public function addSection(string $name, string $content): void
     {
         $this->sections[$name] = $content;
     }
 
     /**
      * 获取模板内容
-     * @param $name
-     * @param $data
+     * @param string $name
+     * @param array $data
      * @return false|string
      */
-    public function fetch(string $name, array $data = [])
+    public function fetch(string $name, array $data = []): bool|string
     {
         return $this->render($name, $data);
     }
@@ -261,14 +264,18 @@ class View2
      * 页面插入模板内容
      * @param string $name
      * @param array $data
-     * @return null
+     * @return void
      */
-    public function insert(string $name, array $data = [])
+    public function insert(string $name, array $data = []): void
     {
         echo $this->render($name, $data);
     }
 
-    public function url(string $url = null)
+    /**
+     * @param string $url
+     * @return string
+     */
+    public function url(string $url): string
     {
         return $url . '?v=' . APP_VER;
     }
@@ -278,8 +285,9 @@ class View2
      * @param mixed $var
      * @param string $functions
      * @return mixed
+     * @throws \Exception
      */
-    public function batch(mixed $var, string $functions)
+    public function batch(mixed $var, string $functions): mixed
     {
         foreach (explode('|', $functions) as $function) {
             if (is_callable($function)) {
@@ -295,10 +303,11 @@ class View2
     /**
      * 转义字符串
      * @param string $string
-     * @param null|string $functions
+     * @param string|null $functions
      * @return string
+     * @throws \Exception
      */
-    public function escape(string $string, string $functions = null)
+    public function escape(string $string, string $functions = null): string
     {
         if ($functions) {
             $string = $this->batch($string, $functions);
@@ -310,10 +319,11 @@ class View2
     /**
      * escape 函数的别名
      * @param string $string
-     * @param null|string $functions
+     * @param string|null $functions
      * @return string
+     * @throws \Exception
      */
-    public function e(string $string, string $functions = null)
+    public function e(string $string, string $functions = null): string
     {
         return $this->escape($string, $functions);
     }

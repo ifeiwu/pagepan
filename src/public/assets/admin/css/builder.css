@@ -1,3 +1,41 @@
+html, body {
+    scrollbar-width: none;
+}
+
+.pb-split {
+    height:100vh
+}
+
+.pb-split {
+    .gutter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background-color: oklch(90% 0 none);
+        background-repeat: no-repeat;
+        background-position: 50%;
+        transition: background-color 250ms ease;
+    }
+    .gutter:hover {
+        background-color: oklch(90.16% .0324 268.2);
+    }
+    .gutter.gutter-vertical {
+        cursor: row-resize;
+    }
+    .gutter.gutter-vertical::after {
+        content: '';
+        position: absolute;
+        width: 40px;
+        height: 4px;
+        background-color: oklch(65% 0 none);
+        border-radius: 10px;
+    }
+    .gutter.gutter-vertical:hover::after {
+        background-color: oklch(63.99% .0804 266.1);
+    }
+}
+
 .pb-app {
     display: flex;
     flex-direction: column;

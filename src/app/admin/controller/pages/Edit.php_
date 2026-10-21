@@ -12,7 +12,7 @@ class Edit
     public function index(Request $request)
     {
         $id = $request->get('id');
-        return view2()->response('pages/edit', [
+        return view2()->display('pages/edit', [
             'id' => $id,
 //            'item' => $item,
         ]);

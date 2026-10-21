@@ -4,6 +4,7 @@ namespace app\admin\controller\pages;
 
 use app\exception\DatastarAlertException;
 use app\exception\DatastarToastException;
+use HeadlessChromium\BrowserFactory;
 use support\Request;
 
 class Index
@@ -12,7 +13,7 @@ class Index
     {
         $page_count = db()->table('page')->count();
 
-        return view2()->response('pages/index', [
+        return view2()->display('pages/index', [
             'page_count' => $page_count
         ]);
     }
@@ -71,10 +72,10 @@ class Index
             'type' => post('type', 'alnum', 'home'),
             'layout' => post('layout', 'text', ''),
             'title' => post('title', 'text', '页面名称'),
-            'path' => post('path', 'text', ''),
+            'path' => post('path', 'text', '') ?: 'index',
         ];
 
-        if (in_array($row['path'], ['admin', 'shop', 'api'])) {
+        if (in_array($row['path'], ['admin', 'api', 'imgph'])) {
             throw new DatastarAlertException("页面路径「{$row['path']}」为系统保留路径，请更换其他路径。");
         }
 

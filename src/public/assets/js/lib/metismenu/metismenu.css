@@ -1,0 +1,55 @@
+@charset "UTF-8";
+/*!
+* metismenu https://github.com/onokumus/metismenu#readme
+* A collapsible jQuery menu plugin
+* @version 3.0.7
+* @author Osman Nuri Okumus <onokumus@gmail.com> (https://github.com/onokumus)
+* @license: MIT
+*/
+.metismenu .mm-collapse:not(.mm-show) {
+  display: none;
+}
+
+.metismenu .mm-collapsing {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  transition-timing-function: ease;
+  transition-duration: 0.35s;
+  transition-property: height, visibility;
+}
+
+.metismenu .has-arrow {
+  position: relative;
+}
+
+.metismenu .has-arrow::after {
+  position: absolute;
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  border-width: 1px 0 0 1px;
+  border-style: solid;
+  border-color: initial;
+  right: 1em;
+  transform: rotate(-45deg);
+  transform-origin: top;
+  top: 50%;
+  transition: all 0.3s ease-out;
+}
+
+*[dir=rtl] .metismenu .has-arrow::after {
+  right: auto;
+  left: 1em;
+  transform: rotate(135deg);
+}
+
+.metismenu .mm-active > .has-arrow::after,
+.metismenu .has-arrow[aria-expanded=true]::after {
+  transform: rotate(-135deg);
+}
+
+*[dir=rtl] .metismenu .mm-active > .has-arrow::after,
+*[dir=rtl] .metismenu .has-arrow[aria-expanded=true]::after {
+  transform: rotate(225deg);
+}

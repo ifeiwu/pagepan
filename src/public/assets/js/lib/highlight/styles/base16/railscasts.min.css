@@ -1,0 +1,119 @@
+/*!
+  Theme: Railscasts
+  Author: Ryan Bates (http://railscasts.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+pre code[theme="base16/railscasts"].hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code[theme="base16/railscasts"].hljs {
+    padding: 3px 5px
+}
+
+[theme="base16/railscasts"].hljs {
+    color: #e6e1dc;
+    background: #2b2b2b
+}
+
+[theme="base16/railscasts"] .hljs::selection {
+    background-color: #3a4055;
+    color: #e6e1dc
+}
+
+[theme="base16/railscasts"] .hljs-comment {
+    color: #5a647e
+}
+
+[theme="base16/railscasts"] .hljs-tag {
+    color: #d4cfc9
+}
+
+[theme="base16/railscasts"] .hljs-operator,
+[theme="base16/railscasts"] .hljs-punctuation,
+[theme="base16/railscasts"] .hljs-subst {
+    color: #e6e1dc
+}
+
+[theme="base16/railscasts"] .hljs-operator {
+    opacity: .7
+}
+
+[theme="base16/railscasts"] .hljs-bullet,
+[theme="base16/railscasts"] .hljs-deletion,
+[theme="base16/railscasts"] .hljs-name,
+[theme="base16/railscasts"] .hljs-selector-tag,
+[theme="base16/railscasts"] .hljs-template-variable,
+[theme="base16/railscasts"] .hljs-variable {
+    color: #da4939
+}
+
+[theme="base16/railscasts"] .hljs-attr,
+[theme="base16/railscasts"] .hljs-link,
+[theme="base16/railscasts"] .hljs-literal,
+[theme="base16/railscasts"] .hljs-number,
+[theme="base16/railscasts"] .hljs-symbol,
+[theme="base16/railscasts"] .hljs-variable.constant_ {
+    color: #cc7833
+}
+
+[theme="base16/railscasts"] .hljs-class .hljs-title,
+[theme="base16/railscasts"] .hljs-title,
+[theme="base16/railscasts"] .hljs-title.class_ {
+    color: #ffc66d
+}
+
+[theme="base16/railscasts"] .hljs-strong {
+    font-weight: 700;
+    color: #ffc66d
+}
+
+[theme="base16/railscasts"] .hljs-addition,
+[theme="base16/railscasts"] .hljs-code,
+[theme="base16/railscasts"] .hljs-string,
+[theme="base16/railscasts"] .hljs-title.class_.inherited__ {
+    color: #a5c261
+}
+
+[theme="base16/railscasts"] .hljs-built_in,
+[theme="base16/railscasts"] .hljs-doctag,
+[theme="base16/railscasts"] .hljs-keyword.hljs-atrule,
+[theme="base16/railscasts"] .hljs-quote,
+[theme="base16/railscasts"] .hljs-regexp {
+    color: #519f50
+}
+
+[theme="base16/railscasts"] .hljs-attribute,
+[theme="base16/railscasts"] .hljs-function .hljs-title,
+[theme="base16/railscasts"] .hljs-section,
+[theme="base16/railscasts"] .hljs-title.function_,
+[theme="base16/railscasts"] .ruby .hljs-property {
+    color: #6d9cbe
+}
+
+[theme="base16/railscasts"] .diff .hljs-meta,
+[theme="base16/railscasts"] .hljs-keyword,
+[theme="base16/railscasts"] .hljs-template-tag,
+[theme="base16/railscasts"] .hljs-type {
+    color: #b6b3eb
+}
+
+[theme="base16/railscasts"] .hljs-emphasis {
+    color: #b6b3eb;
+    font-style: italic
+}
+
+[theme="base16/railscasts"] .hljs-meta,
+[theme="base16/railscasts"] .hljs-meta .hljs-keyword,
+[theme="base16/railscasts"] .hljs-meta .hljs-string {
+    color: #bc9458
+}
+
+[theme="base16/railscasts"] .hljs-meta .hljs-keyword,
+[theme="base16/railscasts"] .hljs-meta-keyword {
+    font-weight: 700
+}

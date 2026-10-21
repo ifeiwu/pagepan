@@ -21,7 +21,6 @@ return [
     'request_class' => Request::class,
     'public_path' => base_path(false) . DIRECTORY_SEPARATOR . 'public',
     'runtime_path' => base_path(false) . DIRECTORY_SEPARATOR . 'runtime',
-    'storage_path' => base_path(false) . DIRECTORY_SEPARATOR . 'storage',
     'controller_suffix' => '',
     'controller_reuse' => true,
 ];

@@ -1,0 +1,105 @@
+<?php
+$theme = json_decode($this->site['theme'], true);
+$theme_screen = $theme['screen'];
+?>
+<!DOCTYPE html>
+<html lang="<?=$theme['base']['lang']?>" class="-<?=str_replace('/', '-', $this->pagevar['page_path'] ?: 'index')?>">
+<head>
+    <base href="<?=$this->pagevar['root_url']?>">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
+    <?php if (!$theme_screen):?>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <meta name="applicable-device" content="pc,mobile">
+    <?php elseif ($theme_screen == 'pc'):?>
+        <meta name="applicable-device" content="pc">
+    <?php elseif ($theme_screen == 'mobile'):?>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <meta name="applicable-device" content="mobile">
+    <?php endif;?>
+    <title><?=$seo['title'] ?? '----'?></title>
+    <meta name="keywords" content="<?=$seo['keywords'] ?? ''?>">
+    <meta name="description" content="<?=$seo['description'] ?? ''?>">
+
+    <?php
+    // 网站图标
+    if ($this->site['favicon'] ?? '') {
+        echo '<link rel="icon" href="' . $this->site['favicon'] . '">';
+    }
+    // 应用图标
+    if ($this->site['touchicon'] ?? '') {
+        echo '<link rel="apple-touch-icon" href="' . $this->site['touchicon'] . '">';
+    }
+    // 应用清单
+    if ($this->site['manifest'] ?? '') {
+        echo '<link rel="manifest" href="data/manifest/manifest.json?' . $this->site['timestamp'] . '">';
+    }
+    // 样式文件
+    echo '<link href="/assets/css/pagepan.css" rel="stylesheet">';
+    // 自定义字体
+    $site_fonts_list = $this->site['fonts_list'] ?? [];
+    if ($site_fonts_list) {
+        $site_fonts_list = json_decode($site_fonts_list, true);
+        foreach ($site_fonts_list as $font) {
+            $fontid = $font['id'];
+            $site_fonts_css = "/data/font/$fontid/$fontid.css";
+            echo '<link href="' . $site_fonts_css . '" rel="preload" as="style" onload="this.rel=\'stylesheet\'">';
+        }
+    }
+    // 图文样式
+    if ($this->site['open_graphic_css'] && $this->pagevar['page_type'] == 'graphic') {
+        echo '<link href="/data/css/graphic.min.css" rel="stylesheet">';
+    }
+    // 全局样式
+    if ($this->site['open_global_css']) {
+        echo '<link href="/data/css/global.min.css" rel="stylesheet">';
+    }
+    ?>
+    <link href="/assets/css/reset.css" rel="stylesheet">
+    <link href="/assets/css/main.css" rel="stylesheet">
+
+    <script>
+        const pagevar = <?=json_encode2($this->pagevar)?>;
+        //const RUN_MODE = '<?php //=RUN_MODE?>//';
+    </script>
+    <script src="https://cdn.jsdmirror.com/npm/@tailwindcss/browser@4"></script>
+    <script src="/assets/js/require.js"></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/lib/jquery.js"></script>
+    <script src="/assets/js/app/main.js"></script>
+</head>
+<body>
+    <?php
+    // 全局页头
+    /*if ($this->site['open_header_php']) {
+        include ROOT_PATH . 'data/php/header.inc';
+    }*/
+
+    // 页面内容
+    echo $this->section('content');
+
+    /*// 全局页脚
+    if ($this->site['open_footer_php']) {
+        include ROOT_PATH . 'data/php/footer.inc';
+    }
+    // 全局脚本
+    if ($this->site['open_global_js']) {
+        echo '<script src="' . assets('data/js/global.min.js') . '"></script>';
+    }
+    // 在线客服
+    if ($this->site['service3_open'] == 1) {
+        echo html_decode(base64_decode($this->site['service3_code']));
+    }
+    // 社交分享
+    if ($this->site['share3_open'] == 1) {
+        echo html_decode(base64_decode($this->site['share3_code']));
+    }
+    // 流量统计
+    if ($this->site['stats3_open'] == 1) {
+        echo html_decode(base64_decode($this->site['stats3_code']));
+    }*/
+    ?>
+</body>
+</html>

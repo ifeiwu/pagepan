@@ -4,7 +4,7 @@ define(['split', 'vs/editor/editor.main'], function (Split) {
     Split(['#split-view', '#split-code'], {
         direction: 'vertical',
         minSize: 0,
-        gutterSize: 20,
+        gutterSize: 14,
         onDrag: function (sizes) {
             editor.layout();
         },
@@ -32,24 +32,7 @@ define(['split', 'vs/editor/editor.main'], function (Split) {
     });
 
     editor.onDidChangeModelContent(() => {
-        /*if (iframe_loading) return;
-
-        clearTimeout(editor_change_timer);
-        editor_change_timer = setTimeout(() => {
-            const blocks = getPageBlocks(editor.getValue())
-            // 保存页面
-            $.post('/admin/builder/page-block/save-code', {'page_id':1, 'blocks':blocks}, function(res) {
-                if (res.code === 0) {
-                    iframe.src = iframe.src
-                    if (res.data) {
-                        iframe_loading = true;
-                        editor.setValue(res.data);
-                    }
-                } else {
-                    alert(res.message);
-                }
-            })
-        }, 3000);*/
+        // if (iframe_loading) return;
     });
 
 

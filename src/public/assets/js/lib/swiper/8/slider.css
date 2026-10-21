@@ -1,0 +1,319 @@
+.slider {
+	opacity: 0;
+}
+
+/* 左右导航 -------------------------------------------------- */
+.slider .swiper-button-next,
+.slider .swiper-button-prev {
+    margin: 0;
+    outline: none;
+    transition: color .5s;
+    transform: translateY(-50%);
+}
+
+.slider .swiper-button-prev {
+    left: 2%;
+}
+
+.slider .swiper-button-next {
+    right: 2%;
+}
+
+.slider .swiper-button-prev span,
+.slider .swiper-button-next span {
+    line-height: 0;
+    white-space: nowrap;
+}
+
+.slider .swiper-button-prev svg,
+.slider .swiper-button-next svg {
+    fill: currentColor;
+    width: var(--swiper-navigation-size);
+    height: var(--swiper-navigation-size);
+}
+
+.slider .swiper-button-prev.swiper-button-disabled.animated,
+.slider .swiper-button-next.swiper-button-disabled.animated {
+    opacity: 0;
+}
+
+.slider [class*="swiper-button-shape"]::after {
+    display: none;
+}
+
+.slider [class*="swiper-button-bgshape"] {
+    background-color: var(--swiper-navigation-bgcolor);
+    transition: opacity .25s;
+}
+
+.slider [class*="swiper-button-bgshape"]:hover {
+    opacity: .85;
+}
+
+.slider .swiper-button-bgshape-circle {
+    padding: calc(var(--swiper-navigation-size) * 0.9);
+    border-radius: 60rem;
+}
+
+.slider [class*="swiper-button-bgshape-square"] {
+    padding: calc(var(--swiper-navigation-size) * 0.9);
+}
+
+.slider .swiper-button-bgshape-rhombus {
+    padding: calc(var(--swiper-navigation-size) * 0.9);
+    transform: rotate(45deg);
+}
+
+.slider .swiper-button-bgshape-rhombus svg {
+    transform: rotate(-45deg);
+}
+
+.slider .swiper-button-bgshape-rhombus::after {
+    transform: rotate(-45deg);
+}
+
+.slider [class*="swiper-button-bgshape-v-rectangle"] {
+    padding: calc(var(--swiper-navigation-size) * 1.2) calc(var(--swiper-navigation-size) * 0.8);
+}
+
+.slider [class*="swiper-button-bgshape-h-rectangle"] {
+    padding: calc(var(--swiper-navigation-size) * 0.8) calc(var(--swiper-navigation-size) * 1.2);
+}
+
+.slider .swiper-button-bgshape-v-rectangle-full,
+.slider .swiper-button-bgshape-h-rectangle-full {
+    border-radius: 60rem;
+}
+.slider .swiper-button-bgshape-square-2px,
+.slider .swiper-button-bgshape-v-rectangle-2px,
+.slider .swiper-button-bgshape-h-rectangle-2px {
+    border-radius: 2px;
+}
+
+.slider .swiper-button-bgshape-square-4px,
+.slider .swiper-button-bgshape-v-rectangle-4px,
+.slider .swiper-button-bgshape-h-rectangle-4px {
+    border-radius: 4px;
+}
+
+.slider .swiper-button-bgshape-square-8px,
+.slider .swiper-button-bgshape-v-rectangle-8px,
+.slider .swiper-button-bgshape-h-rectangle-8px {
+    border-radius: 8px;
+}
+
+
+/* 分页 -------------------------------------------------- */
+.slider .swiper-pagination-bullet {
+    opacity: 1;
+	background: var(--swiper-pagination-color);
+}
+
+.slider .swiper-pagination-bullet-active {
+    background: var(--swiper-pagination-active) !important;
+}
+
+.slider .swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet {
+    margin: 0 clamp(2px, 0.5%, 10px);
+}
+
+.slider .swiper-vertical > .swiper-pagination-bullets {
+    right: 2%;
+}
+
+.slider .swiper-vertical > .swiper-pagination-bullets .swiper-pagination-bullet {
+    margin: 12px 0;
+}
+
+.slider .swiper-vertical > .swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet {
+    margin: 6px 0;
+}
+
+.slider .swiper-pagination-fraction,
+.slider .swiper-pagination-custom,
+.slider .swiper-horizontal > .swiper-pagination-bullets {
+    bottom: 5%;
+}
+
+.slider .swiper-vertical .swiper-pagination-custom {
+    right: 2%;
+    top: 50%;
+    left: auto;
+    bottom: auto;
+    transform: translateY(-50%);
+    width: auto;
+}
+
+/* 分数 */
+.slider .swiper-pagination-fraction {
+    color: var(--swiper-pagination-active);
+}
+
+/* 数字 */
+.slider .swiper-horizontal .swiper-pagination-number {
+    padding: 4px 6px;
+    cursor: pointer;
+    color: var(--swiper-pagination-color);
+}
+
+.slider .swiper-vertical .swiper-pagination-number {
+    display: block;
+    padding: 4px 6px;
+    cursor: pointer;
+    color: var(--swiper-pagination-color);
+}
+
+.slider .swiper-pagination-number-active {
+    color: var(--swiper-pagination-active) !important;
+}
+
+/* 圆形数字 */
+.slider .swiper-pagination-number2 {
+    display: inline-block;
+    height: 26px;
+    width: 26px;
+    line-height: 26px;
+    font-size: 14px;
+    margin: 0 .5rem;
+    background: var(--swiper-pagination-color);
+    color: var(--swiper-pagination-active);
+    border-radius: 26px;
+    cursor: pointer;
+}
+
+.slider .swiper-pagination-number2-active {
+    color: var(--swiper-pagination-color);
+    background: var(--swiper-pagination-active);
+}
+
+.slider .swiper-vertical .swiper-pagination-number2 {
+    display: block;
+    margin: 1rem 0;
+}
+
+/* 药丸分页 */
+.slider .swiper-pagination-pill.swiper-pagination-bullet {
+    transition: all .8s;
+    border-radius: 1rem;
+    background: var(--swiper-pagination-color);
+}
+
+.slider .swiper-horizontal .swiper-pagination-pill.swiper-pagination-bullet-active {
+    width: 1.4rem;
+}
+
+.slider .swiper-vertical .swiper-pagination-pill.swiper-pagination-bullet-active {
+    height: 1.4rem;
+}
+
+/* 正方形分页 */
+.slider .swiper-horizontal .swiper-pagination-square.swiper-pagination-bullet,
+.slider .swiper-vertical .swiper-pagination-square.swiper-pagination-bullet {
+    border-radius: 0;
+    background: var(--swiper-pagination-color);
+}
+
+.slider .swiper-horizontal .swiper-pagination-square.swiper-pagination-bullet {
+    width: .5rem;
+    height: .5rem;
+}
+
+.slider .swiper-vertical .swiper-pagination-square.swiper-pagination-bullet {
+    width: .5rem;
+    height: .5rem;
+}
+
+/* 长方形分页 */
+.slider .swiper .swiper-pagination-rectangle {
+    border-radius: 0;
+    background: var(--swiper-pagination-color);
+}
+
+.slider .swiper-horizontal .swiper-pagination-rectangle {
+    width: clamp(40px, 4%, 60px);
+    height: 3px;
+}
+
+.slider .swiper-vertical .swiper-pagination-rectangle {
+    width: 3px;
+    height: 40px;
+}
+
+/* 长方形分页动画 */
+.slider .swiper .swiper-pagination-rectangle2 {
+    position: relative;
+    border-radius: 0;
+    background: var(--swiper-pagination-color);
+}
+
+.slider .swiper-horizontal .swiper-pagination-rectangle2.swiper-pagination-bullet {
+    margin: 0 clamp(2px, 0.4%, 10px);
+    width: clamp(40px, 4%, 60px);
+    height: 2px;
+}
+
+.slider .swiper-vertical .swiper-pagination-rectangle2 {
+    width: 2px;
+    height: 35px;
+}
+
+.slider .swiper-pagination-rectangle2.swiper-pagination-bullet-active {
+    background: var(--swiper-pagination-active) !important;
+}
+
+.slider .swiper.autoplay .swiper-pagination-rectangle2.swiper-pagination-bullet-active {
+    background: var(--swiper-pagination-color) !important;
+}
+
+.slider .swiper.autoplay .swiper-pagination-rectangle2 i {
+    display: block;
+    background: var(--swiper-pagination-active);
+    height: 100%;
+}
+
+.slider .swiper-horizontal.autoplay .swiper-pagination-rectangle2 i {
+    transform-origin: 0;
+    transform: scaleX(0);
+}
+
+.slider .swiper-vertical.autoplay .swiper-pagination-rectangle2 i {
+    transform-origin: top;
+    transform: scaleY(0);
+}
+
+.slider .swiper.autoplay .swiper-pagination-rectangle2.start-current i {
+    transition: transform calc(var(--swiper-autoplay-delay) - 100ms) linear;
+}
+
+.slider .swiper-horizontal.autoplay .swiper-pagination-rectangle2.start-current i {
+    transform: scaleX(1);
+}
+
+.slider .swiper-vertical.autoplay .swiper-pagination-rectangle2.start-current i {
+    transform: scaleY(1);
+}
+
+.slider .swiper.autoplay .swiper-pagination-rectangle2.current i {
+    transition: transform var(--swiper-autoplay-delay) linear;
+}
+
+.slider .swiper-horizontal.autoplay .swiper-pagination-rectangle2.current i {
+    transform: scaleX(1);
+}
+
+.slider .swiper-vertical.autoplay .swiper-pagination-rectangle2.current i {
+    transform: scaleY(1);
+}
+
+.slider .swiper.autoplay .swiper-pagination-rectangle2.replace {
+    background: var(--swiper-pagination-active) !important;
+}
+
+/* 进度条分页 */
+.slider .swiper-pagination-progressbar {
+    background: var(--swiper-pagination-color)
+}
+
+.slider .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+    background: var(--swiper-pagination-active);
+}

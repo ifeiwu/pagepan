@@ -1,0 +1,119 @@
+/*!
+  Theme: Tomorrow
+  Author: Chris Kempson (http://chriskempson.com)
+  License: ~ MIT (or more permissive) [via base16-schemes-source]
+  Maintainer: @highlightjs/core-team
+  Version: 2021.09.0
+*/
+pre code[theme="base16/tomorrow"].hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code[theme="base16/tomorrow"].hljs {
+    padding: 3px 5px
+}
+
+[theme="base16/tomorrow"].hljs {
+    color: #4d4d4c;
+    background: #fff
+}
+
+[theme="base16/tomorrow"] .hljs::selection {
+    background-color: #d6d6d6;
+    color: #4d4d4c
+}
+
+[theme="base16/tomorrow"] .hljs-comment {
+    color: #8e908c
+}
+
+[theme="base16/tomorrow"] .hljs-tag {
+    color: #969896
+}
+
+[theme="base16/tomorrow"] .hljs-operator,
+[theme="base16/tomorrow"] .hljs-punctuation,
+[theme="base16/tomorrow"] .hljs-subst {
+    color: #4d4d4c
+}
+
+[theme="base16/tomorrow"] .hljs-operator {
+    opacity: .7
+}
+
+[theme="base16/tomorrow"] .hljs-bullet,
+[theme="base16/tomorrow"] .hljs-deletion,
+[theme="base16/tomorrow"] .hljs-name,
+[theme="base16/tomorrow"] .hljs-selector-tag,
+[theme="base16/tomorrow"] .hljs-template-variable,
+[theme="base16/tomorrow"] .hljs-variable {
+    color: #c82829
+}
+
+[theme="base16/tomorrow"] .hljs-attr,
+[theme="base16/tomorrow"] .hljs-link,
+[theme="base16/tomorrow"] .hljs-literal,
+[theme="base16/tomorrow"] .hljs-number,
+[theme="base16/tomorrow"] .hljs-symbol,
+[theme="base16/tomorrow"] .hljs-variable.constant_ {
+    color: #f5871f
+}
+
+[theme="base16/tomorrow"] .hljs-class .hljs-title,
+[theme="base16/tomorrow"] .hljs-title,
+[theme="base16/tomorrow"] .hljs-title.class_ {
+    color: #eab700
+}
+
+[theme="base16/tomorrow"] .hljs-strong {
+    font-weight: 700;
+    color: #eab700
+}
+
+[theme="base16/tomorrow"] .hljs-addition,
+[theme="base16/tomorrow"] .hljs-code,
+[theme="base16/tomorrow"] .hljs-string,
+[theme="base16/tomorrow"] .hljs-title.class_.inherited__ {
+    color: #718c00
+}
+
+[theme="base16/tomorrow"] .hljs-built_in,
+[theme="base16/tomorrow"] .hljs-doctag,
+[theme="base16/tomorrow"] .hljs-keyword.hljs-atrule,
+[theme="base16/tomorrow"] .hljs-quote,
+[theme="base16/tomorrow"] .hljs-regexp {
+    color: #3e999f
+}
+
+[theme="base16/tomorrow"] .hljs-attribute,
+[theme="base16/tomorrow"] .hljs-function .hljs-title,
+[theme="base16/tomorrow"] .hljs-section,
+[theme="base16/tomorrow"] .hljs-title.function_,
+[theme="base16/tomorrow"] .ruby .hljs-property {
+    color: #4271ae
+}
+
+[theme="base16/tomorrow"] .diff .hljs-meta,
+[theme="base16/tomorrow"] .hljs-keyword,
+[theme="base16/tomorrow"] .hljs-template-tag,
+[theme="base16/tomorrow"] .hljs-type {
+    color: #8959a8
+}
+
+[theme="base16/tomorrow"] .hljs-emphasis {
+    color: #8959a8;
+    font-style: italic
+}
+
+[theme="base16/tomorrow"] .hljs-meta,
+[theme="base16/tomorrow"] .hljs-meta .hljs-keyword,
+[theme="base16/tomorrow"] .hljs-meta .hljs-string {
+    color: #a3685a
+}
+
+[theme="base16/tomorrow"] .hljs-meta .hljs-keyword,
+[theme="base16/tomorrow"] .hljs-meta-keyword {
+    font-weight: 700
+}
