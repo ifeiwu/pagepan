@@ -84,12 +84,6 @@ class Index
             }
         }
 
-//        $excludes = ['admin', 'api', 'assets', 'data', 'imgph'];
-//        $match = (bool) array_filter($excludes, fn($prefix) => str_starts_with($path, $prefix));
-//        if ($match) {
-//            throw new DatastarAlertException("页面路径「{$path}」为系统保留路径，请更换其他路径。");
-//        }
-
         if ($path && !preg_match('#\A[a-zA-Z0-9][a-zA-Z0-9/_-]*\z#', $path)) {
             throw new DatastarAlertException('页面路径格式不正确');
         }

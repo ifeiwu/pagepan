@@ -39,7 +39,8 @@
     "jasongrimes/paginator": "^1.0",
     "illuminate/pagination": "^13.38",
     "chrome-php/chrome": "^1.16",
-    "revolt/event-loop": "^1.0"
+    "revolt/event-loop": "^1.0",
+    "workerman/http-client": "^3.1"
   },
   "suggest": {
     "ext-event": "For better performance. "

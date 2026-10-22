@@ -15,11 +15,7 @@
 use Webman\Route;
 use support\Request;
 
-Route::get('/test-chrome', function () {
-    return response('OK');
-});
-
-Route::any('/imgph', [app\controller\Imgph::class, 'index']);
+Route::any('/imgph/bg', [app\controller\Imgph::class, 'bg']);
 
 $exclude = 'admin|api|assets|data';
 
@@ -66,7 +62,11 @@ Route::group('/{path:(?!(?:' . $exclude . ')(?:/|$))(?!.*\.[^/]+$).*}', function
                 $page->path = 'index';
             }
         }
-var_dump($path);
+
+        if (!$page) {
+            return not_found();
+        }
+
         $page_path = "page/{$page->path}";
         $page_file = app_path("view/{$page_path}.phtml");
         if (!is_file($page_file)) {

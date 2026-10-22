@@ -52,7 +52,7 @@ define(['split', 'vs/editor/editor.main'], function (Split) {
                 iframe.contentWindow.location.reload();
                 if (res.data) {
                     iframe_loading = true;
-                    editor.setValue(res.data);
+                    editor.setValue(htmlentities_decode(res.data));
                 }
             } else {
                 alert(res.message);
@@ -98,10 +98,24 @@ define(['split', 'vs/editor/editor.main'], function (Split) {
         return blocks;
     }
 
+    // 字符转换为 HTML 实体
+    function htmlentities_encode(str) {
+        let textarea = document.createElement('textarea')
+        textarea.innerHTML = str
+        return textarea.innerHTML
+    }
+
+    // 实体转换为 HTML 字符
+    function htmlentities_decode(str) {
+        let textarea = document.createElement('textarea')
+        textarea.innerHTML = str
+        return textarea.value
+    }
+
     // 初始化代码编辑器内容
     $.get('/admin/builder/page-block/page-code', {'page_id': appVar.page.id}, function (res) {
         if (res.code === 0) {
-            editor.setValue(res.data);
+            editor.setValue(htmlentities_decode(res.data));
         } else {
             editor.updateOptions({readOnly: true});
             editor_readonly_message = res.message

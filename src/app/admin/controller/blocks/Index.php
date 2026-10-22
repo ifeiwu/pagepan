@@ -6,10 +6,11 @@ use app\exception\DatastarAlertException;
 use CzProject\GitPhp\Git;
 use support\Db;
 use support\Request;
+use support\Response;
 
 class Index
 {
-    public function modal(Request $request)
+    public function modal(Request $request): void
     {
         $repos = db()->table('git_repo')->get();
 
@@ -23,7 +24,8 @@ class Index
         $ds->close();
     }
 
-    public function image(Request $request) {
+    public function image(Request $request): Response
+    {
         $repo = get('repo', 'text');
         $path = get('path', 'text');
         $file_path = storage_path("blocks/$repo/$path/cover.webp");

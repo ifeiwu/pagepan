@@ -3,19 +3,20 @@
 namespace app\controller;
 
 use support\Request;
+use support\Response;
 
 class Imgph
 {
     /**
      * 生成图片占位符
-     * <img src="/imgph?w=500&h=500&fill=000&color=fff&size=20">
+     * <img src="/imgph/bg?w=500&h=500&fill=000&color=fff&size=20">
      */
-    public function index(Request $request)
+    public function bg(Request $request): Response
     {
         $width = $request->get('w');
         $height = $request->get('h');
-        $fill = $request->get('fill') ?: 'E9E9F7';
-        $color = $request->get('color') ?: 'b7b7e1';
+        $fill = $request->get('fill') ?: 'd6dff4';
+        $color = $request->get('color') ?: '9aabd6';
         $size = $request->get('size');
         $text = $request->get('text');
         $text = $text ?? $width . ' x ' . $height;
