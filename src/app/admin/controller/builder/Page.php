@@ -5,6 +5,7 @@ namespace app\admin\controller\builder;
 use support\FileSystem;
 use support\Request;
 use support\Response;
+use Workerman\Timer;
 
 class Page
 {
@@ -53,12 +54,14 @@ class Page
 
     private function buildBlock()
     {
+        Timer::sleep(3);
+
         $block_code = file_get_contents(app_path("view/page/index.phtml"));
         $webp_code = file_get_contents(storage_path("page/screenshot/index.webp"));
 
         $http = new \Workerman\Http\Client();
         $response = $http->post('https://www.test/pagepan-blocks/build.php', [
-            'path' => 'grid/001',
+            'path' => 'grid/022',
             'block_code' => $block_code,
             'webp_code' => $webp_code,
         ]);
