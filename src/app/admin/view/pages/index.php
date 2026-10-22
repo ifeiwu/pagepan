@@ -58,4 +58,4 @@
 
 <template id="EditDialog"></template>
 <!--<template id="BlocksModal" data-init="@get('/admin/blocks/modal')"></template>-->
-<template id="BuilderDialog" data-init="@get('/admin/builder/dialog?id=1')"></template>
+<!--<template id="BuilderDialog" data-init="@get('/admin/builder/dialog?id=1')"></template>-->

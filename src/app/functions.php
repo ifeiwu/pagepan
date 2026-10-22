@@ -53,6 +53,27 @@ function queue($name, $data = [], $delay = 0)
     \Webman\RedisQueue\Client::send($name, $data, $delay);
 }
 
+// 运行 PHP CLI 脚本
+function run_script(string $filename, ...$args): array
+{
+    $script = base_path("scripts/$filename");
+
+    $command = escapeshellarg(PHP_BINARY) . ' '
+        . escapeshellarg($script);
+
+    foreach ($args as $arg) {
+        $command .= ' ' . escapeshellarg((string) $arg);
+    }
+
+    if (PHP_OS_FAMILY === 'Windows') {
+        pclose(popen('start "" /B ' . $command . ' > NUL 2>&1', 'r'));
+    } else {
+        exec($command . ' > /dev/null 2>&1 &');
+    }
+
+    return $args;
+}
+
 // 购物车
 function cart()
 {

@@ -2,6 +2,9 @@
 
 namespace support;
 
+use Exception;
+use Throwable;
+
 /**
  * https://github.com/thephpleague/plates
  */
@@ -89,11 +92,11 @@ class View2
 
     /**
      * 设置模板数据
-     * @param string $name
+     * @param string|array $name
      * @param mixed $value
      * @return void
      */
-    public function assign(string $name, mixed $value): void
+    public function assign(string|array $name, mixed $value): void
     {
         if (is_array($name)) {
             $this->data = array_merge($this->data, $name);
@@ -128,7 +131,7 @@ class View2
             })("{$this->basePath}/{$name}{$this->extname}");
 
             return ob_get_clean();
-        } catch (\Throwable $ex) {
+        } catch (Throwable $ex) {
             while (ob_get_level()) ob_end_clean();
             throw $ex;
         }
@@ -155,7 +158,7 @@ class View2
             })($content);
 
             return ob_get_clean();
-        } catch (\Throwable $ex) {
+        } catch (Throwable $ex) {
             while (ob_get_level()) ob_end_clean();
             throw $ex;
         }
@@ -178,7 +181,7 @@ class View2
      * @param mixed $name
      * @param array $data
      * @return Response
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function display(mixed $name, array $data = []): Response
     {
@@ -254,6 +257,7 @@ class View2
      * @param string $name
      * @param array $data
      * @return false|string
+     * @throws Throwable
      */
     public function fetch(string $name, array $data = []): bool|string
     {
@@ -265,6 +269,7 @@ class View2
      * @param string $name
      * @param array $data
      * @return void
+     * @throws Throwable
      */
     public function insert(string $name, array $data = []): void
     {
@@ -285,7 +290,7 @@ class View2
      * @param mixed $var
      * @param string $functions
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function batch(mixed $var, string $functions): mixed
     {
@@ -293,7 +298,7 @@ class View2
             if (is_callable($function)) {
                 $var = call_user_func($function, $var);
             } else {
-                throw new \Exception('The batch function could not find the "' . $function . '" function.');
+                throw new Exception('The batch function could not find the "' . $function . '" function.');
             }
         }
 
@@ -305,7 +310,7 @@ class View2
      * @param string $string
      * @param string|null $functions
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function escape(string $string, string $functions = null): string
     {
@@ -321,7 +326,7 @@ class View2
      * @param string $string
      * @param string|null $functions
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function e(string $string, string $functions = null): string
     {

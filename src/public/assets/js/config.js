@@ -1,9 +1,8 @@
 require.config({
-    baseUrl: '/assets/js/lib',
+    baseUrl: '/assets/lib',
     paths: {
-        app: '../app',
-        util: '../util',
-        lib: '../lib',
+        app: '../js/app',
+        util: '../js/util',
         data: '../../../data',
         plyr: 'plyr/plyr',
         video: 'video/video',

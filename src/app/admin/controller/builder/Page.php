@@ -2,15 +2,14 @@
 
 namespace app\admin\controller\builder;
 
-use HeadlessChromium\BrowserFactory;
+use support\FileSystem;
 use support\Request;
-use Workerman\Coroutine;
-use Workerman\Timer;
+use support\Response;
 
 class Page
 {
     // 保存代码到文件
-    public function publish(Request $request)
+    public function publish(Request $request): Response
     {
         $db = db();
 
@@ -34,52 +33,21 @@ class Page
         $content = preg_replace('/<delete-test-block\b[^>]*>.*?<\/delete-test-block>/s', '', $content);
 
         $file = app_path("view/page/{$page_path}.phtml");
-        if (file_put_contents($file, $content) === false) {
-            return json_error('保存页面文件失败');
+        if (FileSystem::rmkdir($file)) {
+            if (file_put_contents($file, $content) === false) {
+                return json_error('保存页面文件失败');
+            }
+        } else {
+            return json_error("创建目录失败：$page_path");
         }
 
         return json_success('ok');
     }
 
-    public function screenshot()
+    public function screenshot(Request $request): Response
     {
-        $path = public_path('bar.png');
-        $browser = null;
+        $host = $request->header('x-forwarded-proto') . '://' . $request->host();
 
-        try {
-            $browser = (new BrowserFactory())->createBrowser([
-                'headless' => true
-            ]);
-
-            $page = $browser->createPage();
-
-            $page->navigate('http://192.168.31.5:8008');
-
-            Timer::sleep(0.1);
-
-            $deadline = microtime(true) + 15;
-            do {
-                $state = $page->evaluate('document.readyState')->getReturnValue();
-                if ($state === 'complete') {
-                    break;
-                }
-                Timer::sleep(0.1);
-            } while (microtime(true) < $deadline);
-
-            $page->screenshot()->saveToFile($path);
-
-            return json([
-                'path' => $path,
-                'exists' => is_file($path),
-                'size' => is_file($path) ? filesize($path) : 0,
-            ]);
-        } catch (\Throwable $e) {
-            return json([
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-        } finally {
-            $browser?->close();
-        }
+        return json(run_script('screenshot.php', $host, 'test/index'));
     }
 }

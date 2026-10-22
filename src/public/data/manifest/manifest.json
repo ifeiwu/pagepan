@@ -1,0 +1,21 @@
+{
+    "name": "石棉酷店",
+    "short_name": "酷店",
+    "start_url": "/shop",
+    "theme_color": "#EF6944",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "oriention": "landscape",
+    "icons": [
+        {
+            "src": "icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

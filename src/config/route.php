@@ -21,7 +21,9 @@ Route::get('/test-chrome', function () {
 
 Route::any('/imgph', [app\controller\Imgph::class, 'index']);
 
-Route::group('/{path:(?!admin(?:/|$)|shop(?:/|$)).*}', function () {
+$exclude = 'admin|api|assets|data';
+
+Route::group('/{path:(?!(?:' . $exclude . ')(?:/|$))(?!.*\.[^/]+$).*}', function () {
 
     Route::any('/id/{id:\d+}', function (Request $request, $id) {
         return response('id/'.$id);
@@ -64,9 +66,10 @@ Route::group('/{path:(?!admin(?:/|$)|shop(?:/|$)).*}', function () {
                 $page->path = 'index';
             }
         }
-
+var_dump($path);
         $page_path = "page/{$page->path}";
-        if (!is_file(app_path("view/{$page_path}.phtml"))) {
+        $page_file = app_path("view/{$page_path}.phtml");
+        if (!is_file($page_file)) {
             if ($request->expectsJson()) {
                 return json(['code' => 404, 'msg' => '404 not found']);
             }

@@ -6,10 +6,11 @@ use app\exception\DatastarAlertException;
 use app\exception\DatastarToastException;
 use HeadlessChromium\BrowserFactory;
 use support\Request;
+use support\Response;
 
 class Index
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $page_count = db()->table('page')->count();
 
@@ -18,7 +19,7 @@ class Index
         ]);
     }
 
-    public function query(Request $request)
+    public function query(Request $request): void
     {
         $items = db()->table('page')
             ->orderByRaw("INSTR(',guide,home,dataset,inside,graphic,pro,layout,404,', ',' || type || ',')")
@@ -33,7 +34,7 @@ class Index
         $ds->close();
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request): void
     {
         $id = get('id', 'int');
 
@@ -64,22 +65,32 @@ class Index
         $ds->close();
     }
 
-    public function save(Request $request)
+    public function save(Request $request): void
     {
         $id = post('id', 'int');
+        $path = post('path', 'text', '') ?: 'index';
         $row = [
             'state' => post('state', 'text', 0),
             'type' => post('type', 'alnum', 'home'),
             'layout' => post('layout', 'text', ''),
             'title' => post('title', 'text', '页面名称'),
-            'path' => post('path', 'text', '') ?: 'index',
+            'path' => $path,
         ];
 
-        if (in_array($row['path'], ['admin', 'api', 'imgph'])) {
-            throw new DatastarAlertException("页面路径「{$row['path']}」为系统保留路径，请更换其他路径。");
+        $excludes = ['admin', 'api', 'imgph', 'assets', 'data'];
+        foreach ($excludes as $prefix) {
+            if ($path === $prefix || str_starts_with($path, $prefix . '/')) {
+                throw new DatastarAlertException("页面路径「{$path}」为系统保留路径，请更换其他路径。");
+            }
         }
 
-        if ($row['path'] && !preg_match('#\A[a-zA-Z0-9][a-zA-Z0-9/_-]*\z#', $row['path'])) {
+//        $excludes = ['admin', 'api', 'assets', 'data', 'imgph'];
+//        $match = (bool) array_filter($excludes, fn($prefix) => str_starts_with($path, $prefix));
+//        if ($match) {
+//            throw new DatastarAlertException("页面路径「{$path}」为系统保留路径，请更换其他路径。");
+//        }
+
+        if ($path && !preg_match('#\A[a-zA-Z0-9][a-zA-Z0-9/_-]*\z#', $path)) {
             throw new DatastarAlertException('页面路径格式不正确');
         }
 
@@ -90,9 +101,9 @@ class Index
             $target = "#page_$id";
             $action = 'replace';
         } else {
-            $page = $db->table('page')->where('path', $row['path'])->first(['title', 'path']);
+            $page = $db->table('page')->where('path', $path)->first(['title', 'path']);
             if ($page) {
-                throw new DatastarAlertException("路径 {$row['path']} 已被「{$page->title}」页面占用，请更换其它路径。");
+                throw new DatastarAlertException("路径 {$path} 已被「{$page->title}」页面占用，请更换其它路径。");
             }
             $id = $db->table('page')->insertGetId($row);
             $target = '#pages';
@@ -108,7 +119,8 @@ class Index
         $ds->close();
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request): void
+    {
         $id = get('id', 'int');
 
         if (db()->table('page')->where('id', $id)->delete()) {

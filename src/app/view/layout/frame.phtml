@@ -5,7 +5,6 @@ $theme_screen = $theme['screen'];
 <!DOCTYPE html>
 <html lang="<?=$theme['base']['lang']?>" class="-<?=str_replace('/', '-', $this->pagevar['page_path'] ?: 'index')?>">
 <head>
-    <base href="<?=$this->pagevar['root_url']?>">
     <meta charset="utf-8">
     <meta name="renderer" content="webkit">
     <meta name="force-rendering" content="webkit">
@@ -26,18 +25,16 @@ $theme_screen = $theme['screen'];
     <?php
     // 网站图标
     if ($this->site['favicon'] ?? '') {
-        echo '<link rel="icon" href="' . $this->site['favicon'] . '">';
+        echo '<link rel="icon" href="/' . $this->site['favicon'] . '">';
     }
     // 应用图标
     if ($this->site['touchicon'] ?? '') {
-        echo '<link rel="apple-touch-icon" href="' . $this->site['touchicon'] . '">';
+        echo '<link rel="apple-touch-icon" href="/' . $this->site['touchicon'] . '">';
     }
     // 应用清单
     if ($this->site['manifest'] ?? '') {
-        echo '<link rel="manifest" href="data/manifest/manifest.json?' . $this->site['timestamp'] . '">';
+        echo '<link rel="manifest" href="/data/manifest/manifest.json?' . $this->site['timestamp'] . '">';
     }
-    // 样式文件
-    echo '<link href="/assets/css/pagepan.css" rel="stylesheet">';
     // 自定义字体
     $site_fonts_list = $this->site['fonts_list'] ?? [];
     if ($site_fonts_list) {
@@ -67,8 +64,8 @@ $theme_screen = $theme['screen'];
     <script src="https://cdn.jsdmirror.com/npm/@tailwindcss/browser@4"></script>
     <script src="/assets/js/require.js"></script>
     <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/lib/jquery.js"></script>
-    <script src="/assets/js/app/main.js"></script>
+    <script src="/assets/lib/jquery.js"></script>
+    <script src="/assets/js/main.js"></script>
 </head>
 <body>
     <?php
