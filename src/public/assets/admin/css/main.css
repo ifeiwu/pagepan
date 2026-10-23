@@ -8,6 +8,8 @@
 :root {
     --ui-primary-light: #111111;
     --ui-primary-dark: #ffffff;
+    --ui-neutral-light: #919191;
+    --ui-neutral-dark: #8b8b8b;
     --ui-rounded-scale: 0.5;
 
     --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
@@ -67,6 +69,17 @@ iframe {
     [data-tooltip][aria-label]:not(input,select,textarea) {
         &:before {
             font-size: 0.8125rem;
+        }
+    }
+
+    .pagination {
+        & ul {
+            gap: var(--ui-spacing-1);
+        }
+        & button,& .button {
+            &[aria-current=page] {
+                background-color: var(--ui-primary-100) !important;
+            }
         }
     }
 }

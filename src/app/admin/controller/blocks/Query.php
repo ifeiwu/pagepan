@@ -7,31 +7,37 @@ use support\Request;
 
 class Query
 {
-    public function index(Request $request)
+    public function index(Request $request): void
     {
         $ds = datastar();
         $db = db();
-        $perpage = 2;
+
+        $perpage = 10;
         $pagenum = post('pagenum', 'int', 1);
         $pagenum = $pagenum > 0 ? $pagenum : 1;
-        $fields = '*';
-        $sort = '-created';
-        $filter = "";
+        $repo_path = post('repo', 'text');
+
+        $repo_id = $db->table('git_repo')->where('path', $repo_path)->value('id');
+        $db_block = $db->table('git_block')->where('repo_id', $repo_id);
 
         // 关键字搜索
         $kword = filter(post('kword'), 'keyword');
         if ($kword) {
-            $filter .= " && (title~'$kword' || subtitle~'$kword' || keywords~'$kword')";
+            $db_block->where(function($query) use ($kword) {
+                $query->orWhere('name', 'like', '%' . $kword . '%');
+                $query->orWhere('keywords', 'like', '%' . $kword . '%');
+                $query->orWhere('description', 'like', '%' . $kword . '%');
+            });
         }
 
         $category = post('category');
         if ($category) {
-            $filter .= " && category_id = '$category'";
+            $db_block->where('category', $category);
         }
 
-        $gitblock = $db->table('git_block')->paginate($perpage);
-        $items = $gitblock->items();
-        $total = $gitblock->total();
+        $git_block = $db_block->paginate($perpage, '*', 'page', $pagenum);
+        $items = $git_block->items();
+        $total = $git_block->total();
 
         $ds->signals(['total' => $total]);
 
@@ -52,28 +58,35 @@ class Query
     {
         $paginator = new Paginator($totalItems, $itemsPerPage, $currentPage);
         $paginator->setMaxPagesToShow(5);
-        var_dump($paginator->getNumPages());
+
         if ($paginator->getNumPages() <= 1) {
             return '';
         }
 
         $html = '<ul>';
+
         if ($paginator->getPrevPage()) {
-            $html .= '<li class="prev"><a href="#" data-on:click="$pagenum--">上一页</a></li>';
+            $html .= '<li class="prev"><a href="#" class="button ghost" data-on:click="$pagenum--">上一页</a></li>';
+        } else {
+            $html .= '<li class="prev"><a href="#" class="button ghost" aria-disabled="true">上一页</a></li>';
         }
 
         foreach ($paginator->getPages() as $page) {
             $num = $page['num'];
             if (is_int($num)) {
-                $html .= '<li' . ($page['isCurrent'] ? ' class="active"' : '') . '><a href="#" data-on:click="$pagenum=' . $num . '">' . $num . '</a></li>';
+                $current_attr = $page['isCurrent'] ? 'aria-current="page"' : '';
+                $html .= '<li><a href="#" class="button ghost" data-on:click="$pagenum=' . $num . '" ' . $current_attr . '>' . $num . '</a></li>';
             } else {
-                $html .= '<li class="disabled"><span>' . $num . '</span></li>';
+                $html .= '<li><span>' . $num . '</span></li>';
             }
         }
 
         if ($paginator->getNextPage()) {
-            $html .= '<li class="next"><a href="#" data-on:click="$pagenum++">下一页</a></li>';
+            $html .= '<li class="next"><a href="#" class="button ghost" data-on:click="$pagenum++">下一页</a></li>';
+        } else {
+            $html .= '<li class="next"><a href="#" class="button ghost" aria-disabled="true">下一页</a></li>';
         }
+
         $html .= '</ul>';
 
         return $html;

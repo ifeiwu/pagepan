@@ -61,7 +61,7 @@ class Page
 
         $http = new \Workerman\Http\Client();
         $response = $http->post('https://www.test/pagepan-blocks/build.php', [
-            'path' => 'grid/022',
+            'path' => 'work/001',
             'block_code' => $block_code,
             'webp_code' => $webp_code,
         ]);

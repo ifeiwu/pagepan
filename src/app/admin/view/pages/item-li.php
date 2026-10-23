@@ -42,11 +42,11 @@ foreach ($this->items as $item):
                 <?php if ($state === 1):?>
                 <span class="badge bg:#32d296 f:white"><?=getTypeText($type)?></span>
                 <?php else:?>
-                <span class="badge bg:#faa05a f:white"><?=getTypeText($type)?></span>
+                <span class="badge bg:fade f:white"><?=getTypeText($type)?></span>
                 <?php endif;?>
 
                 <?php if ($layout):?>
-                    <span class="badge f:#c36922 f:12" style="--bg:white" aria-label="<?=$layout?>" data-tooltip="right">布局</span>
+                    <span class="badge bg:orange-94 f:orange f:12" style="--bg:white" aria-label="<?=$layout?>" data-tooltip="right">布局</span>
                 <?php endif;?>
             </div>
             <div class="ml:auto">
@@ -54,7 +54,7 @@ foreach ($this->items as $item):
                     <button class="ghost p:5" popovertarget="dropdown<?=$id?>">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis preview-icon"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
                     </button>
-                    <div id="dropdown<?=$id?>" popover>
+                    <div id="dropdown<?=$id?>" popover data-placement="bottom right">
                         <menu>
                             <li>
                                 <button class="ghost" data-on:click="@get('/admin/pages/edit?id=<?=$id?>')">基本信息</button>
