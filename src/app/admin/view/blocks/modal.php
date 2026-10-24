@@ -4,6 +4,14 @@
         页面块管理
     </div>
 
+    <div id="my-toast" popover class="toast">
+        <article role="status">
+            <svg><!-- icon --></svg>
+            <strong>New features available</strong>
+            <p>Check out our latest updates including dark mode support.</p>
+        </article>
+    </div>
+
     <div class="flex gap:10 p:15 r:10 bg:gray-88">
         <div class="flex-grow:1">
             <label class="field">
@@ -39,6 +47,7 @@
     </div>
 
     <form id="searchForm"
+          data-signals="{pagenum:0}"
           data-indicator:fetching
           data-on:submit__delay.0ms="items.innerHTML='';@post('/admin/blocks/query',{contentType:'form'})">
         <input type="hidden" name="pagenum" data-bind:pagenum>

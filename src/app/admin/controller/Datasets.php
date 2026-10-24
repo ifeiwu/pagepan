@@ -19,7 +19,7 @@ class Datasets
 
         $ds = datastar();
         $items = db()->table('dataset')->get()->toArray();
-        $lis = view2()->fetch('datasets/menu-li', ['id' => $id, 'items' => $items]);
+        $lis = view2()->render('datasets/menu-li', ['id' => $id, 'items' => $items]);
         $ds->inner($lis, '#menus');
 
         $ds->close();
@@ -34,7 +34,7 @@ class Datasets
         if ($id) {
             $dataset = db()->table('dataset')->where("id", '=', $id)->first();
             $items = db()->table("item_$id")->orderByDesc('sortby')->orderByDesc('ctime')->get()->toArray();
-            $lis = view2()->fetch('datasets/items', ['items' => $items]);
+            $lis = view2()->render('datasets/items', ['items' => $items]);
             $ds->append($lis, '#items');
         }
 

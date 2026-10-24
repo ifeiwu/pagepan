@@ -14,7 +14,7 @@ class Index
     {
         $repos = db()->table('git_repo')->get();
 
-        $html = view2()->fetch('blocks/modal', [
+        $html = view2()->render('blocks/modal', [
             'repos' => $repos
         ]);
 
@@ -28,12 +28,29 @@ class Index
     {
         $repo = get('repo', 'text');
         $path = get('path', 'text');
-        $file_path = storage_path("blocks/$repo/$path/cover.webp");
+        $file_path = storage_path("repository/$repo/$path/cover.webp");
 
         if (!is_file($file_path)) {
             return response('Not Found', 404);
         }
 
         return response(file_get_contents($file_path))->withHeader('Content-Type', mime_content_type($file_path));
+    }
+
+    public function copyCode(Request $request): void
+    {
+        $repo = get('repo', 'text');
+        $path = get('path', 'text');
+        $file_path = storage_path("repository/$repo/$path/block.php");
+
+        if (!is_file($file_path)) {
+            throw new DatastarAlertException('找不到文件');
+        }
+
+        $content = file_get_contents($file_path);
+
+        $ds = datastar();
+        $ds->script("copyTextToClipboard(`{$content}`);");
+        $ds->close();
     }
 }

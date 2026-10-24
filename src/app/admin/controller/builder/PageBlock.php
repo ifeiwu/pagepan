@@ -112,7 +112,7 @@ class PageBlock
             }
 
             if ($path) {
-                $block_file = storage_path("blocks/ifeiwu/pagepan-blocks/$path/block.php");
+                $block_file = storage_path("repository/ifeiwu/pagepan-blocks/$path/block.php");
                 if (is_file($block_file)) {
                     $content = file_get_contents($block_file);
                     var_dump($content);
@@ -170,7 +170,7 @@ class PageBlock
             $setting = $node->getAttribute('data-block-setting');
 
             if ($type && $path) {
-                $block_file = storage_path("blocks/$path/code.php");
+                $block_file = storage_path("repository/$path/code.php");
                 if (is_file($block_file)) {
                     $content = file_get_contents($block_file);
                 }

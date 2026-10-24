@@ -21,9 +21,9 @@ class View2
     protected array $data = [];
 
     /**
-     * @var string 模板扩展名称
+     * @var string 模板扩展名
      */
-    protected string $extname = '.php';
+    protected string $extensionName = '.php';
 
     /**
      * @var string 模板布局名称
@@ -70,24 +70,24 @@ class View2
         $this->basePath = $path ?: multi_app_path('view');
     }
 
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        return $this->data[$name];
+        return $this->data[$name] ?? null;
     }
 
-    public function __set(string $name, mixed $value)
+    public function __set(string $name, mixed $value): void
     {
         $this->data[$name] = $value;
     }
 
     /**
-     * 设置模板扩展名称
+     * 设置模板扩展名
      * @param string $value
      * @return void
      */
-    public function setExtname(string $value): void
+    public function setExtensionName(string $value): void
     {
-        $this->extname = $value;
+        $this->extensionName = $value;
     }
 
     /**
@@ -96,72 +96,96 @@ class View2
      * @param mixed $value
      * @return void
      */
-    public function assign(string|array $name, mixed $value): void
+    public function assign(string|array $name, mixed $value = null): void
     {
         if (is_array($name)) {
             $this->data = array_merge($this->data, $name);
+        } elseif (str_contains($name, '.')) {
+            [$name1, $name2] = explode('.', $name, 2);
+            $this->data[$name1] = is_array($this->data[$name1] ?? null)
+                ? $this->data[$name1]
+                : [];
+            $this->data[$name1][$name2] = $value;
         } else {
-            if (strpos($name, '.')) {
-                list($name1, $name2) = explode('.', $name, 2);
-                $this->data[$name1][$name2] = $value;
-            } else {
-                $this->data[$name] = $value;
-            }
+            $this->data[$name] = $value;
         }
+    }
+
+    /**
+     * 获取渲染的组件内容
+     * @param string $repository 仓库名称
+     * @param string $component 组件名称
+     * @param array $data 模板数据
+     * @return string
+     */
+    public function component(string $repository, string $component, array $data = []): string
+    {
+        return $this->renderFile(
+            storage_path("repository/{$repository}/@components/{$component}.php"),
+            $data
+        );
+    }
+
+    /**
+     * 获取指定路径的模板内容
+     * @param string $file 完整的文件路径
+     * @param array $data 模板数据
+     * @return string
+     * @throws Throwable
+     */
+    public function fetch(string $file, array $data = []): string
+    {
+        return $this->renderFile($file, $data);
     }
 
     /**
      * 获取模板内容
      * @param string $name 模板名称
      * @param array $data 模板数据
-     * @return false|string
+     * @return string
+     * @throws Throwable
      */
-    public function render(string $name, array $data = []): bool|string
+    public function render(string $name, array $data = []): string
     {
-        if (!empty($data)) {
+        return $this->renderFile(
+            "{$this->basePath}/{$name}{$this->extensionName}",
+            $data
+        );
+    }
+
+    private function renderFile(string $file, array $data = []): string
+    {
+        if ($data) {
             $this->data = array_merge($this->data, $data);
         }
 
-        try {
-            ob_start();
-
-            (function () {
-                extract($this->data, EXTR_OVERWRITE);
-                include func_get_arg(0);
-            })("{$this->basePath}/{$name}{$this->extname}");
-
-            return ob_get_clean();
-        } catch (Throwable $ex) {
-            while (ob_get_level()) ob_end_clean();
-            throw $ex;
-        }
+        return $this->capture(function () use ($file) {
+            (function ($file, $data) {
+                extract($data, EXTR_SKIP);
+                include $file;
+            })($file, $this->data);
+        });
     }
 
     /**
      * 获取解析的内容
      * @param string $content
      * @param array $data
-     * @return false|string
+     * @return string
+     * @throws Throwable
      */
-    public function parse(string $content, array $data = []): bool|string
+    public function parse(string $content, array $data = []): string
     {
-        if (!empty($data)) {
+        if ($data) {
             $this->data = array_merge($this->data, $data);
         }
 
-        try {
-            ob_start();
-
-            (function () {
-                extract($this->data, EXTR_OVERWRITE);
-                eval('?>' . func_get_arg(0));
-            })($content);
-
-            return ob_get_clean();
-        } catch (Throwable $ex) {
-            while (ob_get_level()) ob_end_clean();
-            throw $ex;
-        }
+        return $this->capture(function () use ($content) {
+            (function ($content, $data) {
+                extract($data, EXTR_OVERWRITE);
+                eval('?>' . $content);
+            })($content, $this->data);
+        });
     }
 
     /**
@@ -185,15 +209,9 @@ class View2
      */
     public function display(mixed $name, array $data = []): Response
     {
-        $content = '';
-
-        if (is_string($name)) {
-            $content = $this->render($name, $data);
-        } elseif (is_callable($name)) {
-            ob_start();
-            $name($this);
-            $content = ob_get_clean();
-        }
+        $content = is_string($name)
+            ? $this->render($name, $data)
+            : (is_callable($name) ? $this->capture(fn() => $name($this)) : '');
 
         if ($this->layoutName) {
             $this->addSection('content', $content);
@@ -253,18 +271,6 @@ class View2
     }
 
     /**
-     * 获取模板内容
-     * @param string $name
-     * @param array $data
-     * @return false|string
-     * @throws Throwable
-     */
-    public function fetch(string $name, array $data = []): bool|string
-    {
-        return $this->render($name, $data);
-    }
-
-    /**
      * 页面插入模板内容
      * @param string $name
      * @param array $data
@@ -275,6 +281,30 @@ class View2
     {
         echo $this->render($name, $data);
     }
+
+    /**
+     * 输出缓冲区
+     * @param callable $callback
+     * @return string
+     * @throws Throwable
+     */
+    private function capture(callable $callback): string
+    {
+        $level = ob_get_level();
+        ob_start();
+
+        try {
+            $callback();
+            return ob_get_clean();
+        } catch (Throwable $ex) {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+
+            throw $ex;
+        }
+    }
+
 
     /**
      * @param string $url
@@ -295,11 +325,11 @@ class View2
     public function batch(mixed $var, string $functions): mixed
     {
         foreach (explode('|', $functions) as $function) {
-            if (is_callable($function)) {
-                $var = call_user_func($function, $var);
-            } else {
-                throw new Exception('The batch function could not find the "' . $function . '" function.');
+            if (!is_callable($function)) {
+                throw new Exception("The batch function could not find the \"{$function}\" function.");
             }
+
+            $var = $function($var);
         }
 
         return $var;
@@ -312,7 +342,7 @@ class View2
      * @return string
      * @throws Exception
      */
-    public function escape(string $string, string $functions = null): string
+    public function escape(string $string, ?string $functions = null): string
     {
         if ($functions) {
             $string = $this->batch($string, $functions);
@@ -328,7 +358,7 @@ class View2
      * @return string
      * @throws Exception
      */
-    public function e(string $string, string $functions = null): string
+    public function e(string $string, ?string $functions = null): string
     {
         return $this->escape($string, $functions);
     }

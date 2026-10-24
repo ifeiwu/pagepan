@@ -77,7 +77,7 @@ Route::group('/{path:(?!(?:' . $exclude . ')(?:/|$))(?!.*\.[^/]+$).*}', function
         }
 
         $view = view2();
-        $view->setExtname('.phtml');
+        $view->setExtensionName('.phtml');
 
         // 站点信息
         $site_list = $db->table('site')->where('state', 1)->get();

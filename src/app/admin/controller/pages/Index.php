@@ -27,7 +27,7 @@ class Index
             ->get();
 
         $ds = datastar();
-        $html = view2()->fetch('pages/item-li', [
+        $html = view2()->render('pages/item-li', [
             'items' => $items
         ]);
         $ds->append($html, '#pages');
@@ -54,7 +54,7 @@ class Index
             ->where('type', 'layout')
             ->get(['path', 'title']);
 
-        $html = view2()->fetch('pages/edit', [
+        $html = view2()->render('pages/edit', [
             'page' => $page,
             'layouts' => $layouts,
         ]);
@@ -105,7 +105,7 @@ class Index
         }
 
         $page = $db->table('page')->where('id', $id)->first();
-        $html = view2()->fetch('pages/item-li', ['items' => [$page]]);
+        $html = view2()->render('pages/item-li', ['items' => [$page]]);
 
         $ds = datastar();
         $ds->$action($html, $target);

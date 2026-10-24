@@ -15,7 +15,7 @@ class Repository
         $url = $request->post('url');
         $path = trim(parse_url($url, PHP_URL_PATH), '/');
         $path = preg_replace('/\.git$/', '', $path);
-        $save_path = storage_path("blocks/$path");
+        $save_path = storage_path("repository/$path");
 
         try {
             $git = new Git;
@@ -94,7 +94,7 @@ class Repository
     {
         $url = $request->post('url');
         $name = basename(parse_url($url, PHP_URL_PATH), '.git');
-        $path = storage_path("blocks/$name");
+        $path = storage_path("repository/$name");
 
         $git = new Git;
         if (!$git->isRemoteUrlReadable($url)) {

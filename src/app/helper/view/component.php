@@ -1,18 +1,23 @@
 <?php
-return function ($repo_path, $file_path, $data) {
+return function ($repo_path, $component_path, $data) {
+
+    $file = storage_path("blocks/{$repo_path}/@components/{$component_path}.php");
+
+    if (!is_file($file)) {
+        throw new RuntimeException("Component file not found: {$file}");
+    }
+
+    ob_start();
+
     try {
-        $file = storage_path('blocks/' . $repo_path . '/@components/' . $file_path . '.php');
-
-        ob_start();
-
-        (function () {
-            extract(func_get_arg(1), EXTR_OVERWRITE);
-            include func_get_arg(0);
+        (static function ($file, $data) {
+            extract($data, EXTR_OVERWRITE);
+            include $file;
         })($file, $data);
 
-        echo ob_get_clean();
+        return ob_get_clean();
     } catch (Throwable $ex) {
-        while (ob_get_level()) ob_end_clean();
+        ob_end_clean();
         throw $ex;
     }
 };

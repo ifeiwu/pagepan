@@ -47,7 +47,7 @@ class Query
             $ds->signals(['nodata' => true])->close();
         }
 
-        $html = view2()->fetch('blocks/item-li', ['items' => $items, 'repo' => post('repo', 'text')]);
+        $html = view2()->render('blocks/item-li', ['items' => $items, 'repo' => post('repo', 'text')]);
         $ds->inner($html, '#items');
         $ds->inner($this->getPaginatorHtml($total, $perpage, $pagenum), '#paginator');
 

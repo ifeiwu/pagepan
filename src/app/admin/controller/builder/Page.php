@@ -52,7 +52,7 @@ class Page
         return json_success('ok');
     }
 
-    private function buildBlock()
+    private function buildBlock(): void
     {
         Timer::sleep(3);
 

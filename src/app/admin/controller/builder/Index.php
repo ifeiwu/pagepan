@@ -18,7 +18,7 @@ class Index
         $id = $request->get('id');
         $ds = datastar();
 
-        $html = view2()->fetch('builder/dialog', [
+        $html = view2()->render('builder/dialog', [
             'id' => $id,
             'title' => ''
         ]);

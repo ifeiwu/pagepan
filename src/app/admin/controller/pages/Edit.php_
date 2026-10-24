@@ -23,7 +23,7 @@ class Edit
         $id = $request->get('id');
         $ds = datastar();
 
-        $html = view2()->fetch('pages/edit-dialog', [
+        $html = view2()->render('pages/edit-dialog', [
             'id' => $id,
             'title' => ''
         ]);

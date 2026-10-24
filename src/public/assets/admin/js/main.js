@@ -206,6 +206,14 @@ require(['toast'], function() {
     // toast.loading('Processing...')
 })
 
+const copyTextToClipboard = async (text) => {
+    try {
+        await navigator.clipboard.writeText(text);
+    } catch (error) {
+        alert('复制失败：' + error.message);
+    }
+};
+
 /*
 require(['overlayscrollbars'], function() {
     var {
