@@ -9,6 +9,24 @@ use support\Request;
 
 class Repository
 {
+    public function list(Request $request): void
+    {
+        $ds = datastar();
+        $db = db();
+
+        $repos = $db->table('git_repo')->get()->toArray();
+        $html = '';
+        foreach ($repos as $repo) {
+            $html .= '<option value="' . $repo->id . '">' . $repo->path . '</option>';
+        }
+        $ds->inner($html, '#repo_options');
+        $ds->signals(['repo_id' => $repos[0]->id]);
+        $ds->event('change', [], '[name="repo_id"]');
+        $ds->event('change', [], '[name="repo_id"]');
+
+        $ds->close();
+    }
+
     // 添加仓库
     public function add(Request $request)
     {

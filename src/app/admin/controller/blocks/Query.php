@@ -15,9 +15,9 @@ class Query
         $perpage = 10;
         $pagenum = post('pagenum', 'int', 1);
         $pagenum = $pagenum > 0 ? $pagenum : 1;
-        $repo_path = post('repo', 'text');
+        $repo_id = post('repo_id', 'int');
 
-        $repo_id = $db->table('git_repo')->where('path', $repo_path)->value('id');
+        $repo_path = $db->table('git_repo')->where('id', $repo_id)->value('path');
         $db_block = $db->table('git_block')->where('repo_id', $repo_id);
 
         // 关键字搜索
@@ -47,7 +47,7 @@ class Query
             $ds->signals(['nodata' => true])->close();
         }
 
-        $html = view2()->render('blocks/item-li', ['items' => $items, 'repo' => post('repo', 'text')]);
+        $html = view2()->render('blocks/item-li', ['items' => $items, 'repo_path' => $repo_path]);
         $ds->inner($html, '#items');
         $ds->inner($this->getPaginatorHtml($total, $perpage, $pagenum), '#paginator');
 

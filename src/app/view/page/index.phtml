@@ -2,35 +2,19 @@
 $config = array (
   'id' => 'p1b1',
   'type' => 'php',
-  'path' => 'work/001',
+  'path' => '',
   'setting' => 
   array (
-    'dataset.id' => '111',
-    'dataset.limit' => false,
-    'pagination.alias' => '01',
+    'repo.path' => 'ifeiwu/pagepan-blocks',
+    'gridlist.name' => '001',
   ),
 );?>
-<ul class="dataview grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-10 md:gap-y-4" data-markjs="">
+<div>
     <?php
     $db = db();
     $items = $db->table('dataset_item_3')->get();
-    var_dump($items);
+    $setting = $config['setting'];
+    echo $this->component($setting['repo.path'], "gridlist/{$setting['gridlist.name']}", ['items' => $items]);
     ?>
-    <li data-setting-prefix="dataview.col">
-        <a href="https://www.foscarini.com/" target="_blank" class="block">
-            <img src="https://uikit.pagepan.test/assets/number/d1/05/0.jpg" alt="Tite 2" loading="lazy">
-        </a>
-        <a href="https://www.foscarini.com/" target="_blank" class="block mt-6">
-            <h2 class="text-2xl font-bold text-center" data-setting-prefix="dataview.title">Tite 2</h2>
-        </a>
-    </li>
-    <li data-setting-prefix="dataview.col">
-        <a href="https://www.foscarini.com/" target="_blank" class="block">
-            <img src="https://uikit.pagepan.test/assets/number/d1/05/0.jpg" alt="Tite 2" loading="lazy">
-        </a>
-        <a href="https://www.foscarini.com/" target="_blank" class="block mt-6">
-            <h2 class="text-2xl font-bold text-center" data-setting-prefix="dataview.title">Tite 2</h2>
-        </a>
-    </li>
-</ul>
+</div>
 

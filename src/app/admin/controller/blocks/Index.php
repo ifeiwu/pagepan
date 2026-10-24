@@ -12,10 +12,10 @@ class Index
 {
     public function modal(Request $request): void
     {
-        $repos = db()->table('git_repo')->get();
+//        $repos = db()->table('git_repo')->get();
 
         $html = view2()->render('blocks/modal', [
-            'repos' => $repos
+//            'repos' => $repos
         ]);
 
         $ds = datastar();
@@ -37,6 +37,7 @@ class Index
         return response(file_get_contents($file_path))->withHeader('Content-Type', mime_content_type($file_path));
     }
 
+    // 复制内容块代码
     public function copyCode(Request $request): void
     {
         $repo = get('repo', 'text');

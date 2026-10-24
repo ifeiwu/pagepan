@@ -5,9 +5,9 @@ foreach ($this->items as $item):
     $dirname = $item->dirname;
 ?>
 <li>
-    <img src="<?="/admin/blocks/image?repo=$this->repo&path=$category/$dirname"?>" alt="">
+    <img src="<?="/admin/blocks/image?repo=$this->repo_path&path=$category/$dirname"?>" alt="">
     <div>
-        <button type="button" data-on:click="@get('<?="/admin/blocks/copy-code?repo=$this->repo&path=$category/$dirname"?>')">复制</button>
+        <button type="button" data-on:click="@get('<?="/admin/blocks/copy-code?repo=$this->repo_path&path=$category/$dirname"?>')">复制</button>
     </div>
 </li>
 <?php endforeach; ?>

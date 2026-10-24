@@ -11,9 +11,7 @@ class Category
         $ds = datastar();
         $db = db();
 
-        $repo_path = $ds->getSignals('repo');
-
-        $repo_id = $db->table('git_repo')->where('path', $repo_path)->value('id');
+        $repo_id = $ds->getSignals('repo_id');
         $categorys = $db->table('git_block')->where(['repo_id' => $repo_id])->groupBy('category')->pluck('category')->toArray();
 
         $html = '';
@@ -21,7 +19,7 @@ class Category
             $html .= '<option value="'.$category.'">'.$category.'</option>';
         }
 
-        $ds->replace($html, '#category_options');
+        $ds->inner($html, '#category_options');
         $ds->close();
     }
 }

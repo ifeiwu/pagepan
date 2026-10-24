@@ -15,14 +15,16 @@
     <div class="flex gap:10 p:15 r:10 bg:gray-88">
         <div class="flex-grow:1">
             <label class="field">
-                <select class="bg:white r:5" data-bind:repo>
+                <select name="repo_id" class="bg:white r:5"
+                        data-init="@get('/admin/blocks/repository/list')"
+                        data-bind:repo_id
+                        data-on:change="$pagenum=1;$category='';$kword='';searchForm.requestSubmit();@get('/admin/blocks/category/list')">
                     <button type="button">
                         <selectedcontent></selectedcontent>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down preview-icon"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
-                    <?php foreach($this->repos as $repo):?>
-                        <option value="<?=$repo->path?>"><?=$repo->path?></option>
-                    <?php endforeach;?>
+                    <option value="">选择仓库</option>
+                    <div id="repo_options"></div>
                 </select>
             </label>
         </div>
@@ -34,7 +36,8 @@
             <dialog id="AddModal" closedby="any">
                 <article>
                     <form id="form" class="flex flex:col gap:15 mt:10 mb:20"
-                          data-on:submit="@post('/admin/blocks/repository/add',{contentType:'form'})">
+                          data-on:submit="@post('/admin/blocks/repository/add',{contentType:'form'})"
+                          data-on:update_repo="@get('/admin/blocks/repository/list')">
                         <input type="text" name="url" value="https://github.com/ifeiwu/pagepan-blocks.git" placeholder="https://" />
                     </form>
                     <form method="dialog" class="text:right">
@@ -51,7 +54,7 @@
           data-indicator:fetching
           data-on:submit__delay.0ms="items.innerHTML='';@post('/admin/blocks/query',{contentType:'form'})">
         <input type="hidden" name="pagenum" data-bind:pagenum>
-        <input type="hidden" name="repo" data-attr:value="$repo">
+        <input type="hidden" name="repo_id" data-attr:value="$repo_id">
         <div class="flex ai:center gap:20 mt:10 py:10 r:5">
             <div class="flex-grow:1">
                 <fieldset role="group">
@@ -65,7 +68,6 @@
             </div>
             <div class="ml:auto">
                 <select name="category"
-                        data-init="@get('/admin/blocks/category/list')"
                         data-bind:category
                         data-on:change="$pagenum=1;$kword='';searchForm.requestSubmit()">
                     <button type="button">
@@ -89,7 +91,6 @@
         <nav id="paginator" class="pagination flex jc:center"
              data-indicator="fetching"
              data-on-signal-patch-filter='{include:/^pagenum$/}'
-             data-on-signal-patch__debounce.200ms="searchForm.requestSubmit()"
-             data-init="$pagenum=1"></nav>
+             data-on-signal-patch__debounce.200ms="searchForm.requestSubmit()"></nav>
     </div>
 </ku-modal>
