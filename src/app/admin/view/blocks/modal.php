@@ -4,19 +4,14 @@
         页面块管理
     </div>
 
-    <div id="my-toast" popover class="toast">
-        <article role="status">
-            <svg><!-- icon --></svg>
-            <strong>New features available</strong>
-            <p>Check out our latest updates including dark mode support.</p>
-        </article>
-    </div>
-
     <div class="flex gap:10 p:15 r:10 bg:gray-88">
         <div class="flex-grow:1">
             <label class="field">
                 <select name="repo_id" class="bg:white r:5"
-                        data-init="@get('/admin/blocks/repository/list')"
+                        data-url="/admin/blocks/repository/list"
+                        data-init="@get(el.dataset.url)"
+                        data-on:reload="@get(el.dataset.url)"
+                        data-ref:repo
                         data-bind:repo_id
                         data-on:change="$pagenum=1;$category='';$kword='';searchForm.requestSubmit();@get('/admin/blocks/category/list')">
                     <button type="button">
@@ -29,16 +24,15 @@
             </label>
         </div>
         <div>
-            <button class="destructive">删除</button>
+            <button class="destructive" data-on:click="confirm(`确认要删除内容块仓库【${$repo.selectedOptions[0].textContent}】吗?`) && @get('/admin/blocks/repository/delete')">删除</button>
         </div>
         <div>
             <button class="color3" onclick="AddModal.showModal()">添加仓库</button>
             <dialog id="AddModal" closedby="any">
                 <article>
                     <form id="form" class="flex flex:col gap:15 mt:10 mb:20"
-                          data-on:submit="@post('/admin/blocks/repository/add',{contentType:'form'})"
-                          data-on:update_repo="@get('/admin/blocks/repository/list')">
-                        <input type="text" name="url" value="https://github.com/ifeiwu/pagepan-blocks.git" placeholder="https://" />
+                          data-on:submit="@post('/admin/blocks/repository/add',{contentType:'form'})">
+                        <input type="text" name="url" value="https://github.com/ifeiwu/example-blocks.git" placeholder="https://" />
                     </form>
                     <form method="dialog" class="text:right">
                         <button form="form">保存</button>

@@ -8,7 +8,7 @@ window.addEventListener('offline', () => toast.warning('当前无法连接网络
 const DataStarHelper = {
     // 触发自定义事件
     // data-on:event="$isSubmit=evt.detail.isSubmit"
-    event: function(selector, data = {}, event = 'myevent') {
+    event: function(selector, data = {}, event = 'event') {
         let el;
         if (typeof selector === 'string') {
             el = document.querySelector(selector);

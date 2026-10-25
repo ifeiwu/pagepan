@@ -28,27 +28,25 @@ class FileSystem
      */
     public static function rrmdir(string $dir): bool
     {
-        try {
-            if (is_dir($dir)) {
-                $files = scandir($dir);
+        if (is_link($dir) || is_file($dir)) {
+            return unlink($dir);
+        }
 
-                foreach ($files as $file) {
-                    if ($file != '.' && $file != '..') {
-                        // 递归删除目录和文件
-                        self::rrmdir("$dir/$file");
-                    }
-                }
+        if (!is_dir($dir)) {
+            return true;
+        }
 
-                rmdir($dir); // 删除空目录
-            } elseif (is_file($dir)) {
-                unlink($dir); // 删除文件
+        foreach (scandir($dir) as $file) {
+            if ($file === '.' || $file === '..') {
+                continue;
             }
 
-            return true;
-        } catch (\Exception $e) {
-            debug($e->getMessage());
-            return false;
+            if (!self::rrmdir($dir . DIRECTORY_SEPARATOR . $file)) {
+                return false;
+            }
         }
+
+        return rmdir($dir);
     }
 
     /**
@@ -59,29 +57,24 @@ class FileSystem
      */
     public static function rcopy(string $src, string $dst): bool
     {
-        try {
-            if (file_exists($dst)) {
-                self::rrmdir($dst); // 如果目标目录存在，先删除
-            }
-
-            if (is_dir($src)) {
-                mkdir($dst); // 创建目标目录
-
-                $files = scandir($src);
-                foreach ($files as $file) {
-                    if ($file != '.' && $file != '..') {
-                        self::rcopy("$src/$file", "$dst/$file"); // 递归复制目录
-                    }
-                }
-            } else {
-                copy($src, $dst); // 复制文件
-            }
-
-            return true;
-        } catch (\Exception $e) {
-            debug($e->getMessage());
-            return false;
+        if (file_exists($dst)) {
+            self::rrmdir($dst); // 如果目标目录存在，先删除
         }
+
+        if (is_dir($src)) {
+            mkdir($dst); // 创建目标目录
+
+            $files = scandir($src);
+            foreach ($files as $file) {
+                if ($file != '.' && $file != '..') {
+                    self::rcopy("$src/$file", "$dst/$file"); // 递归复制目录
+                }
+            }
+        } else {
+            copy($src, $dst); // 复制文件
+        }
+
+        return true;
     }
 
     /**
@@ -92,15 +85,10 @@ class FileSystem
      */
     public static function write(string $file, string $content): bool
     {
-        try {
-            if (file_put_contents($file, $content) === false) {
-                throw new \RuntimeException("Failed to write content to file: $file");
-            }
-            return true;
-        } catch (\Exception $e) {
-            debug($e->getMessage());
-            return false;
+        if (file_put_contents($file, $content) === false) {
+            throw new \RuntimeException("Failed to write content to file: $file");
         }
+        return true;
     }
 
     /**
@@ -131,7 +119,7 @@ class FileSystem
 
     /**
      * 返回目录字节大小
-     * @param string $dir
+     * @param string $path
      * @return int
      */
     public static function dirSize(string $path): int

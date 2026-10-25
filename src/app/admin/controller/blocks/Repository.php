@@ -5,6 +5,7 @@ namespace app\admin\controller\blocks;
 use app\exception\DatastarAlertException;
 use CzProject\GitPhp\Git;
 use support\Db;
+use support\FileSystem;
 use support\Request;
 
 class Repository
@@ -14,7 +15,7 @@ class Repository
         $ds = datastar();
         $db = db();
 
-        $repos = $db->table('git_repo')->get()->toArray();
+        $repos = $db->table('git_repo')->orderByDesc('id')->get()->toArray();
         $html = '';
         foreach ($repos as $repo) {
             $html .= '<option value="' . $repo->id . '">' . $repo->path . '</option>';
@@ -22,13 +23,12 @@ class Repository
         $ds->inner($html, '#repo_options');
         $ds->signals(['repo_id' => $repos[0]->id]);
         $ds->event('change', [], '[name="repo_id"]');
-        $ds->event('change', [], '[name="repo_id"]');
 
         $ds->close();
     }
 
     // 添加仓库
-    public function add(Request $request)
+    public function add(Request $request): void
     {
         $url = $request->post('url');
         $path = trim(parse_url($url, PHP_URL_PATH), '/');
@@ -38,10 +38,10 @@ class Repository
         try {
             $git = new Git;
 
-            exec('git ls-remote --heads ' . escapeshellarg($url) . ' 2>&1', $output, $code);
-            if ($code !== 0) {
-                throw new DatastarAlertException('Git 仓库无效或无法访问：' . $output);
-            }
+//            exec('git ls-remote --heads ' . escapeshellarg($url) . ' 2>&1', $output, $code);
+//            if ($code !== 0) {
+//                throw new DatastarAlertException('Git 仓库无效或无法访问：' . $output);
+//            }
 
             if (!is_dir($save_path . '/.git')) {
                 // 首次克隆
@@ -58,7 +58,6 @@ class Repository
         Db::beginTransaction();
 
         try {
-            // 保存仓库信息
             $db = db();
 
             // 添加仓库
@@ -81,6 +80,7 @@ class Repository
             Db::commit();
 
             $ds = datastar();
+            $ds->event('reload', [], 'select[name="repo_id"]');
             $ds->script('AddModal.close()');
             $ds->close();
         } catch (\Throwable $ex) {
@@ -89,12 +89,49 @@ class Repository
         }
     }
 
+    public function delete(Request $request): void {
+        $ds = datastar();
+        $repo_id = $ds->getSignals('repo_id');
+
+        $db = db();
+        $repo_path = $db->table('git_repo')->where(['id' => $repo_id])->value('path');
+        if ($db->table('git_repo')->where('id', $repo_id)->delete()) {
+            $code = 1;
+            $base_path = realpath(storage_path('repository'));
+            $full_path = realpath(storage_path("repository/$repo_path"));
+            if (
+                $base_path &&
+                $full_path &&
+                str_starts_with($full_path, $base_path . DIRECTORY_SEPARATOR) &&
+                is_dir($full_path . DIRECTORY_SEPARATOR . '.git')
+            ) {
+                if (PHP_OS_FAMILY === 'Windows') {
+                    exec('rmdir /s /q ' . escapeshellarg($full_path), $output, $code);
+                } else {
+                    exec('rm -rf -- ' . escapeshellarg($full_path), $output, $code);
+                }
+            }
+            if ($code !== 0) {
+                $ds->script("alert('删除目录失败：$full_path')");
+            }
+        } else {
+            $ds->script("alert('删除失败')");
+        }
+
+        $ds->event('reload', [], 'select[name="repo_id"]');
+        $ds->close();
+    }
+
     // 构建仓库目录内容块列表
     private function buildRepoBlocks($basePath, $repo_id): array
     {
         $list = [];
 
         foreach (glob($basePath . '/*/*/info.php') as $file) {
+            var_dump($file,$basePath . DIRECTORY_SEPARATOR . '@components' . DIRECTORY_SEPARATOR);
+            if (str_starts_with($file, $basePath . DIRECTORY_SEPARATOR . '@components' . DIRECTORY_SEPARATOR)) {
+                continue;
+            }
             $info = require $file;
             if (!is_array($info)) {
                 continue;
