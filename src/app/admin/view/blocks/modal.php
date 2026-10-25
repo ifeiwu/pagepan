@@ -8,12 +8,12 @@
         <div class="flex-grow:1">
             <label class="field">
                 <select name="repo_id" class="bg:white r:5"
-                        data-url="/admin/blocks/repository/list"
+                        data-url="/admin/repository/items"
                         data-init="@get(el.dataset.url)"
                         data-on:reload="@get(el.dataset.url)"
                         data-ref:repo
                         data-bind:repo_id
-                        data-on:change="$pagenum=1;$category='';$kword='';searchForm.requestSubmit();@get('/admin/blocks/category/list')">
+                        data-on:change="$pagenum=1;$category='';$kword='';searchForm.requestSubmit();@get('/admin/repository/block-categorys')">
                     <button type="button">
                         <selectedcontent></selectedcontent>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down preview-icon"><path d="m6 9 6 6 6-6"/></svg>
@@ -24,15 +24,15 @@
             </label>
         </div>
         <div>
-            <button class="destructive" data-on:click="confirm(`确认要删除内容块仓库【${$repo.selectedOptions[0].textContent}】吗?`) && @get('/admin/blocks/repository/delete')">删除</button>
+            <button class="destructive" data-on:click="confirm(`确认要删除内容块仓库【${$repo.selectedOptions[0].textContent}】吗?`) && @get('/admin/repository/delete')">删除</button>
         </div>
         <div>
             <button class="color3" onclick="AddModal.showModal()">添加仓库</button>
             <dialog id="AddModal" closedby="any">
                 <article>
                     <form id="form" class="flex flex:col gap:15 mt:10 mb:20"
-                          data-on:submit="@post('/admin/blocks/repository/add',{contentType:'form'})">
-                        <input type="text" name="url" value="https://github.com/ifeiwu/example-blocks.git" placeholder="https://" />
+                          data-on:submit="@post('/admin/repository/add',{contentType:'form'})">
+                        <input type="text" name="url" value="https://gitee.com/ifeiwu/example-blocks.git" placeholder="https://" />
                     </form>
                     <form method="dialog" class="text:right">
                         <button form="form">保存</button>
@@ -46,7 +46,7 @@
     <form id="searchForm"
           data-signals="{pagenum:0}"
           data-indicator:fetching
-          data-on:submit__delay.0ms="items.innerHTML='';@post('/admin/blocks/query',{contentType:'form'})">
+          data-on:submit__delay.0ms="items.innerHTML='';@post('/admin/repository/block-query',{contentType:'form'})">
         <input type="hidden" name="pagenum" data-bind:pagenum>
         <input type="hidden" name="repo_id" data-attr:value="$repo_id">
         <div class="flex ai:center gap:20 mt:10 py:10 r:5">

@@ -38,11 +38,6 @@ class Repository
         try {
             $git = new Git;
 
-//            exec('git ls-remote --heads ' . escapeshellarg($url) . ' 2>&1', $output, $code);
-//            if ($code !== 0) {
-//                throw new DatastarAlertException('Git 仓库无效或无法访问：' . $output);
-//            }
-
             if (!is_dir($save_path . '/.git')) {
                 // 首次克隆
                 $git->cloneRepository($url, $save_path);
@@ -89,54 +84,24 @@ class Repository
         }
     }
 
-    public function delete(Request $request): void {
-        $ds = datastar();
-        $repo_id = $ds->getSignals('repo_id');
-
-        $db = db();
-        $repo_path = $db->table('git_repo')->where(['id' => $repo_id])->value('path');
-        if ($db->table('git_repo')->where('id', $repo_id)->delete()) {
-            $code = 1;
-            $base_path = realpath(storage_path('repository'));
-            $full_path = realpath(storage_path("repository/$repo_path"));
-            if (
-                $base_path &&
-                $full_path &&
-                str_starts_with($full_path, $base_path . DIRECTORY_SEPARATOR) &&
-                is_dir($full_path . DIRECTORY_SEPARATOR . '.git')
-            ) {
-                if (PHP_OS_FAMILY === 'Windows') {
-                    exec('rmdir /s /q ' . escapeshellarg($full_path), $output, $code);
-                } else {
-                    exec('rm -rf -- ' . escapeshellarg($full_path), $output, $code);
-                }
-            }
-            if ($code !== 0) {
-                $ds->script("alert('删除目录失败：$full_path')");
-            }
-        } else {
-            $ds->script("alert('删除失败')");
-        }
-
-        $ds->event('reload', [], 'select[name="repo_id"]');
-        $ds->close();
-    }
-
     // 构建仓库目录内容块列表
     private function buildRepoBlocks($basePath, $repo_id): array
     {
         $list = [];
 
         foreach (glob($basePath . '/*/*/info.php') as $file) {
-            var_dump($file,$basePath . DIRECTORY_SEPARATOR . '@components' . DIRECTORY_SEPARATOR);
-            if (str_starts_with($file, $basePath . DIRECTORY_SEPARATOR . '@components' . DIRECTORY_SEPARATOR)) {
+            $category = basename(dirname($file, 2));
+
+            if ($category === 'components') {
                 continue;
             }
+
             $info = require $file;
             if (!is_array($info)) {
                 continue;
             }
-            $info['category'] = basename(dirname($file, 2));
+
+            $info['category'] = $category;
             $info['dirname'] = basename(dirname($file));
             $info['repo_id'] = $repo_id;
             $list[] = $info;
@@ -144,6 +109,52 @@ class Repository
 
         return $list;
     }
+
+    public function delete(Request $request): void {
+        $ds = datastar();
+        $repo_id = $ds->getSignals('repo_id');
+
+        Db::beginTransaction();
+        try {
+            $db = db();
+
+            $repo_path = $db->table('git_repo')->where(['id' => $repo_id])->value('path');
+            if ($db->table('git_repo')->where('id', $repo_id)->delete()) {
+                $code = 1;
+                $base_path = realpath(storage_path('repository'));
+                $full_path = realpath(storage_path("repository/$repo_path"));
+
+                if ($base_path &&
+                    $full_path &&
+                    str_starts_with($full_path, $base_path . DIRECTORY_SEPARATOR) &&
+                    is_dir($full_path . DIRECTORY_SEPARATOR . '.git')
+                ) {
+                    if (PHP_OS_FAMILY === 'Windows') {
+                        exec('rmdir /s /q ' . escapeshellarg($full_path), $output, $code);
+                    } else {
+                        exec('rm -rf -- ' . escapeshellarg($full_path), $output, $code);
+                    }
+                }
+
+                if ($code !== 0) {
+                    Db::rollBack();
+                    throw new DatastarAlertException("删除目录失败");
+                }
+
+                Db::commit();
+
+                $ds->event('reload', [], 'select[name="repo_id"]');
+                $ds->close();
+            } else {
+                throw new DatastarAlertException("删除失败");
+            }
+        } catch (\Throwable $ex) {
+            Db::rollBack();
+            throw new DatastarAlertException($ex->getMessage());
+        }
+    }
+
+
 
     /*public function check(Request $request)
     {
