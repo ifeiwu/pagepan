@@ -1,0 +1,49 @@
+<ul class="dataview grid grid-cols-2 lg:grid-cols-3 gap-x-3 xl:gap-x-2 gap-y-6" data-markjs="">
+    <li>
+        <a href="work-detail/id/10000.html" target="" class="block relative">
+            <img src="https://uikit.pagepan.test/assets/photo/9/1.png" class="absolute" alt="拿着杯子的女孩" loading="lazy">
+            <img src="https://uikit.pagepan.test/assets/photo/9/1.png" alt="拿着杯子的女孩" loading="lazy">
+
+            <h2 class="mt-6 lg:mt-10 xl:mt-16 text-sm text-center text-(--mix-5)">拿着杯子的女孩</h2>
+
+            <h6 class="m-6 text-xs [line-height:1.4] text-center text-(--mix-25) font-normal">人物角色设计</h6>
+        </a>
+    </li>
+    <li>
+        <a href="work-detail/id/10000.html" target="" class="block relative">
+            <img src="https://uikit.pagepan.test/assets/photo/9/1.png" class="absolute" alt="拿着杯子的女孩" loading="lazy">
+            <img src="https://uikit.pagepan.test/assets/photo/9/1.png" alt="拿着杯子的女孩" loading="lazy">
+
+            <h2 class="mt-6 lg:mt-10 xl:mt-16 text-sm text-center text-(--mix-5)">拿着杯子的女孩</h2>
+
+            <h6 class="m-6 text-xs [line-height:1.4] text-center text-(--mix-25) font-normal">人物角色设计</h6>
+        </a>
+    </li>
+</ul>
+
+<?php
+$config = array (
+  'id' => 'p1b2',
+  'type' => 'php',
+  'path' => '',
+  'setting' => 
+  array (
+    'dataset.limit' => false,
+    'component.class' => 'py-15',
+    'container.class' => 'container container-2xl',
+    'category.alias' => '009',
+    'category.class' => 'mb-18 mb-20-lg',
+    'components.gridview' => '001',
+    'pagination.alias' => '001',
+    'repo.path' => 'ifeiwu/example-blocks',
+  ),
+);?>
+<section>
+    ooo
+    <?php
+    $db = db();
+    $items = $db->table('dataset_item_3')->get();
+    $this->component('gridview', $config['setting'], ['items' => $items]);
+    ?>
+</section>
+
