@@ -8,11 +8,11 @@ class OpenModal
 {
     public function index(Request $request): void
     {
-        $html = view2()->render('blocks/modal');
+        $html = view2()->render('repository/modal');
 
         $ds = datastar();
         $ds->replace($html);
-        $ds->script('BlocksModal.show()');
+        $ds->script('RepositoryModal.show()');
         $ds->close();
     }
 }

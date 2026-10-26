@@ -111,6 +111,20 @@ class View2
         }
     }
 
+
+    /**
+     * 输出组件
+     * @param string $category
+     * @param array $setting
+     * @param array $data
+     * @return void
+     */
+    public function component(string $category, array $setting, array $data = []): void
+    {
+        $component = "$category/" . $setting['components.gridview'];
+        echo $this->getComponent($setting['repo.path'], $component, $data);
+    }
+
     /**
      * 获取渲染的组件内容
      * @param string $repository 仓库名称
@@ -118,7 +132,7 @@ class View2
      * @param array $data 模板数据
      * @return string
      */
-    public function component(string $repository, string $component, array $data = []): string
+    public function getComponent(string $repository, string $component, array $data = []): string
     {
         return $this->renderFile(
             storage_path("repository/{$repository}/components/{$component}.php"),

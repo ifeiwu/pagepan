@@ -47,7 +47,7 @@ class BlockQuery
             $ds->signals(['nodata' => true])->close();
         }
 
-        $html = view2()->render('blocks/item-li', ['items' => $items, 'repo_path' => $repo_path]);
+        $html = view2()->render('repository/block-items', ['items' => $items, 'repo_path' => $repo_path]);
         $ds->inner($html, '#items');
         $ds->inner($this->getPaginatorHtml($total, $perpage, $pagenum), '#paginator');
 

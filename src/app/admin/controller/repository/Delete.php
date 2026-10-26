@@ -34,17 +34,19 @@ class Delete
                 !str_starts_with($full_path, $base_path . DIRECTORY_SEPARATOR) ||
                 !is_dir($full_path . DIRECTORY_SEPARATOR . '.git')
             ) {
-                throw new \Exception('仓库目录无效');
-            }
-
-            if (PHP_OS_FAMILY === 'Windows') {
-                exec('rmdir /s /q ' . escapeshellarg($full_path), $output, $code);
+                if (is_dir($full_path)) {
+                    throw new \Exception('仓库目录无效');
+                }
             } else {
-                exec('rm -rf -- ' . escapeshellarg($full_path), $output, $code);
-            }
+                if (PHP_OS_FAMILY === 'Windows') {
+                    exec('rmdir /s /q ' . escapeshellarg($full_path), $output, $code);
+                } else {
+                    exec('rm -rf -- ' . escapeshellarg($full_path), $output, $code);
+                }
 
-            if ($code !== 0) {
-                throw new \Exception('删除目录失败');
+                if ($code !== 0) {
+                    throw new \Exception('删除目录失败');
+                }
             }
 
             Db::commit();

@@ -60,7 +60,7 @@ class Page
         $webp_code = file_get_contents(storage_path("page/screenshot/index.webp"));
 
         $http = new \Workerman\Http\Client();
-        $response = $http->post('https://www.test/pagepan-blocks/build.php', [
+        $response = $http->post('https://www.test/example-blocks/build.php', [
             'path' => 'work/001',
             'block_code' => $block_code,
             'webp_code' => $webp_code,

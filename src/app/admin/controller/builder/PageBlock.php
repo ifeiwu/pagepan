@@ -5,10 +5,11 @@ namespace app\admin\controller\builder;
 use IvoPetkov\HTML5DOMDocument;
 use support\Db;
 use support\Request;
+use support\Response;
 
 class PageBlock
 {
-    public function pageCode(Request $request)
+    public function pageCode(Request $request): Response
     {
         $page_id = $request->get('page_id');
         $page_code = $this->getPageCode($page_id);
@@ -40,7 +41,7 @@ class PageBlock
                 // 内容块添加属性
                 $dom->loadHTML("<!DOCTYPE html><html><body>{$content}</body></html>", HTML5DOMDocument::ALLOW_DUPLICATE_IDS);
                 $node = $dom->querySelector('body>*');
-                $node->setAttribute('data-block-id', $block->block_id);
+//                $node->setAttribute('data-block-id', $block->block_id);
                 $block->type && $node->setAttribute('data-block-type', $block->type);
                 $block->path && $node->setAttribute('data-block-path', $block->path);
                 $block->setting && $node->setAttribute('data-block-setting', $block->setting);
@@ -59,9 +60,10 @@ class PageBlock
         return $page_code;
     }
 
-    public function save(Request $request)
+    public function save(Request $request): Response
     {
         Db::beginTransaction();
+
         try {
             $db = db();
 
@@ -81,12 +83,12 @@ class PageBlock
 
             // 有新内容块增加，前端代码编辑器（monaco）需要更新内容
             $page_code = '';
-            foreach ($blocks as $block) {
+            /*foreach ($blocks as $block) {
                 if (!$block['id']) {
                     $page_code = $this->getPageCode($page_id);
                     break;
                 }
-            }
+            }*/
 
             return json_success('ok', $page_code);
         } catch (\Throwable $ex) {
@@ -95,7 +97,7 @@ class PageBlock
         }
     }
 
-    public function getRows($page_id, $blocks)
+    public function getRows($page_id, $blocks): array
     {
         $rows = [];
 
@@ -111,13 +113,12 @@ class PageBlock
                 $type = $type ?: 'php';
             }
 
-            if ($path) {
-                $block_file = storage_path("repository/ifeiwu/pagepan-blocks/$path/block.php");
-                if (is_file($block_file)) {
-                    $content = file_get_contents($block_file);
-                    var_dump($content);
-                }
-            }
+//            if ($path) {
+//                $block_file = storage_path("repository/{$setting['repo.path']}/$path/block.php");
+//                if (is_file($block_file)) {
+//                    $content = file_get_contents($block_file);
+//                }
+//            }
 
             $variables = '';
             if ($setting) {

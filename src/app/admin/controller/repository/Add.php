@@ -87,15 +87,19 @@ class Add
 
         foreach (glob($basePath . '/*/*/info.php') as $file) {
             $category = basename(dirname($file, 2));
-
             if ($category === 'components') {
                 continue;
             }
 
             $info = require $file;
-
             if (!is_array($info)) {
                 continue;
+            }
+
+            $content = file_get_contents(dirname($file) . DIRECTORY_SEPARATOR . 'block.php');
+            // 包含 PHP 代码
+            if (str_contains($content, '<?php') || str_contains($content, '<?=')) {
+                $info['type'] = 'php';
             }
 
             $info['category'] = $category;
