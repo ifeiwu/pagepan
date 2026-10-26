@@ -25,7 +25,6 @@ $pagevar = [
 
     <title><?=$this->page->title?></title>
 
-    <link href="/assets/css/reset.css" rel="stylesheet">
     <link href="/assets/css/main.css" rel="stylesheet">
 
     <script>

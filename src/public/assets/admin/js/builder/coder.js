@@ -47,7 +47,7 @@ define(['split', 'vs/editor/editor.main'], function (Split) {
     function savePageBlocks() {
         const blocks = getPageBlocks(editor.getValue())
         // 保存页面
-        $.post('/admin/builder/page-block/save', {'page_id': 1, 'blocks': blocks}, function (res) {
+        $.post('/admin/builder/save-page-block', {'page_id': 1, 'blocks': blocks}, function (res) {
             if (res.code === 0) {
                 iframe.contentWindow.location.reload();
                 if (res.data) {
@@ -113,7 +113,7 @@ define(['split', 'vs/editor/editor.main'], function (Split) {
     }
 
     // 初始化代码编辑器内容
-    $.get('/admin/builder/page-block/page-code', {'page_id': appVar.page.id}, function (res) {
+    $.get('/admin/builder/page-block-code', {'page_id': appvar.page.id}, function (res) {
         if (res.code === 0) {
             editor.setValue(htmlentities_decode(res.data));
         } else {

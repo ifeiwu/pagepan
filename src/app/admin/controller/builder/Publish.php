@@ -7,10 +7,10 @@ use support\Request;
 use support\Response;
 use Workerman\Timer;
 
-class Page
+class Publish
 {
     // 保存代码到文件
-    public function publish(Request $request): Response
+    public function index(Request $request): Response
     {
         $db = db();
 
@@ -54,9 +54,10 @@ class Page
 
     private function buildBlock(): void
     {
-        Timer::sleep(3);
+        Timer::sleep(2);
 
         $block_code = file_get_contents(app_path("view/page/index.phtml"));
+        $block_code = preg_replace('/^<\?php\b.*?\?>\s*/s', '', $block_code); // 动态块需要删除开头生成的配置数组
         $webp_code = file_get_contents(storage_path("page/screenshot/index.webp"));
 
         $http = new \Workerman\Http\Client();

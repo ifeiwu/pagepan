@@ -57,7 +57,7 @@ foreach ($this->items as $item):
                     <div id="dropdown<?=$id?>" popover data-placement="bottom right">
                         <menu>
                             <li>
-                                <button class="ghost" data-on:click="@get('/admin/pages/edit?id=<?=$id?>')">基本信息</button>
+                                <button class="ghost" data-on:click="@get('/admin/pages/edit-info?id=<?=$id?>')">基本信息</button>
                             </li>
                             <li><button class="ghost">打开页面</button></li>
                             <li><button class="ghost">复制页面</button></li>

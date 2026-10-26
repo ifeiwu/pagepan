@@ -20,7 +20,7 @@ require.config({
     },
     skipDataMain: true,
     waitSeconds: 0,
-    urlArgs: appVar.ver
+    urlArgs: appvar.ver
 })
 
 // 捕获局域未捕获的异常
