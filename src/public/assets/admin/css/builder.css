@@ -295,27 +295,30 @@ html, body {
     pointer-events: none;
 }
 
-/* .pb-ruler .fluid {
+.pb-ruler .fluid {
     width: 100%;
     z-index: 1;
 }
+
 .pb-ruler .fluid:hover:after {
-    content: '100% - Full';
-} */
-/* .pb-ruler .xxl {
-    width: 1680px;
+    content: '全屏 - 100%';
+}
+
+.pb-ruler .xxl {
+    width: 1536px;
     z-index: 3;
 }
 .pb-ruler .xxl:hover:after {
-    content: 'Desktop - 1680px';
-} */
+    content: '超大桌面屏幕 ≥ 1536px';
+}
+
 .pb-ruler .xl {
     width: 1280px;
     z-index: 3;
 }
 
 .pb-ruler .xl:hover:after {
-    content: '台式电脑 >= 1280px';
+    content: '桌面电脑 ≥ 1280px';
 }
 
 .pb-ruler .lg {
@@ -324,7 +327,7 @@ html, body {
 }
 
 .pb-ruler .lg:hover:after {
-    content: '笔记本 >= 1024px';
+    content: '笔记本电脑 ≥ 1024px';
 }
 
 .pb-ruler .md {
@@ -333,16 +336,16 @@ html, body {
 }
 
 .pb-ruler .md:hover:after {
-    content: '平板电脑 >= 768px';
+    content: '平板电脑 ≥ 768px';
 }
 
 .pb-ruler .sm {
-    width: 560px;
+    width: 640px;
     z-index: 6;
 }
 
 .pb-ruler .sm:hover:after {
-    content: '大屏手机 >= 560px';
+    content: '大屏手机 ≥ 640px';
 }
 
 .pb-ruler .xs {
@@ -351,7 +354,7 @@ html, body {
 }
 
 .pb-ruler .xs:hover:after {
-    content: '小屏手机 > 360px';
+    content: '小屏手机 ≥ 360px';
 }
 
 .pb-resize {

@@ -31,6 +31,14 @@ define(['interact'], function (interact) {
         // }, 400)
     })
 
+    $ruler.on('click', '>.fluid>.left,>.fluid>.right', function () {
+        resize(this, 'fluid', '100%')
+    })
+
+    $ruler.on('click', '>.xxl>.left,>.xxl>.right', function () {
+        resize(this, 'xxl', '1536')
+    })
+
     $ruler.on('click', '>.xl>.left,>.xl>.right', function () {
         resize(this, 'xl', '1280')
     })
@@ -44,7 +52,7 @@ define(['interact'], function (interact) {
     })
 
     $ruler.on('click', '>.sm>.left,>.sm>.right', function () {
-        resize(this, 'sm', '560')
+        resize(this, 'sm', '640')
     })
 
     $ruler.on('click', '>.xs>.left,>.xs>.right', function () {

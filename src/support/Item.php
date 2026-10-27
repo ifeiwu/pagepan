@@ -132,14 +132,15 @@ class Item
 
     /**
      * 返回图片链接
+     * @param string $name 字段名称
      * @param string $prefix 图片前缀：s_,m_
      * @param bool $iscache 是否添加时间缓存控制
      * @param bool $isfull 是否带域名
      * @return mixed
      */
-    public function getImage(string $prefix = '', bool $iscache = true, bool $isfull = false): mixed
+    public function getImage(string $name = 'image', string $prefix = '', bool $iscache = true, bool $isfull = false): mixed
     {
-        $image = $this->item['image'];
+        $image = $this->item[$name];
         if ($image) {
             $image = $this->getFileURL($image, $prefix, $iscache, $isfull);
         } else {
@@ -238,7 +239,7 @@ class Item
                     $updated = strtotime($this->item['updated']);
                     $filepath = $filepath . rtrim("?$updated", '?');
                 }
-                return "//{$filepath}";
+                return "/{$filepath}";
             }
         }
         return $filepath;
@@ -277,9 +278,9 @@ class Item
                         $link_url = $this->parseUrlItemParams($setting_link_url);
                     }
                 } else {
-                    $link_title = $link['title'];
+                    $link_title = $link['title'] ?? '';
                     $link_url = $link['url'];
-                    $link_target = $link['target'];
+                    $link_target = $link['target'] ?? '';
                 }
             }
         }

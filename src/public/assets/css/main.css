@@ -164,81 +164,39 @@
     }*/
 }
 
+.container,
+.container-fluid,
+.container-xxl,
+.container-xl,
+.container-lg,
+.container-md,
+.container-sm {
+    --gutter-x: 1.5rem;
+    width: 100%;
+    padding-right: calc(var(--gutter-x) * 0.5);
+    padding-left: calc(var(--gutter-x) * 0.5);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.container-xxl {
+    max-width: 1536px;
+}
+.container-xl {
+    max-width: 1280px;
+}
+.container-lg {
+    max-width: 1024px;
+}
+.container-md {
+    max-width: 768px;
+}
+.container-sm {
+    max-width: 640px;
+}
+
 @layer components {
-    .container {
-        padding-right: 1rem;
-        padding-left: 1rem;
-        margin-right: auto;
-        margin-left: auto;
-    }
 
-    .container-sm {
-        max-width: 560px
-    }
-
-    .container-fluid {
-        max-width: 100% !important
-    }
-
-    @media (min-width: 0px) {
-        .container-fluid, .container {
-            --gutter: .25rem;
-            --gutter-x: var(--gutter);
-            --gutter-y: var(--gutter);
-            max-width: 100%
-        }
-    }
-
-    @media (min-width: 560px) {
-        .container-sm {
-            max-width: 560px
-        }
-    }
-
-    @media (min-width: 768px) {
-        .container-fluid, .container-xxxl, .container-xxl, .container-xl, .container-lg, .container-md {
-            --gutter: .5rem;
-            --gutter-x: var(--gutter);
-            --gutter-y: var(--gutter);
-            max-width: 768px
-        }
-    }
-
-    @media (min-width: 1024px) {
-        .container-fluid, .container-xxxl, .container-xxl, .container-xl, .container-lg {
-            --gutter: .75rem;
-            --gutter-x: var(--gutter);
-            --gutter-y: var(--gutter);
-            max-width: 1024px
-        }
-    }
-
-    @media (min-width: 1280px) {
-        .container-fluid, .container-xxxl, .container-xxl, .container-xl {
-            --gutter: 1rem;
-            --gutter-x: var(--gutter);
-            --gutter-y: var(--gutter);
-            max-width: 1280px
-        }
-    }
-
-    @media (min-width: 1440px) {
-        .container-fluid, .container-xxxl, .container-xxl {
-            max-width: 1440px
-        }
-    }
-
-    @media (min-width: 1680px) {
-        .container-fluid, .container-xxxl {
-            max-width: 1680px
-        }
-    }
-
-    @media (min-width: 1681px) {
-        .container-fluid {
-            max-width: 100%
-        }
-    }
 
     /*.clearfix::after {
         display: block;

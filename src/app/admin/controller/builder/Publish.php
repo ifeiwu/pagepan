@@ -27,7 +27,8 @@ class Publish
 
         $blocks = $db->table('page_block')->where('page_id', '=', $page_id)->get()->toArray();
         $content = implode('', array_column($blocks, 'content'));
-        $content = preg_replace('/\s+data-block-(?:id|type|path|setting)="[^"]*"/', '', $content);
+        // 删除内容块属性
+        $content = preg_replace('/\s+data-block-(?:type|path|setting)="[^"]*"/', '', $content);
         // 删除测试内容块
         $content = preg_replace('/<!-- delete-test-block:start -->.*?<!-- delete-test-block:end -->\s*/s', '', $content);
         $content = preg_replace('/<delete-test-block\b[^>]*>.*?<\/delete-test-block>/s', '', $content);

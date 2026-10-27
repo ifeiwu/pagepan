@@ -1,33 +1,209 @@
-<ul class="dataview grid grid-cols-2 lg:grid-cols-3 gap-x-3 xl:gap-x-2 gap-y-6" data-markjs="">
+<div class="flex w-full items-center justify-center overflow-hidden"><div class="flex h-screen items-center border-x"><div><div aria-hidden="true" data-contained="false" class="pointer-events-none absolute h-px bg-border data-[contained=false]:left-1/2 data-[contained=false]:w-screen data-[contained=false]:-translate-x-1/2 data-[contained=true]:inset-x-0 data-[contained=true]:w-full"></div><!----> <!--[--><div data-slot="empty" class="gap-4 rounded-lg border-dashed p-12 flex w-full min-w-0 flex-1 flex-col items-center justify-center text-center text-balance"><!--[--><div data-slot="empty-header" class="gap-2 flex max-w-sm flex-col items-center"><!--[--><div data-slot="empty-title" class="tracking-tight font-mono text-8xl font-black"><!---->404<!----></div><!--]--> <!--[--><div data-slot="empty-description" class="text-sm/relaxed text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary text-nowrap"><!---->The page you're looking for might have been <br> moved or doesn't exist.<!----></div><!--]--><!----></div><!--]--> <!--[--><div data-slot="empty-content" class="gap-4 text-sm flex w-full max-w-sm min-w-0 flex-col items-center text-balance"><div class="flex gap-2"><!--[0--><a data-slot="button" class="focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 rounded-md border border-transparent bg-clip-padding text-sm font-medium focus-visible:ring-3 aria-invalid:ring-3 active:not-aria-[haspopup]:translate-y-px [&_svg:not([class*='size-'])]:size-4 group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-all outline-none select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/80 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house lucide-home lucide-icon" aria-hidden="true" data-icon="inline-start"><!--[--><!----><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"><!----></path><!----><!----><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"><!----></path><!----><!--]--><!----></svg><!----><!----> Go Home<!----></a><!--]--><!----> <!--[0--><a data-slot="button" class="focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 rounded-md border bg-clip-padding text-sm font-medium focus-visible:ring-3 aria-invalid:ring-3 active:not-aria-[haspopup]:translate-y-px [&_svg:not([class*='size-'])]:size-4 group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-all outline-none select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 border-border bg-background hover:bg-muted hover:text-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 aria-expanded:bg-muted aria-expanded:text-foreground shadow-xs h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-compass lucide-icon" aria-hidden="true" data-icon="inline-start"><!--[--><!----><circle cx="12" cy="12" r="10"><!----></circle><!----><!----><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"><!----></path><!----><!--]--><!----></svg><!----><!----> Explore<!----></a><!--]--><!----></div><!----></div><!--]--><!----></div><!--]--> <div aria-hidden="true" data-contained="false" class="pointer-events-none absolute h-px bg-border data-[contained=false]:left-1/2 data-[contained=false]:w-screen data-[contained=false]:-translate-x-1/2 data-[contained=true]:inset-x-0 data-[contained=true]:w-full"></div><!----></div></div></div>
+
+<div class="container-xl">
+<div class="flex flex-col items-center">
+    <div class="mb-6 xl:mb-0 xl:mr-auto">
+        <a href="/" class="logo inline-block active" data-setting-prefix="navlogo.link">
+            <img src="//uikit.pagepan.test/assets/logo/01-black.svg" class="max-h-[30px]" data-setting-prefix="navlogo.img">
+        </a>
+    </div>
+    <div class="w-full">
+        <style>
+            @layer {
+                [uk6ae04b6184b70] .nav a {
+                    font-weight: bold;
+                }
+
+                .theme-invert .nav a:not(:hover):not(.active) {
+                    color: var(--mix-15);
+                }
+            }
+        </style>
+        <ul class="flex justify-around sm:justify-center gap-x-2.5 sm:gap-x-11 md:gap-x-24 nav" data-setting-prefix="navitem.row">
+            <li data-setting-prefix="navitem.col">
+                <a href="./" class="text-[0.9375rem] active" data-setting-prefix="navitem.link">首页</a>
+            </li>
+            <li data-setting-prefix="navitem.col">
+                <a href="works" class="text-[0.9375rem]" data-setting-prefix="navitem.link">作品</a>
+            </li>
+            <li data-setting-prefix="navitem.col">
+                <a href="blog" class="text-[0.9375rem]" data-setting-prefix="navitem.link">博客</a>
+            </li>
+            <li data-setting-prefix="navitem.col">
+                <a href="about" class="text-[0.9375rem]" data-setting-prefix="navitem.link">关于</a>
+            </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<section class="px-5 pt-10 pb-10 sm:px-8 lg:px-12">
+        <div class="mx-auto max-w-6xl">
+
+            <!-- 标题 -->
+            <div class="mx-auto mb-16 max-w-2xl text-center">
+                <h1 class="mb-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-[44px] lg:leading-[1.2]">
+                    适合您的定价
+                </h1>
+                <p class="mx-auto max-w-2xl text-sm leading-6 text-gray-700 sm:text-base">
+                    Gemini 的发展不仅仅只是模特。 它支持整个 API 和平台，帮助开发人员和企业进行创新。
+                </p>
+            </div>
+
+            <!-- 价格卡片 -->
+            <div class="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
+
+                <!-- Free -->
+                <div class="flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                    <h2 class="mb-4 text-base font-medium">Free</h2>
+
+                    <div class="mb-1 text-2xl font-semibold tracking-tight">
+                        $0 / mo
+                    </div>
+                    <p class="text-sm leading-7 text-gray-500">Per editor</p>
+
+                    <div class="my-5 border-t border-dashed border-gray-200"></div>
+
+                    <ul class="flex-1 space-y-3 text-sm leading-5">
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Basic Analytics Dashboard</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>5GB Cloud Storage</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Email and Chat Support</span>
+                        </li>
+                    </ul>
+
+                    <a href="#" class="mt-6 flex h-[34px] items-center justify-center rounded-lg border border-gray-200 text-sm font-medium shadow-sm transition hover:bg-gray-50">
+                        Get Started
+                    </a>
+                </div>
+
+                <!-- Pro -->
+                <div class="relative flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                    <span class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-pink-400 via-rose-400 to-amber-400 px-3 py-1 text-xs font-medium leading-4 text-black shadow-sm">
+                        Popular
+                    </span>
+
+                    <h2 class="mb-4 text-base font-medium">Pro</h2>
+
+                    <div class="mb-1 text-2xl font-semibold tracking-tight">
+                        $19 / mo
+                    </div>
+                    <p class="text-sm leading-7 text-gray-500">Per editor</p>
+
+                    <div class="my-5 border-t border-dashed border-gray-200"></div>
+
+                    <ul class="flex-1 space-y-3 text-sm leading-5">
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Everything in Free Plan</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>5GB Cloud Storage</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Email and Chat Support</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Access to Community Forum</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Single User Access</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Access to Basic Templates</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Mobile App Access</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>1 Custom Report Per Month</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Monthly Product Updates</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Standard Security Features</span>
+                        </li>
+                    </ul>
+
+                    <a href="#" class="mt-6 flex h-[34px] items-center justify-center rounded-lg border border-neutral-900 bg-neutral-900 text-sm font-semibold text-white transition hover:bg-neutral-800">
+                        Get Started
+                    </a>
+                </div>
+
+                <!-- Startup -->
+                <div class="flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                    <h2 class="mb-4 text-base font-medium">Startup</h2>
+
+                    <div class="mb-1 text-2xl font-semibold tracking-tight">
+                        $29 / mo
+                    </div>
+                    <p class="text-sm leading-7 text-gray-500">Per editor</p>
+
+                    <div class="my-5 border-t border-dashed border-gray-200"></div>
+
+                    <ul class="flex-1 space-y-3 text-sm leading-5">
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Everything in Pro Plan</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>5GB Cloud Storage</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="shrink-0">✓</span>
+                            <span>Email and Chat Support</span>
+                        </li>
+                    </ul>
+
+                    <a href="#" class="mt-6 flex h-[34px] items-center justify-center rounded-lg border border-gray-200 text-sm font-medium shadow-sm transition hover:bg-gray-50">
+                        Get Started
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+<ul id="aaa" class="gridview grid grid-cols-2 lg:grid-cols-3 gap-x-3 sm:gap-x-6 xl:gap-x-12 gap-y-10 md:gap-y-15" data-markjs="">
+    <?php for($i=0;$i<1;$i++):?>
     <li>
-        <a href="work-detail/id/10000.html" target="" class="block relative">
+        <a href="work-detail/id/10000.html" target="" class="block relative text-center">
             <img src="https://uikit.pagepan.test/assets/photo/9/1.png" class="absolute" alt="拿着杯子的女孩" loading="lazy">
             <img src="https://uikit.pagepan.test/assets/photo/9/1.png" alt="拿着杯子的女孩" loading="lazy">
-
-            <h2 class="mt-6 lg:mt-10 xl:mt-16 text-sm text-center text-(--mix-5)">拿着杯子的女孩</h2>
-
-            <h6 class="m-6 text-xs [line-height:1.4] text-center text-(--mix-25) font-normal">人物角色设计</h6>
+            <h2 class="mt-6 md:mt-10 text-sm font-bold">拿着杯子的女孩</h2>
+            <h6 class="mt-6 text-xs text-gray-500">人物角色设计</h6>
         </a>
     </li>
-    <li>
-        <a href="work-detail/id/10000.html" target="" class="block relative">
-            <img src="https://uikit.pagepan.test/assets/photo/9/1.png" class="absolute" alt="拿着杯子的女孩" loading="lazy">
-            <img src="https://uikit.pagepan.test/assets/photo/9/1.png" alt="拿着杯子的女孩" loading="lazy">
-
-            <h2 class="mt-6 lg:mt-10 xl:mt-16 text-sm text-center text-(--mix-5)">拿着杯子的女孩</h2>
-
-            <h6 class="m-6 text-xs [line-height:1.4] text-center text-(--mix-25) font-normal">人物角色设计</h6>
-        </a>
-    </li>
+    <?php endfor;?>
 </ul>
 
 <?php
 $config = array (
-  'id' => 'p1b2',
+  'id' => 'p1b5',
   'type' => 'php',
   'path' => '',
   'setting' => 
   array (
+    'dataset.id' => '1',
+    'dataset.table' => 'dataset_work',
     'dataset.limit' => false,
     'component.class' => 'py-15',
     'container.class' => 'container container-2xl',
@@ -39,10 +215,10 @@ $config = array (
   ),
 );?>
 <section>
-    ooo
     <?php
     $db = db();
-    $items = $db->table('dataset_item_3')->get();
+    $setting = $config['setting'];
+    $items = $db->table($setting['dataset.table'])->where('dataset_id', $setting['dataset.id'])->get();
     $this->component('gridview', $config['setting'], ['items' => $items]);
     ?>
 </section>

@@ -51,6 +51,14 @@
             </div>
         </div>
         <div class="pb-ruler active">
+            <div class="fluid">
+                <div class="left"></div>
+                <div class="right"></div>
+            </div>
+            <div class="xxl">
+                <div class="left"></div>
+                <div class="right"></div>
+            </div>
             <div class="xl">
                 <div class="left"></div>
                 <div class="right"></div>
@@ -117,9 +125,7 @@
 </div>
 
 <script>
-    require(['js/builder'], function() {
-
-    })
+    require(['js/builder'], function() {})
 </script>
 
 <template id="RepositoryModal"></template>
