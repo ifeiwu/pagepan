@@ -1,0 +1,78 @@
+@import "tailwindcss" source(none);
+@import "starting-point-ui" source(none);
+
+@source "../src/app/admin/**/*.php";
+
+
+@utility btn-ghost {
+    &:hover {
+        background-color: rgb(0 0 0 / 10%);
+    }
+    &[aria-haspopup][aria-expanded=true] {
+        background-color: rgb(0 0 0 / 15%);
+    }
+}
+
+@utility navbar-link {
+    &:hover {
+        background-color: rgb(0 0 0 / 5%);
+    }
+    &.active {
+        background-color: rgb(0 0 0 / 10%);
+    }
+}
+
+:root {
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+}
+
+@layer base {
+    * {
+        scrollbar-color: rgb(0, 0, 0, 0.3) transparent;
+        scrollbar-width: thin;
+    }
+
+    body {
+        font-size: 14px;
+    }
+
+    iframe {
+        display: block;
+        border-width: 0;
+    }
+
+    .container,
+    .container-fluid,
+    .container-xxl,
+    .container-xl,
+    .container-lg,
+    .container-md,
+    .container-sm {
+        width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .container-xxl {
+        max-width: 1536px;
+    }
+
+    .container-xl {
+        max-width: 1280px;
+    }
+
+    .container-lg {
+        max-width: 1024px;
+    }
+
+    .container-md {
+        max-width: 768px;
+    }
+
+    .container-sm {
+        max-width: 640px;
+    }
+}

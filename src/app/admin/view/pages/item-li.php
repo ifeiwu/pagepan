@@ -32,7 +32,7 @@ foreach ($this->items as $item):
             break;
     }
 ?>
-<li id="page_<?=$id?>" class="bg:<?=getTypeColor($type)?>" style="<?=$state === 0 ? 'opacity:.6' : ''?>">
+<li id="page_<?=$id?>" class="bg:<?=getTypeColor($type)?> overflow-hidden" style="<?=$state === 0 ? 'opacity:.6' : ''?>">
     <!--<a href="#" data-on:click="@get('/admin/pages/edit/dialog?id=<?php /*=$id*/?>')">
         <img src="/assets/admin/img/page-cover-demo.png" class="h:120 w:full obj:cover obj:top">
     </a>-->
@@ -51,22 +51,16 @@ foreach ($this->items as $item):
             </div>
             <div class="ml:auto">
                 <div class="more opacity:0">
-                    <button class="ghost p:5" popovertarget="dropdown<?=$id?>">
+                    <button id="dd-basic-trigger<?=$id?>" class="btn btn-ghost">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis preview-icon"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
                     </button>
-                    <div id="dropdown<?=$id?>" popover data-placement="bottom right">
-                        <menu>
-                            <li>
-                                <button class="ghost" data-on:click="@get('/admin/pages/edit-info?id=<?=$id?>')">基本信息</button>
-                            </li>
-                            <li><button class="ghost">打开页面</button></li>
-                            <li><button class="ghost">复制页面</button></li>
-                            <li><hr /></li>
-                            <li>
-                                <button class="ghost destructive"
-                                        data-on:click="confirm('确认要删除页面【<?=$title?>】吗?') && @get('/admin/pages/delete?id=<?=$id?>')">删除页面</button>
-                            </li>
-                        </menu>
+                    <div class="dropdown" data-sp-toggle="#dd-basic-trigger<?=$id?>">
+                        <button class="dropdown-item" data-on:click="@get('/admin/pages/edit-info?id=<?=$id?>')">基本信息</button>
+                        <button class="dropdown-item">打开页面</button>
+                        <button class="dropdown-item">复制页面</button>
+                        <div class="dropdown-separator"></div>
+                        <button class="dropdown-item dropdown-item-destructive"
+                                data-on:click="confirm('确认要删除页面【<?=$title?>】吗?') && @get('/admin/pages/delete?id=<?=$id?>')">删除页面</button>
                     </div>
                 </div>
             </div>

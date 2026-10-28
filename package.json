@@ -1,0 +1,27 @@
+{
+  "name": "pagepan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx @tailwindcss/cli -i ./resource/sp-ui.css -o ./src/public/assets/admin/css/sp-ui.css --watch",
+    "build": "npx @tailwindcss/cli -i ./resource/input.css -o ./src/output.css --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifeiwu/pagepan.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ifeiwu/pagepan/issues"
+  },
+  "homepage": "https://github.com/ifeiwu/pagepan#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "starting-point-ui": "^0.39.0",
+    "tailwindcss": "^4.3.3"
+  }
+}
