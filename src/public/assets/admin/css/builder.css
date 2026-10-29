@@ -105,19 +105,14 @@ html, body {
 .pb-header #publish {
     color: #fff;
     background: #4263eb;
-    width: 68px;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .pb-header #publish:hover {
     background: #4c6ef5;
 }
 
-.pb-header .editmode {
-    --bg: black;
-    --fg: #ddd;
-    --fg-hover: white;
-    border: 2px solid black;
-}
 
 /*.pb-header .icon {
     background-repeat: no-repeat;

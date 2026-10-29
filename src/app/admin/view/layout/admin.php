@@ -39,9 +39,9 @@ $route = request()->path();
         }
     </style>
 </head>
-<body class="bg-olive-100">
+<body class="bg-olive-200">
     <div class="app">
-        <div class="py:10 bd:blur(10px)" style="width:100%;flex-shrink:0;">
+        <div class="py-3" style="width:100%;flex-shrink:0;">
             <div class="container-xl">
                 <header class="navbar" style="--background:#0000;--navbar-height:auto;--navbar-padding:0">
                     <a href="#" class="brand">

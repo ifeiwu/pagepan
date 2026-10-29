@@ -11,40 +11,37 @@
         <div class="pb-header">
             <div class="flex-basis:300 flex ai:center">
                 <div>
-                    <button class="ghost" popovertarget="file-menu">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu preview-icon"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
-                        菜单
+                    <button id="dd-menu" class="btn btn-ghost btn-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu preview-icon"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
                     </button>
-                    <div id="file-menu" popover>
-                        <menu>
-                            <li><button class="ghost">页面设置</button></li>
-                            <li>
-                                <button class="ghost" popovertarget="find-menu">历史记录</button>
-                                <div id="find-menu" popover data-placement="right top">
-                                    <menu>
-                                        <li><button class="ghost">2026/10/17 16:23:07</button></li>
-                                        <li><button class="ghost">2026/10/17 15:35:53</button></li>
-                                        <li><button class="ghost">2026/10/17 15:35:35</button></li>
-                                    </menu>
-                                </div>
-                            </li>
-                            <li>
-                                <a class="button ghost" href="https://support.qq.com/products/65308" target="_blank">意见反馈</a>
-                            </li>
-                        </menu>
+                    <div class="dropdown" data-sp-toggle="#dd-menu">
+                        <button class="dropdown-item">页面设置</button>
+                        <button id="dd-sub-history" class="dropdown-item">
+                            历史记录
+                            <svg class="ml-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                        </button>
+                        <a href="https://support.qq.com/products/65308" target="_blank" class="dropdown-item">意见反馈</a>
+                    </div>
+                    <div class="dropdown dropdown-sub" data-sp-toggle="#dd-sub-history" data-sp-mode="hover" data-sp-placement="inline-end-start">
+                        <button class="dropdown-item">2026/10/17 16:23:07</button>
+                        <button class="dropdown-item">2026/10/17 15:35:53</button>
+                        <button class="dropdown-item">2026/10/17 15:35:35</button>
                     </div>
                 </div>
                 <div class="ml:20">
-                    <nav class="tab-links editmode">
-                        <a href="/overview">设计</a>
-                        <a href="/activity" aria-current="page">代码</a>
-                    </nav>
+                    <div class="tab-list">
+                        <button class="tab">设计</button>
+                        <button class="tab active">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+                            代码
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="flex-grow:1 flex jc:center">首页</div>
             <div class="flex-basis:300 flex jc:right gap:5">
-                <button id="publish">发布</button>
-                <button id="close_modal rounded" aria-label="关闭" data-tooltip="bottom"
+                <button id="publish" class="btn rounded-sm">发布</button>
+                <button class="btn rounded-sm"
                         data-on:click="parent.BuilderModal.close()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                 </button>

@@ -1,9 +1,9 @@
 <?php $this->layout('admin');?>
 
 <div class="flex flex:col h:full">
-    <div class="flex mt:20 px:20">
+    <div class="flex mt:25 px:20">
         <div>
-            <h2 class="text-2xl font-bold">页面管理 <sup class="badge"><?=$this->page_count?></sup></h2>
+            <h2 class="text-2xl font-bold">页面管理 <sup class="badge badge-secondary"><?=$this->page_count?></sup></h2>
         </div>
         <div class="ml:auto">
             <div class="flex gap:10">
@@ -63,4 +63,4 @@
 
 <template id="EditModal"></template>
 <!--<template id="RepositoryModal" data-init="@get('/admin/repository/open-modal')"></template>-->
-<!--<template id="BuilderModal" data-init="@get('/admin/builder/open-modal?page_id=1')"></template>-->
+<template id="BuilderModal" data-init="@get('/admin/builder/open-modal?page_id=1')"></template>

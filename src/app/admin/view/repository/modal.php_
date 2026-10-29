@@ -1,0 +1,88 @@
+<ku-modal id="RepositoryModal" placement="top-center" style="--ku-width:64rem;--ku-height:100%" static-backdrop hidden>
+    <div slot="header" class="flex ai:center gap:10 f:bold f:17">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks preview-icon"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"/><rect x="14" y="2" width="8" height="8" rx="1"/></svg>
+        页面块管理
+    </div>
+
+    <div class="flex gap:10 p:15 r:10 bg:gray-88">
+        <div class="flex-grow:1">
+            <select name="repo_id" class="select bg-white"
+                    data-url="/admin/repository/items"
+                    data-init="@get(el.dataset.url)"
+                    data-on:reload="@get(el.dataset.url)"
+                    data-ref:repo
+                    data-bind:repo_id
+                    data-on:change="$pagenum=1;$category='';$kword='';searchForm.requestSubmit();@get('/admin/repository/block-categorys')">
+                <option value="">选择仓库</option>
+                <div id="repo_options"></div>
+            </select>
+        </div>
+        <div>
+            <button class="btn btn-destructive"
+                    data-on:click="confirm(`确认要删除内容块仓库【${$repo.selectedOptions[0].textContent}】吗?`) && @get('/admin/repository/delete')">删除</button>
+        </div>
+        <div>
+            <button id="open_add_dialog" class="btn">添加仓库</button>
+            <dialog class="dialog" id="AddDialog" data-sp-toggle="#open_add_dialog" data-sp-static>
+                <div class="dialog-panel">
+                    <button class="btn btn-ghost btn-xs btn-icon absolute top-3 right-3" aria-label="Close" data-sp-dismiss>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
+                    <div class="dialog-header">
+                        <h2 class="dialog-title">添加仓库</h2>
+                    </div>
+                    <div class="dialog-content">
+                        <form id="form"
+                              data-on:submit="@post('/admin/repository/add',{contentType:'form'})">
+                            <div class="field">
+                                <input type="url" name="url" class="input" value="https://gitee.com/ifeiwu/example-blocks.git" required />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="dialog-footer">
+                        <button type="submit" form="form" class="btn">保存</button>
+                    </div>
+                </div>
+            </dialog>
+        </div>
+    </div>
+
+    <form id="searchForm"
+          data-signals="{pagenum:0}"
+          data-indicator:fetching
+          data-on:submit__delay.0ms="items.innerHTML='';@post('/admin/repository/block-query',{contentType:'form'})">
+        <input type="hidden" name="pagenum" data-bind:pagenum>
+        <input type="hidden" name="repo_id" data-attr:value="$repo_id">
+        <div class="flex ai:center gap:20 mt:10 py:10 r:5">
+            <div class="flex-grow:1">
+                <div class="input-group max-w-3xs">
+                    <input type="search" class="input" name="kword" placeholder="开始搜索..." enterkeyhint="搜索"
+                           data-bind:kword
+                           data-on:search="$pagenum=1;$category='';!el.value && searchForm.requestSubmit()" />
+                    <span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></span>
+                </div>
+            </div>
+            <div class="ml:auto">
+                <select name="category" class="select"
+                        data-bind:category
+                        data-on:change="$pagenum=1;$kword='';searchForm.requestSubmit()">
+                    <option value="">全部分类</option>
+                    <div id="category_options"></div>
+                </select>
+            </div>
+        </div>
+    </form>
+
+    <ul id="items" class="gap:20 cols:3 py:20 {mb:20;r:10;b:1|solid|gray-86;overflow:hidden;}>li"></ul>
+
+    <div class="text:center f:gray" data-show="$fetching">加载数据中</div>
+
+    <div class="f:gray-50 f:14 text:center mt:20" style="display:none" data-show="$nodata">没有找到相关内容</div>
+
+    <div slot="footer">
+        <nav id="paginator" class="pagination flex jc:center"
+             data-indicator="fetching"
+             data-on-signal-patch-filter='{include:/^pagenum$/}'
+             data-on-signal-patch__debounce.200ms="searchForm.requestSubmit()"></nav>
+    </div>
+</ku-modal>

@@ -72,7 +72,7 @@ class Add
 
             $ds = datastar();
             $ds->event('reload', [], 'select[name="repo_id"]');
-            $ds->script('AddModal.close()');
+            $ds->script('sp.dialog(AddDialog).hide()');
             $ds->close();
         } catch (\Throwable $ex) {
             Db::rollBack();

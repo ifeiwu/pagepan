@@ -47,7 +47,7 @@ class BlockQuery
             $ds->signals(['nodata' => true])->close();
         }
 
-        $html = view2()->render('repository/block-items', ['items' => $items, 'repo_path' => $repo_path]);
+        $html = view2()->render('repository/item-li', ['items' => $items, 'repo_path' => $repo_path]);
         $ds->inner($html, '#items');
         $ds->inner($this->getPaginatorHtml($total, $perpage, $pagenum), '#paginator');
 
@@ -63,31 +63,31 @@ class BlockQuery
             return '';
         }
 
-        $html = '<ul>';
+        $html = '<nav class="pagination">';
 
         if ($paginator->getPrevPage()) {
-            $html .= '<li class="prev"><a href="#" class="button ghost" data-on:click="$pagenum--">上一页</a></li>';
+            $html .= '<a href="#" class="pagination-item pagination-previous" data-on:click="$pagenum--">上一页</a>';
         } else {
-            $html .= '<li class="prev"><a href="#" class="button ghost" aria-disabled="true">上一页</a></li>';
+            $html .= '<a href="#" class="pagination-item pagination-previous">上一页</a>';
         }
 
         foreach ($paginator->getPages() as $page) {
             $num = $page['num'];
             if (is_int($num)) {
-                $current_attr = $page['isCurrent'] ? 'aria-current="page"' : '';
-                $html .= '<li><a href="#" class="button ghost" data-on:click="$pagenum=' . $num . '" ' . $current_attr . '>' . $num . '</a></li>';
+                $active = $page['isCurrent'] ? ' active' : '';
+                $html .= '<a href="#" class="pagination-item' . $active . '" data-on:click="$pagenum=' . $num . '">' . $num . '</a>';
             } else {
-                $html .= '<li><span>' . $num . '</span></li>';
+                $html .= '<span class="pagination-ellipsis">' . $num . '</span>';
             }
         }
 
         if ($paginator->getNextPage()) {
-            $html .= '<li class="next"><a href="#" class="button ghost" data-on:click="$pagenum++">下一页</a></li>';
+            $html .= '<a href="#" class="pagination-item pagination-next" data-on:click="$pagenum++">下一页</a>';
         } else {
-            $html .= '<li class="next"><a href="#" class="button ghost" aria-disabled="true">下一页</a></li>';
+            $html .= '<a href="#" class="pagination-item pagination-next">下一页</a>';
         }
 
-        $html .= '</ul>';
+        $html .= '</nav>';
 
         return $html;
     }

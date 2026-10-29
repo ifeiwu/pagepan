@@ -31,20 +31,6 @@
                 <?php endforeach;?>
             </select>
         </div>
-
-        <!--<label class="field">
-            <span>页面布局</span>
-            <select name="layout" data-bind:layout data-attr:disabled="$type=='layout'">
-                <button type="button">
-                    <selectedcontent></selectedcontent>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down preview-icon"><path d="m6 9 6 6 6-6"/></svg>
-                </button>
-                <option value="">请选择</option>
-                <?php /*foreach ($this->layouts as $layout): */?>
-                    <option value="<?php /*=$layout->path*/?>"><?php /*=$layout->title*/?></option>
-                <?php /*endforeach;*/?>
-            </select>
-        </label>-->
         <div class="field gap-1">
             <label class="label">页面名称</label>
             <input type="text" name="title" value="<?=$page->title?>" class="input" placeholder="" required />
@@ -57,15 +43,11 @@
     </form>
 
     <div slot="footer">
-        <div class="flex jc:end gap:10">
+        <div class="flex jc:end gap:15">
             <div class="field field-horizontal gap-2 w-auto">
                 <input type="checkbox" form="form" class="checkbox" name="state" id="state" value="1" data-bind:state />
                 <label class="label" for="state">启用</label>
             </div>
-            <!--<label class="">
-                <input type="checkbox" class="checkbox" form="form" name="state" value="1" data-bind:state />
-                启用
-            </label>-->
             <div>
                 <button type="submit" form="form" class="btn">保存页面</button>
             </div>
