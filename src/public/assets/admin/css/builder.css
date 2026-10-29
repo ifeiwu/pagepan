@@ -1,8 +1,5 @@
-html, body {
-    scrollbar-width: none;
-}
 
-.pb-split {
+/*.pb-split {
     height:100vh
 }
 
@@ -34,7 +31,7 @@ html, body {
     .gutter.gutter-vertical:hover::after {
         background-color: oklch(63.99% .0804 266.1);
     }
-}
+}*/
 
 .pb-app {
     display: flex;

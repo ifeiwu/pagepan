@@ -1,33 +1,11 @@
 <?php
 $route = request()->path();
-/*if (str_starts_with($route, '/account/')){
-    $top_title = '个人中心';
-    $menus = [
-        '/account/profile' => '个人资料',
-        '/account/order' => '我的订单',
-        '/account/address' => '收货地址',
-        '/account/settings' => '帐号设置',
-    ];
-} elseif (str_starts_with($route, '/manager/')) {
-    $top_title = '店铺管理';
-    $menus = [
-        '/manager/store' => '基本信息',
-        '/manager/work' => '作品管理',
-        '/manager/category' => '作品分类',
-        '/manager/order' => '客户订单',
-//        '/manager/notice' => '设置',
-    ];
-}*/
 ?>
 <!DOCTYPE html>
-<html lang="zh" style="color-scheme: light">
+<html lang="zh">
 <head>
     <?=$this->insert('layout/head')?>
     <style>
-        html, body {
-            scrollbar-width: none;
-        }
-        
         .app {
             display: flex;
             flex-direction: column;
@@ -41,14 +19,14 @@ $route = request()->path();
 </head>
 <body class="bg-olive-200">
     <div class="app">
-        <div class="py-3" style="width:100%;flex-shrink:0;">
+        <div class="py-1" style="width:100%;flex-shrink:0;">
             <div class="container-xl">
-                <header class="navbar" style="--background:#0000;--navbar-height:auto;--navbar-padding:0">
+                <header class="navbar" style="--background:#0000;--navbar-height:auto;--navbar-padding:0;">
                     <a href="#" class="brand">
                         <span class="brand-logo"><i class="font-serif font-bold not-italic">P</i></span>
                     </a>
                     <div class="navbar-collapse" data-sp-toggle="#navbar-app-toggle">
-                        <nav class="navbar-nav" aria-label="Main">
+                        <nav class="navbar-nav gap-1" aria-label="Main" style="--spacing:0.2rem;">
                             <a href="/admin/dashboard" class="navbar-link <?=str_starts_with($route, '/admin/dashboard') ? 'active' : ''?>">
                                 工作台
                             </a>
@@ -68,8 +46,8 @@ $route = request()->path();
                             <div class="navbar-content" data-sp-toggle="#navbar-app-favorites">
                                 <a href="#" class="navbar-link">网站主题</a>
                                 <a href="#" class="navbar-link">自定代码</a>
-                                <a href="#" class="navbar-link">页面字体</a>
-                                <a href="#" class="navbar-link">更换网站</a>
+                                <a href="#" class="navbar-link">网站字体</a>
+                                <a href="#" class="navbar-link">模板市场</a>
                                 <a href="#" class="navbar-link">回收数据</a>
                                 <a href="#" class="navbar-link">关于系统</a>
                             </div>
@@ -84,10 +62,6 @@ $route = request()->path();
                         </button>
                         <div class="dropdown" data-sp-toggle="#navbar-app-user">
                             <div class="dropdown-label">admin</div>
-                            <a href="#" class="dropdown-item">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                个人信息
-                            </a>
                             <a href="#" class="dropdown-item">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                 安全邮箱
@@ -117,7 +91,7 @@ $route = request()->path();
         </div>
 
         <main style="flex:1;width:100%;min-height:0;">
-            <div class="container-xl bg:gray-96 rt:20" style="height:100%;overflow-y:auto;">
+            <div class="container-xl h-full bg-white rounded-t-2xl">
                 <?=$this->section('content')?>
             </div>
         </main>

@@ -1,12 +1,12 @@
 <?php $page = $this->page; ?>
 
-<ku-modal id="EditModal" style="" static-backdrop hidden>
-    <div slot="header" class="flex ai:center gap:10 f:bold f:17">
+<ku-modal id="EditModal" static-backdrop hidden>
+    <div slot="header" class="flex items-center gap-2 font-semibold text-[17px]">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen preview-icon"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
         <?=$page->title ?: '新增页面'?>
     </div>
 
-    <form id="form" class="flex flex:col gap:15 mt:10 mb:20"
+    <form id="form" class="flex flex-col gap-5 mt-2 mb-5"
           data-signals="{type:'<?=$page->type ?: 'home'?>',layout:'<?=$page->layout?>',state:'<?=$page->state?>'}"
           data-on:submit="@post('/admin/pages/save-info',{contentType:'form',openWhenHidden:true})">
         <input type="hidden" name="id" value="<?=$page->id?>">
@@ -43,7 +43,7 @@
     </form>
 
     <div slot="footer">
-        <div class="flex jc:end gap:15">
+        <div class="flex justify-end gap-2">
             <div class="field field-horizontal gap-2 w-auto">
                 <input type="checkbox" form="form" class="checkbox" name="state" id="state" value="1" data-bind:state />
                 <label class="label" for="state">启用</label>

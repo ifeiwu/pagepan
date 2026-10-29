@@ -1,14 +1,9 @@
-define(['split', 'vs/editor/editor.main'], function (Split) {
-    const iframe = document.getElementById('iframe');
+define(['vs/editor/editor.main'], function (Split) {
+    const iframe = document.querySelector('#iframe');
 
-    Split(['#split-view', '#split-code'], {
-        direction: 'vertical',
-        minSize: 0,
-        gutterSize: 14,
-        onDrag: function (sizes) {
-            editor.layout();
-        },
-    })
+    document.querySelector('#workspace').addEventListener("sp-resize", (e) => {
+        editor.layout();
+    });
 
     let iframe_loading = true;
     let editor_change_timer;

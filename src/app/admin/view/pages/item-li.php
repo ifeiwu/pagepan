@@ -32,25 +32,28 @@ foreach ($this->items as $item):
             break;
     }
 ?>
-<li id="page_<?=$id?>" class="bg:<?=getTypeColor($type)?> overflow-hidden" style="<?=$state === 0 ? 'opacity:.6' : ''?>">
-    <!--<a href="#" data-on:click="@get('/admin/pages/edit/dialog?id=<?php /*=$id*/?>')">
-        <img src="/assets/admin/img/page-cover-demo.png" class="h:120 w:full obj:cover obj:top">
-    </a>-->
-    <div class="flex flex:col h:full p:15 pt:10">
-        <div class="flex ai:center">
+<li id="page_<?=$id?>" style="background-color:<?=getTypeColor($type)?>;<?=$state === 0 ? 'opacity:.6' : ''?>">
+    <div>
+        <a href="#" data-on:click="@get('/admin/pages/edit/dialog?id=<?=$id?>')">
+            <img src="/assets/admin/img/page-cover-demo.png" class="aspect-square h-32 object-cover">
+        </a>
+    </div>
+    <div class="flex flex-col h-full p-4 pr-2 pt-2">
+        <div class="flex items-center">
             <div>
                 <?php if ($state === 1):?>
-                <span class="badge bg:#32d296 f:white"><?=getTypeText($type)?></span>
+                <span class="badge bg-[#32d296] text-white"><?=getTypeText($type)?></span>
                 <?php else:?>
-                <span class="badge bg:fade f:white"><?=getTypeText($type)?></span>
+                <span class="badge bg-gray-400 text-white"><?=getTypeText($type)?></span>
                 <?php endif;?>
 
                 <?php if ($layout):?>
-                    <span class="badge bg:orange-94 f:orange f:12" style="--bg:white" aria-label="<?=$layout?>" data-tooltip="right">布局</span>
+                    <span id="badge-layout-trigger<?=$id?>" class="badge bg-orange-50 text-orange-400 cursor-default">布局</span>
+                    <div class="tooltip" data-sp-toggle="#badge-layout-trigger<?=$id?>"><?=$layout?></div>
                 <?php endif;?>
             </div>
-            <div class="ml:auto">
-                <div class="more opacity:0">
+            <div class="ml-auto">
+                <div class="more opacity-0">
                     <button id="dd-basic-trigger<?=$id?>" class="btn btn-ghost">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis preview-icon"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
                     </button>
@@ -65,17 +68,12 @@ foreach ($this->items as $item):
                 </div>
             </div>
         </div>
-        <a href="" class="flex gap:2 mt:5">
-            <div class="f:17 f:bold"><?=$item['title']?></div>
-            <!--<div class="lh:0">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w:16 h:16" color="currentColor" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 6.65032C9 6.65032 15.9383 6.10759 16.9154 7.08463C17.8924 8.06167 17.3496 15 17.3496 15M16.5 7.5L6.5 17.5"></path>
-                </svg>
-            </div>-->
+        <a href="" class="flex gap-1 mt-1">
+            <div class="text-[17px] font-semibold"><?=$item['title']?></div>
         </a>
-        <div class="f:13 f:gray f:bold mt:10 mb:20 font:mono"><?=$item['path']?></div>
-        <div class="mt:auto"></div>
+        <div class="text-xs text-[#0009] font-medium mt-1 mb-5 font-mono"><?=$item['path']?></div>
+        <div class="mt-auto"></div>
     </div>
-    <div class="abs bottom:-2 right:-2 lh:0"><?=$type_icon?></div>
+    <div class="absolute -bottom-2 -right-2 leading-0"><?=$type_icon?></div>
 </li>
 <?php endforeach; ?>

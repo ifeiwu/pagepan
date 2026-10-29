@@ -23,6 +23,10 @@
     }
 }
 
+@utility label {
+    color: #555;
+}
+
 :root {
     --font-weight-normal: 400;
     --font-weight-medium: 500;
@@ -30,10 +34,18 @@
     --font-weight-bold: 700;
 }
 
+a, button {
+    cursor: pointer;
+}
+
 @layer base {
     * {
         scrollbar-color: rgb(0, 0, 0, 0.3) transparent;
         scrollbar-width: thin;
+    }
+
+    html, body {
+        scrollbar-width: none;
     }
 
     body {
