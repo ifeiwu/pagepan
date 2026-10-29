@@ -285,28 +285,28 @@ function getTypeText($type)
 // 获取类型的颜色
 function getTypeColor($type)
 {
-    $color = '#e7f6ff';
+    $color = '#f5fbff';
     switch ($type) {
         case 'guide':
-            $color = '#f8ffe7';
+            $color = '#fcfff5';
             break;
         case 'home':
-            $color = '#e7efff';
+            $color = '#f5f8ff';
             break;
         case 'pro':
-            $color = '#ffe7fd';
+            $color = '#fff5fe';
             break;
         case 'graphic':
-            $color = '#ebf4fa';
+            $color = '#f7fbfd';
             break;
         case 'layout':
-            $color = '#fff2e7';
+            $color = '#fffaf5';
             break;
         case 'dataset':
             $color = '#eeffe7';
             break;
         case '404':
-            $color = '#ffe7e7';
+            $color = '#fff5f5';
             break;
     }
     return $color;

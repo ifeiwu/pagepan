@@ -1,7 +1,7 @@
 <?php $this->layout('admin');?>
 
 <div class="flex flex-col h-full">
-    <div class="flex p-5 pb-1">
+    <div class="flex p-7 pb-1">
         <div>
             <h2 class="text-[22px] font-bold">页面管理 <sup class="badge badge-secondary"><?=$this->page_count?></sup></h2>
         </div>
@@ -30,7 +30,7 @@
             </div>
         </div>
     </div>
-    <div class="flex gap-2 px-5">
+    <div class="flex gap-2 px-7">
         <div>
             <div class="input-group">
                 <input class="input" placeholder="搜索页面" />
@@ -55,11 +55,12 @@
         </div>
         <div class="ml-auto"></div>
     </div>
-    <div class="px-5 mt-6 pb-10 scroll-fade scrollbar scrollbar-sm" style="flex:1;width:100%;min-height:0;overflow-y:auto">
-        <ul id="pages" class="grid grid-cols-4 gap-5 justify-between
-            *:relative *:flex *:border *:border-solid *:border-gray-300 *:rounded-[10px] *:overflow-hidden
+    <div class="px-7 mt-6 pb-10 scroll-fade scrollbar scrollbar-sm" style="flex:1;width:100%;min-height:0;overflow-y:auto">
+        <ul id="pages" class="grid grid-cols-4 gap-7 justify-between
+            *:relative *:flex *:flex-col *:border *:border-solid *:transition-colors *:border-gray-300 *:rounded-xl *:overflow-hidden
            [&>li]:border-gray-200
-           [&>li:hover]:opacity-100
+           [&>li:hover]:border-gray-300
+           [&>li:hover_.edit]:opacity-100
            [&>li:hover_.more]:opacity-100
            [&>li:has([popover]:popover-open)_.more]:opacity-100"
             data-init="@get('/admin/pages/query')"></ul>
@@ -68,4 +69,4 @@
 
 <template id="EditModal"></template>
 <!--<template id="RepositoryModal" data-init="@get('/admin/repository/open-modal')"></template>-->
-<!--<template id="BuilderModal" data-init="@get('/admin/builder/open-modal?page_id=1')"></template>-->
+<template id="BuilderModal" data-init="@get('/admin/builder/open-modal?page_id=1')"></template>

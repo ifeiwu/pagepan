@@ -20,7 +20,7 @@ $route = request()->path();
 <body class="bg-olive-200">
     <div class="app">
         <div class="py-1" style="width:100%;flex-shrink:0;">
-            <div class="container-xl">
+            <div class="container-xl px-3">
                 <header class="navbar" style="--background:#0000;--navbar-height:auto;--navbar-padding:0;">
                     <a href="#" class="brand">
                         <span class="brand-logo"><i class="font-serif font-bold not-italic">P</i></span>

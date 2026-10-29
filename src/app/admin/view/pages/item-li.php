@@ -32,13 +32,16 @@ foreach ($this->items as $item):
             break;
     }
 ?>
-<li id="page_<?=$id?>" style="background-color:<?=getTypeColor($type)?>;<?=$state === 0 ? 'opacity:.6' : ''?>">
+<li id="page_<?=$id?>" class="bg-top bg-cover" style="<?=$state === 0 ? 'opacity:.6;' : ''?>background-image:url('/assets/admin/img/page-cover-demo.png');">
     <div>
-        <a href="#" data-on:click="@get('/admin/pages/edit/dialog?id=<?=$id?>')">
-            <img src="/assets/admin/img/page-cover-demo.png" class="aspect-square h-32 object-cover">
+        <a class="edit flex items-center justify-center transition-opacity relative opacity-0 h-20 before:absolute before:-inset-5 before:bg-[#fff9]"
+           data-on:click="@get('/admin/builder/open-modal?page_id=<?=$id?>')">
+            <div class="absolute btn btn-ghost underline underline-offset-3" title="编辑页面">
+                <svg xmlns="http://www.w3.org/2000/svg" style="width:22px;height:22px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen preview-icon"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
+            </div>
         </a>
     </div>
-    <div class="flex flex-col h-full p-4 pr-2 pt-2">
+    <div class="flex flex-col h-full p-4 pr-2 pt-2 z-10 rounded-t-xl" style="background-color:<?=getTypeColor($type)?>;">
         <div class="flex items-center">
             <div>
                 <?php if ($state === 1):?>
@@ -68,12 +71,10 @@ foreach ($this->items as $item):
                 </div>
             </div>
         </div>
-        <a href="" class="flex gap-1 mt-1">
-            <div class="text-[17px] font-semibold"><?=$item['title']?></div>
-        </a>
-        <div class="text-xs text-[#0009] font-medium mt-1 mb-5 font-mono"><?=$item['path']?></div>
+        <div class="flex gap-1 mt-1 text-[15px] font-semibold"><?=$item['title']?></div>
+        <div class="text-xs text-[#0009] font-medium mt-1 mb-2 font-mono"><?=$item['path']?></div>
         <div class="mt-auto"></div>
     </div>
-    <div class="absolute -bottom-2 -right-2 leading-0"><?=$type_icon?></div>
+    <div class="absolute -bottom-2 -right-2 leading-0 z-20 opacity-60"><?=$type_icon?></div>
 </li>
 <?php endforeach; ?>
