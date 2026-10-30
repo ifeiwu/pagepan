@@ -61,7 +61,7 @@ class Delete
             throw new DatastarAlertException($e->getMessage());
         }
     }
-    
+
     /*public function index(Request $request): void
     {
         $db = db();

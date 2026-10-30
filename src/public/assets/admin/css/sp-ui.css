@@ -13,7 +13,6 @@
     --color-orange-50: oklch(98% 0.016 73.684);
     --color-orange-400: oklch(75% 0.183 55.934);
     --color-slate-300: oklch(86.9% 0.022 252.894);
-    --color-gray-100: oklch(96.7% 0.003 264.542);
     --color-gray-200: oklch(92.8% 0.006 264.531);
     --color-gray-300: oklch(87.2% 0.01 258.338);
     --color-gray-400: oklch(70.7% 0.022 261.325);
@@ -35,9 +34,20 @@
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
+    --tracking-normal: 0em;
     --leading-snug: 1.375;
     --leading-normal: 1.5;
+    --radius-sm: calc(var(--radius) * .6);
     --radius-md: calc(var(--radius) * .8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --shadow-2xs: 0 1px rgb(0 0 0 / 0.05);
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
     --animate-spin: spin 1s linear infinite;
     --blur-xs: 4px;
     --default-transition-duration: 150ms;
@@ -49,6 +59,37 @@
     --breakpoint-sidebar: 48rem;
     --breakpoint-drawer: 40rem;
     --breakpoint-navbar: 48rem;
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
   }
 }
 @layer base {
@@ -2771,36 +2812,6 @@
     }
   }
   @layer l1 {
-    .field-responsive {
-      flex-direction: column;
-    }
-    :is(.field-responsive > *) {
-      width: 100%;
-    }
-    .field-responsive > .sr-only {
-      width: auto;
-    }
-    @container (width >= 28rem) {
-      .field-responsive {
-        flex-direction: row;
-        align-items: center;
-      }
-      :is(.field-responsive > *) {
-        width: auto;
-      }
-      .field-responsive:has( > .field-content) {
-        align-items: flex-start;
-      }
-      .field-responsive > .label {
-        flex: auto;
-      }
-      .field-responsive:has( > .field-content) > .checkbox {
-        margin-top: 1.5px;
-      }
-      .field-responsive:has( > .field-content) > .radio {
-        margin-top: 1.5px;
-      }
-    }
     .field-horizontal {
       flex-direction: row;
       align-items: center;
@@ -3159,14 +3170,6 @@
         overflow-x: auto;
       }
     }
-    .field-content {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      gap: var(--spacing);
-      --tw-leading: var(--leading-snug);
-      line-height: var(--leading-snug);
-    }
     .toast-content {
       display: flex;
       flex: 1;
@@ -3236,6 +3239,9 @@
   }
   .hidden {
     display: none;
+  }
+  .inline {
+    display: inline;
   }
   @layer l1.l2 {
     .avatar-image {
@@ -3464,9 +3470,6 @@
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
   }
-  .min-w-44 {
-    min-width: calc(var(--spacing) * 44);
-  }
   @layer l1.l2 {
     .calendar-weekday {
       flex: 1;
@@ -3619,52 +3622,11 @@
         }
       }
     }
-    .btn-destructive {
-      background-color: var(--destructive);
-      color: var(--color-white);
-    }
-    @media (hover: hover) {
-      .btn-destructive:hover {
-        background-color: var(--destructive);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .btn-destructive:hover {
-          background-color: color-mix(in oklab, var(--destructive) 90%, transparent);
-        }
-      }
-    }
-    .btn-destructive:focus-visible {
-      border-color: var(--destructive);
-      @supports (color: color-mix(in lab, red, red)) {
-        border-color: color-mix(in oklab, var(--destructive) 40%, transparent);
-      }
-      --tw-ring-color: var(--destructive);
-      @supports (color: color-mix(in lab, red, red)) {
-        --tw-ring-color: color-mix(in oklab, var(--destructive) 20%, transparent);
-      }
-    }
-    .btn-destructive:is(.dark, .dark *) {
-      background-color: var(--destructive);
-      @supports (color: color-mix(in lab, red, red)) {
-        background-color: color-mix(in oklab, var(--destructive) 60%, transparent);
-      }
-    }
-    @media (hover: hover) {
-      .btn-destructive:is(.dark, .dark *):hover {
-        background-color: var(--destructive);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .btn-destructive:is(.dark, .dark *):hover {
-          background-color: color-mix(in oklab, var(--destructive) 70%, transparent);
-        }
-      }
-    }
-    .btn-destructive:is(.dark, .dark *):focus-visible {
-      --tw-ring-color: var(--destructive);
-      @supports (color: color-mix(in lab, red, red)) {
-        --tw-ring-color: color-mix(in oklab, var(--destructive) 40%, transparent);
-      }
-    }
+  }
+  .border-border {
+    border-color: var(--border);
+  }
+  @layer l1 {
     .dropdown-item-destructive {
       color: var(--destructive);
     }
@@ -3774,11 +3736,11 @@
   .bg-\[\#32d296\] {
     background-color: #32d296;
   }
+  .bg-background {
+    background-color: var(--background);
+  }
   .bg-black {
     background-color: var(--color-black);
-  }
-  .bg-gray-100 {
-    background-color: var(--color-gray-100);
   }
   .bg-gray-200 {
     background-color: var(--color-gray-200);
@@ -4030,6 +3992,9 @@
     :is(.\*\:hover\:border-gray-400 > *):hover {
       border-color: var(--color-gray-400);
     }
+  }
+  .dark\:bg-black:is(.dark, .dark *) {
+    background-color: var(--color-black);
   }
   .\[\&_li\:hover\>\.bar\]\:opacity-100 li:hover > .bar {
     opacity: 100%;

@@ -11,7 +11,7 @@ class CopyCode
     // 复制内容块代码
     public function index(Request $request): void
     {
-        $block_id = get('block_id', 'int');
+        $block_id = get('block_id', 'text');
 
         $db = db();
         $block = $db->table('git_block')->where('id', '=', $block_id)->first();

@@ -9,9 +9,10 @@ class Items
     public function index(Request $request): void
     {
         $ds = datastar();
-        $repos = db()->table('git_repo')->orderByDesc('id')->get();
+        $repo_id = $ds->getSignals('repo_id');
 
         $html = '';
+        $repos = db()->table('git_repo')->orderByDesc('id')->get();
         foreach ($repos as $repo) {
             $html .= '<option value="' . $repo->id . '">' . $repo->path . '</option>';
         }
@@ -19,7 +20,7 @@ class Items
         $ds->inner($html, '#repo_options');
 
         if ($repos->isNotEmpty()) {
-            $ds->signals(['repo_id' => $repos[0]->id]);
+            $ds->signals(['repo_id' => $repo_id ?: $repos[0]->id]);
             $ds->event('change', [], '[name="repo_id"]');
         }
 

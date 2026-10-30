@@ -177,7 +177,7 @@ class AddPull
 
         $ds->event('reload', [], 'select[name="repo_id"]');
         $ds->script('sp.dialog(AddDialog).hide()');
-        $ds->script("sp.toast.success('内容块更新到最新', {position:'top-center'})");
+        $ds->script("sp.toast.success('内容块已更新', {position:'top-center'})");
         $ds->close();
     }
 
@@ -197,16 +197,17 @@ class AddPull
                 continue;
             }
 
-            $content = file_get_contents(dirname($file) . DIRECTORY_SEPARATOR . 'block.php');
-            // 包含 PHP 代码
-            if (str_contains($content, '<?php') || str_contains($content, '<?=')) {
-                $info['type'] = 'php';
-            }
-
+            $info['type'] = '';
             $info['id'] = bin2hex(random_bytes(16));
             $info['category'] = $category;
             $info['name'] = basename(dirname($file));
             $info['repo_id'] = $repo_id;
+
+            // 包含 PHP 代码
+            $content = file_get_contents(dirname($file) . DIRECTORY_SEPARATOR . 'block.php');
+            if (str_contains($content, '<?php') || str_contains($content, '<?=')) {
+                $info['type'] = 'php';
+            }
 
             $list[] = $info;
         }

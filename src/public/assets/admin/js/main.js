@@ -22,8 +22,17 @@ const DataStarHelper = {
 document.addEventListener('datastar-fetch', ({ detail }) => {
     let el = detail.el
     let tagname = el.tagName.toLowerCase()
-    if (tagname === 'button' || tagname === 'a') {
-        detail.type === 'started' && el.classList.add('ds-fetch-started', el.dataset.loading)
+    if (tagname === 'button') {
+        // 请求开始
+        if (detail.type === 'started') {
+            el.setAttribute('disabled', '');
+            // el.classList.add('ds-fetch-started')
+        } else if (detail.type === 'finished') {
+            el.removeAttribute('disabled');
+            // el.classList.remove('ds-fetch-started')
+        }
+    } else if (tagname === 'a') {
+        detail.type === 'started' && el.classList.add('ds-fetch-started', el.dataset.loading || '')
         detail.type === 'finished' && el.classList.remove('ds-fetch-started')
     } else if (tagname === 'form') {
         let submit = Array.from(el.elements).find(e => e.type === 'submit');
