@@ -44,4 +44,17 @@ class Imgph
 
         return response($body, '200')->header('Content-Type', 'image/svg+xml');
     }
+
+    public function block(Request $request): Response
+    {
+        $repo = get('repo', 'text');
+        $name = get('name', 'text');
+        $file_path = storage_path("repository/$repo/assets/$name");
+
+        if (!is_file($file_path)) {
+            return response('Not Found', 404);
+        }
+
+        return response(file_get_contents($file_path))->withHeader('Content-Type', mime_content_type($file_path));
+    }
 }

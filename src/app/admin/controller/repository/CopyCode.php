@@ -16,7 +16,7 @@ class CopyCode
         $db = db();
         $block = $db->table('git_block')->where('id', '=', $block_id)->first();
         $repo = $db->table('git_repo')->where('id', '=', $block->repo_id)->first();
-        $block_path = "{$block->category}/{$block->dirname}";
+        $block_path = "{$block->category}/{$block->name}";
 
         $base_path = storage_path("repository/{$repo->path}/$block_path");
 

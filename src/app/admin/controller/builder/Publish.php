@@ -63,7 +63,7 @@ class Publish
 
         $http = new \Workerman\Http\Client();
         $response = $http->post('https://www.test/example-blocks/build.php', [
-            'path' => 'work/001',
+            'path' => 'logo-cloud/001',
             'block_code' => $block_code,
             'webp_code' => $webp_code,
         ]);

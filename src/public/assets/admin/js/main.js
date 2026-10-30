@@ -69,11 +69,11 @@ new MutationObserver((mutations) => {
     subtree: true
 })
 
-require(['dialog'], function() {
-    /**
+/*require(['dialog'], function() {
+    /!**
      * https://github.com/bukacekd/dialog
      * @param content string | AsyncFunction | Function | HTMLElement
-     */
+     *!/
     window.dialog = (content, options = {}) => {
         let sheet = new CSSStyleSheet()
         sheet.replaceSync(`
@@ -97,7 +97,7 @@ require(['dialog'], function() {
             ...options
         })
     }
-})
+})*/
 
 require(['jquery'], function() {
     // Ajax 请求错误处理
@@ -111,7 +111,7 @@ require(['jquery'], function() {
         }
     })
 
-    // 通用浮动窗口
+    /*// 通用浮动窗口
     if ($('[data-popover-ele=""]').length) {
         require(['popover'], function() {
             PopoverComponent.init({
@@ -125,11 +125,11 @@ require(['jquery'], function() {
                 }
             })
         })
-    }
+    }*/
 })
 
 // 吐司通知
-require(['toast'], function() {
+/*require(['toast'], function() {
     toast.info = function (message, options = {}) {
         return toast({
             message,
@@ -204,7 +204,7 @@ require(['toast'], function() {
     // toast.error('Failed')
     // toast.warning('Watch out')
     // toast.loading('Processing...')
-})
+})*/
 
 const copyTextToClipboard = async (text) => {
     try {

@@ -16,6 +16,7 @@ use Webman\Route;
 use support\Request;
 
 Route::any('/imgph/bg', [app\controller\Imgph::class, 'bg']);
+Route::any('/imgph/block', [app\controller\Imgph::class, 'block']);
 
 $exclude = 'admin|api|assets|data';
 

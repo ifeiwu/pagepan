@@ -135,7 +135,7 @@ class View2
     public function getComponent(string $repository, string $component, array $data = []): string
     {
         return $this->renderFile(
-            storage_path("repository/{$repository}/components/{$component}.php"),
+            storage_path("repository/{$repository}/components/{$component}/code.php"),
             $data
         );
     }

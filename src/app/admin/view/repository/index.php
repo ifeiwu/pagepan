@@ -2,7 +2,10 @@
 
 <div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;overflow:hidden;">
     <div class="px-5" style="width:100%;flex-shrink:0;">
-        <div class="flex gap-2 p-5 rounded-md bg-gray-200">
+        <div class="flex items-center gap-2 p-5 rounded-md bg-gray-200">
+            <div>
+                <label class="label">选择仓库</label>
+            </div>
             <div class="grow">
                 <select name="repo_id" class="select bg-white"
                         data-url="/admin/repository/items"
@@ -11,13 +14,21 @@
                         data-ref:repo
                         data-bind:repo_id
                         data-on:change="$pagenum=1;$category='';$kword='';searchForm.requestSubmit();@get('/admin/repository/block-categorys')">
-                    <option value="">选择仓库</option>
                     <div id="repo_options"></div>
                 </select>
             </div>
             <div>
-                <button class="btn btn-destructive"
-                        data-on:click="confirm(`确认要删除内容块仓库【${$repo.selectedOptions[0].textContent}】吗?`) && @get('/admin/repository/delete')">删除</button>
+                <div class="btn-group">
+                    <button class="btn btn-outline"
+                            data-on:click="@post('/admin/repository/add-pull')">拉取更新</button>
+                    <button id="dd-repository-trigger" class="btn btn-outline btn-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                </div>
+                <div class="dropdown" data-sp-toggle="#dd-repository-trigger" data-sp-placement="bottom-end">
+                    <button class="dropdown-item dropdown-item-destructive"
+                            data-on:click="confirm(`确认要删除内容块仓库【${$repo.selectedOptions[0].textContent}】吗?`) && @get('/admin/repository/delete')">删除仓库</button>
+                </div>
             </div>
             <div>
                 <button id="open_add_dialog" class="btn">添加仓库</button>
@@ -31,7 +42,7 @@
                         </div>
                         <div class="dialog-content">
                             <form id="form"
-                                  data-on:submit="@post('/admin/repository/add',{contentType:'form'})">
+                                  data-on:submit="@post('/admin/repository/add-pull',{contentType:'form'})">
                                 <div class="field">
                                     <input type="url" name="url" class="input" value="https://gitee.com/ifeiwu/example-blocks.git" required />
                                 </div>

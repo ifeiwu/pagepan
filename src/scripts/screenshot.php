@@ -23,6 +23,7 @@ try {
     }
 
     $browser = (new BrowserFactory())->createBrowser([
+        'windowSize' => [1024, 768],
         'headless' => true
     ]);
 
