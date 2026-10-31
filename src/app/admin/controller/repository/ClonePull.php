@@ -7,7 +7,7 @@ use CzProject\GitPhp\Git;
 use support\Db;
 use support\Request;
 
-class AddPull
+class ClonePull
 {
     // 添加仓库
     /*public function index(Request $request): void

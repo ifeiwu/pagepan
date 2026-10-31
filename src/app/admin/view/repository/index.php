@@ -20,7 +20,7 @@
             <div>
                 <div class="btn-group">
                     <button class="btn btn-outline"
-                            data-on:click="@post('/admin/repository/add-pull')">拉取更新</button>
+                            data-on:click="@post('/admin/repository/clone-pull')">拉取更新</button>
                     <button id="dd-repository-trigger" class="btn btn-outline btn-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                     </button>
@@ -42,7 +42,7 @@
                         </div>
                         <div class="dialog-content">
                             <form id="form"
-                                  data-on:submit="@post('/admin/repository/add-pull',{contentType:'form'})">
+                                  data-on:submit="@post('/admin/repository/clone-pull',{contentType:'form'})">
                                 <div class="field">
                                     <input type="url" name="url" class="input" value="https://gitee.com/ifeiwu/example-blocks.git" required />
                                 </div>

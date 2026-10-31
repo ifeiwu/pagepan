@@ -13,7 +13,8 @@ define(['vs/editor/editor.main'], function (Split) {
         iframe_loading = false;
     }).attr('src', '/admin/builder/page?id=1')
 
-    const editor = monaco.editor.create(document.getElementById('coder'), {
+    const coder = document.querySelector('#coder');
+    const editor = monaco.editor.create(coder, {
         theme: 'vs-dark',
         language: 'php',
         minimap: { enabled: true },
@@ -21,6 +22,8 @@ define(['vs/editor/editor.main'], function (Split) {
             enabled: false
         },
     });
+
+    coder.editor = editor;
 
     editor.onDidAttemptReadOnlyEdit(() => {
         alert(editor_readonly_message);
