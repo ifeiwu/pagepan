@@ -16,7 +16,7 @@ class BlockCategorys
 
         $html = '';
         foreach ($categorys as $category) {
-            $html .= '<option value="'.$category.'">'.$category.'</option>';
+            $html .= '<option value="' . $category . '">' . $category . '</option>';
         }
 
         $ds->inner($html, '#category_options');

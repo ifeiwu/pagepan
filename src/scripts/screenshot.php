@@ -30,7 +30,7 @@ try {
 
     $browser = (new BrowserFactory())->createBrowser([
         'windowSize' => [1024, 768],
-        'headless' => false,
+        'headless' => true,
     ]);
 
     $page = $browser->createPage();
@@ -84,6 +84,8 @@ try {
         'quality' => 90,
         'optimizeForSpeed' => false,
     ])->saveToFile($file_path);
+
+    file_put_contents($file_path . '.done', '1');
 
 } catch (\Throwable $e) {
     Log::error('截图任务执行失败', [

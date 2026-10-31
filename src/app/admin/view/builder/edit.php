@@ -122,47 +122,6 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grid-2x2-plus preview-icon"><path d="M12 3v17a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1H3"/><path d="M16 19h6"/><path d="M19 22v-6"/></svg>
                 </button>
                 <div id="popover-myself-block"></div>
-
-
-                <!--<dialog class="dialog" data-sp-toggle="#dialog-share-trigger">
-                    <div class="dialog-panel">
-                        <button class="btn btn-ghost btn-xs btn-icon absolute top-3 right-3" data-sp-dismiss>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                        </button>
-                        <div class="dialog-header">
-                            <h2 class="dialog-title font-bold">创建为内容块</h2>
-                        </div>
-                        <div class="dialog-content">
-                            <div class="field gap-1">
-                                <label class="label">分类</label>
-                                <div class="input-group w-full max-w-sm" id="cb-basic-field">
-                                    <input class="input" placeholder="选择分类" />
-                                    <span class="input-group-addon input-group-addon-end">
-                                        <button class="btn btn-ghost btn-xs btn-icon" type="button" tabindex="-1" aria-label="Open list"><svg class="text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
-                                    </span>
-                                </div>
-                                <div class="combobox" data-sp-toggle="#cb-basic-field">
-                                    <div class="combobox-empty">No items found.</div>
-                                    <div class="combobox-list">
-                                        <div class="combobox-item"><input type="radio" name="cb-basic" value="next" /> Next.js</div>
-                                        <div class="combobox-item"><input type="radio" name="cb-basic" value="sveltekit" /> SvelteKit</div>
-                                        <div class="combobox-item"><input type="radio" name="cb-basic" value="nuxt" /> Nuxt.js</div>
-                                        <div class="combobox-item"><input type="radio" name="cb-basic" value="remix" /> Remix</div>
-                                        <div class="combobox-item"><input type="radio" name="cb-basic" value="astro" /> Astro</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="field gap-1">
-                                <label class="label">名称</label>
-                                <input class="input" value="" />
-                            </div>
-                        </div>
-                        <div class="dialog-footer">
-                            <button class="btn btn-outline">覆盖现有</button>
-                            <button class="btn">新建</button>
-                        </div>
-                    </div>
-                </dialog>-->
             </div>
             <div class="grow bg-[#1e1e1e]">
                 <div id="coder" style="width:100%;height:100%"></div>
