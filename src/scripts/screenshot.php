@@ -1,4 +1,5 @@
 <?php
+
 define('ROOT_PATH', dirname(__DIR__));
 
 require ROOT_PATH . '/vendor/autoload.php';
@@ -9,8 +10,13 @@ use support\FileSystem;
 use HeadlessChromium\BrowserFactory;
 use HeadlessChromium\Clip;
 
-$host = $argv[1] ?? '';
-$page_path = $argv[2] ?? '';
+$host = rtrim($argv[1] ?? '', '/');
+$page_path = trim($argv[2] ?? '', '/');
+
+if (!$host || !$page_path || str_contains($page_path, '..')) {
+    exit(1);
+}
+
 $page_url = "$host/$page_path";
 $file_path = base_path("storage/page/screenshot/{$page_path}.webp");
 $save_path = dirname($file_path);
@@ -24,19 +30,36 @@ try {
 
     $browser = (new BrowserFactory())->createBrowser([
         'windowSize' => [1024, 768],
-        'headless' => true
+        'headless' => false,
     ]);
 
     $page = $browser->createPage();
 
-    $navigation = $page->navigate($page_url);
-    $navigation->waitForNavigation();
+    $page->navigate($page_url)->waitForNavigation();
 
+    // 等待图片和字体加载
+    $page->evaluate('async () => {
+        await document.fonts.ready;
+
+        await Promise.all(
+            Array.from(document.images).map(img => {
+                if (img.complete) return Promise.resolve();
+
+                return new Promise(resolve => {
+                    img.addEventListener("load", resolve, {once: true});
+                    img.addEventListener("error", resolve, {once: true});
+                });
+            })
+        );
+    }')->waitForResponse();
+
+    // 获取 body 第一个子元素的位置和尺寸
     $rect = $page->evaluate('(() => {
         const el = document.querySelector("body > *");
         if (!el) return null;
 
         const r = el.getBoundingClientRect();
+
         return {
             x: r.x + window.scrollX,
             y: r.y + window.scrollY,
@@ -49,7 +72,7 @@ try {
         throw new \Exception('未找到可截图的元素');
     }
 
-    $screenshot = $page->screenshot([
+    $page->screenshot([
         'captureBeyondViewport' => true,
         'clip' => new Clip(
             $rect['x'],
@@ -57,22 +80,21 @@ try {
             $rect['width'],
             $rect['height']
         ),
-        'format'  => 'webp',  // default to 'png' - possible values: 'png', 'jpeg', 'webp'
-        'quality' => 90,      // only when format is 'jpeg' or 'webp' - default 100
-        'optimizeForSpeed' => false // default to 'false' - Optimize image encoding for speed, not for resulting size
-    ]);
+        'format' => 'webp',
+        'quality' => 90,
+        'optimizeForSpeed' => false,
+    ])->saveToFile($file_path);
 
-    $screenshot->saveToFile($file_path);
-}
-catch (\Throwable $e) {
+} catch (\Throwable $e) {
     Log::error('截图任务执行失败', [
         'message' => $e->getMessage(),
         'file' => $e->getFile(),
         'line' => $e->getLine(),
         'trace' => $e->getTraceAsString(),
     ]);
+
     exit(1);
-}
-finally {
+
+} finally {
     $browser?->close();
 }

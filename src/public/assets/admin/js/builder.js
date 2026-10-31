@@ -5,10 +5,10 @@ define(['jquery', 'js/builder/resize', 'js/builder/coder'], function() {
 
         $.post('/admin/builder/publish', {'page_id': appvar.page.id}, function (res) {
             if (res.code === 0) {
-                $publish.attr('disabled', false).text('发布');
             } else {
                 alert(res.message);
             }
+            $publish.attr('disabled', false).text('发布');
         })
     })
 })

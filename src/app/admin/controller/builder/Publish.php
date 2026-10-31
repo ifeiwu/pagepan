@@ -48,7 +48,7 @@ class Publish
         $host = $request->header('x-forwarded-proto') . '://' . $request->host();
         run_script('screenshot.php', $host, $page_path);
 
-        $this->buildBlock();
+//        $this->buildBlock();
 
         return json_success('ok');
     }
