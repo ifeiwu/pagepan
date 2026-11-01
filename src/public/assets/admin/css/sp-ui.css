@@ -13,6 +13,7 @@
     --color-orange-50: oklch(98% 0.016 73.684);
     --color-orange-400: oklch(75% 0.183 55.934);
     --color-slate-300: oklch(86.9% 0.022 252.894);
+    --color-gray-100: oklch(96.7% 0.003 264.542);
     --color-gray-200: oklch(92.8% 0.006 264.531);
     --color-gray-300: oklch(87.2% 0.01 258.338);
     --color-gray-400: oklch(70.7% 0.022 261.325);
@@ -396,78 +397,6 @@
       &:is(.dark,.dark *) {
         color: var(--foreground);
       }
-    }
-    .combobox-item {
-      position: relative;
-      display: flex;
-      width: 100%;
-      cursor: default;
-      align-items: center;
-      gap: calc(var(--spacing) * 2);
-      border-radius: calc(var(--radius) * .6);
-      padding-block: calc(var(--spacing) * 1.5);
-      padding-inline-start: calc(var(--spacing) * 2);
-      padding-inline-end: calc(var(--spacing) * 8);
-      font-size: var(--text-sm);
-      line-height: var(--tw-leading, var(--text-sm--line-height));
-      --tw-outline-style: none;
-      outline-style: none;
-    }
-    @media (forced-colors: active) {
-      .combobox-item {
-        outline: 2px solid transparent;
-        outline-offset: 2px;
-      }
-    }
-    .combobox-item {
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    .combobox-item.active {
-      background-color: var(--accent);
-      color: var(--accent-foreground);
-    }
-    .combobox-item svg {
-      pointer-events: none;
-      flex-shrink: 0;
-    }
-    .combobox-item svg:not([class*="size-"]) {
-      width: calc(var(--spacing) * 4);
-      height: calc(var(--spacing) * 4);
-    }
-    .combobox-item > input {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-      border-width: 0;
-    }
-    .combobox-item[aria-disabled="true"] {
-      pointer-events: none;
-      opacity: 50%;
-    }
-    .combobox-item::after {
-      pointer-events: none;
-      position: absolute;
-      inset-inline-end: calc(var(--spacing) * 2);
-      top: calc(1 / 2 * 100%);
-      display: none;
-      width: calc(var(--spacing) * 4);
-      height: calc(var(--spacing) * 4);
-      --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);
-      translate: var(--tw-translate-x) var(--tw-translate-y);
-      background-color: currentcolor;
-      --tw-content: "";
-      content: var(--tw-content);
-      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
-      mask-size: 100% 100%;
-    }
-    .combobox-item:has(input:checked)::after {
-      display: block;
     }
     .navbar-link {
       position: relative;
@@ -1782,63 +1711,6 @@
       --tw-exit-scale: .95;
       animation-fill-mode: forwards;
     }
-    .combobox:not([popover]) {
-      display: none;
-    }
-    .combobox {
-      position: fixed;
-      inset: auto;
-      z-index: 998;
-      margin: 0px;
-      overflow: hidden;
-      max-height: var(--sp-available-height);
-      border-radius: calc(var(--radius) * .8);
-      --tw-border-style: none;
-      border-style: none;
-      background-color: var(--popover);
-      color: var(--popover-foreground);
-      --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
-      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-      --tw-ring-color: var(--foreground);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .combobox {
-        --tw-ring-color: color-mix(in oklab, var(--foreground) 10%, transparent);
-      }
-    }
-    .combobox.show {
-      animation: enter var(--tw-animation-duration,var(--tw-duration,.15s))var(--tw-ease,ease)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
-      --tw-duration: 100ms;
-      transition-duration: 100ms;
-      --tw-enter-opacity: calc(0*.01);
-      --tw-enter-opacity: 0;
-      --tw-enter-scale: calc(95*1%);
-      --tw-enter-scale: .95;
-      animation-fill-mode: forwards;
-    }
-    .combobox.show[data-sp-side="bottom"] {
-      --tw-enter-translate-y: calc(2*var(--spacing)*-1);
-    }
-    .combobox.show[data-sp-side="left"] {
-      --tw-enter-translate-x: calc(2*var(--spacing));
-    }
-    .combobox.show[data-sp-side="right"] {
-      --tw-enter-translate-x: calc(2*var(--spacing)*-1);
-    }
-    .combobox.show[data-sp-side="top"] {
-      --tw-enter-translate-y: calc(2*var(--spacing));
-    }
-    .combobox.hide {
-      animation: exit var(--tw-animation-duration,var(--tw-duration,.15s))var(--tw-ease,ease)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
-      --tw-duration: 100ms;
-      transition-duration: 100ms;
-      --tw-exit-opacity: calc(0*.01);
-      --tw-exit-opacity: 0;
-      --tw-exit-scale: calc(95*1%);
-      --tw-exit-scale: .95;
-      animation-fill-mode: forwards;
-    }
     .tooltip:not([popover]) {
       display: none;
     }
@@ -2736,9 +2608,6 @@
   .-right-2 {
     right: calc(var(--spacing) * -2);
   }
-  .right-0 {
-    right: 0px;
-  }
   .right-3 {
     right: calc(var(--spacing) * 3);
   }
@@ -2765,9 +2634,6 @@
   .-bottom-2 {
     bottom: calc(var(--spacing) * -2);
   }
-  .bottom-0 {
-    bottom: 0px;
-  }
   @layer l1.l2 {
     .resizable-grip {
       z-index: 10;
@@ -2784,21 +2650,6 @@
   }
   .z-20 {
     z-index: 20;
-  }
-  @layer l1 {
-    .input-group-addon-end {
-      order: 9999;
-      padding-inline-start: 0px;
-      padding-inline-end: calc(var(--spacing) * 2);
-    }
-    .input-group-addon-end:has( > button) {
-      margin-inline-start: 0px;
-      margin-inline-end: -.25rem;
-    }
-    .input-group-addon-end:has( > kbd) {
-      margin-inline-start: 0px;
-      margin-inline-end: -.15rem;
-    }
   }
   @layer l1.l2 {
     .input-group-addon {
@@ -3358,17 +3209,6 @@
       --tw-font-weight: var(--font-weight-medium);
       font-weight: var(--font-weight-medium);
     }
-    .combobox-empty {
-      display: none;
-      padding-block: calc(var(--spacing) * 2);
-      text-align: center;
-      font-size: var(--text-sm);
-      line-height: var(--tw-leading, var(--text-sm--line-height));
-      color: var(--muted-foreground);
-    }
-    .combobox-empty.visible {
-      display: block;
-    }
   }
   .block {
     display: block;
@@ -3391,79 +3231,6 @@
     display: inline;
   }
   @layer l1.l2 {
-    .radio {
-      aspect-ratio: 1 / 1;
-      width: calc(var(--spacing) * 4);
-      height: calc(var(--spacing) * 4);
-      flex-shrink: 0;
-      cursor: pointer;
-      appearance: none;
-      border-radius: calc(infinity * 1px);
-      border-style: var(--tw-border-style);
-      border-width: 1px;
-      border-color: var(--input);
-      color: var(--primary);
-      --tw-outline-style: none;
-      outline-style: none;
-      transition-property: color,box-shadow;
-      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-      transition-duration: var(--tw-duration, var(--default-transition-duration));
-    }
-    .radio:disabled {
-      cursor: not-allowed;
-      opacity: 50%;
-    }
-    .radio:focus-visible {
-      border-color: var(--ring);
-      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-      --tw-ring-color: var(--ring);
-      @supports (color: color-mix(in lab, red, red)) {
-        --tw-ring-color: color-mix(in oklab, var(--ring) 50%, transparent);
-      }
-    }
-    .radio[aria-invalid="true"] {
-      border-color: var(--destructive);
-      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-      --tw-ring-color: var(--destructive);
-      @supports (color: color-mix(in lab, red, red)) {
-        --tw-ring-color: color-mix(in oklab, var(--destructive) 20%, transparent);
-      }
-    }
-    .radio[aria-invalid="true"]:checked {
-      border-color: var(--primary);
-    }
-    .radio:is(.dark, .dark *) {
-      background-color: var(--input);
-      @supports (color: color-mix(in lab, red, red)) {
-        background-color: color-mix(in oklab, var(--input) 30%, transparent);
-      }
-    }
-    .radio:is(.dark, .dark *)[aria-invalid="true"] {
-      border-color: var(--destructive);
-      @supports (color: color-mix(in lab, red, red)) {
-        border-color: color-mix(in oklab, var(--destructive) 50%, transparent);
-      }
-      --tw-ring-color: var(--destructive);
-      @supports (color: color-mix(in lab, red, red)) {
-        --tw-ring-color: color-mix(in oklab, var(--destructive) 40%, transparent);
-      }
-    }
-    .radio:checked {
-      border-color: var(--primary);
-      background-color: var(--primary);
-      &:is(.dark,.dark *) {
-        background-color: var(--primary);
-      }
-      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='4' fill='white'/%3e%3c/svg%3e");
-      background-size: 100% 100%;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-    :is(.dark *) .radio:checked {
-      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='4' fill='%23171717'/%3e%3c/svg%3e");
-    }
     .avatar-image {
       aspect-ratio: 1 / 1;
       width: 100%;
@@ -3619,6 +3386,21 @@
     height: calc(var(--spacing) * 4);
   }
   @layer l1 {
+    .btn-sm {
+      height: calc(var(--spacing) * 8);
+      gap: var(--spacing);
+      border-radius: min(var(--radius-md), 10px);
+      padding-inline: calc(var(--spacing) * 2.5);
+    }
+    :where(:is(.btn-group)) .btn-sm {
+      border-radius: calc(var(--radius) * .8);
+    }
+    .btn-sm:has(:is(.icon-end)) {
+      padding-inline-end: calc(var(--spacing) * 1.5);
+    }
+    .btn-sm:has(:is(.icon-start)) {
+      padding-inline-start: calc(var(--spacing) * 1.5);
+    }
     .date-picker-trigger-sm {
       height: calc(var(--spacing) * 8);
     }
@@ -3639,16 +3421,6 @@
     height: 100vh;
   }
   @layer l1.l2 {
-    .combobox-list {
-      max-height: calc(var(--spacing) * 72);
-      scroll-padding-block: var(--spacing);
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      padding: var(--spacing);
-    }
-    .combobox-list:not(:has(.combobox-item:not([hidden]))) {
-      padding: 0px;
-    }
     .resizable-panel {
       min-height: 0px;
       min-width: 0px;
@@ -3981,6 +3753,9 @@
   .bg-black {
     background-color: var(--color-black);
   }
+  .bg-gray-100 {
+    background-color: var(--color-gray-100);
+  }
   .bg-gray-200 {
     background-color: var(--color-gray-200);
   }
@@ -4008,9 +3783,6 @@
   .bg-top {
     background-position: top;
   }
-  .p-1 {
-    padding: var(--spacing);
-  }
   .p-4 {
     padding: calc(var(--spacing) * 4);
   }
@@ -4037,6 +3809,9 @@
   .px-3 {
     padding-inline: calc(var(--spacing) * 3);
   }
+  .px-4 {
+    padding-inline: calc(var(--spacing) * 4);
+  }
   .px-5 {
     padding-inline: calc(var(--spacing) * 5);
   }
@@ -4045,6 +3820,9 @@
   }
   .py-1 {
     padding-block: var(--spacing);
+  }
+  .py-2 {
+    padding-block: calc(var(--spacing) * 2);
   }
   .py-3 {
     padding-block: calc(var(--spacing) * 3);
@@ -4066,9 +3844,6 @@
   }
   .text-center {
     text-align: center;
-  }
-  .text-right {
-    text-align: right;
   }
   .font-mono {
     font-family: var(--font-mono);
@@ -4238,12 +4013,6 @@
   }
   .dark\:bg-black:is(.dark, .dark *) {
     background-color: var(--color-black);
-  }
-  .\[\&_li\:hover\>\.bar\]\:opacity-100 li:hover > .bar {
-    opacity: 100%;
-  }
-  .\[\&_li\>\.bar\]\:opacity-0 li > .bar {
-    opacity: 0%;
   }
   .\[\&\>li\]\:border-gray-200 > li {
     border-color: var(--color-gray-200);
@@ -5103,6 +4872,14 @@ a, button {
   inherits: false;
   initial-value: solid;
 }
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-translate-x {
   syntax: "*";
   inherits: false;
@@ -5117,14 +4894,6 @@ a, button {
   syntax: "*";
   inherits: false;
   initial-value: 0;
-}
-@property --tw-duration {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-leading {
-  syntax: "*";
-  inherits: false;
 }
 @property --tw-ease {
   syntax: "*";
@@ -5225,11 +4994,11 @@ a, button {
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
       --tw-outline-style: solid;
+      --tw-duration: initial;
+      --tw-leading: initial;
       --tw-translate-x: 0;
       --tw-translate-y: 0;
       --tw-translate-z: 0;
-      --tw-duration: initial;
-      --tw-leading: initial;
       --tw-ease: initial;
       --tw-backdrop-blur: initial;
       --tw-backdrop-brightness: initial;

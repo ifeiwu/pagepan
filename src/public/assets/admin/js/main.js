@@ -218,6 +218,7 @@ require(['jquery'], function() {
 const copyTextToClipboard = async (text) => {
     try {
         await navigator.clipboard.writeText(text);
+        sp.toast.success('已复制到剪贴板');
     } catch (error) {
         alert('复制失败：' + error.message);
     }

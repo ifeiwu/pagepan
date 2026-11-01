@@ -77,6 +77,7 @@ class Myself
     {
         if (!FileSystem::rmkdir($file)) return false;
 
+        $content .= '<script src="/assets/js/skeleton.js"></script>';
         return file_put_contents($file, $content) !== false;
     }
 

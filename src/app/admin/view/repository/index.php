@@ -84,7 +84,7 @@
     </div>
 
     <div class="px-5 scroll-fade scroll-fade-5 scrollbar-none" style="flex:1;width:100%;min-height:0;overflow-y:auto">
-        <ul id="items" class="gap-5 columns-3 *:relative *:mb-5 *:rounded-md *:border *:border-solid *:hover:border-gray-400 *:overflow-hidden [&_li>.bar]:opacity-0 [&_li:hover>.bar]:opacity-100"></ul>
+        <ul id="items" class="gap-5 columns-3 *:relative *:mb-5 *:rounded-md *:border *:border-solid *:hover:border-gray-400 *:overflow-hidden"></ul>
         <div class="text-center text-gray-500" data-show="$fetching">加载数据中</div>
         <div class="text-gray-500 text-center mt-10" style="display:none" data-show="$nodata">没有找到相关内容</div>
     </div>
