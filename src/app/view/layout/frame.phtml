@@ -1,9 +1,12 @@
 <?php
-$theme = json_decode($this->site['theme'], true);
+$site = context('site');
+$page = context('page');
+
+$theme = json_decode($site['theme'], true);
 $theme_screen = $theme['screen'];
 ?>
 <!DOCTYPE html>
-<html lang="<?=$theme['base']['lang']?>" class="-<?=str_replace('/', '-', $this->pagevar['page_path'] ?: 'index')?>">
+<html lang="<?=$theme['base']['lang']?>" class="-<?=str_replace('/', '-', $page['path'] ?: 'index')?>">
 <head>
     <meta charset="utf-8">
     <meta name="renderer" content="webkit">
@@ -24,19 +27,19 @@ $theme_screen = $theme['screen'];
 
     <?php
     // 网站图标
-    if ($this->site['favicon'] ?? '') {
-        echo '<link rel="icon" href="/' . $this->site['favicon'] . '">';
+    if ($site['favicon'] ?? '') {
+        echo '<link rel="icon" href="/' . $site['favicon'] . '">';
     }
     // 应用图标
-    if ($this->site['touchicon'] ?? '') {
-        echo '<link rel="apple-touch-icon" href="/' . $this->site['touchicon'] . '">';
+    if ($site['touchicon'] ?? '') {
+        echo '<link rel="apple-touch-icon" href="/' . $site['touchicon'] . '">';
     }
     // 应用清单
-    if ($this->site['manifest'] ?? '') {
-        echo '<link rel="manifest" href="/data/manifest/manifest.json?' . $this->site['timestamp'] . '">';
+    if ($site['manifest'] ?? '') {
+        echo '<link rel="manifest" href="/data/manifest/manifest.json?' . $site['timestamp'] . '">';
     }
     // 自定义字体
-    $site_fonts_list = $this->site['fonts_list'] ?? [];
+    $site_fonts_list = $site['fonts_list'] ?? [];
     if ($site_fonts_list) {
         $site_fonts_list = json_decode($site_fonts_list, true);
         foreach ($site_fonts_list as $font) {
@@ -46,15 +49,14 @@ $theme_screen = $theme['screen'];
         }
     }
     // 图文样式
-    if ($this->site['open_graphic_css'] && $this->pagevar['page_type'] == 'graphic') {
+    if ($site['open_graphic_css'] && $page['type'] == 'graphic') {
         echo '<link href="/data/css/graphic.min.css" rel="stylesheet">';
     }
     // 全局样式
-    if ($this->site['open_global_css']) {
+    if ($site['open_global_css']) {
         echo '<link href="/data/css/global.min.css" rel="stylesheet">';
     }
     ?>
-    <link href="/assets/css/main.css" rel="stylesheet">
 
     <script>
         const pagevar = <?=json_encode2($this->pagevar)?>;
@@ -66,7 +68,11 @@ $theme_screen = $theme['screen'];
     <script src="/assets/js/tailwind.js"></script>
     <style type="text/tailwindcss">
         @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+        @theme {
+            --default-font-family: "system-ui, -apple-system, Tahoma, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif"
+        }
 
+        
         :root {
             --radius: 0.625rem;
             --background: oklch(1 0 0);
@@ -113,52 +119,40 @@ $theme_screen = $theme['screen'];
         @theme inline {
             --color-background: var(--background);
             --color-foreground: var(--foreground);
-
             --color-card: var(--card);
             --color-card-foreground: var(--card-foreground);
-
             --color-popover: var(--popover);
             --color-popover-foreground: var(--popover-foreground);
-
             --color-primary: var(--primary);
             --color-primary-foreground: var(--primary-foreground);
-
             --color-secondary: var(--secondary);
             --color-secondary-foreground: var(--secondary-foreground);
-
             --color-muted: var(--muted);
             --color-muted-foreground: var(--muted-foreground);
-
             --color-accent: var(--accent);
             --color-accent-foreground: var(--accent-foreground);
-
             --color-destructive: var(--destructive);
-
             --color-border: var(--border);
             --color-input: var(--input);
             --color-ring: var(--ring);
-
             --radius-sm: calc(var(--radius) - 4px);
             --radius-md: calc(var(--radius) - 2px);
             --radius-lg: var(--radius);
             --radius-xl: calc(var(--radius) + 4px);
         }
-
+        
         @layer base {
             * {
                 @apply border-border outline-ring/50;
             }
-
-            body {
-                @apply bg-background text-foreground;
-            }
         }
     </style>
+    <link href="/assets/css/main.css" rel="stylesheet">
 </head>
 <body>
     <?php
     // 全局页头
-    /*if ($this->site['open_header_php']) {
+    /*if ($site['open_header_php']) {
         include ROOT_PATH . 'data/php/header.inc';
     }*/
 
@@ -166,24 +160,24 @@ $theme_screen = $theme['screen'];
     echo $this->section('content');
 
     /*// 全局页脚
-    if ($this->site['open_footer_php']) {
+    if ($site['open_footer_php']) {
         include ROOT_PATH . 'data/php/footer.inc';
     }
     // 全局脚本
-    if ($this->site['open_global_js']) {
+    if ($site['open_global_js']) {
         echo '<script src="' . assets('data/js/global.min.js') . '"></script>';
     }
     // 在线客服
-    if ($this->site['service3_open'] == 1) {
-        echo html_decode(base64_decode($this->site['service3_code']));
+    if ($site['service3_open'] == 1) {
+        echo html_decode(base64_decode($site['service3_code']));
     }
     // 社交分享
-    if ($this->site['share3_open'] == 1) {
-        echo html_decode(base64_decode($this->site['share3_code']));
+    if ($site['share3_open'] == 1) {
+        echo html_decode(base64_decode($site['share3_code']));
     }
     // 流量统计
-    if ($this->site['stats3_open'] == 1) {
-        echo html_decode(base64_decode($this->site['stats3_code']));
+    if ($site['stats3_open'] == 1) {
+        echo html_decode(base64_decode($site['stats3_code']));
     }*/
     ?>
     <script src="/assets/js/main.js"></script>

@@ -53,6 +53,18 @@ function queue($name, $data = [], $delay = 0)
     \Webman\RedisQueue\Client::send($name, $data, $delay);
 }
 
+function context($name, $data = null)
+{
+    if (func_num_args() === 1) {
+        [$key, $field] = array_pad(explode('.', $name, 2), 2, null);
+        $value = Webman\Context::get($key);
+
+        return $field === null ? $value : (is_array($value) ? ($value[$field] ?? null) : ($value->$field ?? null));
+    }
+
+    Webman\Context::set($name, $data);
+}
+
 // 运行 PHP CLI 脚本
 function run_script(string $filename, ...$args): array
 {

@@ -10,7 +10,7 @@ class SaveInfo
     public function index(Request $request): void
     {
         $id = post('id', 'int');
-        $path = post('path', 'text', '') ?: 'index';
+        $path = post('path', 'text', '');
         $row = [
             'state' => post('state', 'text', 0),
             'type' => post('type', 'alnum', 'home'),

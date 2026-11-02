@@ -332,6 +332,22 @@ class View2
         return $url . '?v=' . APP_VER;
     }
 
+    public function isActive(string $url, string $path = null): bool
+    {
+        $page_path = $path ?? context('page.path');
+
+        if (in_array($url, ['', '#'], true)) {
+            return in_array($page_path, ['', '/'], true);
+        }
+
+        return trim($page_path, '/') === trim($url, '/');
+    }
+
+    public function active(string $url): string
+    {
+        return $this->isActive($url) ? 'active' : '';
+    }
+
     /**
      * 将多个函数应用于变量。
      * @param mixed $var

@@ -3,7 +3,6 @@
         <h4 class="popover-title">创建为内容块</h4>
     </div>
     <form id="form_myself_block" class="grid gap-2">
-        <input type="hidden" name="content">
         <div class="grid grid-cols-5 items-center gap-4">
             <label class="label">分类</label>
             <div class="col-span-4">
@@ -37,11 +36,14 @@
             $form.on('submit', function(e) {
                 e.preventDefault();
 
-                $(this).find('[name="content"]').val($('#coder')[0].editor.getValue());
+//                $(this).find('[name="content"]').val($('#coder')[0].editor.getValue());
 
                 const submitter = e.originalEvent.submitter;
                 const data = $(this).serializeArray();
-                data.push({name: submitter.name, value: submitter.value}, {name: 'page_id', value: appvar.page.id});
+                data.push(
+                    {name: submitter.name, value: submitter.value},
+                    {name: 'page_id', value: appvar.page.id}
+                );
 
                 $submits.prop('disabled', true);
 

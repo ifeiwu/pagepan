@@ -1,20 +1,23 @@
 <?php
-$theme = $this->site['theme'] ? json_decode($this->site['theme'], true) : [];
+$site = context('site');
+$page = context('page');
+
+$theme = $site['theme'] ? json_decode($site['theme'], true) : [];
 
 $pagevar = [
     'isBuilder' => true,
-    'domain' => $this->site['domain'],
-    'domain3' => $this->site['domain3'] ?: '',
-    'page_id' => $this->page->id,
-    'page_path' => $this->page->path,
-    'page_title' => $this->page->title,
-    'timestamp' => $this->site['timestamp']
+    'domain' => $site['domain'],
+    'domain3' => $site['domain3'] ?: '',
+    'page_id' => $page['id'],
+    'page_path' => $page['path'],
+    'page_title' => $page['title'],
+    'timestamp' => $site['timestamp']
 ];
 ?>
 <!DOCTYPE html>
-<html lang="<?=$theme['base']['lang']?>" class="-<?=str_replace('/', '-', $this->page->path ?: 'index')?>">
+<html lang="<?=$theme['base']['lang']?>" class="-<?=str_replace('/', '-', $page['path'] ?: 'index')?>">
 <head>
-    <base href="<?=$this->site['domain']?>">
+    <base href="<?=$site['domain']?>">
     <meta charset="utf-8">
     <meta name="renderer" content="webkit">
     <meta name="force-rendering" content="webkit">
@@ -23,9 +26,7 @@ $pagevar = [
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <?php endif;?>
 
-    <title><?=$this->page->title?></title>
-
-    <link href="/assets/css/main.css" rel="stylesheet">
+    <title><?=$page['title']?></title>
 
     <script>
         var pagevar = <?=json_encode($pagevar)?>;
@@ -45,48 +46,51 @@ $pagevar = [
     <script src="/assets/js/tailwind.js"></script>
     <style type="text/tailwindcss">
         @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+        @theme {
+            --default-font-family: "system-ui, -apple-system, Tahoma, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif"
+        }
 
         :root {
-        --radius: 0.625rem;
-        --background: oklch(1 0 0);
-        --foreground: oklch(0.141 0.004 150.069);
-        --card: oklch(1 0 0);
-        --card-foreground: oklch(0.141 0.004 150.069);
-        --popover: oklch(1 0 0);
-        --popover-foreground: oklch(0.141 0.004 150.069);
-        --primary: oklch(0.527 0.154 150.069);
-        --primary-foreground: oklch(0.985 0 0);
-        --secondary: oklch(0.967 0.009 150.069);
-        --secondary-foreground: oklch(0.21 0.009 150.069);
-        --muted: oklch(0.967 0.009 150.069);
-        --muted-foreground: oklch(0.552 0.009 150.069);
-        --accent: oklch(0.982 0.018 155.826);
-        --accent-foreground: oklch(0.393 0.095 152.535);
-        --destructive: oklch(0.583 0.239 28.487);
-        --border: oklch(0.92 0.009 150.069);
-        --input: oklch(0.92 0.009 150.069);
-        --ring: oklch(0.792 0.209 151.711);
+            --radius: 0.625rem;
+            --background: oklch(1 0 0);
+            --foreground: oklch(0.141 0.004 150.069);
+            --card: oklch(1 0 0);
+            --card-foreground: oklch(0.141 0.004 150.069);
+            --popover: oklch(1 0 0);
+            --popover-foreground: oklch(0.141 0.004 150.069);
+            --primary: oklch(0.527 0.154 150.069);
+            --primary-foreground: oklch(0.985 0 0);
+            --secondary: oklch(0.967 0.009 150.069);
+            --secondary-foreground: oklch(0.21 0.009 150.069);
+            --muted: oklch(0.967 0.009 150.069);
+            --muted-foreground: oklch(0.552 0.009 150.069);
+            --accent: oklch(0.982 0.018 155.826);
+            --accent-foreground: oklch(0.393 0.095 152.535);
+            --destructive: oklch(0.583 0.239 28.487);
+            --border: oklch(0.92 0.009 150.069);
+            --input: oklch(0.92 0.009 150.069);
+            --ring: oklch(0.792 0.209 151.711);
         }
 
         [data-theme="dark"] {
-        --background: oklch(0.141 0.004 150.069);
-        --foreground: oklch(0.985 0.004 150.069);
-        --card: oklch(0.21 0.009 150.069);
-        --card-foreground: oklch(0.985 0.004 150.069);
-        --popover: oklch(0.21 0.009 150.069);
-        --popover-foreground: oklch(0.985 0.004 150.069);
-        --primary: oklch(0.792 0.209 151.711);
-        --primary-foreground: oklch(0.141 0.004 150.069);
-        --secondary: oklch(0.274 0.009 150.069);
-        --secondary-foreground: oklch(0.985 0.004 150.069);
-        --muted: oklch(0.274 0.009 150.069);
-        --muted-foreground: oklch(0.705 0.009 150.069);
-        --accent: oklch(0.266 0.065 152.934);
-        --accent-foreground: oklch(0.962 0.044 156.743);
-        --destructive: oklch(0.702 0.189 22.162);
-        --border: oklch(0.274 0.009 150.069);
-        --input: oklch(0.274 0.009 150.069);
-        --ring: oklch(0.723 0.219 149.579);
+            --background: oklch(0.141 0.004 150.069);
+            --foreground: oklch(0.985 0.004 150.069);
+            --card: oklch(0.21 0.009 150.069);
+            --card-foreground: oklch(0.985 0.004 150.069);
+            --popover: oklch(0.21 0.009 150.069);
+            --popover-foreground: oklch(0.985 0.004 150.069);
+            --primary: oklch(0.792 0.209 151.711);
+            --primary-foreground: oklch(0.141 0.004 150.069);
+            --secondary: oklch(0.274 0.009 150.069);
+            --secondary-foreground: oklch(0.985 0.004 150.069);
+            --muted: oklch(0.274 0.009 150.069);
+            --muted-foreground: oklch(0.705 0.009 150.069);
+            --accent: oklch(0.266 0.065 152.934);
+            --accent-foreground: oklch(0.962 0.044 156.743);
+            --destructive: oklch(0.702 0.189 22.162);
+            --border: oklch(0.274 0.009 150.069);
+            --input: oklch(0.274 0.009 150.069);
+            --ring: oklch(0.723 0.219 149.579);
         }
 
         @theme inline {
@@ -121,14 +125,11 @@ $pagevar = [
             * {
                 @apply border-border outline-ring/50;
             }
-
-            body {
-                @apply bg-background text-foreground;
-            }
         }
     </style>
+    <link href="/assets/css/main.css" rel="stylesheet">
 </head>
-<body class="bg-white dark:bg-black">
+<body>
     <?php
         $page_code = '';
         foreach ($this->blocks as $block) {

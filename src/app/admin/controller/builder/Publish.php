@@ -48,6 +48,11 @@ class Publish
         $host = $request->header('x-forwarded-proto') . '://' . $request->host();
         run_script('screenshot.php', $host, $page_path);
 
+        $screenshot_file = storage_path("page/screenshot/{$page_path}.webp");
+        $done_file = $screenshot_file . '.done';
+
+        @unlink($done_file);
+
 //        $this->buildBlock();
 
         return json_success('ok');

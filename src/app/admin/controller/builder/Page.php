@@ -23,12 +23,13 @@ class Page
             }
         }
 
-        $page = $db->table('page')->where('id', $page_id)->first();
+        $page = (array)$db->table('page')->where('id', $page_id)->first();
         $blocks = $db->table('page_block')->where('page_id', $page_id)->get();
 
+        context('site', $site);
+        context('page', $page);
+
         return view2()->display('builder/page', [
-            'site' => $site,
-            'page' => $page,
             'blocks' => $blocks
         ]);
     }

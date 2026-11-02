@@ -60,7 +60,7 @@ Route::group('/{path:(?!(?:' . $exclude . ')(?:/|$))(?!.*\.[^/]+$).*}', function
             if (!$page) {
                 // 查询专页首页，别名可以是空字符串或 index
                 $page = $db->table('page')->where([['state', '=', 1], ['type', '=', 'pro'], ['path', 'IN', ['index', '']]])->first();
-                $page->path = 'index';
+                $page['path'] = 'index';
             }
         }
 
@@ -68,7 +68,8 @@ Route::group('/{path:(?!(?:' . $exclude . ')(?:/|$))(?!.*\.[^/]+$).*}', function
             return not_found();
         }
 
-        $page_path = "page/{$page->path}";
+        $page = (array)$page;
+        $page_path = "page/" . ($page['path'] ?: 'index');
         $page_file = app_path("view/{$page_path}.phtml");
         if (!is_file($page_file)) {
             if ($request->expectsJson()) {
@@ -98,10 +99,6 @@ Route::group('/{path:(?!(?:' . $exclude . ')(?:/|$))(?!.*\.[^/]+$).*}', function
             'domain' => $request->host(),
             'domain3' => '',
             'timestamp' => $site['timestamp'],
-            'page_id' => $page->id,
-            'page_type' => $page->type,
-            'page_path' => $page->path,
-            'page_title' => $page->title,
 //            'get_alias' => $data['alias'] ?: '',
 //            'get_id' => $data['id'] ?: '',
 //            'get_cid' => $data['cid'] ?: '', // 分类 id
@@ -110,7 +107,10 @@ Route::group('/{path:(?!(?:' . $exclude . ')(?:/|$))(?!.*\.[^/]+$).*}', function
 //            'get_pagenum' => $data['pagenum'] ?: '',
         ]);
 
-        $layout_path = $page->layout;
+        context('site', $site);
+        context('page', $page);
+
+        $layout_path = $page['layout'];
         // 使用页面布局
         if ($layout_path) {
             $layout_path = app_path("view/layout/{$layout_path}.phtml");

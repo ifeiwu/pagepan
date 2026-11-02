@@ -8,24 +8,25 @@ $config = array (
     'dataset.id' => '2',
     'dataset.table' => 'dataset_nav',
     'repo.path' => 'pagepan-com/blocks',
+    'component.logo.image' => '//uikit.pagepan.com/assets/logo/01-black.svg',
+    'component.logo.url' => '/',
     'component.navitem' => '001',
   ),
 );?>
-<section class="py-4 lg:py-6" data-block="gridview">
+<section class="py-4 lg:py-6" data-block="gridview" data-block-type="php" data-block-setting="{"dataset.id":"2","dataset.table":"dataset_nav","repo.path":"pagepan-com/blocks","component.logo.image":"//uikit.pagepan.com/assets/logo/01-black.svg","component.logo.url":"/","component.navitem":"001"}">
     <div class="container-lg">
+        <?php $setting = $config['setting']; ?>
         <div class="flex flex-col lg:flex-row items-center">
             <div class="mb-6 lg:mb-0">
-                <a href="/" class="inline-block active">
-                    <img src="//uikit.pagepan.com/assets/logo/01-black.svg" class="max-h-[30px]">
+                <a href="<?= $setting['component.logo.url'] ?>">
+                    <img src="<?= $setting['component.logo.image'] ?>" class="max-h-[30px]">
                 </a>
             </div>
             <div class="w-full">
-            <?php
-            $db = db();
-            $setting = $config['setting'];
-            $items = $db->table($setting['dataset.table'])->where('dataset_id', $setting['dataset.id'])->get();
-            $this->component('navitem', $config['setting'], ['items' => $items]);
-            ?>
+                <?php
+                $items = db()->table($setting['dataset.table'])->where('dataset_id', $setting['dataset.id'])->get();
+                $this->component('navitem', $config['setting'], ['items' => $items]);
+                ?>
             </div>
         </div>
     </div>

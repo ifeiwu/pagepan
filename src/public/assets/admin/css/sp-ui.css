@@ -3,9 +3,6 @@
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
-    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-      "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol", "Noto Color Emoji";
     --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
@@ -45,7 +42,7 @@
     --blur-xs: 4px;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    --default-font-family: var(--font-sans);
+    --default-font-family: "system-ui, -apple-system, Tahoma, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif";
     --default-mono-font-family: var(--font-mono);
     --animate-collapse-down: collapse-down .2s ease-out;
     --animate-collapse-up: collapse-up .2s ease-out;
@@ -3735,12 +3732,6 @@
     background-color: rgb(0 0 0 / 90%);
     color: white;
   }
-  .btn-ghost:hover {
-    background-color: rgb(0 0 0 / 5%);
-  }
-  .btn-ghost[aria-haspopup][aria-expanded=true] {
-    background-color: rgb(0 0 0 / 10%);
-  }
   .bg-\[\#1e1e1e\] {
     background-color: #1e1e1e;
   }
@@ -4010,9 +4001,6 @@
     :is(.\*\:hover\:border-gray-400 > *):hover {
       border-color: var(--color-gray-400);
     }
-  }
-  .dark\:bg-black:is(.dark, .dark *) {
-    background-color: var(--color-black);
   }
   .\[\&\>li\]\:border-gray-200 > li {
     border-color: var(--color-gray-200);
@@ -4743,12 +4731,6 @@
     color: var(--foreground);
   }
 }
-:root {
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-}
 a, button {
   cursor: pointer;
 }
@@ -4762,10 +4744,7 @@ a, button {
   }
   body {
     font-size: 14px;
-  }
-  iframe {
-    display: block;
-    border-width: 0;
+    font-family: var(--default-font-family);
   }
   .container, .container-fluid, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm {
     width: 100%;

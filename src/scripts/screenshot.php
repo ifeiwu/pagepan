@@ -13,7 +13,7 @@ use HeadlessChromium\Clip;
 $host = rtrim($argv[1] ?? '', '/');
 $page_path = trim($argv[2] ?? '', '/');
 
-if (!$host || !$page_path || str_contains($page_path, '..')) {
+if (!$host || str_contains($page_path, '..')) {
     exit(1);
 }
 
@@ -30,21 +30,23 @@ try {
 
     $browser = (new BrowserFactory())->createBrowser([
         'windowSize' => [1024, 768],
-        'headless' => true,
+//        'headless' => false,
     ]);
 
     $page = $browser->createPage();
-
+    $page->addPreScript("
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.style.fontFamily = 'system-ui, -apple-system, Tahoma, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif';
+        });
+    ");
     $page->navigate($page_url)->waitForNavigation();
 
     // 等待图片和字体加载
     $page->evaluate('async () => {
         await document.fonts.ready;
-
         await Promise.all(
             Array.from(document.images).map(img => {
                 if (img.complete) return Promise.resolve();
-
                 return new Promise(resolve => {
                     img.addEventListener("load", resolve, {once: true});
                     img.addEventListener("error", resolve, {once: true});
@@ -57,9 +59,7 @@ try {
     $rect = $page->evaluate('(() => {
         const el = document.querySelector("body > *");
         if (!el) return null;
-
         const r = el.getBoundingClientRect();
-
         return {
             x: r.x + window.scrollX,
             y: r.y + window.scrollY,
@@ -86,7 +86,6 @@ try {
     ])->saveToFile($file_path);
 
     file_put_contents($file_path . '.done', '1');
-
 } catch (\Throwable $e) {
     Log::error('截图任务执行失败', [
         'message' => $e->getMessage(),
@@ -96,7 +95,6 @@ try {
     ]);
 
     exit(1);
-
 } finally {
     $browser?->close();
 }

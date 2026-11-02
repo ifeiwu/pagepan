@@ -3,6 +3,7 @@
 namespace app\admin\controller\repository;
 
 use support\FileSystem;
+use support\PhpConfigWriter;
 use support\Request;
 use support\Response;
 use Workerman\Timer;
@@ -28,18 +29,16 @@ class Myself
     public function saveBlock(Request $request): Response
     {
         $repo_id = 1;
+        $page_id = post('page_id', 'int');
         $category = post('category', 'text');
         $name = post('name', 'text');
-        $content = post('content');
-
+        
         if (!$category) return json_error('请输入分类');
         if (!$name) return json_error('请输入名称');
-        if (!$content) return json_error('请输入内容');
 
         $db = db();
 
         // 获取页面信息
-        $page_id = post('page_id', 'int');
         $page = $db->table('page')->where('id', $page_id)->first();
         if (!$page) return json_error('获取页面信息失败');
 
@@ -48,10 +47,9 @@ class Myself
         if (!$repo) return json_error('仓库不存在');
 
         // 保存页面内容
-        $file = app_path("view/page/{$page->path}.phtml");
-        $content = htmlspecialchars_decode($content, ENT_QUOTES);
-        if (!$this->savePageFile($file, $content)) return json_error('保存页面文件失败');
-
+        $block = $db->table('page_block')->where('page_id', '=', $page_id)->first();
+        if (!$this->savePageFile(($page->path ?: 'index'), $block->content)) return json_error('保存页面文件失败');
+        
         // 获取截图
         $webp_content = $this->createScreenshot($request, $page->path);
         if ($webp_content === false) return json_error('截图失败或超时');
@@ -60,12 +58,12 @@ class Myself
         $save_path = $this->getBlockPath($repo->path, $category, $name);
         if (!$save_path) return json_error('创建内容块目录失败');
 
-        if (!$this->saveBlockFiles($save_path, $content, $webp_content)) {
+        if (!$this->saveBlockFiles($save_path, $webp_content, $block->content, $block->setting)) {
             return json_error('保存内容块文件失败');
         }
 
         // 保存数据库记录
-        if (!$this->saveBlockRecord($db, $repo_id, $category, $name, $content)) {
+        if (!$this->saveBlockRecord($db, $repo_id, $category, $name, $block->content)) {
             return json_error('添加内容块失败');
         }
 
@@ -73,13 +71,21 @@ class Myself
     }
 
     // 保存页面文件
-    private function savePageFile(string $file, string $content): bool
+    private function savePageFile(string $page_path, string $content): bool
     {
-        if (!FileSystem::rmkdir($file)) return false;
+        // 内容块写入文件
+        $file = app_path("view/page/{$page_path}.phtml");
+        if (FileSystem::rmkdir($file)) {
+            $content = htmlspecialchars_decode($content, ENT_QUOTES);
+            // $content .= '<script src="/assets/js/skeleton.js"></script>';
+            if (file_put_contents($file, $content) === false) {
+                return false;
+            }
+        } else {
+            return false;
+        }
 
-//        $content .= '<script src="/assets/js/skeleton.js"></script>';
-
-        return file_put_contents($file, $content) !== false;
+        return true;
     }
 
     // 生成截图
@@ -124,9 +130,22 @@ class Myself
     }
 
     // 保存内容块文件
-    private function saveBlockFiles(string $save_path, string $content, string $webp_content): bool
+    private function saveBlockFiles(string $save_path, string $webp_content, string $content, string $setting = ''): bool
     {
         $info_content = "<?php return ['keywords' => '', 'description' => ''];";
+        $content = preg_replace('/^<\?php\b.*?\?>\s*/s', '', $content); // 动态块需要删除开头生成的配置数组
+        // 删除内容块属性
+        $content = preg_replace('/\s+data-block-(?:type|path|setting)="[^"]*"/', '', $content);
+        // 删除测试内容块
+        $content = preg_replace('/<!-- delete-test-block:start -->.*?<!-- delete-test-block:end -->\s*/s', '', $content);
+        $content = preg_replace('/<delete-test-block\b[^>]*>.*?<\/delete-test-block>/s', '', $content);
+
+        if ($setting) {
+            $writer = new PhpConfigWriter();
+            if ($writer->write($setting, "$save_path/setting.php") === false) {
+                return false;
+            }
+        }
 
         return file_put_contents("$save_path/info.php", $info_content) !== false
             && file_put_contents("$save_path/cover.webp", $webp_content) !== false
