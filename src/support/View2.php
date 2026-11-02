@@ -121,7 +121,10 @@ class View2
      */
     public function component(string $category, array $setting, array $data = []): void
     {
-        $component = "$category/" . $setting['components.gridview'];
+        $data['setting'] = $setting;
+        
+        $component = "$category/" . $setting['component.' . $category];
+
         echo $this->getComponent($setting['repo.path'], $component, $data);
     }
 

@@ -1,158 +1,33 @@
-<section class="py-12 lg:py-20">
-    <div class="container mx-auto px-4">
-        <div class="mx-auto flex max-w-2xl flex-col items-center space-y-6 text-center lg:space-y-8">
-            <header class="mb-4 space-y-4">
-                <h1 class="text-4xl font-semibold tracking-tight lg:text-4xl">适合每个发展阶段的灵活套餐</h1>
-                <p class="text-balance text-muted-foreground lg:text-md">无论您是刚刚起步，还是正在快速发展，我们都有适合您的方案。</p>
-            </header>
-
-            <div class="flex items-center gap-2 text-sm">
-                <span>按月付费</span>
-                <button id="billing-switch" type="button" role="switch" aria-checked="false" aria-label="切换年度付费" class="relative inline-flex h-[1.15rem] w-8 shrink-0 cursor-pointer items-center rounded-full border border-transparent bg-input shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
-                    <span class="pointer-events-none block size-4 translate-x-0 rounded-full bg-background shadow-sm ring-0"></span>
-                </button>
-                <span>按年付费</span>
+<?php
+$config = array (
+  'id' => 'p1b1',
+  'type' => 'php',
+  'path' => '',
+  'setting' => 
+  array (
+    'dataset.id' => '2',
+    'dataset.table' => 'dataset_nav',
+    'repo.path' => 'pagepan-com/blocks',
+    'component.navitem' => '001',
+  ),
+);?>
+<section class="py-4 lg:py-6" data-block="gridview">
+    <div class="container-lg">
+        <div class="flex flex-col lg:flex-row items-center">
+            <div class="mb-6 lg:mb-0">
+                <a href="/" class="inline-block active">
+                    <img src="//uikit.pagepan.com/assets/logo/01-black.svg" class="max-h-[30px]">
+                </a>
             </div>
-
-            <div class="flex flex-col items-stretch gap-6 md:flex-row">
-                <article class="flex w-80 flex-col justify-between gap-6 rounded-xl border border-border bg-card py-6 text-left text-card-foreground shadow-none">
-                    <header class="grid gap-2 px-6">
-                        <h2 class="font-semibold leading-none">Starter 入门版</h2>
-                        <p class="text-sm text-muted-foreground">
-                            适合初创企业和小型团队
-                        </p>
-                        <div class="flex items-end">
-                            <span class="plan-price text-3xl font-bold lg:text-4xl" data-monthly="29" data-yearly="290">$29</span>
-                            <span class="text-2xl font-semibold text-muted-foreground">/月</span>
-                        </div>
-                    </header>
-
-                    <div class="px-6">
-                        <div class="mb-6 h-px w-full shrink-0 bg-border"></div>
-                        <ul class="space-y-4">
-                            <li class="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="m9 12 2 2 4-4"></path>
-                                </svg>
-                                <span>最多支持 10 名团队成员</span>
-                            </li>
-                            <li class="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="m9 12 2 2 4-4"></path>
-                                </svg>
-                                <span>使用所有核心功能</span>
-                            </li>
-                            <li class="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="m9 12 2 2 4-4"></path>
-                                </svg>
-                                <span>电子邮件客服支持</span>
-                            </li>
-                            <li class="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="m9 12 2 2 4-4"></path>
-                                </svg>
-                                <span>5GB 云存储空间</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <footer class="mt-auto flex items-center px-6">
-                        <a href="https://app.yoursaas.com/signup" target="_blank" rel="noopener noreferrer" class="inline-flex h-9 w-full items-center justify-center rounded-md border border-primary bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
-                            立即开始
-                        </a>
-                    </footer>
-                </article>
-
-                <article class="flex w-80 flex-col justify-between gap-6 rounded-xl border border-border bg-card py-6 text-left text-card-foreground shadow-none">
-                    <header class="grid gap-2 px-6">
-                        <h2 class="font-semibold leading-none">Growth 成长版</h2>
-                        <p class="text-sm text-muted-foreground">
-                            适合需要更多功能和资源的成长型企业
-                        </p>
-                        <div class="flex items-end">
-                            <span class="plan-price text-3xl font-bold lg:text-4xl" data-monthly="79" data-yearly="790">$79</span>
-                            <span class="text-2xl font-semibold text-muted-foreground">/月</span>
-                        </div>
-                    </header>
-
-                    <div class="px-6">
-                        <div class="mb-6 h-px w-full shrink-0 bg-border"></div>
-                        <ul class="space-y-4">
-                            <li class="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="m9 12 2 2 4-4"></path>
-                                </svg>
-                                <span>团队成员数量不限</span>
-                            </li>
-                            <li class="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="m9 12 2 2 4-4"></path>
-                                </svg>
-                                <span>高级数据分析</span>
-                            </li>
-                            <li class="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="m9 12 2 2 4-4"></path>
-                                </svg>
-                                <span>优先邮件及在线客服支持</span>
-                            </li>
-                            <li class="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="m9 12 2 2 4-4"></path>
-                                </svg>
-                                <span>无限云存储空间</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <footer class="mt-auto flex items-center px-6">
-                        <a href="https://app.yoursaas.com/signup" target="_blank" rel="noopener noreferrer" class="inline-flex h-9 w-full items-center justify-center rounded-md border border-primary bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
-                            立即开始
-                        </a>
-                    </footer>
-                </article>
+            <div class="w-full">
+            <?php
+            $db = db();
+            $setting = $config['setting'];
+            $items = $db->table($setting['dataset.table'])->where('dataset_id', $setting['dataset.id'])->get();
+            $this->component('navitem', $config['setting'], ['items' => $items]);
+            ?>
             </div>
         </div>
     </div>
-
-    <script>
-        (() => {
-            const section = document.currentScript.closest('section');
-            const billingSwitch = section.querySelector('#billing-switch');
-            const priceElements = section.querySelectorAll('.plan-price');
-            const billingPeriod = section.querySelectorAll('.plan-price + span');
-
-            billingSwitch.addEventListener('click', () => {
-                const isYearly = billingSwitch.getAttribute('aria-checked') !== 'true';
-
-                billingSwitch.setAttribute('aria-checked', String(isYearly));
-
-                const thumb = billingSwitch.firstElementChild;
-
-                billingSwitch.classList.toggle('bg-primary', isYearly);
-                billingSwitch.classList.toggle('bg-input', !isYearly);
-                thumb.classList.toggle('translate-x-3', isYearly);
-                thumb.classList.toggle('translate-x-0', !isYearly);
-
-                priceElements.forEach((price) => {
-                    const value = isYearly ? price.dataset.yearly : price.dataset.monthly;
-                    price.textContent = `$${value}`;
-                });
-
-                billingPeriod.forEach((period) => {
-                    period.textContent = isYearly ? '/年' : '/月';
-                });
-            });
-        })();
-    </script>
 </section>
 
