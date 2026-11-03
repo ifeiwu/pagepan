@@ -57,7 +57,6 @@ class Myself
         // 保存内容块文件
         $save_path = $this->getBlockPath($repo->path, $category, $name);
         if (!$save_path) return json_error('创建内容块目录失败');
-
         if (!$this->saveBlockFiles($save_path, $webp_content, $block->content, $block->setting)) {
             return json_error('保存内容块文件失败');
         }
@@ -132,24 +131,37 @@ class Myself
     // 保存内容块文件
     private function saveBlockFiles(string $save_path, string $webp_content, string $content, string $setting = ''): bool
     {
-        $info_content = "<?php return ['keywords' => '', 'description' => ''];";
-        $content = preg_replace('/^<\?php\b.*?\?>\s*/s', '', $content); // 动态块需要删除开头生成的配置数组
+        // 动态块需要删除开头生成的配置数组
+        $content = preg_replace('/^<\?php\b.*?\?>\s*/s', '', $content);
         // 删除内容块属性
         $content = preg_replace('/\s+data-block-(?:type|path|setting)="[^"]*"/', '', $content);
         // 删除测试内容块
         $content = preg_replace('/<!-- delete-test-block:start -->.*?<!-- delete-test-block:end -->\s*/s', '', $content);
         $content = preg_replace('/<delete-test-block\b[^>]*>.*?<\/delete-test-block>/s', '', $content);
+        $writer = new PhpConfigWriter();
 
         if ($setting) {
-            $writer = new PhpConfigWriter();
             if ($writer->write($setting, "$save_path/setting.php") === false) {
                 return false;
             }
         }
 
-        return file_put_contents("$save_path/info.php", $info_content) !== false
-            && file_put_contents("$save_path/cover.webp", $webp_content) !== false
-            && file_put_contents("$save_path/block.php", $content) !== false;
+        if ($writer->write([
+                'keywords' => '',
+                'description' => '',
+                'updated' => date('Y-m-d H:i:s'),
+            ], "$save_path/info.php") === false) {
+            return false;
+        }
+
+        if (file_put_contents("$save_path/cover.webp", $webp_content) === false
+            || file_put_contents("$save_path/block.php", $content) === false) {
+            return false;
+        }
+
+        $this->buildDevBlock($save_path);
+
+        return true;
     }
 
     // 保存数据库记录
@@ -164,7 +176,6 @@ class Myself
         $type = str_contains($content, '<?php') || str_contains($content, '<?=') ? 'php' : '';
 
         return $table->insert([
-            'id' => bin2hex(random_bytes(16)),
             'repo_id' => $repo_id,
             'category' => $category,
             'name' => $name,
@@ -172,6 +183,38 @@ class Myself
             'keywords' => '',
             'description' => ''
         ]);
+    }
+
+    // 开发内容块使用
+    private function buildDevBlock($save_path): void
+    {
+        Timer::sleep(1);
+
+        $info_code = file_get_contents("$save_path/info.php");
+        $block_code = file_get_contents("$save_path/block.php");
+        $webp_code = file_get_contents("$save_path/cover.webp");
+
+        $setting_code = '';
+        if (file_exists("$save_path/setting.php")) {
+            $setting_code = file_get_contents("$save_path/setting.php");
+        }
+        $settings_code = '';
+        if (file_exists("$save_path/settings.php")) {
+            $settings_code = file_get_contents("$save_path/settings.php");
+        }
+
+
+        $http = new \Workerman\Http\Client();
+        $response = $http->post('https://www.test/blocks/build.php', [
+            'path' => 'feature/002',
+            'info_code' => $info_code,
+            'block_code' => $block_code,
+            'setting_code' => $setting_code,
+            'settings_code' => $settings_code,
+            'webp_code' => $webp_code,
+        ]);
+
+        echo $response->getBody();
     }
 
     /*public function saveBlock(Request $request): Response

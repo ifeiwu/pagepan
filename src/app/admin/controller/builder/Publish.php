@@ -53,26 +53,6 @@ class Publish
 
         @unlink($done_file);
 
-//        $this->buildBlock();
-
         return json_success('ok');
-    }
-
-    private function buildBlock(): void
-    {
-        Timer::sleep(1);
-
-        $block_code = file_get_contents(app_path("view/page/index.phtml"));
-        $block_code = preg_replace('/^<\?php\b.*?\?>\s*/s', '', $block_code); // 动态块需要删除开头生成的配置数组
-        $webp_code = file_get_contents(storage_path("page/screenshot/index.webp"));
-
-        $http = new \Workerman\Http\Client();
-        $response = $http->post('https://www.test/blocks/build.php', [
-            'path' => 'feature/002',
-            'block_code' => $block_code,
-            'webp_code' => $webp_code,
-        ]);
-
-        echo $response->getBody();
     }
 }

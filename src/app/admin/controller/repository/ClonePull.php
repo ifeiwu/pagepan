@@ -197,14 +197,18 @@ class ClonePull
                 continue;
             }
 
+            $block_file = dirname($file) . DIRECTORY_SEPARATOR . 'block.php';
+            if (!file_exists($block_file)) {
+                continue;
+            }
+
             $info['type'] = '';
-            $info['id'] = bin2hex(random_bytes(16));
             $info['category'] = $category;
             $info['name'] = basename(dirname($file));
             $info['repo_id'] = $repo_id;
 
             // 包含 PHP 代码
-            $content = file_get_contents(dirname($file) . DIRECTORY_SEPARATOR . 'block.php');
+            $content = file_get_contents($block_file);
             if (str_contains($content, '<?php') || str_contains($content, '<?=')) {
                 $info['type'] = 'php';
             }

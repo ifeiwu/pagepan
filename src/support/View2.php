@@ -115,17 +115,15 @@ class View2
     /**
      * 输出组件
      * @param string $category
-     * @param array $setting
-     * @param array $data
+     * @param array $config
      * @return void
      */
-    public function component(string $category, array $setting, array $data = []): void
+    public function component(string $category, array $config = []): void
     {
-        $data['setting'] = $setting;
-        
+        $setting = $config['setting'] ?? [];
         $component = "$category/" . $setting['component.' . $category];
 
-        echo $this->getComponent($setting['repo.path'], $component, $data);
+        echo $this->getComponent($setting['repo.path'], $component, $config);
     }
 
     /**

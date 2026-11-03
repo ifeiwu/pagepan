@@ -26,7 +26,7 @@ class PhpConfigWriter
             throw new InvalidArgumentException('参数必须是 JSON 字符串或数组');
         }
 
-        $content = "<?php\n\nreturn " . $this->exportShort($data) . ";\n";
+        $content = "<?php\nreturn " . $this->exportShort($data) . ";\n";
 
         return file_put_contents($file, $content) !== false;
     }

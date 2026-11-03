@@ -2,30 +2,31 @@
 $config = array (
   'id' => 'p1b1',
   'type' => 'php',
-  'path' => '',
+  'path' => 'navbar/001',
   'setting' => 
   array (
     'dataset.id' => '2',
     'dataset.table' => 'dataset_nav',
     'repo.path' => 'pagepan-com/blocks',
-    'component.logo.image' => '//uikit.pagepan.com/assets/logo/01-black.svg',
+    'component.logo.image' => '/imgph/block?repo=pagepan-com/blocks&name=/logo/01-black.svg',
     'component.logo.url' => '/',
-    'component.navitem' => '001',
+    'component.navitem' => '002',
   ),
 );?>
-<section class="py-4 lg:py-6" data-block="gridview" data-block-type="php" data-block-setting="{"dataset.id":"2","dataset.table":"dataset_nav","repo.path":"pagepan-com/blocks","component.logo.image":"//uikit.pagepan.com/assets/logo/01-black.svg","component.logo.url":"/","component.navitem":"001"}">
+<section class="py-4 md:py-6" data-block-type="php" data-block-path="navbar/001" data-block-setting="{"dataset.id":"2","dataset.table":"dataset_nav","repo.path":"pagepan-com/blocks","component.logo.image":"/imgph/block?repo=pagepan-com/blocks&name=/logo/01-black.svg","component.logo.url":"/","component.navitem":"002"}">
     <div class="container-lg">
         <?php $setting = $config['setting']; ?>
-        <div class="flex flex-col lg:flex-row items-center">
-            <div class="mb-6 lg:mb-0">
+        <div class="flex flex-col md:flex-row items-center">
+            <div class="mb-5 md:mb-0">
                 <a href="<?= $setting['component.logo.url'] ?>">
                     <img src="<?= $setting['component.logo.image'] ?>" class="max-h-[30px]">
                 </a>
             </div>
-            <div class="w-full">
+            <div class="pl-5">
                 <?php
                 $items = db()->table($setting['dataset.table'])->where('dataset_id', $setting['dataset.id'])->get();
-                $this->component('navitem', $config['setting'], ['items' => $items]);
+                $config['items'] = $items;
+                $this->component('navitem', $config);
                 ?>
             </div>
         </div>
