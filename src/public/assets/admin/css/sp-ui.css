@@ -3688,24 +3688,6 @@
       background-color: var(--muted);
       color: var(--foreground);
     }
-    .btn-secondary {
-      background-color: var(--secondary);
-      color: var(--secondary-foreground);
-    }
-    @media (hover: hover) {
-      .btn-secondary:hover {
-        background-color: var(--secondary);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .btn-secondary:hover {
-          background-color: color-mix(in oklch,var(--secondary),var(--foreground) 5%);
-        }
-      }
-    }
-    .btn-secondary[aria-haspopup][aria-expanded=true] {
-      background-color: var(--secondary);
-      color: var(--secondary-foreground);
-    }
     .badge-secondary {
       background-color: var(--secondary);
       color: var(--secondary-foreground);

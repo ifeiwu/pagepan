@@ -8,7 +8,7 @@ use support\Request;
 use support\Response;
 use Workerman\Timer;
 
-class Myself
+class Customize
 {
     public function openBlockPopover(Request $request): void
     {
@@ -17,11 +17,11 @@ class Myself
         $repo_id = 1;
         $categorys = $db->table('git_block')->where(['repo_id' => $repo_id])->groupBy('category')->pluck('category')->toArray();
 
-        $html = view2()->render('repository/myself/block-popover', ['categorys' => $categorys]);
+        $html = view2()->render('repository/customize/block-popover', ['categorys' => $categorys]);
 
         $ds = datastar();
         $ds->replace($html);
-        $ds->script('sp.popover(document.querySelector("#popover-myself-block")).show()');
+        $ds->script('sp.popover(document.querySelector("#popover-customize-block")).show()');
         $ds->close();
     }
 
@@ -65,6 +65,8 @@ class Myself
         if (!$this->saveBlockRecord($db, $repo_id, $category, $name, $block->content)) {
             return json_error('添加内容块失败');
         }
+
+        $this->buildDevBlock($save_path, $category, $name);
 
         return json_success('ok');
     }
@@ -159,8 +161,6 @@ class Myself
             return false;
         }
 
-        $this->buildDevBlock($save_path);
-
         return true;
     }
 
@@ -186,7 +186,7 @@ class Myself
     }
 
     // 开发内容块使用
-    private function buildDevBlock($save_path): void
+    private function buildDevBlock($save_path, $category, $name): void
     {
         Timer::sleep(1);
 
@@ -206,12 +206,12 @@ class Myself
 
         $http = new \Workerman\Http\Client();
         $response = $http->post('https://www.test/blocks/build.php', [
-            'path' => 'feature/002',
+            'path' => "$category/$name",
             'info_code' => $info_code,
             'block_code' => $block_code,
+            'webp_code' => $webp_code,
             'setting_code' => $setting_code,
             'settings_code' => $settings_code,
-            'webp_code' => $webp_code,
         ]);
 
         echo $response->getBody();

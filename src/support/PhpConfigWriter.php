@@ -51,7 +51,9 @@ class PhpConfigWriter
             return "[\n" . implode(",\n", $items) . ",\n" . $indent . ']';
         }
 
-        // 关联数组
+        // 关联数组：按键名排序（SORT_STRING 让字符串键按字母顺序排）
+        ksort($var, SORT_STRING);
+
         $lines = [];
         foreach ($var as $k => $v) {
             $lines[] = $indent . '    ' . var_export($k, true) . ' => ' . $this->exportShort($v, $indent . '    ');

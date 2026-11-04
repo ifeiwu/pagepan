@@ -5,29 +5,44 @@ $config = array (
   'path' => '',
   'setting' => 
   array (
+    'component.navbar.item' => '004',
+    'component.navbar.icon' => '001',
+    'component.navbar.menu' => '001',
     'dataset.id' => '2',
     'dataset.table' => 'dataset_nav',
     'repo.path' => 'pagepan-com/blocks',
-    'component.navitem' => '008',
     'component.logo.image' => '/imgph/block?repo=pagepan-com/blocks&name=/logo/01-black.svg',
     'component.logo.url' => '/',
   ),
 );?>
-<section class="py-4 md:py-6">
-    <div class="container-lg">
-        <?php $setting = $config['setting']; ?>
-        <div class="flex flex-col md:flex-row items-center">
-            <div class="mb-5 md:mb-0">
-                <a href="<?= $setting['component.logo.url'] ?>">
-                    <img src="<?= $setting['component.logo.image'] ?>" class="max-h-[30px]">
+<section class="py-4 md:py-6" data-block-setting="{"component.navbar.item":"004","component.navbar.icon":"001","component.navbar.menu":"001","dataset.id":"2","dataset.table":"dataset_nav","repo.path":"pagepan-com/blocks","component.logo.image":"/imgph/block?repo=pagepan-com/blocks&name=/logo/01-black.svg","component.logo.url":"/"}">
+    <div class="container-xl">
+        <?php
+        $setting = $config['setting'];
+        $items = db()->table($setting['dataset.table'])->where('dataset_id', $setting['dataset.id'])->where('state', 1)->get()->toArray();
+        $navs = array_filter($items, function($v) { return $v->type == ''; });
+        $icons = array_filter($items, function($v) { return $v->type == 'icon'; });
+        ?>
+        <div class="flex flex-wrap items-center">
+            <div class="self-baseline">
+                <a href="<?=$setting['component.logo.url'] ?? '/'?>" class="logo">
+                    <img src="<?=$setting['component.logo.image'] ?? ''?>" class="max-h-[30px]">
                 </a>
             </div>
-            <div class="pl-5">
-                <?php
-                $items = db()->table($setting['dataset.table'])->where('dataset_id', $setting['dataset.id'])->get();
-                $config['items'] = $items;
-                $this->component('navitem', $config);
-                ?>
+
+            <div class="self-baseline md:hidden ml-auto">
+                <?php $this->component('navbar.menu', $config, ['navs' => $navs, 'icons' => $icons]);?>
+            </div>
+
+            <div class="hidden md:block flex-grow">
+                <div class="flex items-center flex-wrap flex-row">
+                    <div class="px-6">
+                        <?php $this->component('navbar.item', $config, ['items' => $navs]);?>
+                    </div>
+                    <div>
+                        <?php $this->component('navbar.icon', $config, ['items' => $icons]);?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

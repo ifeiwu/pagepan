@@ -1,5 +1,6 @@
-define(['vs/editor/editor.main'], function (Split) {
+define(['vs/editor/editor.main'], function (monaco) {
     const iframe = document.querySelector('#iframe');
+    const $save = $('#save_code').prop('disabled', true);
 
     document.querySelector('#workspace').addEventListener("sp-resize", (e) => {
         editor.layout();
@@ -13,6 +14,7 @@ define(['vs/editor/editor.main'], function (Split) {
         iframe_loading = false;
     }).attr('src', '/admin/builder/page?id=1')
 
+    // 初始化
     const coder = document.querySelector('#coder');
     const editor = monaco.editor.create(coder, {
         theme: 'vs-dark',
@@ -23,29 +25,48 @@ define(['vs/editor/editor.main'], function (Split) {
         },
     });
 
-    coder.editor = editor;
+    // coder.editor = editor;
+
+    // 初始化代码编辑器内容
+    let originalValue;
+    $.get('/admin/builder/page-block-code', {'page_id': appvar.page.id}, function (res) {
+        if (res.code === 0) {
+            originalValue = htmlentities_decode(res.data);
+            editor.setValue(originalValue);
+        } else {
+            editor.updateOptions({readOnly: true});
+            editor_readonly_message = res.message
+            alert(editor_readonly_message)
+        }
+    })
 
     editor.onDidAttemptReadOnlyEdit(() => {
         alert(editor_readonly_message);
     });
 
     editor.onDidChangeModelContent(() => {
-        // if (iframe_loading) return;
+        if (iframe_loading) return;
+
+        const changed = editor.getValue() !== originalValue;
+
+        $save.prop('disabled', !changed);
+        $save.toggleClass('opacity-50', !changed);
     });
 
 
     // Ctrl + S 保存
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, savePageBlocks);
 
-    $('#save_code').on('click', function () {
+    $save.on('click', function () {
         savePageBlocks()
     })
 
     // 保存代码
     function savePageBlocks() {
-        const blocks = getPageBlocks(editor.getValue())
+        originalValue = editor.getValue();
+        const blocks = getPageBlocks(originalValue)
         // 保存页面
-        $.post('/admin/builder/save-page-block', {'page_id': 1, 'blocks': blocks}, function (res) {
+        $.post('/admin/builder/save-page-block', {'page_id': appvar.page.id, 'blocks': blocks}, function (res) {
             if (res.code === 0) {
                 iframe.contentWindow.location.reload();
                 if (res.data) {
@@ -110,14 +131,5 @@ define(['vs/editor/editor.main'], function (Split) {
         return textarea.value
     }
 
-    // 初始化代码编辑器内容
-    $.get('/admin/builder/page-block-code', {'page_id': appvar.page.id}, function (res) {
-        if (res.code === 0) {
-            editor.setValue(htmlentities_decode(res.data));
-        } else {
-            editor.updateOptions({readOnly: true});
-            editor_readonly_message = res.message
-            alert(editor_readonly_message)
-        }
-    })
+
 })

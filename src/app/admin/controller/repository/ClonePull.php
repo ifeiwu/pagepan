@@ -165,7 +165,6 @@ class ClonePull
 
                 // 同步区块
                 $db->table('git_block')->where('repo_id', $repo_id)->delete();
-
                 $blocks = $this->buildRepoBlocks($save_path, $repo_id);
                 if ($blocks) {
                     $db->table('git_block')->insert($blocks);
@@ -184,7 +183,7 @@ class ClonePull
     // 构建仓库目录内容块列表
     private function buildRepoBlocks(string $basePath, int $repo_id): array
     {
-        $list = [];
+        $rows = [];
 
         foreach (glob($basePath . '/*/*/info.php') as $file) {
             $category = basename(dirname($file, 2));
@@ -202,20 +201,25 @@ class ClonePull
                 continue;
             }
 
-            $info['type'] = '';
-            $info['category'] = $category;
-            $info['name'] = basename(dirname($file));
-            $info['repo_id'] = $repo_id;
+            $row = [
+                'repo_id' => $repo_id,
+                'type' => '',
+                'category' => $category,
+                'name' => basename(dirname($file)),
+                'keywords' => $info['keywords'] ?? '',
+                'description' => $info['description'] ?? '',
+                'updated' => $info['updated'] ?? '',
+            ];
 
             // 包含 PHP 代码
             $content = file_get_contents($block_file);
             if (str_contains($content, '<?php') || str_contains($content, '<?=')) {
-                $info['type'] = 'php';
+                $row['type'] = 'php';
             }
 
-            $list[] = $info;
+            $rows[] = $row;
         }
 
-        return $list;
+        return $rows;
     }
 }

@@ -48,13 +48,13 @@ class CopyCode
         $dom->loadHTML("<!DOCTYPE html><html><body>{$content}</body></html>", HTML5DOMDocument::ALLOW_DUPLICATE_IDS);
         $node = $dom->querySelector('body>*');
 //        $node->setAttribute('data-block-id', $block->block_id);
-        $node->setAttribute('data-block-type', $block->type);
-        $node->setAttribute('data-block-path', $block_path);
+//        $node->setAttribute('data-block-type', $block->type);
+//        $node->setAttribute('data-block-path', $block_path);
         $setting && $node->setAttribute('data-block-setting', $setting);
 
         // 还原 PHP 代码
         $content = strtr($node->outerHTML, $php);
-
+        $content = htmlspecialchars_decode($content, ENT_QUOTES);
 
         $ds = datastar();
         $ds->script("copyTextToClipboard(`{$content}`);");
