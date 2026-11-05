@@ -15,8 +15,7 @@ define(['vs/editor/editor.main'], function (monaco) {
     }).attr('src', '/admin/builder/page?id=1')
 
     // 初始化
-    const coder = document.querySelector('#coder');
-    const editor = monaco.editor.create(coder, {
+    const editor = monaco.editor.create(document.querySelector('#editor'), {
         theme: 'vs-dark',
         language: 'php',
         minimap: { enabled: true },
@@ -24,8 +23,6 @@ define(['vs/editor/editor.main'], function (monaco) {
             enabled: false
         },
     });
-
-    // coder.editor = editor;
 
     // 初始化代码编辑器内容
     let originalValue;

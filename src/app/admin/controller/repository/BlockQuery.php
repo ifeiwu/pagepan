@@ -18,7 +18,7 @@ class BlockQuery
         $repo_id = post('repo_id', 'int');
 
         $repo_path = $db->table('git_repo')->where('id', $repo_id)->value('path');
-        $db_block = $db->table('git_block')->where('repo_id', $repo_id);
+        $db_block = $db->table('git_block')->where('repo_id', $repo_id)->orderByDesc('updated');
 
         // 关键字搜索
         $kword = filter(post('kword'), 'keyword');

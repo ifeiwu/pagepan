@@ -41,7 +41,7 @@ foreach ($this->items as $item):
             </div>
         </a>
     </div>
-    <div class="flex flex-col h-full p-4 pr-2 pt-2 z-10 rounded-t-xl" style="background-color:<?=getTypeColor($type)?>;">
+    <div class="flex flex-col h-full p-4 pr-2 pt-2 z-10 rounded-t-2xl" style="background-color:<?=getTypeColor($type)?>;">
         <div class="flex items-center">
             <div>
                 <?php if ($state === 1):?>

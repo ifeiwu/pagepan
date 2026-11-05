@@ -89,7 +89,7 @@ class SavePageBlock
                 'type' => $type,
                 'path' => $path,
                 'setting' => $setting,
-                'content' => $content,
+                'content' => htmlspecialchars_decode($content, ENT_QUOTES),
             ];
 
             $rows[] = $row;
