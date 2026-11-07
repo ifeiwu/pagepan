@@ -66,17 +66,12 @@ class PageBlockCode
                 $node = $dom->querySelector('body>*');
 
                 if (!$node) {
-                    throw new \RuntimeException("内容块解析失败：{$block->block_id}");
+                    throw new \RuntimeException("内容块解析失败：{$block->id}");
                 }
 
                 // 添加编辑器属性
-                if ($block->type) {
-                    $node->setAttribute('data-block-type', $block->type);
-                }
-
-                if ($block->path) {
-                    $node->setAttribute('data-block-path', $block->path);
-                }
+//                $node->setAttribute('data-block-id', $block->id);
+//                $node->setAttribute('data-block-path', $block->path);
 
                 if ($block->setting) {
                     $node->setAttribute('data-block-setting', $block->setting);

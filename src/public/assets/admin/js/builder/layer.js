@@ -1,8 +1,14 @@
 define(['van', 'snapdom'], function (interact) {
-    const {button, div, img, ul, li, rect} = van.tags
-    const { path, svg } = van.tags('http://www.w3.org/2000/svg')
+    const {button, div, img, ul, li} = van.tags
+    const { svg, rect, path } = van.tags('http://www.w3.org/2000/svg')
 
     const $drawerLayer = $('#drawer_layer');
+    const $drawerLayerList = $('#drawer_layer_list')
+
+    $drawerLayer[0].addEventListener("sp-hidden", async (e) => {
+        $drawerLayerList.empty();
+    })
+
     $drawerLayer[0].addEventListener("sp-beforeshow", async (e) => {
         const results = await capturePageBlocks();
 
@@ -11,7 +17,7 @@ define(['van', 'snapdom'], function (interact) {
             images.push(URL.createObjectURL(blob))
         });
 
-        van.add($('#drawer_layer_list')[0], List({items: images}))
+        van.add($drawerLayerList[0], List({items: images}))
     });
 
     const List = ({items}) => ul({class: 'flex flex-col gap-4'}, items.map(it => li({class: "flex items-center gap-4 border rounded-md p-2"},

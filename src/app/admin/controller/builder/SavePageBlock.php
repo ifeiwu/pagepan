@@ -33,7 +33,7 @@ class SavePageBlock
         try {
             $db->transaction(function () use ($db, $request, $page_id) {
                 $content = $request->post('content', '');
-                $rows = $this->getRows2($page_id, $content);
+                $rows = $this->getRows($page_id, $content);
 
                 $db->table('page_block')->where('page_id', '=', $page_id)->delete();
 
@@ -57,9 +57,9 @@ class SavePageBlock
      * @param int|string $page_id 页面 ID
      * @param string $content 页面 HTML 内容
      * @return array
-     * @throws JsonException
+     * @throws \Exception
      */
-    public function getRows2(int|string $page_id, string $content): array
+    public function getRows(int|string $page_id, string $content): array
     {
         $php = [];
 
@@ -77,8 +77,7 @@ class SavePageBlock
         $rows = [];
         $nodes = $dom->querySelectorAll('body>*');
 
-        foreach ($nodes as $index => $node) {
-            $sort = $index + 1;
+        foreach ($nodes as $sort => $node) {
             $path = $node->getAttribute('data-block-path') ?? '';
             $setting = $node->getAttribute('data-block-setting') ?? '';
 
@@ -88,38 +87,22 @@ class SavePageBlock
             $node->removeAttribute('data-block-setting');
 
             // 还原 PHP 代码
-            $html = strtr($node->outerHTML, $php);
-            $html = htmlspecialchars_decode($html, ENT_QUOTES);
+            $content = strtr($node->outerHTML, $php);
+            $content = htmlspecialchars_decode($content, ENT_QUOTES);
 
             // 判断内容块类型
             $type = '';
-            if (str_contains($html, '<?php') || str_contains($html, '<?=')) {
+            if (str_contains($content, '<?php') || str_contains($content, '<?=')) {
                 $type = 'php';
             }
 
-            // 生成内容块配置
-            $variables = '';
-            if ($setting !== '') {
-                $config = [
-                    'type' => $type,
-                    'path' => $path,
-                    'setting' => json_decode($setting, true, 512, JSON_THROW_ON_ERROR),
-                ];
-
-                $variables = '<?php' . PHP_EOL;
-                $variables .= '$config = ' . var_export($config, true) . ';?>' . PHP_EOL;
-            }
-
-            $html = $variables . $html . PHP_EOL . PHP_EOL;
-
             $rows[] = [
-                'block_id' => "p{$page_id}b{$sort}",
                 'page_id' => $page_id,
                 'sort' => $sort,
                 'type' => $type,
                 'path' => $path,
                 'setting' => $setting,
-                'content' => $html,
+                'content' => $content,
             ];
         }
 

@@ -130,7 +130,7 @@ $pagevar = [
     <link href="/assets/css/main.css" rel="stylesheet">
 </head>
 <body>
-    <?php eval('?>' . implode('', array_map(fn($block) => $block->content, $this->blocks))); ?>
+    <?php eval('?>' . $page_code) ?>
 
     <script src="/assets/js/main.js"></script>
 </body>
