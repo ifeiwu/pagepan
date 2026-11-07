@@ -1,6 +1,6 @@
 <?php $this->layout('builder') ?>
 
-<div id="workspace" class="resizable resizable-vertical h-screen">
+<div id="app" class="resizable resizable-vertical h-screen">
     <div class="resizable-panel" data-sp-size="50">
         <?php
         $this->insert('builder/_header');
@@ -12,12 +12,12 @@
         <div class="resizable-grip" style="--border:#63748d;--spacing:0.4rem;"></div>
     </div>
     <div class="resizable-panel" data-sp-size="50">
-        <?php $this->insert('builder/_editor') ?>
+        <?php $this->insert('builder/_coder') ?>
     </div>
 </div>
 
 <script>
-    require(['js/builder'], function() {})
+    require(['js/builder', 'js/builder/coder'], function() {})
 </script>
 
 <template id="RepositoryModal"></template>

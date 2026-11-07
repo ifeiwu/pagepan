@@ -24,7 +24,7 @@ class Page
         }
 
         $page = (array)$db->table('page')->where('id', $page_id)->first();
-        $blocks = $db->table('page_block')->where('page_id', $page_id)->get();
+        $blocks = $db->table('page_block')->where('page_id', $page_id)->get()->toArray();
 
         context('site', $site);
         context('page', $page);

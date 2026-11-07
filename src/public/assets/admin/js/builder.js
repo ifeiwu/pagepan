@@ -1,4 +1,4 @@
-define(['jquery', 'js/builder/resize', 'js/builder/coder'], function () {
+define(['jquery', 'js/builder/resize', 'js/builder/layer'], function () {
 
     $('#publish').on('click', function (e) {
         const $publish = $(this).attr('disabled', true);

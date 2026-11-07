@@ -130,15 +130,7 @@ $pagevar = [
     <link href="/assets/css/main.css" rel="stylesheet">
 </head>
 <body>
-    <?php
-        $page_code = '';
-        foreach ($this->blocks as $block) {
-            $page_code .= $block->content;
-        }
-        ob_start();
-        eval('?>' . $page_code);
-        echo ob_get_clean();
-    ?>
+    <?php eval('?>' . implode('', array_map(fn($block) => $block->content, $this->blocks))); ?>
 
     <script src="/assets/js/main.js"></script>
 </body>

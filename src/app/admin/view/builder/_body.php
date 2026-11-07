@@ -14,7 +14,8 @@
                     </a>
                 </div>
             </div>
-            <iframe id="iframe" src="about:blank"></iframe>
+<!--            <iframe id="iframe" src="about:blank"></iframe>-->
+            <iframe id="iframe" src="<?="/admin/builder/page?id={$this->page->id}"?>"></iframe>
             <div class="resize-right"></div>
         </div>
     </div>

@@ -1,132 +1,107 @@
 define(['vs/editor/editor.main'], function (monaco) {
-    const iframe = document.querySelector('#iframe');
-    const $save = $('#save_code').prop('disabled', true);
+    const $save = $('#save_code');
+    const $editor = $('#editor');
+    const $app = $('#app');
 
-    document.querySelector('#workspace').addEventListener("sp-resize", (e) => {
-        editor.layout();
-    });
+    let lastSavedValue = '';
+    let readonlyMessage = '';
+    let isSaving = false;
 
-    let iframe_loading = true;
-    let editor_change_timer;
-    let editor_readonly_message = '';
-
-    $(iframe).on('load', function () {
-        iframe_loading = false;
-    }).attr('src', '/admin/builder/page?id=1')
-
-    // 初始化
-    const editor = monaco.editor.create(document.querySelector('#editor'), {
+    // 初始化 Monaco 编辑器
+    const editor = monaco.editor.create($editor[0], {
         theme: 'vs-dark',
         language: 'php',
         minimap: { enabled: true },
-        stickyScroll: {
-            enabled: false
-        },
+        stickyScroll: { enabled: false }
     });
 
-    // 初始化代码编辑器内容
-    let originalValue;
-    $.get('/admin/builder/page-block-code', {'page_id': appvar.page.id}, function (res) {
-        if (res.code === 0) {
-            originalValue = htmlentities_decode(res.data);
-            editor.setValue(originalValue);
-        } else {
-            editor.updateOptions({readOnly: true});
-            editor_readonly_message = res.message
-            alert(editor_readonly_message)
-        }
-    })
+    // 编辑器容器尺寸变化时重新计算布局
+    $app[0].addEventListener('sp-resize', () => editor.layout());
 
+    // 尝试修改只读内容时提示原因
     editor.onDidAttemptReadOnlyEdit(() => {
-        alert(editor_readonly_message);
+        if (readonlyMessage) alert(readonlyMessage);
     });
 
+    // 监听内容变化，更新保存按钮状态
     editor.onDidChangeModelContent(() => {
-        if (iframe_loading) return;
-
-        const changed = editor.getValue() !== originalValue;
-
-        $save.prop('disabled', !changed);
-        $save.toggleClass('opacity-50', !changed);
+        $save.prop('disabled', isSaving || editor.getValue() === lastSavedValue);
     });
 
+    // 加载页面源代码
+    $.get('/admin/builder/page-block-code', { page_id: appvar.page.id }, function (res) {
+        if (res.code === 0) {
+            lastSavedValue = res.data;
+            editor.setValue(lastSavedValue);
+            $save.prop('disabled', true);
+        } else {
+            readonlyMessage = res.message;
+            editor.updateOptions({ readOnly: true });
+            $save.prop('disabled', true);
+            alert(readonlyMessage);
+        }
+    }).fail(function () {
+        readonlyMessage = '代码加载失败，请刷新页面重试。';
+        editor.updateOptions({ readOnly: true });
+        $save.prop('disabled', true);
+        alert(readonlyMessage);
+    });
 
-    // Ctrl + S 保存
+    // 注册 Ctrl + S / Command + S 保存快捷键
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, savePageBlocks);
 
-    $save.on('click', function () {
-        savePageBlocks()
-    })
+    // 点击按钮保存
+    $save.on('click', savePageBlocks);
 
-    // 保存代码
+    /**
+     * 保存页面内容块代码。
+     */
     function savePageBlocks() {
-        originalValue = editor.getValue();
-        const blocks = getPageBlocks(originalValue)
-        // 保存页面
-        $.post('/admin/builder/save-page-block', {'page_id': appvar.page.id, 'blocks': blocks}, function (res) {
+        if (isSaving || editor.getValue() === lastSavedValue) return;
+
+        const content = editor.getValue();
+        isSaving = true;
+        $save.prop('disabled', true);
+
+        $.post('/admin/builder/save-page-block', {
+            page_id: appvar.page.id,
+            content: content
+        }, function (res) {
             if (res.code === 0) {
+                lastSavedValue = content;
                 iframe.contentWindow.location.reload();
-                if (res.data) {
-                    iframe_loading = true;
-                    editor.setValue(htmlentities_decode(res.data));
-                }
             } else {
                 alert(res.message);
             }
-        })
+        }).fail(function () {
+            alert('保存失败，请稍后重试。');
+        }).always(function () {
+            isSaving = false;
+            $save.prop('disabled', editor.getValue() === lastSavedValue);
+        });
     }
 
-    // 获取页面内容块数组
-    function getPageBlocks(html) {
-        const phpBlocks = [];
-
-        // 保护 PHP 代码，避免被浏览器解析
-        html = html.replace(/<\?php[\s\S]*?\?>|<\?=[\s\S]*?\?>/g, match => {
-            const token = `PHP_BLOCK_${phpBlocks.length}_TOKEN`;
-            phpBlocks.push(match);
-            return token;
-        });
-
-        const $container = $('<div>').html(html);
-        const blocks = [];
-
-        $container.children(/*':not(script, style, link)'*/).each(function () {
-            const $block = $(this).clone(true);
-            $block.find('[contenteditable]').removeAttr('contenteditable');
-            $block.find('lottie-player').html('');
-
-            // 还原 PHP 代码
-            let content = $block[0].outerHTML;
-            content = content.replace(
-                /PHP_BLOCK_(\d+)_TOKEN/g,
-                (_, index) => phpBlocks[Number(index)]
-            );
-            const config = $(content).data();
-            blocks.push({
-                id: config['blockId'] || '',
-                type: config['blockType'] || '',
-                path: config['blockPath'] || '',
-                setting: config['blockSetting'] ? JSON.stringify(config['blockSetting']) : '',
-                content,
-            });
-        });
-
-        return blocks;
-    }
-
-    // 字符转换为 HTML 实体
+    /**
+     * 将字符串中的特殊字符转换为 HTML 实体。
+     *
+     * @param {string} str 原始字符串
+     * @returns {string} HTML 实体字符串
+     */
     function htmlentities_encode(str) {
-        let textarea = document.createElement('textarea')
-        textarea.innerHTML = str
-        return textarea.innerHTML
+        const textarea = document.createElement('textarea');
+        textarea.textContent = str;
+        return textarea.innerHTML;
     }
 
-    // 实体转换为 HTML 字符
+    /**
+     * 将 HTML 实体解码为普通字符串。
+     *
+     * @param {string} str HTML 实体字符串
+     * @returns {string} 解码后的字符串
+     */
     function htmlentities_decode(str) {
-        let textarea = document.createElement('textarea')
-        textarea.innerHTML = str
-        return textarea.value
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = str;
+        return textarea.value;
     }
-
-
-})
+});

@@ -1,0 +1,76 @@
+define(['vs/editor/editor.main'], function (monaco) {
+    const $save = $('#save_code');
+
+    document.querySelector('#app').addEventListener('sp-resize', (e) => {
+        editor.layout();
+    });
+
+    let editor_readonly_message = '';
+
+    // 初始化
+    const editor = monaco.editor.create(document.querySelector('#editor'), {
+        theme: 'vs-dark',
+        language: 'php',
+        minimap: { enabled: true },
+        stickyScroll: {
+            enabled: false
+        },
+    });
+
+    editor.onDidAttemptReadOnlyEdit(() => {
+        alert(editor_readonly_message);
+    });
+
+    editor.onDidChangeModelContent(() => {
+        $save.prop('disabled', editor.getValue() === lastSavedValue);
+    });
+
+    // 初始化代码编辑器内容
+    let lastSavedValue;
+    $.get('/admin/builder/page-block-code', {'page_id': appvar.page.id}, function (res) {
+        if (res.code === 0) {
+            lastSavedValue = htmlentities_decode(res.data);
+            editor.setValue(lastSavedValue);
+        } else {
+            editor.updateOptions({readOnly: true});
+            editor_readonly_message = res.message
+            alert(editor_readonly_message)
+        }
+    })
+
+    // Ctrl + S 保存
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, savePageBlocks);
+
+    // 按钮保存
+    $save.on('click', function () {
+        savePageBlocks()
+    })
+
+    // 保存代码
+    function savePageBlocks() {
+        lastSavedValue = editor.getValue();
+        // 保存页面
+        $.post('/admin/builder/save-page-block', {'page_id': appvar.page.id, 'content': lastSavedValue}, function (res) {
+            if (res.code === 0) {
+                iframe.contentWindow.location.reload();
+                $save.prop('disabled', true);
+            } else {
+                alert(res.message);
+            }
+        })
+    }
+
+    // 字符转换为 HTML 实体
+    function htmlentities_encode(str) {
+        let textarea = document.createElement('textarea')
+        textarea.innerHTML = str
+        return textarea.innerHTML
+    }
+
+    // 实体转换为 HTML 字符
+    function htmlentities_decode(str) {
+        let textarea = document.createElement('textarea')
+        textarea.innerHTML = str
+        return textarea.value
+    }
+})

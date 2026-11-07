@@ -1,0 +1,104 @@
+<?php
+
+namespace app\admin\controller\builder;
+
+use IvoPetkov\HTML5DOMDocument;
+use support\Db;
+use support\Request;
+use support\Response;
+
+class SavePageBlock2
+{
+    public function index(Request $request): Response
+    {
+        Db::beginTransaction();
+
+        try {
+            $db = db();
+            
+            $page_id = $request->post('page_id');
+            $page = $db->table('page')->where('id', '=', $page_id)->first();
+            if (empty($page)) {
+                return json_error('获取页面信息失败');
+            }
+
+            // 把页面块内容重新添加到数据库
+            $content = $request->post('content');
+            $rows = $this->getRows2($page_id, $content);
+            $db->table('page_block')->where('page_id', '=', $page_id)->delete();
+            if ($db->table('page_block')->insert($rows)) {
+                Db::commit();
+            }
+
+            return json_success('ok');
+        } catch (\Throwable $ex) {
+            Db::rollBack();
+            return json_error($ex->getMessage());
+        }
+    }
+
+    public function getRows2($page_id, $content): array
+    {
+        $rows = [];
+
+        try {
+            // 保护 PHP 代码，避免注释
+            $php = [];
+            $content = preg_replace_callback('/<\?(?:php|=)[\s\S]*?\?>/', function ($matches) use (&$php) {
+                $key = 'PHP_BLOCK_' . count($php) . '_TOKEN';
+                $php[$key] = $matches[0];
+                return $key;
+            }, $content);
+
+            $dom = new HTML5DOMDocument();
+            $dom->loadHTML("<!DOCTYPE html><html><body>{$content}</body></html>", HTML5DOMDocument::ALLOW_DUPLICATE_IDS);
+            $nodes = $dom->querySelectorAll('body>*');
+            foreach ($nodes as $sort => $node) {
+                $path = $node->getAttribute('data-block-path') ?? '';
+                $setting = $node->getAttribute('data-block-setting') ?? '';
+                $node->removeAttribute('data-block-type');
+                $node->removeAttribute('data-block-path');
+                $node->removeAttribute('data-block-setting');
+
+                // 还原 PHP 代码
+                $content = strtr($node->outerHTML, $php);
+                $content = htmlspecialchars_decode($content, ENT_QUOTES);
+
+                $type = '';
+                // 包含 PHP 代码
+                if (str_contains($content, '<?php') || str_contains($content, '<?=')) {
+                    $type = 'php';
+                }
+
+                $variables = '';
+                if ($setting) {
+                    $variables = '<?php' . PHP_EOL;
+                    $config = [
+                        'type' => $type,
+                        'path' => $path,
+                        'setting' => json_decode($setting, true),
+                    ];
+                    $variables .= '$config = ' . var_export($config, true) . ';?>' . PHP_EOL;
+                }
+
+                $content = $variables . $content . PHP_EOL . PHP_EOL;
+
+                $row = [
+                    'block_id' => "p{$page_id}b" . ++$sort,
+                    'page_id' => $page_id,
+                    'sort' => $sort,
+                    'type' => $type,
+                    'path' => $path,
+                    'setting' => $setting,
+                    'content' => $content,
+                ];
+
+                $rows[] = $row;
+            }
+        } catch (\Exception $e) {
+            print(PHP_EOL . $e->getMessage() . PHP_EOL);
+        }
+
+        return $rows;
+    }
+}
