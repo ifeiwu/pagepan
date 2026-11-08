@@ -9,5 +9,10 @@
 </div>
 
 <script>
-    require(['js/builder'], function() {})
+    const iframe = document.querySelector('#iframe');
+    iframe.addEventListener('load', () => {
+        require(['js/builder', 'js/builder/design'], function (builder, design) {
+            design(iframe.contentDocument);
+        });
+    });
 </script>

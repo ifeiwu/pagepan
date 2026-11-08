@@ -8,6 +8,7 @@
     <script>
         appvar.page = <?=json_encode($this->page)?>
     </script>
+
 </head>
 <body>
     <?=$this->section('content')?>

@@ -15,23 +15,4 @@ define(['jquery', 'js/builder/resize', 'js/builder/layer'], function () {
         })
     })
 
-
-    const $blocks = $('#iframe').contents()
-        .find('body')
-        .children(':not(script, style, link, [data-block-type!=""])');
-
-    $blocks.each((i, block) => {
-        // 为有文本内容的指定元素启用编辑
-        $(block).find('h1,h2,h3,h4,h5,h6,p,a,span,kbd,em,small,big,button,td,th,li,time')
-            /*.filter(function () {
-                return $(this).text().trim().length > 0;
-            })*/
-            .each(function () {
-                const $el = $(this);
-
-                // 避免嵌套的可编辑区域
-                $el.closest('[contenteditable="true"]').removeAttr('contenteditable');
-                $el.attr('contenteditable', 'true');
-            });
-    });
 })

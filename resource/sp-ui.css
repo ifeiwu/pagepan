@@ -28,6 +28,10 @@
     }
 }
 
+@utility drawer {
+    --tw-backdrop-blur: none;
+}
+
 @utility label {
     color: #555;
 }
