@@ -128,6 +128,33 @@ $pagevar = [
         }
     </style>
     <link href="/assets/css/main.css" rel="stylesheet">
+
+
+
+    <style>
+        [contenteditable="true"] {
+            outline: 1px dashed transparent;
+            outline-offset: 2px;
+            border-radius: 2px;
+            cursor: text;
+            transition: outline-color .15s;
+        }
+
+        [contenteditable="true"]:hover {
+            outline-color: #94a3b8;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        [contenteditable="true"]:empty::before {
+            content: '点击编辑内容';
+            color: #94a3b8;
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
     <?php eval('?>' . $page_code) ?>
