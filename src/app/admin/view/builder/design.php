@@ -1,6 +1,8 @@
 <?php $this->layout('builder') ?>
 
-<div id="app" class="h-screen">
+
+
+<div id="app">
     <?php
     $this->insert('builder/_header');
     $this->insert('builder/_ruler');
@@ -8,11 +10,13 @@
     ?>
 </div>
 
-<script>
+<script src="/assets/admin/js/builder-design.js"></script>
+
+<!--<script>
     const iframe = document.querySelector('#iframe');
     iframe.addEventListener('load', () => {
         require(['js/builder', 'js/builder/design'], function (builder, design) {
             design(iframe.contentDocument);
         });
     });
-</script>
+</script>-->

@@ -226,6 +226,15 @@
   }
 }
 @layer utilities {
+  @layer l1.l2 {
+    .field-group {
+      container-type: inline-size;
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      gap: calc(var(--spacing) * 7);
+    }
+  }
   .\@container {
     container-type: inline-size;
   }
@@ -1839,6 +1848,21 @@
     }
     .sidebar-menu-button:where(.sidebar-menu-button:not(.sidebar-menu-button-sm, .sidebar-menu-button-lg)) {
       height: calc(var(--spacing) * 8);
+    }
+    .input-group-text {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 2);
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      color: var(--muted-foreground);
+    }
+    .input-group-text svg {
+      pointer-events: none;
+    }
+    .input-group-text svg:not([class*="size-"]) {
+      width: calc(var(--spacing) * 4);
+      height: calc(var(--spacing) * 4);
     }
     .label {
       display: flex;
@@ -4409,6 +4433,23 @@
         padding: 0px;
       }
     }
+    .input-group-addon-block-end {
+      order: 9999;
+      width: 100%;
+      justify-content: flex-start;
+      padding-inline: calc(var(--spacing) * 2.5);
+      padding-top: calc(var(--spacing) * 1.5);
+      padding-bottom: calc(var(--spacing) * 2);
+    }
+    .input-group-addon-block-end.border-t {
+      padding-top: calc(var(--spacing) * 2);
+    }
+    .input-group-addon-block-end:has( > button) {
+      margin-inline-start: 0px;
+    }
+    .input-group-addon-block-end:has( > kbd) {
+      margin-inline-start: 0px;
+    }
   }
   .col-span-4 {
     grid-column: span 4 / span 4;
@@ -4771,6 +4812,37 @@
     }
     .field-horizontal:has( > .field-content) > .radio {
       margin-top: 1.5px;
+    }
+  }
+  @layer l1.l2 {
+    .field-description {
+      text-align: start;
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      --tw-leading: var(--leading-normal);
+      line-height: var(--leading-normal);
+      --tw-font-weight: var(--font-weight-normal);
+      font-weight: var(--font-weight-normal);
+      color: var(--muted-foreground);
+    }
+    :where(:is(.field-horizontal)) .field-description {
+      text-wrap: balance;
+    }
+    .field-description:last-child {
+      margin-top: 0px;
+    }
+    .field-description:nth-last-child(2) {
+      margin-top: calc(var(--spacing) * -1);
+    }
+    .field-legend:not(.field-legend-label) + .field-description {
+      margin-top: calc(var(--spacing) * -1.5);
+    }
+    .field-description > a {
+      text-decoration-line: underline;
+      text-underline-offset: 4px;
+    }
+    .field-description > a:hover {
+      color: var(--primary);
     }
   }
   .mt-1 {
@@ -5996,6 +6068,17 @@
     .btn-sm:has(:is(.icon-start)) {
       padding-inline-start: calc(var(--spacing) * 1.5);
     }
+    .btn-lg {
+      height: calc(var(--spacing) * 10);
+      gap: calc(var(--spacing) * 1.5);
+      padding-inline: calc(var(--spacing) * 2.5);
+    }
+    .btn-lg:has(:is(.icon-end)) {
+      padding-inline-end: calc(var(--spacing) * 2);
+    }
+    .btn-lg:has(:is(.icon-start)) {
+      padding-inline-start: calc(var(--spacing) * 2);
+    }
     .date-picker-trigger-sm {
       height: calc(var(--spacing) * 8);
     }
@@ -6225,6 +6308,9 @@
   .grid-cols-5 {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
+  .grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
   .flex-col {
     flex-direction: column;
   }
@@ -6355,6 +6441,52 @@
         .btn-outline:is(.dark, .dark *):hover {
           background-color: color-mix(in oklab, var(--input) 50%, transparent);
         }
+      }
+    }
+    .btn-destructive {
+      background-color: var(--destructive);
+      color: var(--color-white);
+    }
+    @media (hover: hover) {
+      .btn-destructive:hover {
+        background-color: var(--destructive);
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .btn-destructive:hover {
+          background-color: color-mix(in oklab, var(--destructive) 90%, transparent);
+        }
+      }
+    }
+    .btn-destructive:focus-visible {
+      border-color: var(--destructive);
+      @supports (color: color-mix(in lab, red, red)) {
+        border-color: color-mix(in oklab, var(--destructive) 40%, transparent);
+      }
+      --tw-ring-color: var(--destructive);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--destructive) 20%, transparent);
+      }
+    }
+    .btn-destructive:is(.dark, .dark *) {
+      background-color: var(--destructive);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--destructive) 60%, transparent);
+      }
+    }
+    @media (hover: hover) {
+      .btn-destructive:is(.dark, .dark *):hover {
+        background-color: var(--destructive);
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .btn-destructive:is(.dark, .dark *):hover {
+          background-color: color-mix(in oklab, var(--destructive) 70%, transparent);
+        }
+      }
+    }
+    .btn-destructive:is(.dark, .dark *):focus-visible {
+      --tw-ring-color: var(--destructive);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--destructive) 40%, transparent);
       }
     }
   }
@@ -6790,6 +6922,10 @@
   }
   .shadow {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-none {
+    --tw-shadow: 0 0 #0000;
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .ring {

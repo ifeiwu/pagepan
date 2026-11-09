@@ -18,6 +18,7 @@
 </script>
 <script src="/assets/admin/lib/datastar.js" type="module"></script>
 <script src="/assets/admin/lib/sp-ui.js" type="module"></script>
+<script src="/assets/admin/lib/jquery.js"></script>
 <script src="/assets/admin/lib/master.js"></script>
 <script src="/assets/admin/lib/require.js"></script>
 <script src="/assets/admin/js/config.js"></script>

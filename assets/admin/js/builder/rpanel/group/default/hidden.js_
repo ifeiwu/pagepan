@@ -1,0 +1,34 @@
+RPanel.GroupHidden = {
+    view: function() {
+        return m('.group', [
+            m('.value', [
+                m('input[id="hidden"][type="checkbox"]', {
+                    oncreate: function(vnode) {
+                        vnode.attrs.onupdate(vnode)
+                    },
+                    onupdate: function(vnode) {
+                        if ($targetel.parent().is('.__handle--hidden')) {
+                            $(vnode.dom).prop('checked', true)
+                        } else {
+                            $(vnode.dom).prop('checked', false)
+                        }
+                    },
+                    onchange: function() {
+                        this.value = ''
+                        if (this.checked) {
+                            this.value = 'none'
+                            $targetel.hide()
+                            $targetel.parent().addClass('__handle--hidden')
+                        } else {
+                            $targetel.show()
+                            $targetel.parent().removeClass('__handle--hidden')
+                        }
+                        // 动态组件添加样式
+                        $.PFrame.setComponentSettingStyle()
+                    }
+                }),
+                m('label[for="hidden"]', '隐藏组件')
+            ])
+        ])
+    }
+}

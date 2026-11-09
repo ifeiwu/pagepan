@@ -1,0 +1,67 @@
+RPanel.GroupButton = {
+    view: function(vnode) {
+        let isbase64 = vnode.attrs['isbase64']
+        let datatype = vnode.attrs['datatype']
+        let group_class = vnode.attrs['group.class'] || ''
+        let name = vnode.attrs['name']
+        let text = vnode.attrs['text']
+        let title = vnode.attrs['title']
+        let url = vnode.attrs['url']
+        let value = vnode.attrs['value']
+        let setting = vnode.attrs['setting']
+
+        // 设置有值状态颜色
+        const updateButtonStatus = function(el, value) {
+            if (value) {
+                $(el).addClass('isvalue')
+            } else {
+                $(el).removeClass('isvalue')
+            }
+        }
+
+        return m('.group' + group_class, {'setting': name}, [
+            m('button[type="button"].btn', {
+                'title': title,
+                oncreate: function(vnode) {
+                    vnode.attrs.onupdate(vnode)
+                },
+                onupdate: function(vnode) {
+                    updateButtonStatus(vnode.dom, value)
+                },
+                onclick: function() {
+                    let _this = this
+
+                    updateButtonStatus(_this, value)
+
+                    if (value && isbase64 === true) {
+                        value = Base64.decode(value)
+                    } else if (datatype == 'object' && $.isPlainObject(value)) {
+                        value = JSON.stringify(value)
+                    }
+
+                    if (url) {
+                        alertify.openUrl(url, value, function(value, event) {
+                            $(_this).attr('disabled', true)
+
+                            updateButtonStatus(_this, value)
+
+                            // 应用按钮
+                            if (event.index == 0) {
+                                if (value && isbase64 === true) {
+                                    value = Base64.encode(value)
+                                } else if (value && datatype == 'object') {
+                                    value = JSON.parse(value)
+                                }
+                                Component.setSetting(name, value)
+                            }
+
+                            Uikit.updateDynamicComponent('', '', function() {
+                                $(_this).attr('disabled', false)
+                            })
+                        })
+                    }
+                }
+            }, text)
+        ])
+    }
+}

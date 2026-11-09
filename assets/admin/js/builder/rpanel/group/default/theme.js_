@@ -1,0 +1,31 @@
+RPanel.GroupTheme = {
+    view: function() {
+        return m('.group', [
+            m('.value', [
+                m('input[id="theme-invert"][type="checkbox"]', {
+                    oncreate: function(vnode) {
+                        vnode.attrs.onupdate(vnode)
+                    },
+                    onupdate: function(vnode) {
+                        if ($targetel.is('.theme-invert')) {
+                            $(vnode.dom).prop('checked', true)
+                        } else {
+                            $(vnode.dom).prop('checked', false)
+                        }
+                    },
+                    onchange: function() {
+                        this.value = ''
+                        if (this.checked) {
+                            $targetel.addClass('theme-invert')
+                        } else {
+                            $targetel.removeClass('theme-invert')
+                        }
+                        // 动态组件删除样式
+                        $.PFrame.setComponentSettingClass()
+                    }
+                }),
+                m('label[for="theme-invert"]', '反色组件')
+            ])
+        ])
+    }
+}

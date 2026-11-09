@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx @tailwindcss/cli -i ./resource/sp-ui.css -o ./src/public/assets/admin/css/sp-ui.css --watch",
-    "build": "npx @tailwindcss/cli -i ./resource/input.css -o ./src/output.css --minify"
+    "dev": "concurrently -k \"npm:dev:css\" \"npm:dev:js\"",
+    "dev:css": "npx @tailwindcss/cli -i ./assets/admin/css/sp-ui.css -o ./src/public/assets/admin/css/sp-ui.css --watch",
+    "dev:js": "esbuild ./assets/admin/js/*.js --bundle --outdir=./src/public/assets/admin/js --format=iife --target=es2020 --watch",
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "npx @tailwindcss/cli -i ./assets/admin/css/sp-ui.css -o ./src/public/assets/admin/css/sp-ui.css --minify",
+    "build:js": "esbuild ./assets/admin/js/*.js --bundle --minify --outdir=./src/public/assets/admin/js --format=iife --target=es2020"
   },
   "repository": {
     "type": "git",
@@ -21,7 +25,12 @@
   "homepage": "https://github.com/ifeiwu/pagepan#readme",
   "dependencies": {
     "@tailwindcss/cli": "^4.3.3",
+    "pubsub-js": "^1.9.5",
     "starting-point-ui": "^0.39.0",
     "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.7",
+    "esbuild": "^0.28.2"
   }
 }

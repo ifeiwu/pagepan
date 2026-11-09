@@ -130,33 +130,6 @@ $pagevar = [
     <link href="/assets/css/main.css" rel="stylesheet">
 
     <style>
-        h1,h2,h3,h4,h5,h6,p,a,span,kbd,em,small,big,button,td,th,li,time {
-            outline: 1px dashed transparent;
-            outline-offset: 2px;
-            border-radius: 2px;
-            cursor: text;
-            transition: outline-color .15s;
-            &:hover {
-                outline-color: #94a3b8;
-            }
-            &:empty::before {
-                content: '点击编辑内容';
-                color: #94a3b8;
-                pointer-events: none;
-            }
-        }
-
-        [contenteditable="true"]:focus {
-            outline: 2px solid #3b82f6;
-            outline-offset: 2px;
-        }
-
-        /*[contenteditable="true"]:empty::before {
-            content: '点击编辑内容';
-            color: #94a3b8;
-            pointer-events: none;
-        }*/
-
         body>[data-block-mode="design"] {
             outline: 1px dashed transparent;
             outline-offset: -1px;
@@ -169,13 +142,36 @@ $pagevar = [
                 outline: 2px solid #3b82f6;
                 outline-offset: -2px;
             }
-        }
 
-        body>[data-block-mode="design"][data-block-type="php"] {
-            user-select: none;
-            cursor: pointer;
-            * {
-                pointer-events: none;
+            &[data-block-type=""] {
+                h1,h2,h3,h4,h5,h6,p,a,span,kbd,em,small,big,button,td,th,li,time {
+                    outline: 1px dashed transparent;
+                    outline-offset: 2px;
+                    border-radius: 2px;
+                    cursor: text;
+                    transition: outline-color .15s;
+                    &:hover {
+                        outline-color: #94a3b8;
+                    }
+                    &:empty::before {
+                        content: '点击编辑内容';
+                        color: #94a3b8;
+                        pointer-events: none;
+                    }
+                }
+            }
+
+            &[data-block-type=""] [contenteditable="true"]:focus {
+                outline: 2px solid #3b82f6;
+                outline-offset: 2px;
+            }
+
+            &:not([data-block-type=""]) {
+                user-select: none;
+                cursor: pointer;
+                * {
+                    pointer-events: none;
+                }
             }
         }
     </style>
