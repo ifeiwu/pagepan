@@ -130,7 +130,7 @@ $pagevar = [
     <link href="/assets/css/main.css" rel="stylesheet">
 
     <style>
-        body>[data-block-mode="design"] {
+        body[data-mode="design"]>* {
             outline: 1px dashed transparent;
             outline-offset: -1px;
             border-radius: 2px;
@@ -138,7 +138,7 @@ $pagevar = [
             &:hover {
                 outline-color: #94a3b8;
             }
-            &.active {
+            &.pb-editable {
                 outline: 2px solid #3b82f6;
                 outline-offset: -2px;
             }
@@ -161,6 +161,7 @@ $pagevar = [
                 }
             }
 
+            &[data-block-type=""] .pb-editable,
             &[data-block-type=""] [contenteditable="true"]:focus {
                 outline: 2px solid #3b82f6;
                 outline-offset: 2px;
