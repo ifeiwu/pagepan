@@ -16,8 +16,6 @@ class Index
         $page = $db->table('page')->where('id', $page_id)->first();
         $domain = $db->table('site')->where('name', 'domain')->value('value');
 
-//        $edit_mode = $request->cookie('builder-edit-mode', 'design');
-
         $response = view2()->display("builder/$edit_mode", [
             'edit_mode' => $edit_mode,
             'domain' => $domain,
@@ -25,7 +23,6 @@ class Index
             'page_url' => "{$domain}{$page->path}"
         ]);
 
-        var_export($edit_mode);
         $response->cookie('builder-edit-mode', $edit_mode);
 
         return $response;

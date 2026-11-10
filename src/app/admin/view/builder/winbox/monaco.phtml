@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <?php $this->insert('layout/head'); ?>
+    <style>
+        html, body {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="editor" style="width:100%;height:calc(100% - 1px);border-bottom: 1px solid #e1e1e0"></div>
+
+    <script>
+        require(['vs/editor/editor.main'], function() {
+            let editor = monaco.editor.create(document.getElementById('editor'), {
+                language: "<?=get('lang') ?: 'html'?>",
+                // minimap: { enabled: false },
+                // theme: 'vs-dark',
+            })
+
+            // 父窗口获取值
+            window.getValue = function() {
+                return editor.getValue()
+            }
+
+            // 父窗口设置值
+            window.setValue = function(content) {
+                if (content) {
+                    editor.setValue(content)
+                }
+            }
+            // 通知父窗口加载完毕
+            setTimeout(function() {
+                window.parent.postMessage({ loaded: true }, '*')
+            }, 200)
+        })
+    </script>
+</body>
+</html>

@@ -173,6 +173,10 @@
         outline: 0 !important;
     }*/
 
+    img, svg {
+        display: inline-block;
+    }
+
     .container,
     .container-fluid,
     .container-xxl,

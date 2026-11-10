@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <?php $this->insert('layout/head'); ?>
+    <style>html, body {height: 100%;}</style>
+    <script src="<?=url('app/editor/plugin/tinymce/tinymce.min.js')?>"></script>
+</head>
+<body>
+    <textarea style="width:100%;height:calc(100% - 8px);"></textarea>
+    <script>
+        require([], function() {
+            tinymce.init({
+                selector: 'textarea',
+                menubar: false,
+                resize: false,
+                statusbar: false,
+                // skin: 'oxide-dark',
+                language: 'zh_CN',
+                cache_suffix: '?v=5.7.1',
+                plugins: 'table importcss searchreplace autolink directionality image link media template codesample table charmap hr anchor advlist lists wordcount imagetools textpattern noneditable charmap emoticons code help',
+                toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | align | forecolor backcolor table | numlist bullist | image media link | outdent indent | removeformat anchor hr codesample template | charmap emoticons | ltr rtl | pagebreak code help',
+                toolbar_mode: 'sliding',
+                quickbars_selection_toolbar: false,
+                quickbars_insert_toolbar: false,
+                body_class: 'graphic-body',
+                content_style: '.mce-content-body{padding:1rem;background-color: ' + pagevar.site.theme.base['background-color'] + '}',
+                custom_elements: 'style', // 设置内容不过滤标签
+                valid_elements: '*[*]', // 所用元素有效
+                fontsize_formats: '10px 11px 12px 13px 14px 15px 16px 17px 18px 19px 20px 21px 22px 23px 24px 25px 26px 27px 28px 29px 30px 31px 32px 33px 34px 35px 36px 37px 38px 39px 40px',
+                content_css: [
+                    pagevar.site.domain + 'assets/css/pagepan.css',
+                    pagevar.site.domain + 'data/css/graphic.css',
+                ],
+                table_appearance_options: false,
+                table_advtab: false,
+                // image_class_list: [
+                // 	{title: 'None', value: ''},
+                // 	{title: '响应式', value: 'responsive'},
+                // 	{title: '放大', value: 'zoom'}
+                // ],
+                automatic_uploads: false,
+                image_advtab: true,
+                image_dimensions: false,
+                image_title: true,
+                relative_urls: true,
+                document_base_url: pagevar.site.domain,
+                file_picker_callback: function (callback, value, meta) {
+                    let self = this;
+                    let finder_url = 'finder/modal?mode=choose';
+                    let finder_title = '文件';
+
+                    if (meta.filetype == 'image') {
+                        finder_title = '图片';
+                        finder_url = finder_url + '&type=image';
+                    } else if (meta.filetype == 'media') {
+                        finder_title = '视频';
+                        finder_url = finder_url + '&type=media';
+                    }
+
+                    self.windowManager.openUrl({
+                        title: '选取' + finder_title,
+                        url: finder_url
+                    });
+
+                    // 外部页面通信，获取选择的图片地址
+                    window.addEventListener('message', function (event) {
+                        callback(pagevar.site.domain3 + event.data.content);
+                    });
+                },
+                init_instance_callback: function (self) {
+                    window.teditor = self;
+
+                    // 父窗口获取值
+                    window.getValue = function() {
+                        return teditor.getContent();
+                    };
+
+                    // 父窗口设置值
+                    window.setValue = function(content) {
+                        if ( content ) {
+                            teditor.setContent(content);
+                        }
+                    };
+                    
+                    setTimeout(function() {
+                        window.parent.postMessage({ loaded: true }, '*')
+                    }, 200)
+                }
+            });
+        });
+    </script>
+</body>
+</html>

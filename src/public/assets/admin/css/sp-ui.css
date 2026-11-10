@@ -889,6 +889,98 @@
       background-color: var(--muted);
       color: var(--foreground);
     }
+    .radio-segment {
+      position: relative;
+      display: inline-flex;
+      height: 100%;
+      flex: 1;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      gap: calc(var(--spacing) * 1.5);
+      border-radius: calc(var(--radius) * .8);
+      border-style: var(--tw-border-style);
+      border-width: 1px;
+      border-color: transparent;
+      padding-inline: calc(var(--spacing) * 2);
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      --tw-font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-medium);
+      white-space: nowrap;
+      color: var(--foreground);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .radio-segment {
+        color: color-mix(in oklab, var(--foreground) 60%, transparent);
+      }
+    }
+    .radio-segment {
+      transition-property: all;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    @media (hover: hover) {
+      .radio-segment:hover {
+        color: var(--foreground);
+      }
+    }
+    .radio-segment:is(.dark, .dark *) {
+      color: var(--muted-foreground);
+    }
+    @media (hover: hover) {
+      .radio-segment:is(.dark, .dark *):hover {
+        color: var(--foreground);
+      }
+    }
+    .radio-segment:has(:focus-visible) {
+      border-color: var(--ring);
+      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+      --tw-ring-color: var(--ring);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--ring) 50%, transparent);
+      }
+    }
+    .radio-segment:has(:checked) {
+      background-color: var(--background);
+      color: var(--foreground);
+      --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+    .radio-segment:is(.dark, .dark *):has(:checked) {
+      border-color: var(--input);
+      background-color: var(--input);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--input) 30%, transparent);
+      }
+      color: var(--foreground);
+    }
+    .radio-segment:has(:disabled) {
+      pointer-events: none;
+      opacity: 50%;
+    }
+    .radio-segment svg {
+      pointer-events: none;
+      flex-shrink: 0;
+    }
+    .radio-segment svg:not([class*="size-"]) {
+      width: calc(var(--spacing) * 4);
+      height: calc(var(--spacing) * 4);
+    }
+    .radio-segment > input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border-width: 0;
+    }
     .btn {
       display: inline-flex;
       flex-shrink: 0;
@@ -1848,6 +1940,21 @@
     }
     .sidebar-menu-button:where(.sidebar-menu-button:not(.sidebar-menu-button-sm, .sidebar-menu-button-lg)) {
       height: calc(var(--spacing) * 8);
+    }
+    .input-group-text {
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing) * 2);
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      color: var(--muted-foreground);
+    }
+    .input-group-text svg {
+      pointer-events: none;
+    }
+    .input-group-text svg:not([class*="size-"]) {
+      width: calc(var(--spacing) * 4);
+      height: calc(var(--spacing) * 4);
     }
     .label {
       display: flex;
@@ -4367,6 +4474,21 @@
   .z-20 {
     z-index: 20;
   }
+  @layer l1 {
+    .input-group-addon-end {
+      order: 9999;
+      padding-inline-start: 0px;
+      padding-inline-end: calc(var(--spacing) * 2);
+    }
+    .input-group-addon-end:has( > button) {
+      margin-inline-start: 0px;
+      margin-inline-end: -.25rem;
+    }
+    .input-group-addon-end:has( > kbd) {
+      margin-inline-start: 0px;
+      margin-inline-end: -.15rem;
+    }
+  }
   @layer l1.l2 {
     .input-group-addon {
       display: flex;
@@ -4433,6 +4555,23 @@
       margin-inline-start: 0px;
     }
     .input-group-addon-block-end:has( > kbd) {
+      margin-inline-start: 0px;
+    }
+    .input-group-addon-block-start {
+      order: -9999;
+      width: 100%;
+      justify-content: flex-start;
+      padding-inline: calc(var(--spacing) * 2.5);
+      padding-top: calc(var(--spacing) * 2);
+      padding-bottom: calc(var(--spacing) * 1.5);
+    }
+    .input-group-addon-block-start.border-b {
+      padding-bottom: calc(var(--spacing) * 2);
+    }
+    .input-group-addon-block-start:has( > button) {
+      margin-inline-start: 0px;
+    }
+    .input-group-addon-block-start:has( > kbd) {
       margin-inline-start: 0px;
     }
   }
@@ -5096,6 +5235,31 @@
       line-height: var(--tw-leading, var(--text-sm--line-height));
       --tw-font-weight: var(--font-weight-medium);
       font-weight: var(--font-weight-medium);
+    }
+    .radio-segmented {
+      display: inline-flex;
+      height: calc(var(--spacing) * 9);
+      width: fit-content;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+      background-color: var(--muted);
+      padding: 3px;
+      color: var(--muted-foreground);
+    }
+    .radio-segmented[aria-invalid="true"] {
+      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+      --tw-ring-color: var(--destructive);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--destructive) 20%, transparent);
+      }
+    }
+    .radio-segmented:is(.dark, .dark *)[aria-invalid="true"] {
+      --tw-ring-color: var(--destructive);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--destructive) 40%, transparent);
+      }
     }
     .tab-list {
       display: inline-flex;
@@ -6288,6 +6452,9 @@
   .justify-end {
     justify-content: flex-end;
   }
+  .field {
+    gap: var(--spacing);
+  }
   .gap-1 {
     gap: var(--spacing);
   }
@@ -6635,6 +6802,9 @@
   }
   .text-justify {
     text-align: justify;
+  }
+  .text-right {
+    text-align: right;
   }
   .font-mono {
     font-family: var(--font-mono);

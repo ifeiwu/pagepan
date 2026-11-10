@@ -1,6 +1,3 @@
-import WinBox from 'winbox/src/js/winbox.js';
-import 'winbox/dist/css/winbox.min.css';
-
 export function open(url, title, callback) {
     // 删除已经打开的窗口
     WinBox.stack().forEach(winbox => winbox.close());

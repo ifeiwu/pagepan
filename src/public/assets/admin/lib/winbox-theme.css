@@ -1,0 +1,63 @@
+.winbox {
+    border-radius: 10px;
+}
+.winbox .wb-body {
+    border-radius: 4px;
+}
+
+.winbox.footbar iframe {
+    height: calc(100% - 50px);
+}
+
+
+/* 无头窗口样式 */
+.winbox.headless .wb-header {
+    display: none;
+}
+.winbox.headless .wb-body {
+    top: 0;
+    border-radius: 0;
+}
+
+
+.wb-footbar {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    padding: 0 15px;
+    gap: 10px;
+    align-items: center;
+    justify-content: end;
+    background: #f1f1f1;
+}
+
+.wb-footbar button {
+    padding: 10px 20px;
+    color: #fff;
+    background: #111;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.wb-footbar button:disabled {
+    opacity: 0.45;
+    cursor: auto;
+    pointer-events: none;
+}
+
+.wb-footbar button.primary {
+    background: #2C62E5;
+}
+
+.winbox .wb-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 22px;
+    letter-spacing: .5px;
+    color: #666;
+}

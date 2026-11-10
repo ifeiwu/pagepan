@@ -1,39 +1,54 @@
-export default function linkTarget(attrs) {
+export default function linkTarget(attrs = {}) {
     const $target = $(attrs.target);
+    const $link = $target.closest('a');
 
+    // 创建组件模板
     const $template = $(`
-        <div class="group">
-            <div class="label">打开方式</div>
-            <div class="value">
-                <input name="link_target" id="target1" type="radio" value="">
-                <label for="target1">本窗口</label>
-
-                <input name="link_target" id="target2" type="radio" value="_blank">
-                <label for="target2">新窗口</label>
-
-                <input name="link_target" id="target3" type="radio" value="_modal">
-                <label for="target3">弹窗口</label>
+        <div class="field gap-1">
+            <label class="label">打开方式</label>
+            <div class="radio-segmented" role="radiogroup" aria-label="链接打开方式">
+                <label class="radio-segment">
+                    <input type="radio" name="link_target" value="">
+                    本窗口
+                </label>
+                <label class="radio-segment">
+                    <input type="radio" name="link_target" value="_blank">
+                    新窗口
+                </label>
+                <label class="radio-segment">
+                    <input type="radio" name="link_target" value="_modal">
+                    弹窗口
+                </label>
             </div>
         </div>
     `);
 
-    const $link = $target.closest('a');
+    // 获取单选按钮
+    const $radios = $template.find('[name="link_target"]');
 
     // 初始化选中状态
-    $template.find('#target1').prop('checked', !$link.attr('target'));
+    const target = $link.attr('target');
 
-    $template.find('#target2').prop('checked', $link.attr('target') === '_blank');
+    $radios.filter('[value=""]').prop('checked', !target);
+    $radios.filter('[value="_blank"]').prop('checked', target === '_blank');
+    $radios.filter('[value="_modal"]').prop('checked', target === '_modal' || $link.is('[data-modal]'));
 
-    $template.find('#target3').prop('checked', $link.is('[data-modal],[target="_modal"]'));
+    // 监听打开方式切换
+    $radios.on('change', function () {
+        if (!this.checked) return;
 
-    // 切换打开方式
-    $template.find('[name="link_target"]').on('change', function () {
-        if (this.value === '') {
-            $link.removeAttr('target data-modal');
-        } else if (this.value === '_blank') {
-            $link.attr('target', '_blank').removeAttr('data-modal');
-        } else if (this.value === '_modal') {
-            $link.attr('target', '_modal');
+        switch (this.value) {
+            case '':
+                $link.removeAttr('target data-modal');
+                break;
+
+            case '_blank':
+                $link.attr('target', '_blank').removeAttr('data-modal');
+                break;
+
+            case '_modal':
+                $link.attr('target', '_modal');
+                break;
         }
     });
 

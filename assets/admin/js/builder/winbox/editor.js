@@ -1,71 +1,96 @@
-var WinboxEditor = (function(window, document, $) {
-    let value2
-    let iframe
+export function open(url, title, value, onSaveCallback, onCloseCallback) {
+    // 关闭已经打开的窗口
+    WinBox.stack().forEach(winbox => winbox.close());
 
-    // iframe页面通知加载完毕
-    const messageHandler = function(e) {
-        if (e.data.loaded == true) {
-            iframe.contentWindow.setValue(value2)
+    // 保存编辑器初始值及 iframe 引用
+    let value2 = value;
+    let iframe;
+
+    // 监听 iframe 加载完成消息
+    const messageHandler = function (e) {
+        if (e.data?.loaded === true && iframe?.contentWindow) {
+            iframe.contentWindow.setValue(value2);
         }
-    }
+    };
 
-    function open(url, title, value, onSaveCallback, onCloseCallback) {
-        // 删除已经打开的窗口
-        WinBox.stack().forEach((winbox) => {
-            winbox.close()
-        })
+    // 创建窗口
+    const winbox = new WinBox(title || '编辑内容', {
+        url,
+        x: 'center',
+        y: 'center',
+        width: '80%',
+        minwidth: '900px',
+        maxwidth: '1200px',
+        height: '80%',
+        border: 6,
+        background: '#000',
+        overflow: true,
+        class: ['no-full', 'no-max', 'no-min', 'footbar'],
 
-        value2 = value
+        // 窗口创建后初始化底部工具栏
+        oncreate: function () {
+            const $body = $(this.body);
 
-        let winbox = new WinBox(title || '编辑内容', {
-            url: url,
-            x: 'center',
-            y: 'center',
-            width: '80%',
-            minwidth: '900px',
-            maxwidth: '1200px',
-            height: '80%',
-            border: 6,
-            background: '#000',
-            overflow: true,
-            class: ['no-full', 'no-max', 'no-min', 'footbar'],
-            oncreate: function() {
-                $(this.body).append('<div class="wb-loading">页面加载中...</div>')
-                let $footbar = $(`<div class="wb-footbar">
-                                    <div><button id="save">应用</button></div>
-                                    <div><button id="save_close" class="primary">应用&关闭</button></div>
-                                </div>`).appendTo(this.body)
-                let $save = $footbar.find('#save')
-                let $save_close = $footbar.find('#save_close')
-                $save.on('click', function(e, type) {
-                    $save.attr('disabled', true)
-                    $save_close.attr('disabled', true)
+            // 加载提示
+            $body.append(`
+                <div class="wb-loading">页面加载中...</div>
+            `);
 
-                    let value = iframe.contentWindow.getValue()
+            // 底部操作栏模板
+            const $footbar = $(`
+                <div class="wb-footbar">
+                    <div>
+                        <button type="button" id="save">应用</button>
+                    </div>
+                    <div>
+                        <button type="button" id="save_close" class="primary">应用&关闭</button>
+                    </div>
+                </div>
+            `).appendTo($body);
 
-                    onSaveCallback(value, $save, $save_close)
+            // 获取操作按钮
+            const $save = $footbar.find('#save');
+            const $saveClose = $footbar.find('#save_close');
 
-                    if (type == 'close') {
-                        winbox.close()
-                    }
-                })
-                $save_close.on('click', function() {
-                    $save.trigger('click', ['close'])
-                })
-            },
-            onload: function() {
-                iframe = this
-                window.addEventListener('message', messageHandler)
-            },
-            onclose: function(force) {
-                winbox.setUrl('about:blank')
-                window.removeEventListener('message', messageHandler)
-                onCloseCallback()
-            }
-        })
-    }
+            // 应用编辑内容
+            $save.on('click', function (e, type) {
+                // 防止重复提交
+                $save.add($saveClose).prop('disabled', true);
 
-    return {
-        open: open
-    }
-})(window, document, jQuery)
+                // 获取 iframe 中的编辑内容
+                const value = iframe.contentWindow.getValue();
+
+                // 执行保存回调
+                onSaveCallback?.(value, $save, $saveClose);
+
+                // 保存后关闭窗口
+                if (type === 'close') {
+                    winbox.close();
+                }
+            });
+
+            // 应用并关闭
+            $saveClose.on('click', function () {
+                $save.trigger('click', ['close']);
+            });
+        },
+
+        // iframe 加载完成后绑定消息监听
+        onload: function () {
+            iframe = this;
+
+            window.addEventListener('message', messageHandler);
+        },
+
+        // 窗口关闭时清理资源
+        onclose: function () {
+            winbox.setUrl('about:blank');
+
+            window.removeEventListener('message', messageHandler);
+
+            onCloseCallback?.();
+        }
+    });
+
+    return winbox;
+}
