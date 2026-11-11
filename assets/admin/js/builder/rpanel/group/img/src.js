@@ -11,7 +11,7 @@ export default function imgSrc(attrs = {}) {
     return finder({
         label: '图片地址',
         placeholder: 'https://domain/*.png or *.jpg',
-        rows: 3,
+        height: '35px',
         value: image,
         filetype: 'image',
         update: function (value) {

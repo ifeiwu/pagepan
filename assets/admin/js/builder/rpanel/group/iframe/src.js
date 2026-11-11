@@ -8,7 +8,7 @@ export default function iframeSrc(attrs = {}) {
 	return finder({
 		label: '页面地址',
 		placeholder: 'http://',
-		rows: 4,
+		height: '35px',
 		value: value,
 		filetype: '',
 		update: function (value) {

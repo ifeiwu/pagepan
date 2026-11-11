@@ -428,36 +428,10 @@ html, body {
 }
 
 .pb-rpanel .card {
-    padding: 15px;
     background: #fbfbfb;
-    border-radius: 10px;
-    border: 1px solid #eee;
+    border: none;
 }
 
 .pb-rpanel .card:empty {
     display: none;
-}
-
-.pb-rpanel .card .headbar {
-    display: flex;
-    align-items: center;
-    column-gap: 3px;
-    width: 100%;
-    line-height: 1;
-    color: #666;
-    margin-bottom: 5px
-}
-
-.pb-rpanel .card .headbar.right {
-    justify-content: flex-end;
-    margin-bottom: 0;
-}
-
-.pb-rpanel .card .headbar .icon {
-    line-height: 0;
-}
-
-.pb-rpanel .card .headbar .title {
-    font-size: 13px;
-    font-weight: bold;
 }

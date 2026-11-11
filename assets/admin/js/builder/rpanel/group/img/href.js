@@ -43,7 +43,8 @@ export default function imgHref(attrs = {}) {
     };
 
     // 初始链接地址
-    $textarea.val(getLink().attr('href') || '');
+    $textarea.css('min-height', '35px')
+        .val(getLink().attr('href') || '');
 
     // 监听输入，同步更新或创建链接
     $textarea.on('input', function () {

@@ -18,7 +18,32 @@ export default function remove(attrs = {}) {
     $apply.on('click', function (e) {
         e.preventDefault();
 
-        $target.remove();
+        if (
+            ($target.is('img') && $target.parent().is('picture')) ||
+            ($target.is('video') && $target.parent().is('._video_')) ||
+            ($target.is('audio') && $target.parent().is('._audio_')) ||
+            ($target.is('iframe') && $target.parent().is('._iframe_'))
+        ) {
+            let $parent = $target.parent()
+            $target = $parent.parent()
+            $parent.remove()
+        } else {
+            let $target2 = $target.next()
+            if ($target2.length === 0) {
+                $target2 = $target.prev()
+            }
+            if ($target2.length === 0) {
+                $target2 = $target.parent()
+            }
+            $target.remove()
+            $target = $target2
+        }
+        // 当前元素没有子元素，清空换行，空格等
+        if ($target.children().length === 0 && $target.text().trim() === '') {
+            $target.empty()
+        }
+
+        $target.trigger('click.target')
     });
 
     // 返回组件模板

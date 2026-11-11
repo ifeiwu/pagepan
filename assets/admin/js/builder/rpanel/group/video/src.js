@@ -8,7 +8,7 @@ export default function videoSrc(attrs = {}) {
 	return finder({
 		label: '视频地址',
 		placeholder: 'https://domain/*.mp4',
-		rows: 3,
+		height: '35px',
 		value: value,
 		filetype: 'media',
 		update: function (value) {

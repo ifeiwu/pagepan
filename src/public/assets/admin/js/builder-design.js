@@ -251,6 +251,7 @@
     const $apply = $template.find("button");
     $apply.on("click", function(e) {
       e.preventDefault();
+      console.log($target);
       if ($target.is("img")) {
         let $picture = $target.parent("picture");
         if ($picture.length) {
@@ -265,10 +266,12 @@
       } else {
         let $li = $target.closest("li");
         if ($li.length) {
-          $li.after($li.clone(true));
+          let $li2 = $li.clone(true);
+          $li2.removeAttr("data-editable contenteditable");
+          $li.after($li2);
         } else {
           let $target2 = $target.clone();
-          $target2.removeAttr("data-editable");
+          $target2.removeAttr("data-editable contenteditable");
           $target.after($target2);
         }
       }
@@ -293,7 +296,25 @@
     const $apply = $template.find("button");
     $apply.on("click", function(e) {
       e.preventDefault();
-      $target.remove();
+      if ($target.is("img") && $target.parent().is("picture") || $target.is("video") && $target.parent().is("._video_") || $target.is("audio") && $target.parent().is("._audio_") || $target.is("iframe") && $target.parent().is("._iframe_")) {
+        let $parent = $target.parent();
+        $target = $parent.parent();
+        $parent.remove();
+      } else {
+        let $target2 = $target.next();
+        if ($target2.length === 0) {
+          $target2 = $target.prev();
+        }
+        if ($target2.length === 0) {
+          $target2 = $target.parent();
+        }
+        $target.remove();
+        $target = $target2;
+      }
+      if ($target.children().length === 0 && $target.text().trim() === "") {
+        $target.empty();
+      }
+      $target.trigger("click.target");
     });
     return $template;
   }
@@ -302,11 +323,34 @@
     }
   });
 
+  // assets/admin/js/builder/rpanel/action/removeBlock.js
+  function remove2(attrs = {}) {
+    let $target = $(attrs.target);
+    const $template = $(`
+        <li>
+            <button class="btn btn-lg btn-icon btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash preview-icon"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+        </li>
+    `);
+    const $apply = $template.find("button");
+    $apply.on("click", function(e) {
+      e.preventDefault();
+      console.log($target);
+    });
+    return $template;
+  }
+  var init_removeBlock = __esm({
+    "assets/admin/js/builder/rpanel/action/removeBlock.js"() {
+    }
+  });
+
   // assets/admin/js/builder/rpanel/action/index.js
   var init_action = __esm({
     "assets/admin/js/builder/rpanel/action/index.js"() {
       init_clone();
       init_remove();
+      init_removeBlock();
     }
   });
 
@@ -453,7 +497,7 @@
   function finder(attrs = {}) {
     const {
       placeholder = "",
-      rows,
+      height,
       name,
       value = "",
       filetype = "",
@@ -495,9 +539,8 @@
     $template.attr("setting", name);
     $template.find(".label").text(attrs.label || "");
     $textarea.attr({
-      placeholder,
-      rows
-    }).val(value);
+      placeholder
+    }).css("min-height", height).val(value);
     function encodeSVG(data) {
       return data.replace(/"/g, "'").replace(/>\s+</g, "><").replace(/\s{2,}/g, " ");
     }
@@ -623,7 +666,7 @@
     return finder({
       label: "\u56FE\u7247\u5730\u5740",
       placeholder: "https://domain/*.png or *.jpg",
-      rows: 3,
+      height: "35px",
       value: image,
       filetype: "image",
       update: function(value) {
@@ -678,7 +721,7 @@
     const toggleRemoveButton = () => {
       $remove.prop("disabled", !getLink().length);
     };
-    $textarea.val(getLink().attr("href") || "");
+    $textarea.css("min-height", "35px").val(getLink().attr("href") || "");
     $textarea.on("input", function() {
       let $link = getLink();
       if ($link.length) {
@@ -981,10 +1024,21 @@
       var import_pubsub_js = __toESM(require_pubsub());
       init_action();
       init_group();
-      import_pubsub_js.default.subscribe("event.click.contenteditable", function(msg, target) {
-        const $fieldset = $('<div class="field-group px-4">');
+      $rpanel = $(".pb-rpanel");
+      import_pubsub_js.default.subscribe("event.click.block", function(msg, target) {
+        $rpanel.find(".card.attributes").empty();
         const $action = $('<ul class="grid grid-cols-6 p-2">');
-        switch (target.tagName.toLocaleUpperCase()) {
+        $action.append(
+          clone({ target }),
+          remove2({ target })
+        );
+        $rpanel.find(">.actions").html($action);
+      });
+      import_pubsub_js.default.subscribe("event.click.editable", function(msg, target) {
+        const $fieldset = $('<div class="field-group">');
+        const $action = $('<ul class="grid grid-cols-6 p-2">');
+        const tagname = target.tagName.toLocaleUpperCase();
+        switch (tagname) {
           case "A":
             $fieldset.append(
               linkHref({ target }),
@@ -992,9 +1046,6 @@
             );
             break;
           case "IMG":
-            $action.append(
-              clone({ target })
-            );
             $fieldset.append(
               imgSrc({ target }),
               imgHref({ target })
@@ -1010,9 +1061,15 @@
             );
             break;
         }
-        $action.append(remove({ target }));
-        $(".pb-rpanel .scroll").html($fieldset);
-        $(".pb-rpanel .action").html($action);
+        $action.append(
+          clone({ target }),
+          remove({ target })
+        );
+        if (!$fieldset.is(":empty")) {
+          const $card = $('<div class="card-content">').append($fieldset);
+          $rpanel.find(".card.attributes").html($card);
+        }
+        $rpanel.find(">.actions").html($action);
       });
     }
   });
@@ -1028,22 +1085,25 @@
         const $body = $doc.find("body").attr("data-mode", "design");
         const editableSelector = "h1,h2,h3,h4,h5,h6,p,a,span,kbd,em,small,big,button,td,th,li,time";
         const clickSelector = "svg,img";
-        $doc.on("mousedown", function(e) {
+        $body.on("mousedown", "> [data-block-type] *", function(e) {
+          e.stopPropagation();
           if (e.button > 0) return;
-          const $el = $(e.target);
+          const target = e.target;
+          const $target = $(target);
           $body.find('[contenteditable="true"]').removeAttr("contenteditable");
           $body.find("[data-editable]").removeAttr("data-editable");
-          if ($el.is(editableSelector)) {
-            $el.attr("contenteditable", "true");
+          if ($target.is(editableSelector)) {
+            $target.attr("contenteditable", "true");
+            import_pubsub_js.default.publish("event.click.contenteditable", target);
           }
-          if ($el.is(editableSelector) || $el.is(clickSelector)) {
-            $(e.target).attr("data-editable", "");
+          if ($target.is(editableSelector) || $target.is(clickSelector)) {
+            $target.attr("data-editable", "");
+            import_pubsub_js.default.publish("event.click.editable", target);
           }
         });
         $body.on("click", "[data-editable]", function(e) {
           e.preventDefault();
           e.stopPropagation();
-          import_pubsub_js.default.publish("event.click.contenteditable", e.target);
         });
         $body.on("click", "> [data-block-type]", function(e) {
           e.preventDefault();
@@ -1054,6 +1114,14 @@
         });
         $body.on("click", function() {
           $body.find("[data-editable]").removeAttr("data-editable");
+        });
+        $body.on("click.target", function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const target = e.target;
+          const $target = $(target);
+          $body.find("[data-editable]").removeAttr("data-editable");
+          $target.attr("data-editable", "");
         });
       });
     }

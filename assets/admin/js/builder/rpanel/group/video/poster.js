@@ -8,7 +8,7 @@ export default function videoPoster(attrs = {}) {
 	return finder({
 		label: '视频封面',
 		placeholder: 'https://domain/*.png or *.jpg',
-		rows: 3,
+		height: '35px',
 		value: value,
 		filetype: 'image',
 		update: function (value) {

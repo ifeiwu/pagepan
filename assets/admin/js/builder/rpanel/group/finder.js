@@ -5,7 +5,7 @@ export default function finder(attrs = {}) {
 	// 组件配置
 	const {
 		placeholder = '',
-		rows,
+		height,
 		name,
 		value = '',
 		filetype = '',
@@ -58,8 +58,7 @@ export default function finder(attrs = {}) {
 
 	$textarea.attr({
 		placeholder,
-		rows
-	}).val(value);
+	}).css('min-height', height).val(value);
 
 	// 编码 SVG 内容，避免属性引号和空白字符影响 HTML
 	function encodeSVG(data) {

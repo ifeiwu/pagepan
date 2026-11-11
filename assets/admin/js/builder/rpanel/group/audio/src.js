@@ -8,7 +8,7 @@ export default function audioSrc(attrs = {}) {
 	return finder({
 		label: '音频地址',
 		placeholder: 'https://domain/*.mp3',
-		rows: 3,
+		height: '35px',
 		value: value,
 		file: 'media',
 		update: function (value) {

@@ -17,7 +17,7 @@ export default function clone(attrs = {}) {
     // 点击按钮，打开 SVG 源码编辑器
     $apply.on('click', function (e) {
         e.preventDefault();
-
+        console.log($target)
         if ($target.is('img')) {
             let $picture = $target.parent('picture')
             if ($picture.length) {
@@ -32,10 +32,12 @@ export default function clone(attrs = {}) {
         } else {
             let $li = $target.closest('li');
             if ($li.length) {
-                $li.after($li.clone(true));
+                let $li2 = $li.clone(true);
+                $li2.removeAttr('data-editable contenteditable');
+                $li.after($li2);
             } else {
                 let $target2 = $target.clone()
-                $target2.removeAttr('data-editable')
+                $target2.removeAttr('data-editable contenteditable')
                 $target.after($target2)
             }
         }

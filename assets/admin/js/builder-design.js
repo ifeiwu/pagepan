@@ -10,23 +10,25 @@ $iframe.on('load', function () {
     const clickSelector = 'svg,img';
 
     // 单击可编辑元素
-    $doc.on('mousedown', function (e) {
+    $body.on('mousedown', '> [data-block-type] *', function (e) {
+        e.stopPropagation();
+
         if (e.button > 0) return;
 
-        // const $el = $(e.target).closest(editableSelector);
-        // if (!$el.length) return;
-
-        const $el = $(e.target);
+        const target = e.target;
+        const $target = $(target);
 
         $body.find('[contenteditable="true"]').removeAttr('contenteditable');
         $body.find('[data-editable]').removeAttr('data-editable');
 
-        if ($el.is(editableSelector)) {
-            $el.attr('contenteditable', 'true');
+        if ($target.is(editableSelector)) {
+            $target.attr('contenteditable', 'true');
+            PubSub.publish('event.click.contenteditable', target);
         }
 
-        if ($el.is(editableSelector) || $el.is(clickSelector)) {
-            $(e.target).attr('data-editable', '');
+        if ($target.is(editableSelector) || $target.is(clickSelector)) {
+            $target.attr('data-editable', '');
+            PubSub.publish('event.click.editable', target);
         }
     });
 
@@ -34,8 +36,6 @@ $iframe.on('load', function () {
     $body.on('click', '[data-editable]', function (e) {
         e.preventDefault();
         e.stopPropagation();
-
-        PubSub.publish('event.click.contenteditable', e.target);
     });
 
     // 点击区块及取消选中
@@ -52,5 +52,17 @@ $iframe.on('load', function () {
     // 点击空白区域取消选中
     $body.on('click', function () {
         $body.find('[data-editable]').removeAttr('data-editable');
+    });
+
+    // 手动触发点击元素：$target.trigger('click.target')
+    $body.on('click.target', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const target = e.target;
+        const $target = $(target);
+
+        $body.find('[data-editable]').removeAttr('data-editable');
+        $target.attr('data-editable', '');
     });
 });
