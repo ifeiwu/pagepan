@@ -25,6 +25,8 @@
   "homepage": "https://github.com/ifeiwu/pagepan#readme",
   "dependencies": {
     "@tailwindcss/cli": "^4.3.3",
+    "@zumer/snapdom": "^3.7.4",
+    "interactjs": "^1.10.28",
     "pubsub-js": "^1.9.5",
     "starting-point-ui": "^0.39.0",
     "tailwindcss": "^4.3.3",

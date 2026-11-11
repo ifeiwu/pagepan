@@ -238,6 +238,78 @@
     }
   });
 
+  // assets/admin/js/builder/rpanel/action/clone.js
+  function clone(attrs = {}) {
+    let $target = $(attrs.target);
+    const $template = $(`
+        <li>
+            <button class="btn btn-lg btn-icon btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy preview-icon"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            </button>
+        </li>
+    `);
+    const $apply = $template.find("button");
+    $apply.on("click", function(e) {
+      e.preventDefault();
+      if ($target.is("img")) {
+        let $picture = $target.parent("picture");
+        if ($picture.length) {
+          let $picture2 = $picture.clone();
+          $picture2.find("img").removeAttr("data-editable");
+          $picture.after($picture2);
+        } else {
+          let $target2 = $target.clone();
+          $target2.removeAttr("data-editable");
+          $target.after($target2);
+        }
+      } else {
+        let $li = $target.closest("li");
+        if ($li.length) {
+          $li.after($li.clone(true));
+        } else {
+          let $target2 = $target.clone();
+          $target2.removeAttr("data-editable");
+          $target.after($target2);
+        }
+      }
+    });
+    return $template;
+  }
+  var init_clone = __esm({
+    "assets/admin/js/builder/rpanel/action/clone.js"() {
+    }
+  });
+
+  // assets/admin/js/builder/rpanel/action/remove.js
+  function remove(attrs = {}) {
+    let $target = $(attrs.target);
+    const $template = $(`
+        <li>
+            <button class="btn btn-lg btn-icon btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash preview-icon"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+        </li>
+    `);
+    const $apply = $template.find("button");
+    $apply.on("click", function(e) {
+      e.preventDefault();
+      $target.remove();
+    });
+    return $template;
+  }
+  var init_remove = __esm({
+    "assets/admin/js/builder/rpanel/action/remove.js"() {
+    }
+  });
+
+  // assets/admin/js/builder/rpanel/action/index.js
+  var init_action = __esm({
+    "assets/admin/js/builder/rpanel/action/index.js"() {
+      init_clone();
+      init_remove();
+    }
+  });
+
   // assets/admin/js/builder/winbox/finder.js
   function open(url, title, callback) {
     WinBox.stack().forEach((winbox2) => winbox2.close());
@@ -907,9 +979,11 @@
   var require_rpanel = __commonJS({
     "assets/admin/js/builder/rpanel.js"() {
       var import_pubsub_js = __toESM(require_pubsub());
+      init_action();
       init_group();
       import_pubsub_js.default.subscribe("event.click.contenteditable", function(msg, target) {
         const $fieldset = $('<div class="field-group px-4">');
+        const $action = $('<ul class="grid grid-cols-6 p-2">');
         switch (target.tagName.toLocaleUpperCase()) {
           case "A":
             $fieldset.append(
@@ -918,6 +992,9 @@
             );
             break;
           case "IMG":
+            $action.append(
+              clone({ target })
+            );
             $fieldset.append(
               imgSrc({ target }),
               imgHref({ target })
@@ -933,7 +1010,9 @@
             );
             break;
         }
+        $action.append(remove({ target }));
         $(".pb-rpanel .scroll").html($fieldset);
+        $(".pb-rpanel .action").html($action);
       });
     }
   });

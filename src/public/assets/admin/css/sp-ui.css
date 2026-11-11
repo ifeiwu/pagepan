@@ -4557,23 +4557,6 @@
     .input-group-addon-block-end:has( > kbd) {
       margin-inline-start: 0px;
     }
-    .input-group-addon-block-start {
-      order: -9999;
-      width: 100%;
-      justify-content: flex-start;
-      padding-inline: calc(var(--spacing) * 2.5);
-      padding-top: calc(var(--spacing) * 2);
-      padding-bottom: calc(var(--spacing) * 1.5);
-    }
-    .input-group-addon-block-start.border-b {
-      padding-bottom: calc(var(--spacing) * 2);
-    }
-    .input-group-addon-block-start:has( > button) {
-      margin-inline-start: 0px;
-    }
-    .input-group-addon-block-start:has( > kbd) {
-      margin-inline-start: 0px;
-    }
   }
   .col-span-4 {
     grid-column: span 4 / span 4;

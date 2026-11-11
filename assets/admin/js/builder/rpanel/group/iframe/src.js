@@ -1,19 +1,19 @@
-RPanel.GroupIframeSrc = {
+import { default as finder } from '../finder.js';
 
-    view: function () {
-    
-    	let value = $targetel.find('iframe').attr('src');
-    
-    	return m(RPanel.GroupFinder, {
-    		label: '页面地址',
-    		placeholder: 'http://',
-    		rows: 4,
-    		value: value,
-    		file: '',
-    		update: function (value) {
-    			
-    			$targetel.find('iframe').attr('src', value);
-    		},
-    	});
-    }
+export default function iframeSrc(attrs = {}) {
+	// 获取目标元素
+	const $target = $(attrs.target);
+	let value = $target.find('iframe').attr('src');
+
+	return finder({
+		label: '页面地址',
+		placeholder: 'http://',
+		rows: 4,
+		value: value,
+		filetype: '',
+		update: function (value) {
+
+			$target.find('iframe').attr('src', value);
+		},
+	});
 }

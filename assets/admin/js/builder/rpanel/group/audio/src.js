@@ -1,18 +1,18 @@
-RPanel.GroupAudioSrc = {
+import { default as finder } from '../finder.js';
 
-    view: function () {
-    
-    	let value = $targetel.find('audio').attr('src');
-    
-    	return m(RPanel.GroupFinder, {
-    		label: '音频地址',
-    		placeholder: 'https://domain/*.mp3',
-    		rows: 3,
-    		value: value,
-    		file: 'media',
-    		update: function (value) {
-    			$targetel.find('audio').attr('src', value);
-    		},
-    	});
-    }
+export default function audioSrc(attrs = {}) {
+	// 获取目标视频元素
+	const $target = $(attrs.target);
+	let value = $target.find('audio').attr('src');
+
+	return finder({
+		label: '音频地址',
+		placeholder: 'https://domain/*.mp3',
+		rows: 3,
+		value: value,
+		file: 'media',
+		update: function (value) {
+			$target.find('audio').attr('src', value);
+		},
+	});
 }

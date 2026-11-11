@@ -338,11 +338,13 @@ html, body {
 }
 
 .pb-rpanel {
+    display: flex;
+    flex-direction: column;
     position: absolute;
-    top: 1px;
-    bottom: 0;
+    top: 70px;
     right: 0;
     width: 305px;
+    height: calc(100% - 70px);
     background: #fdfdfd;
     transform: translateX(305px);
     transition: transform .25s;
@@ -352,7 +354,7 @@ html, body {
 
 .pb-rpanel.open {
     transform: translateX(0);
-    box-shadow: 0 0 0 1px #e2e2e2, 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .pb-rpanel.loading::before {
@@ -379,7 +381,7 @@ html, body {
 .pb-rpanel .close {
     display: none;
     position: absolute;
-    top: -1px;
+    top: 0;
     left: -25px;
     width: 25px;
     line-height: 0;
@@ -402,8 +404,9 @@ html, body {
 }
 
 .pb-rpanel .scroll {
+    flex: 1;
+    min-height: 0;
     position: relative;
-    height: 100%;
     padding-top: 15px;
     padding-bottom: 15px;
     overflow-y: auto;
