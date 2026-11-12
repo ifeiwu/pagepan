@@ -32,34 +32,14 @@
                     </div>
                     <div class="flex-1 p-4">
                         <div id="drawer_layer_list"></div>
-                        <!--<ul id="drawer_layer_list" class="flex flex-col gap-4">
-                            <li class="flex items-center gap-4 border rounded-md p-2">
-                                <div>
-                                    <img class="h-20" src="data:image/png;base64,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" alt="">
-                                </div>
-                                <div class="flex ml-auto">
-                                    <button class="btn btn-sm btn-icon btn-ghost">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up preview-icon"><path d="m18 15-6-6-6 6"/></svg>
-                                    </button>
-                                    <button class="btn btn-sm btn-icon btn-ghost">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down preview-icon"><path d="m6 9 6 6 6-6"/></svg>
-                                    </button>
-                                    <button class="btn btn-sm btn-icon btn-ghost">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy preview-icon"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                                    </button>
-                                    <button class="btn btn-sm btn-icon btn-ghost">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash preview-icon"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                                    </button>
-                                </div>
-                            </li>
-                        </ul>-->
                     </div>
                 </div>
             </dialog>
 
-            <button class="btn btn-icon btn-secondary" title="添加元素">
+            <button class="btn btn-icon btn-secondary" title="内容块" data-on:click="@get('/admin/builder/repo-blocks/open-drawer')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-component preview-icon"><path d="M15.536 11.293a1 1 0 0 0 0 1.414l2.376 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z"/><path d="M2.297 11.293a1 1 0 0 0 0 1.414l2.377 2.377a1 1 0 0 0 1.414 0l2.377-2.377a1 1 0 0 0 0-1.414L6.088 8.916a1 1 0 0 0-1.414 0z"/><path d="M8.916 17.912a1 1 0 0 0 0 1.415l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.415l-2.377-2.376a1 1 0 0 0-1.414 0z"/><path d="M8.916 4.674a1 1 0 0 0 0 1.414l2.377 2.376a1 1 0 0 0 1.414 0l2.377-2.376a1 1 0 0 0 0-1.414l-2.377-2.377a1 1 0 0 0-1.414 0z"/></svg>
             </button>
+            <template id="drawer_repo_blocks" data-init="@get('/admin/builder/repo-blocks/open-drawer')"></template>
         </div>
     </div>
     <div class="grow flex justify-center">
