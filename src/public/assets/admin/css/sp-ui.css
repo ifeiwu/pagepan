@@ -227,28 +227,6 @@
 }
 @layer utilities {
   @layer l1.l2 {
-    .card-header {
-      container-type: inline-size;
-      display: grid;
-      grid-auto-rows: min-content;
-      align-items: flex-start;
-      gap: var(--spacing);
-      border-top-left-radius: calc(var(--radius) * 1.4);
-      border-top-right-radius: calc(var(--radius) * 1.4);
-      padding-inline: var(--card-spacing);
-    }
-    .card-header:has(:is(.card-action)) {
-      grid-template-columns: 1fr auto;
-    }
-    .card-header:has(:is(.card-description)) {
-      grid-template-rows: auto auto;
-    }
-    .card-header > :not(.card-action) {
-      grid-column-start: 1;
-    }
-    .card-header.border-b {
-      padding-bottom: var(--card-spacing);
-    }
     .field-group {
       container-type: inline-size;
       display: flex;
@@ -4583,15 +4561,6 @@
   .col-span-4 {
     grid-column: span 4 / span 4;
   }
-  @layer l1.l2 {
-    .card-action {
-      grid-column-start: 2;
-      grid-row: span 2 / span 2;
-      grid-row-start: 1;
-      align-self: flex-start;
-      justify-self: flex-end;
-    }
-  }
   @layer l1 {
     .carousel-fade .carousel-content {
       display: grid;
@@ -5732,16 +5701,6 @@
       font-weight: var(--font-weight-normal);
       color: var(--foreground);
     }
-    .card-footer {
-      display: flex;
-      align-items: center;
-      border-bottom-right-radius: calc(var(--radius) * 1.4);
-      border-bottom-left-radius: calc(var(--radius) * 1.4);
-      padding-inline: var(--card-spacing);
-    }
-    .card-footer.border-t {
-      padding-top: var(--card-spacing);
-    }
     .table-cell {
       padding: calc(var(--spacing) * 2);
       vertical-align: middle;
@@ -6847,14 +6806,6 @@
       font-weight: var(--font-weight-medium);
       color: var(--foreground);
     }
-    .card-title {
-      font-size: var(--text-base);
-      line-height: var(--tw-leading, var(--text-base--line-height));
-      --tw-leading: var(--leading-normal);
-      line-height: var(--leading-normal);
-      --tw-font-weight: var(--font-weight-medium);
-      font-weight: var(--font-weight-medium);
-    }
     .dialog-title {
       font-size: var(--text-base);
       line-height: var(--tw-leading, var(--text-base--line-height));
@@ -6874,11 +6825,6 @@
     }
     .dialog-description > a:hover {
       color: var(--foreground);
-    }
-    .card-description {
-      font-size: var(--text-sm);
-      line-height: var(--tw-leading, var(--text-sm--line-height));
-      color: var(--muted-foreground);
     }
     .drawer-description {
       font-size: var(--text-sm);

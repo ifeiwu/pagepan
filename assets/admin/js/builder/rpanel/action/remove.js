@@ -11,10 +11,10 @@ export default function remove(attrs = {}) {
         </li>
     `);
 
-    // 获取编辑按钮
+    // 获取删除按钮
     const $apply = $template.find('button');
 
-    // 点击按钮，打开 SVG 源码编辑器
+    // 点击删除按钮
     $apply.on('click', function (e) {
         e.preventDefault();
 

@@ -1,4 +1,4 @@
-export default function remove(attrs = {}) {
+export default function removeBlock(attrs = {}) {
     // 获取目标元素
     let $target = $(attrs.target);
 
@@ -11,14 +11,26 @@ export default function remove(attrs = {}) {
         </li>
     `);
 
-    // 获取编辑按钮
+    // 获取删除按钮
     const $apply = $template.find('button');
 
-    // 点击按钮，打开 SVG 源码编辑器
+    // 点击删除区块
     $apply.on('click', function (e) {
         e.preventDefault();
-        console.log($target)
-        // $target.trigger('click.target')
+
+        const block_id = $target.data('blockId');
+        console.log(block_id)
+        $.get('/admin/builder/block/delete', {'block_id': block_id}, function (res) {
+            if (res.code === 0) {
+                // let $target2 = $target.next()
+                // if ($target2.length === 0) {
+                //     $target2 = $target.prev()
+                //     if ($target2.length === 0) {
+                // }
+                $target.remove()
+                // $target.trigger('click.target')
+            }
+        })
     });
 
     // 返回组件模板

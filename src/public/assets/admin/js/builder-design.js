@@ -251,7 +251,6 @@
     const $apply = $template.find("button");
     $apply.on("click", function(e) {
       e.preventDefault();
-      console.log($target);
       if ($target.is("img")) {
         let $picture = $target.parent("picture");
         if ($picture.length) {
@@ -324,7 +323,7 @@
   });
 
   // assets/admin/js/builder/rpanel/action/removeBlock.js
-  function remove2(attrs = {}) {
+  function removeBlock(attrs = {}) {
     let $target = $(attrs.target);
     const $template = $(`
         <li>
@@ -336,7 +335,13 @@
     const $apply = $template.find("button");
     $apply.on("click", function(e) {
       e.preventDefault();
-      console.log($target);
+      const block_id = $target.data("blockId");
+      console.log(block_id);
+      $.get("/admin/builder/block/delete", { "block_id": block_id }, function(res) {
+        if (res.code === 0) {
+          $target.remove();
+        }
+      });
     });
     return $template;
   }
@@ -1029,8 +1034,8 @@
         $rpanel.find(".card.attributes").empty();
         const $action = $('<ul class="grid grid-cols-6 p-2">');
         $action.append(
-          clone({ target }),
-          remove2({ target })
+          // Action.cloneBlock({target}),
+          removeBlock({ target })
         );
         $rpanel.find(">.actions").html($action);
       });

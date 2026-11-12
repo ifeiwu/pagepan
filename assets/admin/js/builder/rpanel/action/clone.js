@@ -17,7 +17,7 @@ export default function clone(attrs = {}) {
     // 点击按钮，打开 SVG 源码编辑器
     $apply.on('click', function (e) {
         e.preventDefault();
-        console.log($target)
+
         if ($target.is('img')) {
             let $picture = $target.parent('picture')
             if ($picture.length) {

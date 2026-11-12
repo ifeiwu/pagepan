@@ -10,7 +10,7 @@ PubSub.subscribe('event.click.block', function (msg, target) {
     const $action = $('<ul class="grid grid-cols-6 p-2">');
 
     $action.append(
-        Action.clone({target}),
+        // Action.cloneBlock({target}),
         Action.removeBlock({target})
     )
 
