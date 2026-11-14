@@ -1,6 +1,6 @@
 <?php foreach ($this->items as $item):?>
 <li>
-    <img src="<?="/admin/repository/block-cover?repo=$this->repo_path&path={$item->category}/{$item->name}"?>&v=<?=time()?>" alt="">
+    <img src="<?="/admin/repository/block-cover?repo=$this->repo_path&path={$item->category}/{$item->name}"?>&v=<?= strtotime($item->updated) ?: time() ?>" alt="">
     <div class="flex items-center px-4 py-2 bg-gray-100">
         <div><?="{$item->category}/{$item->name}"?></div>
         <div class="ml-auto">

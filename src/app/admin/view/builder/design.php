@@ -1,6 +1,6 @@
 <?php $this->layout('builder') ?>
 
-<div id="app">
+<div id="app" data-signals="{page_id:<?=$page->id?>}">
     <?php
     $this->insert('builder/_header');
     $this->insert('builder/_ruler');
