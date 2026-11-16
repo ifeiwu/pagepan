@@ -69,4 +69,4 @@
 
 <template id="EditModal"></template>
 <!--<template id="RepositoryModal" data-init="@get('/admin/repository/open-modal')"></template>-->
-<template id="BuilderModal" data-init="@get('/admin/builder/open-modal?page_id=1')"></template>
+<template id="BuilderModal" data-init="@get('/admin/builder/modal?page_id=1')"></template>

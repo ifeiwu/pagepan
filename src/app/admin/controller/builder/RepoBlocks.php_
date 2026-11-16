@@ -10,7 +10,7 @@ class RepoBlocks
 {
     public function openDrawer(Request $request): void
     {
-        $html = view2()->render('builder/repo-blocks/open-drawer');
+        $html = view2()->render('builder/blocks/open-drawer');
 
         $ds = datastar();
         $ds->replace($html);
@@ -87,12 +87,13 @@ class RepoBlocks
             $db_block->where('category', $category);
         }
 
-        $items = $db_block->get();
+        $items = $db_block->get();var_dump($items);
         if (empty($items)) {
             $ds->signals(['pagenum' => 1, 'loadmore' => false]);
         } else {
             $ds->signals(['pagenum' => ++$pagenum, 'loadmore' => count($items) == $perpage]);
-            $html = view2()->render('builder/repo-blocks/item-li', ['items' => $items, 'repo_path' => $repo_path]);
+            $html = view2()->render('builder/blocks/item-li', ['items' => $items, 'repo_path' => $repo_path]);
+
             $ds->append($html, '#items');
         }
 
@@ -134,5 +135,7 @@ class RepoBlocks
             'content' => $content
         ]);
 
+        $ds->script('iframe.contentWindow.location.reload()');
+        $ds->close();
     }
 }

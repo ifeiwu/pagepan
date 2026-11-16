@@ -17,7 +17,9 @@
 </div>
 
 <script>
-    require(['js/builder', 'js/builder/coder'], function() {})
+    require(['vs/editor/editor.main'], function() {
+        require(['js/builder', 'js/builder-coding'])
+    })
 </script>
 
 <template id="RepositoryModal"></template>

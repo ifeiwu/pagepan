@@ -1,6 +1,6 @@
 <?php
 
-namespace app\admin\controller\builder;
+namespace app\admin\controller\builder\page;
 
 use IvoPetkov\HTML5DOMDocument;
 use support\Log;
@@ -12,7 +12,7 @@ use support\Response;
  *
  * 将数据库中的页面内容块还原为可编辑的页面源代码。
  */
-class PageBlockCode
+class BlocksCode
 {
     /**
      * 获取页面源代码。

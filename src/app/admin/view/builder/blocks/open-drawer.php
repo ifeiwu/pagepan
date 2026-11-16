@@ -4,13 +4,13 @@
         <div class="drawer-header">
 
             <form data-indicator:fetching
-                  data-on:submit__delay.0ms="$pagenum=1;items.replaceChildren();@post('/admin/builder/repo-blocks/query')">
+                  data-on:submit__delay.0ms="$pagenum=1;items.replaceChildren();@post('/admin/builder/blocks/query')">
                 <div class="flex flex-col items-center gap-2">
                     <div class="w-full">
                         <select name="repo_id" class="select w-full"
-                                data-init="@get('/admin/builder/repo-blocks/repositories')"
+                                data-init="@get('/admin/builder/blocks/repositories')"
                                 data-bind:repo_id
-                                data-on:change="$category='';$kword='';el.closest('form').requestSubmit();@get('/admin/builder/repo-blocks/categorys')">
+                                data-on:change="$category='';$kword='';el.closest('form').requestSubmit();@get('/admin/builder/blocks/categorys')">
                         </select>
                     </div>
                     <div class="w-full">
@@ -34,7 +34,7 @@
             <ul id="items" class="flex flex-col gap-4"></ul>
 
             <div data-indicator="fetching"
-                 data-on-intersect="$loadmore && !$fetching && @post('/admin/builder/repo-blocks/query')"></div>
+                 data-on-intersect="$loadmore && !$fetching && @post('/admin/builder/blocks/query')"></div>
 
             <ul class="flex flex-col gap-4" data-show="$pagenum==1">
                 <?php for ($i = 0; $i < 10; $i++):?>

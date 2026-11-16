@@ -27,7 +27,7 @@ define(['vs/editor/editor.main'], function (monaco) {
 
     // 初始化代码编辑器内容
     let lastSavedValue;
-    $.get('/admin/builder/page-block-code', {'page_id': appvar.page.id}, function (res) {
+    $.get('/admin/builder/page/blocks-code', {'page_id': appvar.page.id}, function (res) {
         if (res.code === 0) {
             lastSavedValue = htmlentities_decode(res.data);
             editor.setValue(lastSavedValue);
@@ -50,7 +50,7 @@ define(['vs/editor/editor.main'], function (monaco) {
     function savePageBlocks() {
         lastSavedValue = editor.getValue();
         // 保存页面
-        $.post('/admin/builder/save-page-block', {'page_id': appvar.page.id, 'content': lastSavedValue}, function (res) {
+        $.post('/admin/builder/page/save-blocks', {'page_id': appvar.page.id, 'content': lastSavedValue}, function (res) {
             if (res.code === 0) {
                 iframe.contentWindow.location.reload();
                 $save.prop('disabled', true);

@@ -1,11 +1,11 @@
 <?php
 
-namespace app\admin\controller\builder\block;
+namespace app\admin\controller\builder\page;
 
 use support\Request;
 use support\Response;
 
-class Delete
+class DeleteBlock
 {
     public function index(Request $request): Response
     {

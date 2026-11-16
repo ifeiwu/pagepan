@@ -29,7 +29,7 @@ define(['vs/editor/editor.main'], function (monaco) {
     });
 
     // 加载页面源代码
-    $.get('/admin/builder/page-block-code', { page_id: appvar.page.id }, function (res) {
+    $.get('/admin/builder/page/blocks-code', { page_id: appvar.page.id }, function (res) {
         if (res.code === 0) {
             lastSavedValue = res.data;
             editor.setValue(lastSavedValue);
@@ -63,7 +63,7 @@ define(['vs/editor/editor.main'], function (monaco) {
         isSaving = true;
         $save.prop('disabled', true);
 
-        $.post('/admin/builder/save-page-block', {
+        $.post('/admin/builder/page/save-blocks', {
             page_id: appvar.page.id,
             content: content
         }, function (res) {

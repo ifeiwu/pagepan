@@ -19,16 +19,24 @@ export default function removeBlock(attrs = {}) {
         e.preventDefault();
 
         const block_id = $target.data('blockId');
-        console.log(block_id)
-        $.get('/admin/builder/block/delete', {'block_id': block_id}, function (res) {
+
+        $.get('/admin/builder/page/delete-block', {'block_id': block_id}, function (res) {
             if (res.code === 0) {
-                // let $target2 = $target.next()
-                // if ($target2.length === 0) {
-                //     $target2 = $target.prev()
-                //     if ($target2.length === 0) {
-                // }
-                $target.remove()
-                // $target.trigger('click.target')
+                let $target2 = $target.nextAll(':not(script, link, style)').first();
+
+                if (!$target2.length) {
+                    $target2 = $target.prevAll(':not(script, link, style)').first();
+                }
+
+                $target.remove();
+
+                if (!$target2.length) {
+                    $target = $();
+                    return;
+                }
+
+                $target = $target2;
+                $target.trigger('click.target');
             }
         })
     });

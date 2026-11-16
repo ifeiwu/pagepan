@@ -1,9 +1,8 @@
 <?php
 
-namespace app\admin\controller\builder;
+namespace app\admin\controller\builder\page;
 
 use IvoPetkov\HTML5DOMDocument;
-use JsonException;
 use support\Request;
 use support\Response;
 
@@ -12,7 +11,7 @@ use support\Response;
  *
  * 将页面 HTML 内容解析为独立的内容块，并保存到数据库。
  */
-class SavePageBlock
+class SaveBlocks
 {
     /**
      * 保存页面内容块。

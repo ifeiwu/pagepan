@@ -1,4 +1,5 @@
 import PubSub from 'pubsub-js';
+import './builder/layer.js';
 import './builder/rpanel.js';
 
 const $iframe = $('#iframe');

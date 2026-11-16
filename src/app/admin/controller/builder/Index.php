@@ -7,7 +7,23 @@ use support\Response;
 
 class Index
 {
-    public function index(Request $request): Response
+    public function modal(Request $request): void
+    {
+        $page_id = $request->get('page_id');
+        $edit_mode = request()->cookie('builder-edit-mode', 'design');
+
+        $html = view2()->render('builder/modal', [
+            'edit_mode' => $edit_mode,
+            'page_id' => $page_id,
+        ]);
+
+        $ds = datastar();
+        $ds->replace($html);
+        $ds->script('BuilderModal.show()');
+        $ds->close();
+    }
+
+    public function switch(Request $request): Response
     {
         $edit_mode = get('edit_mode', 'text', 'design');
         $page_id = get('page_id', 'int');
