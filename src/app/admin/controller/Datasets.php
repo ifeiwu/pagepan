@@ -28,13 +28,13 @@ class Datasets
             $html .= '
                 <div class="sidebar-menu-item">
                     <a href="/admin/datasets?id=' . $id . '" class="sidebar-menu-button' . $active . '">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
                         <span>' . $title . '</span>
                     </a>
                     <span class="sidebar-menu-badge">8</span>
                 </div>
             ';
         }
-//        $lis = view2()->render('datasets/menu-li', ['dataset_id' => $id, 'items' => $items]);
         $ds->inner($html, '#sidebar_menu');
 
         $ds->close();
@@ -51,8 +51,6 @@ class Datasets
             $items = $db->table($dataset->table)->orderByDesc('sort')->orderByDesc('created')->get()->toArray();
             $html = view2()->render('datasets/items', ['items' => $items]);
             $ds->inner($html, '#items');
-
-
         }
 
         $ds->close();

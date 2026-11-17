@@ -55,7 +55,7 @@
         </div>
         <div class="ml-auto"></div>
     </div>
-    <div class="px-7 mt-6 pb-10 scroll-fade scrollbar scrollbar-sm" style="flex:1;width:100%;min-height:0;overflow-y:auto">
+    <div class="px-7 mt-6 pb-10 scroll-fade scrollbar scrollbar-sm " style="flex:1;width:100%;min-height:0;overflow-y:auto">
         <ul id="pages" class="grid grid-cols-4 gap-7 justify-between
             *:relative *:flex *:flex-col *:border *:border-solid *:transition-colors *:border-gray-300 *:rounded-xl *:overflow-hidden
            [&>li]:border-gray-200

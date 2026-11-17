@@ -1,12 +1,12 @@
 <?php $this->layout('admin');?>
 
-<div class="grid grid-cols-[180px_1fr] gap-5 h-full"
+<div class="grid grid-cols-[250px_1fr] h-full"
      data-signals="{dsid:0}"
      data-indicator="fetching"
      data-on-signal-patch-filter='{include:/^dsid$/}'
      data-on-signal-patch="$pagenum=0;$loadmore=false;$kword=$query.value;items.innerHTML='';$dsid && @get('/admin/datasets/query',{filterSignals:{include:/^(dsid|kword|pagenum)$/}})">
-    <div class="h-full">
-        <aside class="sidebar-static w-50 h-full">
+    <div>
+        <aside class="sidebar-static w-full">
             <div class="sidebar-group">
                 <span class="sidebar-group-label">数据源</span>
                 <button id="group-action" class="sidebar-group-action" aria-label="Add project">
@@ -24,37 +24,54 @@
             </div>
         </aside>
     </div>
-    <div class="flex flex-col h-full">
-        <div class="flex px-5 py-8">
-            <div>
-                <h2 class="text-lg font-bold">首页</h2>
-            </div>
-            <div class="ml-auto">
-                <div class="flex gap-2">
-                    <button type="button" class="btn btn-outline">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-start">
-                            <path d="M12 15V3"></path>
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <path d="m7 10 5 5 5-5"></path></svg>导出</button>
-                    <button type="button" class="btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-start">
-                            <path d="M5 12h14"></path>
-                            <path d="M12 5v14"></path></svg>添加数据
-                    </button>
+    <div class="min-h-0">
+        <div class="flex flex-col h-full">
+            <div class="flex px-5 pt-5">
+                <div class="flex gap-2 font-bold text-[17px]">
+                    <span class="text-gray-500">数据源</span>
+                    <span class="text-gray-500">/</span>
+                    <span>首页数据</span>
+                </div>
+                <div class="ml-auto">
+                    <div class="flex gap-2">
+                        <button type="button" class="btn btn-outline">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-start">
+                                <path d="M12 15V3"></path>
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <path d="m7 10 5 5 5-5"></path></svg>导出</button>
+                        <button type="button" class="btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-start">
+                                <path d="M5 12h14"></path>
+                                <path d="M12 5v14"></path></svg>添加数据
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="scroll-fade scrollbar scrollbar-sm" style="flex:1;width:100%;min-height:0;overflow-y:auto">
-            <div class="max-h-96 overflow-auto">
-                <table id="items" class="table table-lg"
-                       data-init="@get('/admin/datasets/query?id=<?=$this->id?>')"
-                       data-on:replace-item="@get('/manager/work/replace-item?id='+evt.detail.id,{filterSignals:{exclude:/.*/}})"></table>
+            <div class="flex items-center gap-2 px-5">
+                <div class="w-2xs">
+                    <div class="input-group w-full">
+                        <input class="input" placeholder="搜索内容" />
+                        <span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></span>
+                        <span class="input-group-addon input-group-addon-end text-xs">12 个结果</span>
+                    </div>
+
+                </div>
+                <div>
+
+                </div>
+                <div class="ml-auto"></div>
             </div>
-            <div class="f:gray-50 f:14 text:center mt:20" style="display:none" data-show="$nodata">没有找到相关作品</div>
-        </div>
-        <!--<div class="flex items-center justify-between gap-4 p-5">
+            <div class="scrollbar scrollbar-sm px-5 mt-3" style="flex:1;width:100%;min-height:0;overflow-y:auto">
+                <div id="items" class=""
+                     data-init="@get('/admin/datasets/query?id=<?=$this->id?>')"
+                     data-on:replace-item="@get('/manager/work/replace-item?id='+evt.detail.id,{filterSignals:{exclude:/.*/}})">
+                </div>
+                <div class="f:gray-50 f:14 text:center mt:20" style="display:none" data-show="$nodata">没有找到相关作品</div>
+                <pre data-json-signals></pre>
+            </div>
+            <div class="flex items-center justify-between gap-4 p-5">
                 <div class="flex w-full items-center justify-between gap-6">
-                    <span class="font-medium whitespace-nowrap">Page 1 of 3</span>
+                    <span class="text-[13px] text-gray-600">第 1 页，共 3 页</span>
                     <div>
                         <nav class="pagination">
                             <a href="#" class="pagination-item pagination-previous">
@@ -76,13 +93,15 @@
                     </div>
                     <div class="field field-horizontal w-auto md:flex">
                         <select class="select select-sm w-18" id="data-table-page-size">
-                            <option value="10" selected="">10</option>
+                            <option value="10">每页行数</option>
+                            <option value="10" selected>10</option>
                             <option value="20">20</option>
                             <option value="50">50</option>
                         </select>
                     </div>
                 </div>
-        </div>-->
+            </div>
+        </div>
     </div>
 </div>
 
