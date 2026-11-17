@@ -15,7 +15,7 @@
                 </div>
                 <div>
                     <button type="button" class="btn btn-outline" id="tooltip-block-manage"
-                            data-on:click="@get('/admin/blocks/dialog')">
+                            data-on:click="@get('/admin/repository/open-modal')">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks preview-icon"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"/><rect x="14" y="2" width="8" height="8" rx="1"/></svg>
                     </button>
                     <div class="tooltip" data-sp-toggle="#tooltip-block-manage">内容块管理</div>
@@ -68,5 +68,5 @@
 </div>
 
 <template id="EditModal"></template>
-<!--<template id="RepositoryModal" data-init="@get('/admin/repository/open-modal')"></template>-->
-<template id="BuilderModal" data-init="@get('/admin/builder/modal?page_id=1')"></template>
+<template id="RepositoryModal"></template>
+<template id="BuilderModal"></template>

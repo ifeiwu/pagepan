@@ -15,27 +15,44 @@ class Datasets
 
     public function menus(Request $request)
     {
-        $id = $request->get('id');
+        $dataset_id = get('id');
 
         $ds = datastar();
-        $items = db()->table('dataset')->get()->toArray();
-        $lis = view2()->render('datasets/menu-li', ['id' => $id, 'items' => $items]);
-        $ds->inner($lis, '#menus');
+        $items = db()->table('dataset')->get();
+
+        $html = '';
+        foreach ($items as $item) {
+            $id = $item->id;
+            $title = $item->title;
+            $active = $id == $dataset_id ? ' active' : '';
+            $html .= '
+                <div class="sidebar-menu-item">
+                    <a href="/admin/datasets?id=' . $id . '" class="sidebar-menu-button' . $active . '">
+                        <span>' . $title . '</span>
+                    </a>
+                    <span class="sidebar-menu-badge">8</span>
+                </div>
+            ';
+        }
+//        $lis = view2()->render('datasets/menu-li', ['dataset_id' => $id, 'items' => $items]);
+        $ds->inner($html, '#sidebar_menu');
 
         $ds->close();
     }
 
-    public function query(Request $request)
+    public function query(Request $request): void
     {
-        $id = $request->get('id');
+        $id = get('id');
         $ds = datastar();
-        $signals = $ds->getSignals();
 
         if ($id) {
-            $dataset = db()->table('dataset')->where("id", '=', $id)->first();
-            $items = db()->table("item_$id")->orderByDesc('sortby')->orderByDesc('ctime')->get()->toArray();
-            $lis = view2()->render('datasets/items', ['items' => $items]);
-            $ds->append($lis, '#items');
+            $db = db();
+            $dataset = $db->table('dataset')->where('id', $id)->first();
+            $items = $db->table($dataset->table)->orderByDesc('sort')->orderByDesc('created')->get()->toArray();
+            $html = view2()->render('datasets/items', ['items' => $items]);
+            $ds->inner($html, '#items');
+
+
         }
 
         $ds->close();

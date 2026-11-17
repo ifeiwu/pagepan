@@ -46,7 +46,7 @@
         </div>
     </div>
     <div class="grow flex justify-center">
-        <button class="btn font-bold rounded-full bg-blue-50 text-gray-700 px-6">首页</button>
+        <button class="btn font-bold rounded-full bg-blue-50 text-gray-700 px-6"><?=$this->page->title?></button>
     </div>
     <div class="basis-xs flex justify-end">
         <div>

@@ -135,6 +135,11 @@
 } */
 
 @layer base {
+    * {
+        scrollbar-color: rgb(0, 0, 0, 0.3) transparent;
+        scrollbar-width: thin;
+    }
+
     html, body {
         height: 100%;
     }
@@ -190,6 +195,11 @@
         padding-left: calc(var(--gutter-x) * 0.5);
         margin-right: auto;
         margin-left: auto;
+    }
+
+    .container-fluid {
+        padding-right: 0;
+        padding-left: 0;
     }
 
     .container-xxl {

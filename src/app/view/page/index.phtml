@@ -1,201 +1,53 @@
-<section class="py-10" data-block="">
-    <div class="container container-lg">
-        <div class="grid grid-cols-4 gap-2">
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
+<header class="pb-12" data-block="">
+    <style>
+        @scope {
+            .sns > li {
+                position: relative;
+            }
+
+            .sns > li::before {
+                content: "";
+                display: block;
+                height: 13px;
+                width: 1px;
+                background: #aaa;
+                transform: rotate(15deg) translateY(-50%);
+                position: absolute;
+                top: 50%;
+                right: 1px;
+            }
+
+            .sns li:last-child:before {
+                display: none;
+            }
+        }
+    </style>
+
+    <div class="container-fluid">
+        <div class="relative h-44 bg-cover bg-center bg-no-repeat lg:h-64 bg-[url(https://uikit.pagepan.test/assets/photo/4000/13.png)]">
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2">
+                <img src="https://uikit.pagepan.test/assets/photo/12-5.png" class="size-16 rounded-full lg:size-20 translate-y-1/2" alt="">
             </div>
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
+        </div>
+
+        <div class="px-2.5">
+            <h1 class="mt-16 text-center font-bold text-xl lg:mt-20">Ray 个人商店</h1>
+
+            <p class="mx-auto mt-4 mb-4 max-w-xl text-center leading-[1.8] text-[15px]">
+                为用户提供可视化网页设计，构建更好的基于响应式的网站用户体验。这是一个非常强大的网页设计组件，即能拼装成套轻质网页。
+            </p>
+
+            <ul class="sns mb-0 flex flex-wrap justify-center">
+                <li class="mb-2.5 px-3 md:mb-0">
+                    <a href="#" class="text-[13px] md:text-sm">Twitter</a>
+                </li>
+                <li class="mb-2.5 px-3 md:mb-0">
+                    <a href="#" class="text-[13px] md:text-sm">Instagram</a>
+                </li>
+                <li class="mb-2.5 px-3 md:mb-0">
+                    <a href="#" class="text-[13px] md:text-sm">YouTube</a>
+                </li>
+            </ul>
         </div>
     </div>
-</section>
-<?php
-$config = array (
-  'type' => '',
-  'path' => 'pagepan-com/blocks/work/001',
-  'setting' => 
-  array (
-    'repo.path' => 'ifeiwu/pagepan-blocks',
-    'dataset.limit' => false,
-    'component.class' => 'py-15',
-    'container.class' => 'container container-2xl',
-    'category.alias' => '009',
-    'category.class' => 'mb-18 mb-20-lg',
-    'components.gridview' => '001',
-    'pagination.alias' => '001',
-  ),
-);?>
-<section data-block="">
-    <div class="container-lg py-3">
-        <div class="grid grid-cols-2 rounded-lg bg-border shadow md:grid-cols-4">
-            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
-                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Nvidia Logo" src="https://storage.efferd.com/logo/nvidia-wordmark.svg">
-            </div>
-            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
-                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Supabase Logo" src="https://storage.efferd.com/logo/supabase-wordmark.svg"></div>
-            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
-                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="OpenAI Logo" src="https://storage.efferd.com/logo/openai-wordmark.svg">
-            </div>
-            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
-                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Turso Logo" src="https://storage.efferd.com/logo/turso-wordmark.svg">
-            </div>
-            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
-                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Vercel Logo" src="https://storage.efferd.com/logo/vercel-wordmark.svg">
-            </div>
-            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
-                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="GitHub Logo" src="https://storage.efferd.com/logo/github-wordmark.svg">
-            </div>
-            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
-                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Claude AI Logo" src="https://storage.efferd.com/logo/claude-wordmark.svg"></div>
-            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
-                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Clerk Logo" src="https://storage.efferd.com/logo/clerk-wordmark.svg">
-            </div>
-        </div>
-    </div>
-</section>
-<section class="py-12 md:py-20" data-block="">
-    <div class="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
-        <div class="relative z-10 mx-auto max-w-xl space-y-6 text-center">
-            <h2 class="text-4xl font-medium lg:text-5xl">Tailus UI 以数字表示</h2>
-            <p>Gemini 正在不断发展，不仅仅是模特。它支持一系列帮助开发者和企业创新的 API 和平台。</p>
-        </div>
-        <div class="grid gap-12 divide-y *:text-center md:grid-cols-3 md:gap-2 md:divide-x md:divide-y-0">
-            <div class="space-y-4">
-                <div class="text-5xl font-bold">+1200</div>
-                <p>GitHub 上的星星</p>
-            </div>
-            <div class="space-y-4">
-                <div class="text-5xl font-bold">2200 万</div>
-                <p>活跃用户</p>
-            </div>
-            <div class="space-y-4">
-                <div class="text-5xl font-bold">+500</div>
-                <p>动力应用</p>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="py-12 md:py-20" data-block="">
-	<div class="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
-		<div class="relative z-10 mx-auto max-w-xl space-y-6 text-center">
-			<h2 class="text-4xl font-semibold lg:text-5xl">Tailus UI in numbers</h2>
-			<p>
-				Gemini is evolving to be more than just the models. It supports an entire to the
-				APIs and platforms helping developers and businesses innovate.
-			</p>
-		</div>
-		<div class="grid gap-0.5 *:text-center md:grid-cols-3">
-			<div class="space-y-4 rounded-(--radius) border py-12">
-				<div class="text-5xl font-bold">+1200</div>
-				<p>Stars on GitHub</p>
-			</div>
-			<div class="space-y-4 rounded-(--radius) border py-12">
-				<div class="text-5xl font-bold">56%</div>
-				<p>Conversion rate</p>
-			</div>
-			<div class="space-y-4 rounded-(--radius) border py-12">
-				<div class="text-5xl font-bold">+500</div>
-				<p>Powered Apps</p>
-			</div>
-		</div>
-	</div>
-</section>
-<section class="py-10" data-block="">
-    <div class="container container-lg">
-        <div class="grid grid-cols-6 gap-2">
-            <div class="col-start-1 col-end-3">
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-            <div class="col-start-3 col-end-7">
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=100&h=1&size=0">
-                </picture>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="py-10" data-block="">
-    <div class="container container-lg">
-        <div class="grid grid-cols-6 gap-2">
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-            <div class="col-start-2 col-end-7">
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=100&h=1&size=0">
-                </picture>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="py-10" data-block="">
-    <div class="container container-lg">
-        <div class="grid grid-cols-6 gap-2">
-            <div class="col-start-1 col-end-6">
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=100&h=1&size=0">
-                </picture>
-            </div>
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="py-10" data-block="">
-    <div class="container container-lg">
-        <div class="grid grid-cols-6 gap-2">
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-            <div>
-                <picture>
-                    <img class="object-cover object-center w-full h-full" src="/imgph/bg?w=1000&h=1000&size=0">
-                </picture>
-            </div>
-        </div>
-    </div>
-</section>
+</header>

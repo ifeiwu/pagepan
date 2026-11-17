@@ -17,7 +17,8 @@
 </div>
 
 <script>
-    require(['vs/editor/editor.main'], function() {
+    require(['vs/editor/editor.main', 'monaco/tailwind-completion'], function() {
+        registerTailwindCompletion(monaco)
         require(['js/builder', 'js/builder-coding'])
     })
 </script>

@@ -91,7 +91,7 @@ $route = request()->path();
         </div>
 
         <main style="flex:1;width:100%;min-height:0;">
-            <div class="container-xl h-full bg-white rounded-t-2xl">
+            <div class="container-xl h-full bg-white rounded-t-2xl overflow-hidden">
                 <?=$this->section('content')?>
             </div>
         </main>
