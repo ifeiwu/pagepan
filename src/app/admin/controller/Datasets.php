@@ -8,8 +8,11 @@ class Datasets
 {
     public function index(Request $request)
     {
-        return view2()->display('datasets/index', [
-            'id' => $request->get('id')
+        $dataset_id = get('id');
+        $dataset = db()->table('dataset')->where('id', $dataset_id)->first();
+
+        return view2()->display('dataset/index', [
+            'dataset' => $dataset
         ]);
     }
 
