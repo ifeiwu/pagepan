@@ -34,7 +34,7 @@
 }
 
 @utility label {
-    color: #555;
+    font-weight: bold;
 }
 
 @utility field {

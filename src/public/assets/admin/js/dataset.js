@@ -23,7 +23,7 @@
           e.preventDefault();
           let data = $(this).data();
           let winbox = new WinBox(data.title ?? " ", {
-            url: this.href,
+            url: data.url,
             x: "center",
             y: "center",
             maxwidth: 1100,
