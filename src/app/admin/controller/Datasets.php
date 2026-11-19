@@ -6,17 +6,17 @@ use support\Request;
 
 class Datasets
 {
-    public function index(Request $request)
+    /*public function index(Request $request)
     {
         $dataset_id = get('id');
         $dataset = db()->table('dataset')->where('id', $dataset_id)->first();
 
-        return view2()->display('dataset/index', [
+        return view2()->display('datasets/index', [
             'dataset' => $dataset
         ]);
-    }
+    }*/
 
-    public function menus(Request $request)
+    /*public function menus(Request $request)
     {
         $dataset_id = get('id');
 
@@ -41,9 +41,9 @@ class Datasets
         $ds->inner($html, '#sidebar_menu');
 
         $ds->close();
-    }
+    }*/
 
-    public function query(Request $request): void
+    /*public function query(Request $request): void
     {
         $id = get('id');
         $ds = datastar();
@@ -57,5 +57,5 @@ class Datasets
         }
 
         $ds->close();
-    }
+    }*/
 }
