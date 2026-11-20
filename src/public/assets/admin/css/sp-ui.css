@@ -288,6 +288,28 @@
 }
 @layer utilities {
   @layer l1.l2 {
+    .card-header {
+      container-type: inline-size;
+      display: grid;
+      grid-auto-rows: min-content;
+      align-items: flex-start;
+      gap: var(--spacing);
+      border-top-left-radius: calc(var(--radius) * 1.4);
+      border-top-right-radius: calc(var(--radius) * 1.4);
+      padding-inline: var(--card-spacing);
+    }
+    .card-header:has(:is(.card-action)) {
+      grid-template-columns: 1fr auto;
+    }
+    .card-header:has(:is(.card-description)) {
+      grid-template-rows: auto auto;
+    }
+    .card-header > :not(.card-action) {
+      grid-column-start: 1;
+    }
+    .card-header.border-b {
+      padding-bottom: var(--card-spacing);
+    }
     .field-group {
       container-type: inline-size;
       display: flex;
@@ -4577,6 +4599,15 @@
   .-top-0\.5 {
     top: calc(var(--spacing) * -0.5);
   }
+  .-top-5 {
+    top: calc(var(--spacing) * -5);
+  }
+  .-top-6 {
+    top: calc(var(--spacing) * -6);
+  }
+  .-top-10 {
+    top: calc(var(--spacing) * -10);
+  }
   .top-0 {
     top: 0px;
   }
@@ -4595,6 +4626,9 @@
   }
   .-right-2 {
     right: calc(var(--spacing) * -2);
+  }
+  .right-0 {
+    right: 0px;
   }
   .right-3 {
     right: calc(var(--spacing) * 3);
@@ -5165,37 +5199,6 @@
     }
     .field-horizontal:has( > .field-content) > .radio {
       margin-top: 1.5px;
-    }
-  }
-  @layer l1.l2 {
-    .field-description {
-      text-align: start;
-      font-size: var(--text-sm);
-      line-height: var(--tw-leading, var(--text-sm--line-height));
-      --tw-leading: var(--leading-normal);
-      line-height: var(--leading-normal);
-      --tw-font-weight: var(--font-weight-normal);
-      font-weight: var(--font-weight-normal);
-      color: var(--muted-foreground);
-    }
-    :where(:is(.field-horizontal)) .field-description {
-      text-wrap: balance;
-    }
-    .field-description:last-child {
-      margin-top: 0px;
-    }
-    .field-description:nth-last-child(2) {
-      margin-top: calc(var(--spacing) * -1);
-    }
-    .field-legend:not(.field-legend-label) + .field-description {
-      margin-top: calc(var(--spacing) * -1.5);
-    }
-    .field-description > a {
-      text-decoration-line: underline;
-      text-underline-offset: 4px;
-    }
-    .field-description > a:hover {
-      color: var(--primary);
     }
   }
   .mt-1 {
@@ -5772,6 +5775,18 @@
       min-width: 0px;
       flex-direction: column;
       gap: var(--spacing);
+    }
+    .tab-content {
+      display: none;
+      width: 100%;
+      min-width: 0px;
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      --tw-outline-style: none;
+      outline-style: none;
+    }
+    .tab-content.active {
+      display: block;
     }
     .item {
       display: flex;
@@ -8063,6 +8078,52 @@
         }
       }
     }
+    .btn-destructive {
+      background-color: var(--destructive);
+      color: var(--color-white);
+    }
+    @media (hover: hover) {
+      .btn-destructive:hover {
+        background-color: var(--destructive);
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .btn-destructive:hover {
+          background-color: color-mix(in oklab, var(--destructive) 90%, transparent);
+        }
+      }
+    }
+    .btn-destructive:focus-visible {
+      border-color: var(--destructive);
+      @supports (color: color-mix(in lab, red, red)) {
+        border-color: color-mix(in oklab, var(--destructive) 40%, transparent);
+      }
+      --tw-ring-color: var(--destructive);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--destructive) 20%, transparent);
+      }
+    }
+    .btn-destructive:is(.dark, .dark *) {
+      background-color: var(--destructive);
+      @supports (color: color-mix(in lab, red, red)) {
+        background-color: color-mix(in oklab, var(--destructive) 60%, transparent);
+      }
+    }
+    @media (hover: hover) {
+      .btn-destructive:is(.dark, .dark *):hover {
+        background-color: var(--destructive);
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .btn-destructive:is(.dark, .dark *):hover {
+          background-color: color-mix(in oklab, var(--destructive) 70%, transparent);
+        }
+      }
+    }
+    .btn-destructive:is(.dark, .dark *):focus-visible {
+      --tw-ring-color: var(--destructive);
+      @supports (color: color-mix(in lab, red, red)) {
+        --tw-ring-color: color-mix(in oklab, var(--destructive) 40%, transparent);
+      }
+    }
   }
   .border-border {
     border-color: var(--border);
@@ -8548,6 +8609,14 @@
       font-weight: var(--font-weight-medium);
       color: var(--foreground);
     }
+    .card-title {
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+      --tw-leading: var(--leading-normal);
+      line-height: var(--leading-normal);
+      --tw-font-weight: var(--font-weight-medium);
+      font-weight: var(--font-weight-medium);
+    }
     .dialog-title {
       font-size: var(--text-base);
       line-height: var(--tw-leading, var(--text-base--line-height));
@@ -8567,6 +8636,11 @@
     }
     .dialog-description > a:hover {
       color: var(--foreground);
+    }
+    .card-description {
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+      color: var(--muted-foreground);
     }
     .drawer-description {
       font-size: var(--text-sm);
@@ -8823,6 +8897,17 @@
   }
   .whitespace-pre-wrap {
     white-space: pre-wrap;
+  }
+  @layer l1 {
+    .btn-link {
+      color: var(--primary);
+      text-underline-offset: 4px;
+    }
+    @media (hover: hover) {
+      .btn-link:hover {
+        text-decoration-line: underline;
+      }
+    }
   }
   @layer l1.l2 {
     .date-picker-value:empty::before {
@@ -9395,6 +9480,9 @@
     --tw-sepia: sepia(0%);
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
+  .\!filter {
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
+  }
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
@@ -9677,6 +9765,9 @@
   }
   :is(.\*\:h-full > *) {
     height: 100%;
+  }
+  :is(.\*\:grow > *) {
+    flex-grow: 1;
   }
   :is(.\*\:flex-col > *) {
     flex-direction: column;

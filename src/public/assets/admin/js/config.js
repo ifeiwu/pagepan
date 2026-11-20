@@ -10,6 +10,7 @@ require.config({
         popover: 'popover/popover',
         toast: ['toast/toast', 'https://cdn.jsdmirror.com/npm/not-a-toast@1.1.5/dist/not-a-toast.umd'],
         winbox: 'winbox/winbox',
+        FileAPI: 'fileapi/FileAPI.html5',
         vs: './monaco/vs'
     },
     shim: {

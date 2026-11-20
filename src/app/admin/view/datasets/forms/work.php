@@ -16,7 +16,7 @@
             <div class="field-group">
                 <?php $this->insert('datasets/fields/combobox-categorys') ?>
                 <?php $this->insert('datasets/fields/input') ?>
-                <?php $this->insert('datasets/fields/upload-image') ?>
+                <?php $this->insert('datasets/fields/upload-image', []) ?>
             </div>
         </div>
         <div>
@@ -25,3 +25,5 @@
     </form>
 
 </section>
+
+<script src="/assets/admin/js/forms.js"></script>

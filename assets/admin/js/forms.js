@@ -1,0 +1,1 @@
+import './forms/upload-image.js';
