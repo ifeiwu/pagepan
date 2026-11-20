@@ -43,7 +43,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-tree preview-icon"><path d="M8 5h13"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="M3 10a2 2 0 0 0 2 2h3"/><path d="M3 5v12a2 2 0 0 0 2 2h3"/></svg>
                             分类
                         </button>
-                        <button type="button" class="btn item-edit" data-url="/admin/datasets/forms?id=<?=$this->dataset->id?>"
+                        <button type="button" class="btn item-edit" data-url="<?="/admin/forms?dataset_id={$this->dataset->id}&item_id=10005"?>"
                             data-init__delay.400ms="el.click()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus preview-icon"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                             添加数据

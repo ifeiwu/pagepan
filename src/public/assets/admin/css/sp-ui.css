@@ -288,28 +288,6 @@
 }
 @layer utilities {
   @layer l1.l2 {
-    .card-header {
-      container-type: inline-size;
-      display: grid;
-      grid-auto-rows: min-content;
-      align-items: flex-start;
-      gap: var(--spacing);
-      border-top-left-radius: calc(var(--radius) * 1.4);
-      border-top-right-radius: calc(var(--radius) * 1.4);
-      padding-inline: var(--card-spacing);
-    }
-    .card-header:has(:is(.card-action)) {
-      grid-template-columns: 1fr auto;
-    }
-    .card-header:has(:is(.card-description)) {
-      grid-template-rows: auto auto;
-    }
-    .card-header > :not(.card-action) {
-      grid-column-start: 1;
-    }
-    .card-header.border-b {
-      padding-bottom: var(--card-spacing);
-    }
     .field-group {
       container-type: inline-size;
       display: flex;
@@ -4599,14 +4577,8 @@
   .-top-0\.5 {
     top: calc(var(--spacing) * -0.5);
   }
-  .-top-5 {
-    top: calc(var(--spacing) * -5);
-  }
   .-top-6 {
     top: calc(var(--spacing) * -6);
-  }
-  .-top-10 {
-    top: calc(var(--spacing) * -10);
   }
   .top-0 {
     top: 0px;
@@ -5776,18 +5748,6 @@
       flex-direction: column;
       gap: var(--spacing);
     }
-    .tab-content {
-      display: none;
-      width: 100%;
-      min-width: 0px;
-      font-size: var(--text-sm);
-      line-height: var(--tw-leading, var(--text-sm--line-height));
-      --tw-outline-style: none;
-      outline-style: none;
-    }
-    .tab-content.active {
-      display: block;
-    }
     .item {
       display: flex;
       width: 100%;
@@ -6315,6 +6275,9 @@
     .btn-icon.btn-icon.btn-icon {
       padding: 0px;
     }
+  }
+  .aspect-3\/1 {
+    aspect-ratio: 3/1;
   }
   .aspect-auto {
     aspect-ratio: auto;
@@ -8609,14 +8572,6 @@
       font-weight: var(--font-weight-medium);
       color: var(--foreground);
     }
-    .card-title {
-      font-size: var(--text-base);
-      line-height: var(--tw-leading, var(--text-base--line-height));
-      --tw-leading: var(--leading-normal);
-      line-height: var(--leading-normal);
-      --tw-font-weight: var(--font-weight-medium);
-      font-weight: var(--font-weight-medium);
-    }
     .dialog-title {
       font-size: var(--text-base);
       line-height: var(--tw-leading, var(--text-base--line-height));
@@ -8636,11 +8591,6 @@
     }
     .dialog-description > a:hover {
       color: var(--foreground);
-    }
-    .card-description {
-      font-size: var(--text-sm);
-      line-height: var(--tw-leading, var(--text-sm--line-height));
-      color: var(--muted-foreground);
     }
     .drawer-description {
       font-size: var(--text-sm);
@@ -8897,17 +8847,6 @@
   }
   .whitespace-pre-wrap {
     white-space: pre-wrap;
-  }
-  @layer l1 {
-    .btn-link {
-      color: var(--primary);
-      text-underline-offset: 4px;
-    }
-    @media (hover: hover) {
-      .btn-link:hover {
-        text-decoration-line: underline;
-      }
-    }
   }
   @layer l1.l2 {
     .date-picker-value:empty::before {
@@ -9479,9 +9418,6 @@
   .sepia-0 {
     --tw-sepia: sepia(0%);
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
-  }
-  .\!filter {
-    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,) !important;
   }
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);

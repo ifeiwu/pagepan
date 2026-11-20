@@ -60,31 +60,19 @@
         // if used WebCam, set `true`
         //  	staticPath: '/assets/js/lib/fileapi/'
       };
-      $cUploadImage = $(".c-image-upload");
-      $preview = $cUploadImage.find(".preview");
+      var $components = $(".c-upload-image");
       __require(["FileAPI"], function(FileAPI2) {
-        $cUploadImage.on("change", ".fileapi-upload-image", function(evt) {
+        $components.on("change", ".upload", function(evt) {
           let files = FileAPI2.getFiles(evt);
           let $submit = $('button[type="submit"]');
-          let $choice = $(evt.currentTarget);
-          let $upload = $choice.closest(".c-image-upload");
-          let $progress = $upload.find(".c-image-upload-progress");
-          let $success = $upload.find(".c-image-upload-success");
-          let $input = $upload.find('input[type="hidden"]');
-          let option = $upload.data("option");
-          let image_name = option.name;
-          let image_path = option.path;
-          let image_prefix = option.prefix;
-          let image_suffix = option.suffix;
-          let image_width = option.width;
-          let image_height = option.height;
-          let image_quality = option.quality;
-          let image_convert = option.convert;
+          let $upload = $(evt.currentTarget);
+          let $component = $upload.closest(".c-upload-image");
+          let $progress = $component.find(".progress").show();
+          let $preview = $component.find(".preview");
+          let $input_name = $component.find("[data-input-name]");
+          let option = $component.data("option");
           let image_allowed = option.allowed || default_allowed_exts;
           let image_maxsize = option.maxsize || 10;
-          let image_isresize = option.isresize;
-          let image_isoverwrite = option.isoverwrite;
-          let image_path2 = $('input[name="$upload_path"]').val();
           FileAPI2.filterFiles(
             files,
             function(file, info) {
@@ -94,66 +82,94 @@
                 if (file.size <= image_maxsize * FileAPI2.MB) {
                   return true;
                 } else {
-                  UIkit.notification(`\u56FE\u7247 ${file.name} \u5927\u4E8E ${image_maxsize}MB \u4E0D\u80FD\u4E0A\u4F20`, { status: "warning" });
+                  alert(`\u56FE\u7247 ${file.name} \u5927\u4E8E ${image_maxsize}MB \u4E0D\u80FD\u4E0A\u4F20`, { status: "warning" });
                 }
               } else {
-                UIkit.notification(`\u53EA\u5141\u8BB8\u4E0A\u4F20\u7684\u56FE\u7247\u683C\u5F0F\uFF1A${allowed_exts.join("\u3001")}`, { status: "warning" });
+                alert(`\u53EA\u5141\u8BB8\u4E0A\u4F20\u7684\u56FE\u7247\u683C\u5F0F\uFF1A${allowed_exts.join("\u3001")}`, { status: "warning" });
               }
               return false;
             },
             function(files2, rejected) {
               FileAPI2.readAsDataURL(files2[0], function(evt2) {
                 if (evt2.type === "load") {
-                  $preview.show().find("img").attr("src", evt2.result);
+                  $upload.hide();
+                  $preview.show().find("img").attr("src", evt2.result).addClass("grayscale");
                 } else if (evt2.type === "progress") {
                   var pr = evt2.loaded / evt2.total * 100;
                 } else {
                   alert("\u8BFB\u53D6\u56FE\u7247\u5931\u8D25");
                 }
               });
-              if (files2.length == 0) {
+              if (files2.length === 0) {
                 return false;
               }
-              let rdata = {};
-              rdata.image_name = image_name ? image_name : "";
-              rdata.image_path = image_path2 ? image_path2 : "";
-              rdata.image_path = image_path ? image_path : image_path2;
-              rdata.image_prefix = image_prefix ? image_prefix : "";
-              rdata.image_suffix = image_suffix ? image_suffix : "";
-              rdata.image_width = image_width ? image_width : "";
-              rdata.image_height = image_height ? image_height : "";
-              rdata.image_convert = image_convert || "";
-              rdata.image_allowed = image_allowed || "";
-              rdata.image_maxsize = image_maxsize || "";
-              $progress.removeClass("uk-hidden").val(1);
+              $progress.val(1);
+              FileAPI2.upload({
+                url: "/admin/forms/upload/image",
+                data: { "option": option },
+                files: { "image": files2[0] },
+                filecomplete: function(err, xhr, file) {
+                  try {
+                    if (xhr.response) {
+                      let json = JSON.parse(xhr.response);
+                      if (json.code === 0) {
+                        let time = (/* @__PURE__ */ new Date()).getTime();
+                        let image_name = json.data.name;
+                        let image_path = json.data.path;
+                        let image_url = `/${image_path}/${image_name}?${time}`;
+                        $component.find(".preview img").attr("src", image_url).removeClass("grayscale").on("error", function() {
+                          alert(`\u65E0\u6CD5\u52A0\u8F7D\u56FE\u7247\uFF1A${image_url}`);
+                        });
+                        $input_name.val(image_name);
+                      } else {
+                        alert(json.message);
+                      }
+                    }
+                  } catch (error) {
+                    alert(`\u4E0A\u4F20\u56FE\u7247\u5931\u8D25\uFF1A${xhr.response}`);
+                  }
+                },
+                complete: function(err, xhr) {
+                  if (!err) {
+                  } else {
+                    alert(`\u4E0A\u4F20\u56FE\u7247\u5931\u8D25\uFF1A${err}`);
+                  }
+                },
+                progress: function(evt2, file, xhr, options) {
+                  let percentage = parseInt(evt2.loaded / evt2.total * 100);
+                  $progress.val(percentage);
+                  if (percentage === 100) {
+                    $progress.hide().val(0);
+                  }
+                }
+              });
             }
           );
         });
       });
-      $(".c-image-upload").on("click", ".c-image-upload-preview-delete", function() {
-        let $upload = $(this).closest(".c-image-upload");
-        let $input_name = $upload.find('input[type="hidden"]');
-        let $input_file = $upload.find('input[type="file"]');
+      $components.on("click", ".preview>button", function() {
+        let $component = $(this).closest(".c-upload-image");
+        let $input_name = $component.find("[data-input-name]");
+        let $input_file = $component.find('input[type="file"]');
         let image = $input_name.val();
         if (!/^http(s)?:\/\/.+/i.test(image)) {
-          let path = $upload.data("path") ?? $('input[name="$upload_path"]').val();
+          let path = $component.data("path") ?? $('input[name="$upload_path"]').val();
         }
-        $upload.find(".c-image-upload-preview img").attr("src", "");
-        $upload.find(".c-image-upload-preview").hide();
-        $upload.find(".c-image-upload-area").show();
+        $component.find(".preview img").attr("src", "");
+        $component.find(".preview").hide();
+        $component.find(".upload").show();
         $input_name.val("");
         $input_file.val("");
       });
-      $(".c-image-upload").show();
-      $(".remote-image-link").click(function() {
+      $components.on("click", ".remote-image-link", function() {
         let image = window.prompt("\u8BF7\u8F93\u5165\u8FDC\u7A0B\u56FE\u7247\u94FE\u63A5\uFF1A", "https://");
         if (/^http(s)?:\/\/.+/i.test(image)) {
           let $this = $(this);
-          let $upload = $this.closest(".c-image-upload");
-          $upload.find('input[type="hidden"]').val(image);
-          $upload.find(".c-image-upload-preview img").attr("src", image);
-          $upload.find(".c-image-upload-area").hide();
-          $upload.find(".c-image-upload-preview").show();
+          let $component = $this.closest(".c-upload-image");
+          $component.find("[data-input-name]").val(image);
+          $component.find(".preview img").attr("src", image);
+          $component.find(".upload").hide();
+          $component.find(".preview").show();
         } else if (image !== null) {
           alert("\u65E0\u6548\u56FE\u7247\u94FE\u63A5\u5730\u5740\uFF01");
         }
