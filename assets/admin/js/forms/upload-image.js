@@ -30,7 +30,8 @@ require(['FileAPI'], function (FileAPI) {
 		let $component = $upload.closest('.c-upload-image');
 		let $progress = $component.find('.progress').show();
 		let $preview = $component.find('.preview');
-		let $input_name = $component.find('[data-input-name]');
+		let $field_name = $component.find('[data-field-name]');
+		let $field_path = $component.find('[data-field-path]');
 		let option = $component.data('option');
 		let image_allowed = option.allowed || default_allowed_exts;
 		let image_maxsize = option.maxsize || 10;
@@ -88,7 +89,8 @@ require(['FileAPI'], function (FileAPI) {
 									.on('error', function () {
 										alert(`无法加载图片：${image_url}`);
 									});
-									$input_name.val(image_name);
+									$field_name.val(image_name);
+									$field_path.val(image_path);
 								} else {
 									alert(json.message);
 								}
@@ -116,29 +118,46 @@ require(['FileAPI'], function (FileAPI) {
 });
 
 // 删除本地图片
-$components.on('click', '.preview>button', function () {
+$components.on('click', '.preview>.delete', function () {
 	let $component = $(this).closest('.c-upload-image');
-	let $input_name = $component.find('[data-input-name]');
+	let $field_name = $component.find('[data-field-name]');
+	let $field_path = $component.find('[data-field-path]');
 	let $input_file = $component.find('input[type="file"]');
-	let image = $input_name.val();
+	// let image = $field_name.val();
 
-	if (!/^http(s)?:\/\/.+/i.test(image)) {
-		let path = $component.data('path') ?? $('input[name="$upload_path"]').val();
-	}
+	// if (!/^http(s)?:\/\/.+/i.test(image)) {
+	// 	let path = $component.data('option').path;
+	// }
 
-	$component.find('.preview img').attr('src', '');
-	$component.find('.preview').hide();
-	$component.find('.upload').show();
-	$input_name.val('');
-	$input_file.val('');
+	let dataset_id = $('input[name="dataset_id"]').val();
+	let id = $('input[name="id"]').val();
+	let data = {
+		'id': id,
+		'dataset_id': dataset_id,
+		'field_name': $field_name.attr('name'),
+		'path': $field_path.val()
+	};
+	$.get('/admin/forms/delete-image', data, function (res) {
+		if (res.code === 0) {
+			$component.find('.preview img').attr('src', '');
+			$component.find('.preview').hide();
+			$component.find('.upload').show();
+			$field_name.val('');
+			$field_path.val('');
+			$input_file.val('');
+		} else {
+			alert(res.message);
+		}
+	});
 });
 
-$components.on('click', '.remote-image-link', function () {
+$components.on('click', '.remote-image', function () {
 	let image = window.prompt('请输入远程图片链接：', 'https://');
 	if (/^http(s)?:\/\/.+/i.test(image)) {
 		let $this = $(this);
 		let $component = $this.closest('.c-upload-image');
-		$component.find('[data-input-name]').val(image);
+		$component.find('[data-field-name]').val(image);
+		$component.find('[data-field-path]').val('');
 		$component.find('.preview img').attr('src', image);
 		$component.find('.upload').hide();
 		$component.find('.preview').show();
