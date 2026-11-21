@@ -28,92 +28,101 @@ require(['FileAPI'], function (FileAPI) {
 		let $submit = $('button[type="submit"]');
 		let $upload = $(evt.currentTarget);
 		let $component = $upload.closest('.c-upload-image');
-		let $progress = $component.find('.progress').show();
+		let $progress = $component.find('.progress');
 		let $preview = $component.find('.preview');
 		let $field_name = $component.find('[data-field-name]');
 		let $field_path = $component.find('[data-field-path]');
+		let dataset_id = $('input[name="dataset_id"]').val();
+		let item_id = $('input[name="id"]').val();
 		let option = $component.data('option');
 		let image_allowed = option.allowed || default_allowed_exts;
 		let image_maxsize = option.maxsize || 10;
 
 		FileAPI.filterFiles(files, function (file, info) {
-				let ext = mimeToExtMap[file.type];
-				let allowed_exts = image_allowed.split(',');
-				if (allowed_exts.includes(ext)) {
-					if (file.size <= image_maxsize * FileAPI.MB) {
-						return true;
-					} else {
-						alert(`图片 ${file.name} 大于 ${image_maxsize}MB 不能上传`, {status: 'warning'});
-					}
+			let ext = mimeToExtMap[file.type];
+			let allowed_exts = image_allowed.split(',');
+			if (allowed_exts.includes(ext)) {
+				if (file.size <= image_maxsize * FileAPI.MB) {
+					return true;
 				} else {
-					alert(`只允许上传的图片格式：${allowed_exts.join('、')}`, {status: 'warning'});
+					alert(`图片 ${file.name} 大于 ${image_maxsize}MB 不能上传`, {status: 'warning'});
 				}
+			} else {
+				alert(`只允许上传的图片格式：${allowed_exts.join('、')}`, {status: 'warning'});
+			}
+			return false;
+		}, function (files, rejected) {
+			if (files.length === 0) {
 				return false;
-			},
-			function (files, rejected) {
-				FileAPI.readAsDataURL(files[0], function (evt) {
-					if (evt.type === 'load') {
-						$upload.hide();
-						$preview.show().find('img')
-						.attr('src', evt.result)
-						.addClass('grayscale');
-					} else if (evt.type === 'progress') {
-						var pr = evt.loaded / evt.total * 100;
-					} else {
-						alert('读取图片失败');
-					}
-				});
+			}
 
-				if (files.length === 0) {
-					return false;
+			$progress.show().val(1);
+			$component.find('.more').hide();
+			$preview.find('.delete').hide()
+
+			FileAPI.readAsDataURL(files[0], function (evt) {
+				if (evt.type === 'load') {
+					$upload.hide();
+					$preview.show().find('img').attr('src', evt.result).addClass('grayscale');
+				} else if (evt.type === 'progress') {
+					var pr = evt.loaded / evt.total * 100;
+				} else {
+					alert('读取图片失败');
 				}
-
-				// $submit.attr('disabled', true);
-				$progress.val(1);
-				FileAPI.upload({
-					url: '/admin/forms/upload/image',
-					data: {'option': option},
-					files: {'image': files[0]},
-					filecomplete: function (err, xhr, file) {
-						try {
-							if (xhr.response) {
-								let json = JSON.parse(xhr.response);
-								if (json.code === 0) {
-									let time = new Date().getTime();
-									let image_name = json.data.name;
-									let image_path = json.data.path;
-									let image_url = `/${image_path}/${image_name}?${time}`;
-									$component.find('.preview img')
-									.attr('src', image_url)
-									.removeClass('grayscale')
-									.on('error', function () {
-										alert(`无法加载图片：${image_url}`);
-									});
-									$field_name.val(image_name);
-									$field_path.val(image_path);
-								} else {
-									alert(json.message);
-								}
-							}
-						} catch (error) {
-							alert(`上传图片失败：${xhr.response}`);
-						}
-					},
-					complete: function (err, xhr) {
-						if (!err) {
-						} else {
-							alert(`上传图片失败：${err}`);
-						}
-					},
-					progress: function (evt, file, xhr, options) {
-						let percentage = parseInt(evt.loaded / evt.total * 100);
-						$progress.val(percentage);
-						if (percentage === 100) {
-							$progress.hide().val(0);
-						}
-					}
-				});
 			});
+
+			// $submit.attr('disabled', true);
+
+			FileAPI.upload({
+				url: '/admin/forms/upload/image',
+				data: {
+					'id': item_id,
+					'dataset_id': dataset_id,
+					'field_name': $field_name.attr('name'),
+					'option': option
+				},
+				files: {
+					'image': files[0]
+				},
+				filecomplete: function (err, xhr, file) {
+					try {
+						if (xhr.response) {
+							let json = JSON.parse(xhr.response);
+							if (json.code === 0) {
+								let time = new Date().getTime();
+								let image_name = json.data.name;
+								let image_path = json.data.path;
+								let image_url = `/${image_path}/${image_name}?${time}`;
+								$component.find('.preview>img')
+									.attr('src', image_url)
+									.removeClass('grayscale');
+								$field_name.val(image_name);
+								$field_path.val(image_path);
+							} else {
+								alert(json.message);
+							}
+						}
+					} catch (error) {
+						alert(`上传图片失败：${xhr.response}`);
+					}
+				},
+				complete: function (err, xhr) {
+					if (!err) {
+						$preview.find('.delete').show()
+						setTimeout(() => $progress.hide(), 1000)
+					} else {
+						alert(`上传图片失败：${err}`);
+					}
+				},
+				progress: function (evt, file, xhr, options) {
+					let percentage = parseInt(evt.loaded / evt.total * 100);
+					$progress.val(percentage);
+					if (percentage === 100) {
+						$progress.val(0);
+					}
+				}
+			});
+		});
 	});
 });
 
@@ -123,24 +132,27 @@ $components.on('click', '.preview>.delete', function () {
 	let $field_name = $component.find('[data-field-name]');
 	let $field_path = $component.find('[data-field-path]');
 	let $input_file = $component.find('input[type="file"]');
-	// let image = $field_name.val();
 
 	// if (!/^http(s)?:\/\/.+/i.test(image)) {
 	// 	let path = $component.data('option').path;
 	// }
 
 	let dataset_id = $('input[name="dataset_id"]').val();
-	let id = $('input[name="id"]').val();
+	let item_id = $('input[name="id"]').val();
 	let data = {
-		'id': id,
+		'id': item_id,
 		'dataset_id': dataset_id,
 		'field_name': $field_name.attr('name'),
-		'path': $field_path.val()
+		'path': $field_path.val(),
+		'value': $field_name.val()
 	};
+
 	$.get('/admin/forms/delete-image', data, function (res) {
 		if (res.code === 0) {
-			$component.find('.preview img').attr('src', '');
 			$component.find('.preview').hide();
+			$component.find('.preview>img').attr('src', '');
+			$component.find('.preview>.delete').hide()
+			$component.find('.more').show();
 			$component.find('.upload').show();
 			$field_name.val('');
 			$field_path.val('');
@@ -158,8 +170,10 @@ $components.on('click', '.remote-image', function () {
 		let $component = $this.closest('.c-upload-image');
 		$component.find('[data-field-name]').val(image);
 		$component.find('[data-field-path]').val('');
-		$component.find('.preview img').attr('src', image);
+		$component.find('.preview>img').attr('src', image);
+		$component.find('.preview>.delete').show();
 		$component.find('.upload').hide();
+		$component.find('.more').hide();
 		$component.find('.preview').show();
 	} else if (image !== null) {
 		alert('无效图片链接地址！');

@@ -67,86 +67,93 @@
           let $submit = $('button[type="submit"]');
           let $upload = $(evt.currentTarget);
           let $component = $upload.closest(".c-upload-image");
-          let $progress = $component.find(".progress").show();
+          let $progress = $component.find(".progress");
           let $preview = $component.find(".preview");
           let $field_name = $component.find("[data-field-name]");
           let $field_path = $component.find("[data-field-path]");
+          let dataset_id = $('input[name="dataset_id"]').val();
+          let item_id = $('input[name="id"]').val();
           let option = $component.data("option");
           let image_allowed = option.allowed || default_allowed_exts;
           let image_maxsize = option.maxsize || 10;
-          FileAPI2.filterFiles(
-            files,
-            function(file, info) {
-              let ext = mimeToExtMap[file.type];
-              let allowed_exts = image_allowed.split(",");
-              if (allowed_exts.includes(ext)) {
-                if (file.size <= image_maxsize * FileAPI2.MB) {
-                  return true;
-                } else {
-                  alert(`\u56FE\u7247 ${file.name} \u5927\u4E8E ${image_maxsize}MB \u4E0D\u80FD\u4E0A\u4F20`, { status: "warning" });
-                }
+          FileAPI2.filterFiles(files, function(file, info) {
+            let ext = mimeToExtMap[file.type];
+            let allowed_exts = image_allowed.split(",");
+            if (allowed_exts.includes(ext)) {
+              if (file.size <= image_maxsize * FileAPI2.MB) {
+                return true;
               } else {
-                alert(`\u53EA\u5141\u8BB8\u4E0A\u4F20\u7684\u56FE\u7247\u683C\u5F0F\uFF1A${allowed_exts.join("\u3001")}`, { status: "warning" });
+                alert(`\u56FE\u7247 ${file.name} \u5927\u4E8E ${image_maxsize}MB \u4E0D\u80FD\u4E0A\u4F20`, { status: "warning" });
               }
-              return false;
-            },
-            function(files2, rejected) {
-              FileAPI2.readAsDataURL(files2[0], function(evt2) {
-                if (evt2.type === "load") {
-                  $upload.hide();
-                  $preview.show().find("img").attr("src", evt2.result).addClass("grayscale");
-                } else if (evt2.type === "progress") {
-                  var pr = evt2.loaded / evt2.total * 100;
-                } else {
-                  alert("\u8BFB\u53D6\u56FE\u7247\u5931\u8D25");
-                }
-              });
-              if (files2.length === 0) {
-                return false;
-              }
-              $progress.val(1);
-              FileAPI2.upload({
-                url: "/admin/forms/upload/image",
-                data: { "option": option },
-                files: { "image": files2[0] },
-                filecomplete: function(err, xhr, file) {
-                  try {
-                    if (xhr.response) {
-                      let json = JSON.parse(xhr.response);
-                      if (json.code === 0) {
-                        let time = (/* @__PURE__ */ new Date()).getTime();
-                        let image_name = json.data.name;
-                        let image_path = json.data.path;
-                        let image_url = `/${image_path}/${image_name}?${time}`;
-                        $component.find(".preview img").attr("src", image_url).removeClass("grayscale").on("error", function() {
-                          alert(`\u65E0\u6CD5\u52A0\u8F7D\u56FE\u7247\uFF1A${image_url}`);
-                        });
-                        $field_name.val(image_name);
-                        $field_path.val(image_path);
-                      } else {
-                        alert(json.message);
-                      }
-                    }
-                  } catch (error) {
-                    alert(`\u4E0A\u4F20\u56FE\u7247\u5931\u8D25\uFF1A${xhr.response}`);
-                  }
-                },
-                complete: function(err, xhr) {
-                  if (!err) {
-                  } else {
-                    alert(`\u4E0A\u4F20\u56FE\u7247\u5931\u8D25\uFF1A${err}`);
-                  }
-                },
-                progress: function(evt2, file, xhr, options) {
-                  let percentage = parseInt(evt2.loaded / evt2.total * 100);
-                  $progress.val(percentage);
-                  if (percentage === 100) {
-                    $progress.hide().val(0);
-                  }
-                }
-              });
+            } else {
+              alert(`\u53EA\u5141\u8BB8\u4E0A\u4F20\u7684\u56FE\u7247\u683C\u5F0F\uFF1A${allowed_exts.join("\u3001")}`, { status: "warning" });
             }
-          );
+            return false;
+          }, function(files2, rejected) {
+            if (files2.length === 0) {
+              return false;
+            }
+            $progress.show().val(1);
+            $component.find(".more").hide();
+            $preview.find(".delete").hide();
+            FileAPI2.readAsDataURL(files2[0], function(evt2) {
+              if (evt2.type === "load") {
+                $upload.hide();
+                $preview.show().find("img").attr("src", evt2.result).addClass("grayscale");
+              } else if (evt2.type === "progress") {
+                var pr = evt2.loaded / evt2.total * 100;
+              } else {
+                alert("\u8BFB\u53D6\u56FE\u7247\u5931\u8D25");
+              }
+            });
+            FileAPI2.upload({
+              url: "/admin/forms/upload/image",
+              data: {
+                "id": item_id,
+                "dataset_id": dataset_id,
+                "field_name": $field_name.attr("name"),
+                "option": option
+              },
+              files: {
+                "image": files2[0]
+              },
+              filecomplete: function(err, xhr, file) {
+                try {
+                  if (xhr.response) {
+                    let json = JSON.parse(xhr.response);
+                    if (json.code === 0) {
+                      let time = (/* @__PURE__ */ new Date()).getTime();
+                      let image_name = json.data.name;
+                      let image_path = json.data.path;
+                      let image_url = `/${image_path}/${image_name}?${time}`;
+                      $component.find(".preview>img").attr("src", image_url).removeClass("grayscale");
+                      $field_name.val(image_name);
+                      $field_path.val(image_path);
+                    } else {
+                      alert(json.message);
+                    }
+                  }
+                } catch (error) {
+                  alert(`\u4E0A\u4F20\u56FE\u7247\u5931\u8D25\uFF1A${xhr.response}`);
+                }
+              },
+              complete: function(err, xhr) {
+                if (!err) {
+                  $preview.find(".delete").show();
+                  setTimeout(() => $progress.hide(), 1e3);
+                } else {
+                  alert(`\u4E0A\u4F20\u56FE\u7247\u5931\u8D25\uFF1A${err}`);
+                }
+              },
+              progress: function(evt2, file, xhr, options) {
+                let percentage = parseInt(evt2.loaded / evt2.total * 100);
+                $progress.val(percentage);
+                if (percentage === 100) {
+                  $progress.val(0);
+                }
+              }
+            });
+          });
         });
       });
       $components.on("click", ".preview>.delete", function() {
@@ -155,16 +162,20 @@
         let $field_path = $component.find("[data-field-path]");
         let $input_file = $component.find('input[type="file"]');
         let dataset_id = $('input[name="dataset_id"]').val();
-        let id = $('input[name="id"]').val();
+        let item_id = $('input[name="id"]').val();
         let data = {
-          "id": id,
+          "id": item_id,
           "dataset_id": dataset_id,
-          "field_name": $field_name.attr("name")
+          "field_name": $field_name.attr("name"),
+          "path": $field_path.val(),
+          "value": $field_name.val()
         };
         $.get("/admin/forms/delete-image", data, function(res) {
           if (res.code === 0) {
-            $component.find(".preview img").attr("src", "");
             $component.find(".preview").hide();
+            $component.find(".preview>img").attr("src", "");
+            $component.find(".preview>.delete").hide();
+            $component.find(".more").show();
             $component.find(".upload").show();
             $field_name.val("");
             $field_path.val("");
@@ -181,8 +192,10 @@
           let $component = $this.closest(".c-upload-image");
           $component.find("[data-field-name]").val(image);
           $component.find("[data-field-path]").val("");
-          $component.find(".preview img").attr("src", image);
+          $component.find(".preview>img").attr("src", image);
+          $component.find(".preview>.delete").show();
           $component.find(".upload").hide();
+          $component.find(".more").hide();
           $component.find(".preview").show();
         } else if (image !== null) {
           alert("\u65E0\u6548\u56FE\u7247\u94FE\u63A5\u5730\u5740\uFF01");
