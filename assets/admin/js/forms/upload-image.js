@@ -1,4 +1,3 @@
-// const utils = require('app/utils')
 const default_allowed_exts = 'jpg,jpeg,png,webp,avif,gif,svg';
 const mimeToExtMap = {
 	'image/jpeg': 'jpg',
@@ -12,7 +11,7 @@ const mimeToExtMap = {
 	'image/tiff': 'tiff',
 	'image/x-icon': 'ico'
 };
-//	require('css!former/image-upload/image-upload.css');
+
 FileAPI = {
 	debug: false, // debug mode, see Console
 	cors: false, // if used CORS, set `true`
@@ -23,12 +22,28 @@ FileAPI = {
 const $components = $('.c-upload-image');
 
 require(['FileAPI'], function (FileAPI) {
-	$components.on('change', '.upload', function (evt) {
-		let files = FileAPI.getFiles(evt);
-		let $submit = $('button[type="submit"]');
-		let $upload = $(evt.currentTarget);
-		let $component = $upload.closest('.c-upload-image');
-		let $progress = $component.find('.progress');
+
+	$components.each(function () {
+		const $choose = $(this).find('.choose');
+		FileAPI.event.dnd($choose[0], function (over) {
+			$choose.closest('.upload').css('backgroundColor', over ? '#ebe6e7' : '');
+		}, function (files) {
+			if (files.length) {
+				upload($choose, files)
+			}
+		});
+	});
+
+	$components.on('change', '.choose', function (evt) {
+		upload($(this), FileAPI.getFiles(evt))
+	});
+
+	function upload($choose, files) {
+		let $component = $choose.closest('.c-upload-image');
+		let $upload = $component.find('.upload');
+		let $progressbar = $component.find('.progressbar');
+		let $progress = $progressbar.find('progress');
+		let $percentage = $progressbar.find('.percentage');
 		let $preview = $component.find('.preview');
 		let $field_name = $component.find('[data-field-name]');
 		let $field_path = $component.find('[data-field-path]');
@@ -56,9 +71,11 @@ require(['FileAPI'], function (FileAPI) {
 				return false;
 			}
 
-			$progress.show().val(1);
+			$progressbar.show();
+			$progress.val(0);
+			$percentage.text('0%');
 			$component.find('.more').hide();
-			$preview.find('.delete').hide()
+			$preview.find('.delete').hide();
 
 			FileAPI.readAsDataURL(files[0], function (evt) {
 				if (evt.type === 'load') {
@@ -71,20 +88,12 @@ require(['FileAPI'], function (FileAPI) {
 				}
 			});
 
-			// $submit.attr('disabled', true);
-
 			FileAPI.upload({
-				url: '/admin/forms/upload/image',
-				data: {
-					'id': item_id,
-					'dataset_id': dataset_id,
-					'field_name': $field_name.attr('name'),
-					'option': option
-				},
-				files: {
+				url: '/admin/forms/upload/image', data: {
+					'id': item_id, 'dataset_id': dataset_id, 'field_name': $field_name.attr('name'), 'option': option
+				}, files: {
 					'image': files[0]
-				},
-				filecomplete: function (err, xhr, file) {
+				}, filecomplete: function (err, xhr, file) {
 					try {
 						if (xhr.response) {
 							let json = JSON.parse(xhr.response);
@@ -105,25 +114,21 @@ require(['FileAPI'], function (FileAPI) {
 					} catch (error) {
 						alert(`上传图片失败：${xhr.response}`);
 					}
-				},
-				complete: function (err, xhr) {
+				}, complete: function (err, xhr) {
 					if (!err) {
-						$preview.find('.delete').show()
-						setTimeout(() => $progress.hide(), 1000)
+						$preview.find('.delete').show();
+						setTimeout(() => $progressbar.hide(), 500);
 					} else {
 						alert(`上传图片失败：${err}`);
 					}
-				},
-				progress: function (evt, file, xhr, options) {
+				}, progress: function (evt, file, xhr, options) {
 					let percentage = parseInt(evt.loaded / evt.total * 100);
 					$progress.val(percentage);
-					if (percentage === 100) {
-						$progress.val(0);
-					}
+					$percentage.text(percentage + '%');
 				}
 			});
 		});
-	});
+	}
 });
 
 // 删除本地图片
@@ -147,11 +152,11 @@ $components.on('click', '.preview>.delete', function () {
 		'value': $field_name.val()
 	};
 
-	$.get('/admin/forms/delete-image', data, function (res) {
+	$.get('/admin/forms/upload/delete', data, function (res) {
 		if (res.code === 0) {
 			$component.find('.preview').hide();
 			$component.find('.preview>img').attr('src', '');
-			$component.find('.preview>.delete').hide()
+			$component.find('.preview>.delete').hide();
 			$component.find('.more').show();
 			$component.find('.upload').show();
 			$field_name.val('');

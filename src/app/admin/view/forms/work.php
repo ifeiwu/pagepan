@@ -26,18 +26,12 @@
                     <label class="label">图片</label>
                     <?php $this->insert('forms/fields/upload-image', [
                             'name' => 'image',
-                            'option' => [
-                                    'path' => '',
-                                    'prefix' => 's_,',
-                                    'width' => '50,',
-                                    'height' => '',
-                                    'quality' => ',100',
-                                    'convert' => 'jpg',
-                                    'allowed' => 'jpg,jpeg,png,webp,avif,gif,svg',
-                                    'name' => 'cover',
-                                    'isresize' => 1,
-                                    'isoverwrite' => 1
-                            ]
+                    ]) ?>
+                </div>
+                <div class="field">
+                    <label class="label">图片2</label>
+                    <?php $this->insert('forms/fields/upload-image', [
+                            'name' => 'bg',
                     ]) ?>
                 </div>
             </div>

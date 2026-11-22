@@ -1,15 +1,14 @@
 <?php
 $name = $this->name ?: 'image'; // 图片字段名称
 $value = $this->item->{$this->name} ?: ''; // 图片字段值
-$path = $this->item->path;
+$path = $this->item->path ?? '';
 
 // 上传路径
-$path = $path ?: $this->option['path'];
+$path = $path ?: $this->option['path'] ?? '';
 if (!$path) {
     $path = "files/dataset/{$this->dataset->id}";
 }
 $this->assign('option.path', $path);
-
 
 $pattern = '/^(https?:\/\/|\/\/)/i';
 if (preg_match($pattern, $value)) {
@@ -24,23 +23,22 @@ if (preg_match($pattern, $value)) {
     <input type="hidden" name="path" value="<?= $this->item->path ?>" data-field-path>
 
     <button type="button" class="upload relative flex flex-col gap-1 items-center justify-center size-full aspect-3/1 bg-gray-100 text-gray-600 rounded-md overflow-hidden" style="<?= !$value ?: 'display:none' ?>">
-        <input type="file" accept="<?= $this->option['accept'] ?? 'image/*' ?>" style="position:absolute;z-index:1;width:200%;height:200%;opacity:1;cursor:pointer;">
+        <input type="file" class="choose" accept="<?= $this->option['accept'] ?? 'image/*' ?>" style="position:absolute;z-index:1;width:200%;height:200%;opacity:1;cursor:pointer;">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="inline-block"><path d="M10.3 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10l-3.1-3.1a2 2 0 0 0-2.814.014L6 21"/><path d="m14 19.5 3-3 3 3"/><path d="M17 22v-5.5"/><circle cx="9" cy="9" r="2"/></svg>
         点击上传图片
     </button>
 
     <div class="preview relative aspect-3/1 flex items-center justify-center bg-gray-100 rounded-md" style="<?= $value ?: 'display:none' ?>">
         <img <?= $value ? 'src="' . $image . '"' : '' ?> class="size-full object-scale-down">
-        <button type="button" class="delete btn btn-xs btn-destructive rounded absolute -top-6 right-0">
+        <button type="button" class="delete btn btn-xs btn-icon btn-destructive rounded absolute -top-2 -right-2" title="删除">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            删除
         </button>
     </div>
 
-    <div class="uploading mt-2 text-xs">
+    <div class="progressbar mt-2 text-xs" style="display:none">
         <div class="flex">
             <span>上传进度</span>
-            <span class="ml-auto tabular-nums">0%</span>
+            <span class="percentage ml-auto tabular-nums">0%</span>
         </div>
         <progress class="progress" value="0" max="100"></progress>
     </div>

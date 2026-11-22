@@ -62,12 +62,27 @@
       };
       var $components = $(".c-upload-image");
       __require(["FileAPI"], function(FileAPI2) {
-        $components.on("change", ".upload", function(evt) {
+        $components.each(function() {
+          let $choose = $(this).find(".choose");
+          FileAPI2.event.dnd($choose[0], function(over) {
+            $choose.closest(".upload").css("backgroundColor", over ? "#ebe6e7" : "");
+          }, function(files) {
+            if (files.length) {
+              upload($choose, files);
+            }
+          });
+        });
+        $components.on("change", ".choose", function(evt) {
           let files = FileAPI2.getFiles(evt);
-          let $submit = $('button[type="submit"]');
-          let $upload = $(evt.currentTarget);
-          let $component = $upload.closest(".c-upload-image");
-          let $progress = $component.find(".progress");
+          let $choose = $(this);
+          upload($choose, files);
+        });
+        function upload($choose, files) {
+          let $component = $choose.closest(".c-upload-image");
+          let $upload = $component.find(".upload");
+          let $progressbar = $component.find(".progressbar");
+          let $progress = $progressbar.find("progress");
+          let $percentage = $progressbar.find(".percentage");
           let $preview = $component.find(".preview");
           let $field_name = $component.find("[data-field-name]");
           let $field_path = $component.find("[data-field-path]");
@@ -93,15 +108,17 @@
             if (files2.length === 0) {
               return false;
             }
-            $progress.show().val(1);
+            $progressbar.show();
+            $progress.val(0);
+            $percentage.text("0%");
             $component.find(".more").hide();
             $preview.find(".delete").hide();
-            FileAPI2.readAsDataURL(files2[0], function(evt2) {
-              if (evt2.type === "load") {
+            FileAPI2.readAsDataURL(files2[0], function(evt) {
+              if (evt.type === "load") {
                 $upload.hide();
-                $preview.show().find("img").attr("src", evt2.result).addClass("grayscale");
-              } else if (evt2.type === "progress") {
-                var pr = evt2.loaded / evt2.total * 100;
+                $preview.show().find("img").attr("src", evt.result).addClass("grayscale");
+              } else if (evt.type === "progress") {
+                var pr = evt.loaded / evt.total * 100;
               } else {
                 alert("\u8BFB\u53D6\u56FE\u7247\u5931\u8D25");
               }
@@ -140,21 +157,19 @@
               complete: function(err, xhr) {
                 if (!err) {
                   $preview.find(".delete").show();
-                  setTimeout(() => $progress.hide(), 1e3);
+                  setTimeout(() => $progressbar.hide(), 500);
                 } else {
                   alert(`\u4E0A\u4F20\u56FE\u7247\u5931\u8D25\uFF1A${err}`);
                 }
               },
-              progress: function(evt2, file, xhr, options) {
-                let percentage = parseInt(evt2.loaded / evt2.total * 100);
+              progress: function(evt, file, xhr, options) {
+                let percentage = parseInt(evt.loaded / evt.total * 100);
                 $progress.val(percentage);
-                if (percentage === 100) {
-                  $progress.val(0);
-                }
+                $percentage.text(percentage + "%");
               }
             });
           });
-        });
+        }
       });
       $components.on("click", ".preview>.delete", function() {
         let $component = $(this).closest(".c-upload-image");
@@ -170,7 +185,7 @@
           "path": $field_path.val(),
           "value": $field_name.val()
         };
-        $.get("/admin/forms/delete-image", data, function(res) {
+        $.get("/admin/forms/upload/delete", data, function(res) {
           if (res.code === 0) {
             $component.find(".preview").hide();
             $component.find(".preview>img").attr("src", "");

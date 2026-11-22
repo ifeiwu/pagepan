@@ -4,9 +4,9 @@ namespace app\admin\controller\forms;
 
 use support\Request;
 
-class DeleteImage
+class Delete
 {
-    public function index(Request $request)
+    public function file(Request $request)
     {
         $id = get('id');
         $path = get('path');
@@ -32,7 +32,8 @@ class DeleteImage
         }
 
         if ($path) {
-            if (!@unlink(public_path("{$path}/{$value}"))) {
+            $file = public_path("{$path}/{$value}");
+            if (file_exists($file) && !@unlink($file)) {
                 return json_error('删除文件失败');
             }
         }
