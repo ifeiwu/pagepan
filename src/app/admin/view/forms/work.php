@@ -14,30 +14,33 @@
         </div>
     </header>
 
-    <form id="form" class="grid grid-cols-[350px_1fr]"
+    <form id="form" class="grid grid-cols-[350px_1fr] gap-10"
           data-on:submit="@post('/admin/forms/update',{contentType:'form'})">
-        <input type="hidden" name="dataset_id" value="<?= $this->dataset->id ?>">
-        <input type="hidden" name="id" value="<?= $this->item->id ?>">
+        <input type="hidden" name="dataset_id" value="<?= $dataset->id ?>">
+        <input type="hidden" name="id" value="<?= $item->id ?>">
         <div class="">
             <div class="field-group">
-                <?php $this->insert('forms/fields/combobox-categorys') ?>
-                <?php $this->insert('forms/fields/input') ?>
+                <?php $this->insert('forms/fields/combobox-categorys/content') ?>
+
+                <div class="field">
+                    <label class="label">标题</label>
+                    <?php $this->insert('forms/fields/input/content', ['name' => 'title', 'type' => 'text', 'value' => $item->title, 'required' => true]) ?>
+                </div>
                 <div class="field">
                     <label class="label">图片</label>
-                    <?php $this->insert('forms/fields/upload-image', [
-                            'name' => 'image',
-                    ]) ?>
+                    <?php $this->insert('forms/fields/upload-image/content', ['name' => 'image']) ?>
                 </div>
                 <div class="field">
                     <label class="label">图片2</label>
-                    <?php $this->insert('forms/fields/upload-image', [
-                            'name' => 'bg',
-                    ]) ?>
+                    <?php $this->insert('forms/fields/upload-image/content', ['name' => 'image2']) ?>
                 </div>
             </div>
         </div>
         <div>
-
+            <div class="field">
+                <label class="label">内容</label>
+                <?php $this->insert('forms/fields/text-editor/content', ['name' => 'content', 'value' => $item->content]) ?>
+            </div>
         </div>
     </form>
 

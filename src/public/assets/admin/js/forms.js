@@ -63,7 +63,7 @@
       var $components = $(".c-upload-image");
       __require(["FileAPI"], function(FileAPI2) {
         $components.each(function() {
-          let $choose = $(this).find(".choose");
+          const $choose = $(this).find(".choose");
           FileAPI2.event.dnd($choose[0], function(over) {
             $choose.closest(".upload").css("backgroundColor", over ? "#ebe6e7" : "");
           }, function(files) {
@@ -73,35 +73,33 @@
           });
         });
         $components.on("change", ".choose", function(evt) {
-          let files = FileAPI2.getFiles(evt);
-          let $choose = $(this);
-          upload($choose, files);
+          upload($(this), FileAPI2.getFiles(evt));
         });
         function upload($choose, files) {
-          let $component = $choose.closest(".c-upload-image");
-          let $upload = $component.find(".upload");
-          let $progressbar = $component.find(".progressbar");
-          let $progress = $progressbar.find("progress");
-          let $percentage = $progressbar.find(".percentage");
-          let $preview = $component.find(".preview");
-          let $field_name = $component.find("[data-field-name]");
-          let $field_path = $component.find("[data-field-path]");
-          let dataset_id = $('input[name="dataset_id"]').val();
-          let item_id = $('input[name="id"]').val();
-          let option = $component.data("option");
-          let image_allowed = option.allowed || default_allowed_exts;
-          let image_maxsize = option.maxsize || 10;
+          const $component = $choose.closest(".c-upload-image");
+          const $upload = $component.find(".upload");
+          const $progressbar = $component.find(".progressbar");
+          const $progress = $progressbar.find("progress");
+          const $percentage = $progressbar.find(".percentage");
+          const $preview = $component.find(".preview");
+          const $field_name = $component.find("[data-field-name]");
+          const $field_path = $component.find("[data-field-path]");
+          const option = $component.data("option");
+          const image_allowed = option.allowed || default_allowed_exts;
+          const image_maxsize = option.maxsize || 10;
+          const dataset_id = $('input[name="dataset_id"]').val();
+          const item_id = $('input[name="id"]').val();
           FileAPI2.filterFiles(files, function(file, info) {
-            let ext = mimeToExtMap[file.type];
-            let allowed_exts = image_allowed.split(",");
+            const ext = mimeToExtMap[file.type];
+            const allowed_exts = image_allowed.split(",");
             if (allowed_exts.includes(ext)) {
               if (file.size <= image_maxsize * FileAPI2.MB) {
                 return true;
               } else {
-                alert(`\u56FE\u7247 ${file.name} \u5927\u4E8E ${image_maxsize}MB \u4E0D\u80FD\u4E0A\u4F20`, { status: "warning" });
+                alert(`\u56FE\u7247 ${file.name} \u5927\u4E8E ${image_maxsize}MB \u4E0D\u80FD\u4E0A\u4F20`);
               }
             } else {
-              alert(`\u53EA\u5141\u8BB8\u4E0A\u4F20\u7684\u56FE\u7247\u683C\u5F0F\uFF1A${allowed_exts.join("\u3001")}`, { status: "warning" });
+              alert(`\u53EA\u5141\u8BB8\u4E0A\u4F20\u7684\u56FE\u7247\u683C\u5F0F\uFF1A${allowed_exts.join("\u3001")}`);
             }
             return false;
           }, function(files2, rejected) {
@@ -137,12 +135,11 @@
               filecomplete: function(err, xhr, file) {
                 try {
                   if (xhr.response) {
-                    let json = JSON.parse(xhr.response);
+                    const json = JSON.parse(xhr.response);
                     if (json.code === 0) {
-                      let time = (/* @__PURE__ */ new Date()).getTime();
-                      let image_name = json.data.name;
-                      let image_path = json.data.path;
-                      let image_url = `/${image_path}/${image_name}?${time}`;
+                      const image_name = json.data.name;
+                      const image_path = json.data.path;
+                      const image_url = `/${image_path}/${image_name}?${(/* @__PURE__ */ new Date()).getTime()}`;
                       $component.find(".preview>img").attr("src", image_url).removeClass("grayscale");
                       $field_name.val(image_name);
                       $field_path.val(image_path);
@@ -172,13 +169,13 @@
         }
       });
       $components.on("click", ".preview>.delete", function() {
-        let $component = $(this).closest(".c-upload-image");
-        let $field_name = $component.find("[data-field-name]");
-        let $field_path = $component.find("[data-field-path]");
-        let $input_file = $component.find('input[type="file"]');
-        let dataset_id = $('input[name="dataset_id"]').val();
-        let item_id = $('input[name="id"]').val();
-        let data = {
+        const $component = $(this).closest(".c-upload-image");
+        const $field_name = $component.find("[data-field-name]");
+        const $field_path = $component.find("[data-field-path]");
+        const $input_file = $component.find('input[type="file"]');
+        const dataset_id = $('input[name="dataset_id"]').val();
+        const item_id = $('input[name="id"]').val();
+        const data = {
           "id": item_id,
           "dataset_id": dataset_id,
           "field_name": $field_name.attr("name"),
@@ -203,8 +200,8 @@
       $components.on("click", ".remote-image", function() {
         let image = window.prompt("\u8BF7\u8F93\u5165\u8FDC\u7A0B\u56FE\u7247\u94FE\u63A5\uFF1A", "https://");
         if (/^http(s)?:\/\/.+/i.test(image)) {
-          let $this = $(this);
-          let $component = $this.closest(".c-upload-image");
+          const $this = $(this);
+          const $component = $this.closest(".c-upload-image");
           $component.find("[data-field-name]").val(image);
           $component.find("[data-field-path]").val("");
           $component.find(".preview>img").attr("src", image);

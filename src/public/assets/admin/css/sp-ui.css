@@ -4580,12 +4580,6 @@
   .-top-2 {
     top: calc(var(--spacing) * -2);
   }
-  .-top-4 {
-    top: calc(var(--spacing) * -4);
-  }
-  .-top-6 {
-    top: calc(var(--spacing) * -6);
-  }
   .top-0 {
     top: 0px;
   }
@@ -4604,12 +4598,6 @@
   }
   .-right-2 {
     right: calc(var(--spacing) * -2);
-  }
-  .-right-4 {
-    right: calc(var(--spacing) * -4);
-  }
-  .right-0 {
-    right: 0px;
   }
   .right-3 {
     right: calc(var(--spacing) * 3);
@@ -7650,6 +7638,9 @@
   }
   .gap-7 {
     gap: calc(var(--spacing) * 7);
+  }
+  .gap-10 {
+    gap: calc(var(--spacing) * 10);
   }
   :where(.divide-x > :not(:last-child)) {
     --tw-divide-x-reverse: 0;

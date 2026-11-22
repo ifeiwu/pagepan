@@ -1,0 +1,312 @@
+.prose {
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6,
+.prose p, .prose pre, .prose ul, .prose ol, .prose dl, .prose table, .prose form, .prose hr {
+    margin-top: 1.27em;
+    margin-bottom: 1.27em;
+}
+
+.prose tfoot, .prose small {
+    font-size: 90%;
+    color: #999;
+}
+
+.prose video, .prose audio {
+    display: inline-block;
+}
+
+.prose video {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+}
+
+.prose > *:first-child, .prose p > *:first-child, .prose li > *:first-child, .prose th > *:first-child, .prose td > *:first-child, .prose dt > *:first-child, .prose dd > *:first-child, .prose blockquote > *:first-child {
+    margin-top: 0;
+}
+
+.prose > *:last-child, .prose p > *:last-child, .prose li > *:last-child, .prose th > *:last-child, .prose td > *:last-child, .prose dt > *:last-child, .prose dd > *:last-child, .prose blockquote > *:last-child {
+    margin-bottom: 0;
+}
+
+.prose address, .prose caption, .prose cite, .prose code, .prose em, .prose th, .prose dfn, .prose var {
+    font-weight: 400;
+}
+
+.prose code, .prose pre, .prose var {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.prose a {
+    color: #428bca;
+    text-decoration: none;
+    -webkit-text-decoration-skip: ink;
+    text-decoration-skip-ink: auto;
+    text-underline-position: under;
+    text-decoration-thickness: 1px;
+}
+
+.prose a:hover {
+    -webkit-text-decoration-line: underline;
+    text-decoration-line: underline;
+    -webkit-text-decoration-style: solid;
+    text-decoration-style: solid;
+}
+
+.prose a:focus {
+    outline: 1px dotted #999;
+    text-decoration: none;
+}
+
+.prose a:visited {
+    color: #428bca;
+}
+
+.prose a:hover {
+    color: #2a6496;
+}
+
+.prose a:focus {
+    color: #2a6496;
+}
+
+.prose a:active {
+    color: #2a6496;
+}
+
+.prose b, .prose strong {
+    font-weight: 700;
+}
+
+.prose i, .prose em {
+    font-style: italic;
+    margin-right: 0.2em;
+}
+
+.prose sup, .prose sub {
+    font-size: 0.75em;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+    vertical-align: text-top \9;
+    margin-right: 0.2em;
+}
+
+.prose sup {
+    top: -0.5em;
+}
+
+.prose sub {
+    bottom: -0.25em;
+}
+
+.prose mark {
+    background: #fffda0;
+    padding: 1px 0;
+}
+
+.prose abbr {
+    cursor: help;
+    text-underline-position: under;
+    text-decoration-thickness: 1px;
+}
+
+.prose q {
+    color: #999;
+}
+
+.prose code {
+    font-size: 0.9em;
+    background: #f7f7f7;
+    padding: 0.3em 0.5em;
+    border-radius: 0.3em;
+    white-space: nowrap;
+    position: relative;
+    top: -1px;
+}
+
+.prose img {
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    font-weight: 600;
+    line-height: 1.5em;
+    margin-top: 1.2em;
+    margin-bottom: 0.8em;
+}
+
+.prose h1 a, .prose h2 a, .prose h3 a, .prose h4 a, .prose h5 a, .prose h6 a {
+    color: inherit;
+    -webkit-text-decoration-line: underline;
+    text-decoration-line: underline;
+    -webkit-text-decoration-style: dotted;
+    text-decoration-style: dotted;
+}
+
+.prose h1 a:hover, .prose h1 a:focus, .prose h2 a:hover, .prose h2 a:focus, .prose h3 a:hover, .prose h3 a:focus, .prose h4 a:hover, .prose h4 a:focus, .prose h5 a:hover, .prose h5 a:focus, .prose h6 a:hover, .prose h6 a:focus {
+    color: #428bca;
+}
+
+.prose h1 small, .prose h2 small, .prose h3 small, .prose h4 small, .prose h5 small, .prose h6 small {
+    font-size: 70%;
+    font-weight: 500;
+}
+
+.prose h1 code, .prose h2 code, .prose h3 code, .prose h4 code, .prose h5 code, .prose h6 code {
+    font-weight: inherit;
+    font-size: inherit;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    white-space: normal;
+    position: static;
+    top: 0;
+}
+
+.prose h1 {
+    font-size: 2.2em;
+}
+
+.prose h2 {
+    font-size: 1.8em;
+}
+
+.prose h3 {
+    font-size: 1.4em;
+}
+
+.prose h4 {
+    font-size: 1.2em;
+}
+
+.prose h5 {
+    font-size: 1em;
+}
+
+.prose h6 {
+    font-size: 0.9em;
+}
+
+.prose ul, .prose ol, .prose dd {
+    margin-left: 2em;
+    padding-left: 0;
+}
+
+.prose ol {
+    list-style: decimal;
+}
+
+.prose ul {
+    list-style: disc;
+}
+
+.prose li, .prose dd {
+    padding: 0.17em 0;
+}
+
+.prose li ul, .prose li ol {
+    padding: 0.17em 0 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.prose li ul {
+    list-style: circle;
+}
+
+.prose table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    text-align: left;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+}
+
+.prose thead tr, .prose tbody tr:hover {
+    background: #f0f0f0;
+}
+
+.prose th, .prose td {
+    padding: 0.7em 1.4em 0.7em 0;
+    border-bottom: 1px solid #f0f0f0;
+    _padding: 0.7em 1.4em;
+}
+
+.prose th:first-child, .prose td:first-child {
+    padding-left: 1.4em;
+}
+
+.prose th > :first-child, .prose td > :first-child {
+    margin-top: 0;
+}
+
+.prose th > :last-child, .prose td > :last-child {
+    margin-bottom: 0;
+}
+
+.prose th {
+    font-weight: 700;
+}
+
+.prose pre code {
+    display: block;
+    padding: 1em 1.2em;
+    background: #fafafa;
+    white-space: pre;
+    overflow: auto;
+    position: static;
+    top: auto;
+    line-height: 1.48;
+}
+
+.prose blockquote {
+    border-left: 0.3em solid #ddd;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0.5em 1.2em;
+    color: #555;
+}
+
+.prose hr {
+    height: 0;
+    border: 0 none;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.prose li > *:first-child, .prose th > *:first-child, .prose td > *:first-child {
+    margin-top: 0;
+}
+
+.prose li > *:last-child, .prose th > *:last-child, .prose td > *:last-child {
+    margin-bottom: 0;
+}
+
+.prose figure.image {
+    display: inline-block;
+}
+
+.prose figure.image figcaption {
+    color: rgb(0 0 0 / 70%);
+    font-size: 14px;
+    text-align: center;
+}
+
+.prose .grid-cols-2,
+.prose .grid-cols-3 {
+    display: grid;
+    gap: 0.625rem;
+}
+
+.prose .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.prose .grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}

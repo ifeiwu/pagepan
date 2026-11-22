@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently -k \"npm:dev:css\" \"npm:dev:js\"",
     "dev:css": "npx @tailwindcss/cli -i ./assets/admin/css/sp-ui.css -o ./src/public/assets/admin/css/sp-ui.css --watch",
-    "dev:js": "esbuild ./assets/admin/js/*.js --bundle --outdir=./src/public/assets/admin/js --format=iife --target=es2020 --watch",
+    "dev:js": "esbuild ./assets/admin/js/**/*.js --bundle --outdir=./src/public/assets/admin/js --format=iife --target=es2020 --watch",
     "build": "npm run build:css && npm run build:js",
     "build:css": "npx @tailwindcss/cli -i ./assets/admin/css/sp-ui.css -o ./src/public/assets/admin/css/sp-ui.css --minify",
     "build:js": "esbuild ./assets/admin/js/*.js --bundle --minify --outdir=./src/public/assets/admin/js --format=iife --target=es2020"
