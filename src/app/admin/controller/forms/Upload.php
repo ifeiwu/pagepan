@@ -14,7 +14,7 @@ class Upload
             return json_error('没有找到文件');
         }
 
-        $id = post('id', 'int');
+        $item_id = post('item_id', 'int');
         $dataset_id = post('dataset_id', 'int');
         $field_name = post('field_name', 'text');
         $option = post('option', 'array', []);
@@ -28,7 +28,7 @@ class Upload
             return json_error('无效数据集');
         }
 
-        $table = $db->table($dataset->table)->where('dataset_id', $dataset_id)->where('id', $id);
+        $table = $db->table($dataset->table)->where('dataset_id', $dataset_id)->where('id', $item_id);
 
         if ($table->doesntExist()) {
             return json_error('无效数据项');
@@ -83,5 +83,22 @@ class Upload
         }
 
         return json_success('ok');
+    }
+
+    public function textEditorImage(Request $request): Response
+    {
+        $upfile = $request->file('image');
+        if ($upfile && !$upfile->isValid()) {
+            return response('404 not found', 404);
+        }
+
+        $item_id = post('item_id', 'int');
+        $dataset_id = post('dataset_id', 'int');
+        $image_name = $upfile->getUploadName();
+        $image_path = "files/dataset/$dataset_id/$item_id/content";
+
+        $file = $upfile->move(public_path("{$image_path}/{$image_name}"));
+
+        return json(['location' => "/$image_path/{$file->getFilename()}"]);
     }
 }

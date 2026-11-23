@@ -90,7 +90,7 @@ require(['FileAPI'], function (FileAPI) {
 
 			FileAPI.upload({
 				url: '/admin/forms/upload/image', data: {
-					'id': item_id, 'dataset_id': dataset_id, 'field_name': $field_name.attr('name'), 'option': option
+					'item_id': item_id, 'dataset_id': dataset_id, 'field_name': $field_name.attr('name'), 'option': option
 				}, files: {
 					'image': files[0]
 				}, filecomplete: function (err, xhr, file) {

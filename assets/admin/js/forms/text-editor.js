@@ -54,17 +54,15 @@ define(['hugerte'], function () {
 					file_size_limit = 100;
 					input.setAttribute('accept', '.mp4, .ogv, .webm');
 				}
-
-				input.addEventListener('change', (e) => {
-					require(['FileAPI'], function (FileAPI) {
-
-					})
-				});
-
-				input.click();
+				alert('实现文件浏览选择');
+				// input.addEventListener('change', (e) => {
+				// 	require(['FileAPI'], function (FileAPI) {
+				// 	});
+				// });
+				//
+				// input.click();
 			},
 			setup: function (editor) {
-
 				editor.on('keydown', function (e) {
 					// Ctrl + Enter
 					if (e.ctrlKey && e.key === 'Enter') {
@@ -86,50 +84,74 @@ define(['hugerte'], function () {
 					}
 				});
 			}
-		}
+		};
 
 		// 单张图片上传
-		function images_upload_handler(blobInfo, success, failure) {
-			let file = blobInfo.blob()
-			// 检查文件大小
-			if (file.size > 1024 * 1024 * 2) { // 2MB 限制
-				failure(`${file.name} 文件大小超过 2MB 限制。可以考虑使用Caesium（https://saerasoft.com/caesium）压缩图片后再上传。`);
-				return;
-			}
-			let xhr = new XMLHttpRequest()
-			xhr.withCredentials = false
-			xhr.open('POST', defaults.images_upload_url)
-			xhr.onload = function() {
-				if (xhr.status === 403) {
-					failure('HTTP Error: ' + xhr.status, { remove: true });
+		function images_upload_handler(blobInfo, progress) {
+			return new Promise((resolve, reject) => {
+				// 检查文件大小
+				const file = blobInfo.blob();
+				if (file.size > 1024 * 1024 * 5) { // 5MB 限制
+					failure(`${file.name} 文件大小超过 5MB 限制。可以考虑使用Caesium（https://saerasoft.com/caesium）压缩图片后再上传。`);
 					return;
 				}
-				if (xhr.status < 200 || xhr.status >= 300) {
-					failure('HTTP Error: ' + xhr.status);
-					return;
-				}
-				let json = JSON.parse(xhr.responseText);
-				if (!json || typeof json.location != 'string') {
-					failure('Invalid JSON: ' + xhr.responseText);
-					return;
-				}
-				success(json.location);
-			};
-			xhr.onerror = function () {
-				failure('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
-			};
-			let formData = new FormData();
-			formData.append('file', file, file.name);
-			xhr.send(formData);
+
+				const xhr = new XMLHttpRequest();
+				xhr.withCredentials = false;
+				xhr.open('POST', '/admin/forms/upload/text-editor-image');
+
+				xhr.upload.onprogress = (e) => {
+					progress(e.loaded / e.total * 100);
+				};
+
+				xhr.onload = () => {
+					if (xhr.status === 403) {
+						reject({message: 'HTTP Error: ' + xhr.status, remove: true});
+						return;
+					}
+
+					if (xhr.status < 200 || xhr.status >= 300) {
+						reject('HTTP Error: ' + xhr.status);
+						return;
+					}
+
+					const json = JSON.parse(xhr.responseText);
+
+					if (!json || typeof json.location != 'string') {
+						reject('Invalid JSON: ' + xhr.responseText);
+						return;
+					}
+
+					resolve(json.location);
+				};
+
+				xhr.onerror = () => {
+					reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+				};
+
+				const dataset_id = $('input[name="dataset_id"]').val();
+				const item_id = $('input[name="id"]').val();
+
+				const formData = new FormData();
+				formData.append('image', file, file.name);
+				formData.append('dataset_id', dataset_id);
+				formData.append('item_id', item_id);
+				xhr.send(formData);
+			});
 		}
 
 		// 图片批量上传
 		function many_images_upload_handler(blobInfo, success, failure) {
-			images_upload_handler(blobInfo, success, failure)
+			const progress = value => {}
+			images_upload_handler(blobInfo, progress).then(result => {
+				success(result);
+			}).catch(error => {
+				failure(error);
+			});
 		}
 
 		hugerte.init($.extend(true, {}, defaults, $(component).data('option')));
 
-		$(component).removeClass('invisible')
-	}
+		$(component).removeClass('invisible');
+	};
 });

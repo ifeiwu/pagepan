@@ -1,12 +1,6 @@
 (() => {
   var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-    get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-  }) : x)(function(x) {
-    if (typeof require !== "undefined") return require.apply(this, arguments);
-    throw Error('Dynamic require of "' + x + '" is not supported');
-  });
-  var __commonJS = (cb, mod) => function __require2() {
+  var __commonJS = (cb, mod) => function __require() {
     try {
       return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
     } catch (e) {
@@ -72,11 +66,7 @@
                 file_size_limit = 100;
                 input.setAttribute("accept", ".mp4, .ogv, .webm");
               }
-              input.addEventListener("change", (e) => {
-                __require(["FileAPI"], function(FileAPI) {
-                });
-              });
-              input.click();
+              alert("\u5B9E\u73B0\u6587\u4EF6\u6D4F\u89C8\u9009\u62E9");
             },
             setup: function(editor) {
               editor.on("keydown", function(e) {
@@ -95,40 +85,55 @@
               });
             }
           };
-          function images_upload_handler(blobInfo, success, failure) {
-            let file = blobInfo.blob();
-            if (file.size > 1024 * 1024 * 2) {
-              failure(`${file.name} \u6587\u4EF6\u5927\u5C0F\u8D85\u8FC7 2MB \u9650\u5236\u3002\u53EF\u4EE5\u8003\u8651\u4F7F\u7528Caesium\uFF08https://saerasoft.com/caesium\uFF09\u538B\u7F29\u56FE\u7247\u540E\u518D\u4E0A\u4F20\u3002`);
-              return;
-            }
-            let xhr = new XMLHttpRequest();
-            xhr.withCredentials = false;
-            xhr.open("POST", defaults.images_upload_url);
-            xhr.onload = function() {
-              if (xhr.status === 403) {
-                failure("HTTP Error: " + xhr.status, { remove: true });
+          function images_upload_handler(blobInfo, progress) {
+            return new Promise((resolve, reject) => {
+              const file = blobInfo.blob();
+              if (file.size > 1024 * 1024 * 5) {
+                failure(`${file.name} \u6587\u4EF6\u5927\u5C0F\u8D85\u8FC7 5MB \u9650\u5236\u3002\u53EF\u4EE5\u8003\u8651\u4F7F\u7528Caesium\uFF08https://saerasoft.com/caesium\uFF09\u538B\u7F29\u56FE\u7247\u540E\u518D\u4E0A\u4F20\u3002`);
                 return;
               }
-              if (xhr.status < 200 || xhr.status >= 300) {
-                failure("HTTP Error: " + xhr.status);
-                return;
-              }
-              let json = JSON.parse(xhr.responseText);
-              if (!json || typeof json.location != "string") {
-                failure("Invalid JSON: " + xhr.responseText);
-                return;
-              }
-              success(json.location);
-            };
-            xhr.onerror = function() {
-              failure("Image upload failed due to a XHR Transport error. Code: " + xhr.status);
-            };
-            let formData = new FormData();
-            formData.append("file", file, file.name);
-            xhr.send(formData);
+              const xhr = new XMLHttpRequest();
+              xhr.withCredentials = false;
+              xhr.open("POST", "/admin/forms/upload/text-editor-image");
+              xhr.upload.onprogress = (e) => {
+                progress(e.loaded / e.total * 100);
+              };
+              xhr.onload = () => {
+                if (xhr.status === 403) {
+                  reject({ message: "HTTP Error: " + xhr.status, remove: true });
+                  return;
+                }
+                if (xhr.status < 200 || xhr.status >= 300) {
+                  reject("HTTP Error: " + xhr.status);
+                  return;
+                }
+                const json = JSON.parse(xhr.responseText);
+                if (!json || typeof json.location != "string") {
+                  reject("Invalid JSON: " + xhr.responseText);
+                  return;
+                }
+                resolve(json.location);
+              };
+              xhr.onerror = () => {
+                reject("Image upload failed due to a XHR Transport error. Code: " + xhr.status);
+              };
+              const dataset_id = $('input[name="dataset_id"]').val();
+              const item_id = $('input[name="id"]').val();
+              const formData = new FormData();
+              formData.append("image", file, file.name);
+              formData.append("dataset_id", dataset_id);
+              formData.append("item_id", item_id);
+              xhr.send(formData);
+            });
           }
-          function many_images_upload_handler(blobInfo, success, failure) {
-            images_upload_handler(blobInfo, success, failure);
+          function many_images_upload_handler(blobInfo, success, failure2) {
+            const progress = (value) => {
+            };
+            images_upload_handler(blobInfo, progress).then((result) => {
+              success(result);
+            }).catch((error) => {
+              failure2(error);
+            });
           }
           hugerte.init($.extend(true, {}, defaults, $(component).data("option")));
           $(component).removeClass("invisible");
