@@ -20,6 +20,19 @@
       var scrollbarWidth = window.innerWidth - document.body.clientWidth + "px";
       document.documentElement.style.setProperty("--scrollbar-width", scrollbarWidth);
       window.addEventListener("offline", () => toast.warning("\u5F53\u524D\u65E0\u6CD5\u8FDE\u63A5\u7F51\u7EDC"), false);
+      window.DataStarHelper = {
+        // 触发自定义事件
+        // data-on:event="$isSubmit=evt.detail.isSubmit"
+        event: function(selector, data = {}, event = "event") {
+          let el;
+          if (typeof selector === "string") {
+            el = document.querySelector(selector);
+          } else {
+            el = selector;
+          }
+          el.dispatchEvent(new CustomEvent(event, { detail: data }));
+        }
+      };
       document.addEventListener("datastar-fetch", ({ detail }) => {
         let el = detail.el;
         let tagname = el.tagName.toLowerCase();
@@ -80,6 +93,14 @@
           }
         });
       });
+      window.copyTextToClipboard = async (text) => {
+        try {
+          await navigator.clipboard.writeText(text);
+          sp.toast.success("\u5DF2\u590D\u5236\u5230\u526A\u8D34\u677F");
+        } catch (error) {
+          alert("\u590D\u5236\u5931\u8D25\uFF1A" + error.message);
+        }
+      };
     }
   });
   require_main();

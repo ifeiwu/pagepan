@@ -12,10 +12,12 @@ class Index
         $page_id = $request->get('page_id');
         $edit_mode = request()->cookie('builder-edit-mode', 'design');
 
-        $html = view2()->render('builder/modal', [
+        $view = view2();
+        $view->assign([
             'edit_mode' => $edit_mode,
             'page_id' => $page_id,
         ]);
+        $html = $view->render('builder/modal');
 
         $ds = datastar();
         $ds->replace($html);
@@ -32,12 +34,15 @@ class Index
         $page = $db->table('page')->where('id', $page_id)->first();
         $domain = $db->table('site')->where('name', 'domain')->value('value');
 
-        $response = view2()->display("builder/$edit_mode", [
+        $view = view2();
+        $view->assign([
             'edit_mode' => $edit_mode,
             'domain' => $domain,
             'page' => $page,
             'page_url' => "{$domain}{$page->path}"
         ]);
+
+        $response = $view->display("builder/$edit_mode");
 
         $response->cookie('builder-edit-mode', $edit_mode);
 

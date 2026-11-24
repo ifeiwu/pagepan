@@ -29,7 +29,7 @@
     "@zumer/snapdom": "^3.7.4",
     "interactjs": "^1.10.28",
     "pubsub-js": "^1.9.5",
-    "starting-point-ui": "^0.41.0",
+    "starting-point-ui": "^0.43.0",
     "tailwindcss": "^4.3.3",
     "winbox": "^0.2.82"
   },

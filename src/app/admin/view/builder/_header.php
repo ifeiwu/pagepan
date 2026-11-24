@@ -22,7 +22,7 @@
             <div class="separator separator-vertical h-4"></div>
         </div>
         <div class="flex gap-2">
-            <?php if ($this->edit_mode === 'design'):?>
+            <?php if ($edit_mode === 'design'):?>
                 <button id="drawer-layer-trigger" class="btn btn-icon btn-secondary" title="内容块排序">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers-2 preview-icon"><path d="M13 13.74a2 2 0 0 1-2 0L2.5 8.87a1 1 0 0 1 0-1.74L11 2.26a2 2 0 0 1 2 0l8.5 4.87a1 1 0 0 1 0 1.74z"/><path d="m20 14.285 1.5.845a1 1 0 0 1 0 1.74L13 21.74a2 2 0 0 1-2 0l-8.5-4.87a1 1 0 0 1 0-1.74l1.5-.845"/></svg>
                 </button>
@@ -46,16 +46,16 @@
         </div>
     </div>
     <div class="grow flex justify-center">
-        <button class="btn font-bold rounded-full bg-blue-50 text-gray-700 px-6"><?=$this->page->title?></button>
+        <button class="btn font-bold rounded-full bg-blue-50 text-gray-700 px-6"><?=$page->title?></button>
     </div>
     <div class="basis-xs flex justify-end">
         <div>
             <div class="tab-list rounded-full bg-gray-200/60 p-0 *:h-full *:shadow-none [&>a]:gap-1 [&>a]:rounded-full [&>a]:border-0 [&>a]:px-4 [&>a]:text-gray-700 [&>a]:hover:text-blue-700 [&>a.active]:bg-blue-100 [&>a.active]:text-blue-700">
-                <a href="/admin/builder/switch?edit_mode=design&page_id=<?=$this->page->id?>" class="tab <?=$edit_mode == 'design' ? 'active' : ''?>">
+                <a href="/admin/builder/switch?edit_mode=design&page_id=<?=$page->id?>" class="tab <?=$edit_mode == 'design' ? 'active' : ''?>">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-ruler preview-icon"><path d="M13 7 8.7 2.7a2.41 2.41 0 0 0-3.4 0L2.7 5.3a2.41 2.41 0 0 0 0 3.4L7 13"/><path d="m8 6 2-2"/><path d="m18 16 2-2"/><path d="m17 11 4.3 4.3c.94.94.94 2.46 0 3.4l-2.6 2.6c-.94.94-2.46.94-3.4 0L11 17"/><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
                     设计
                 </a>
-                <a href="/admin/builder/switch?edit_mode=coding&page_id=<?=$this->page->id?>" class="tab <?=$edit_mode == 'coding' ? 'active' : ''?>">
+                <a href="/admin/builder/switch?edit_mode=coding&page_id=<?=$page->id?>" class="tab <?=$edit_mode == 'coding' ? 'active' : ''?>">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
                     代码
                 </a>

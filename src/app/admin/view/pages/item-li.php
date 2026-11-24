@@ -1,5 +1,5 @@
 <?php
-foreach ($this->items as $item):
+foreach ($items as $item):
     $item = (array)$item;
     $state = $item['state'];
     $id = $item['id'];

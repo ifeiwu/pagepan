@@ -19,7 +19,7 @@
     </thead>
     <tbody class="table-body">
         <?php
-        foreach ($this->items as $item):
+        foreach ($items as $item):
             $id = $item->id;
         ?>
         <tr class="table-row">

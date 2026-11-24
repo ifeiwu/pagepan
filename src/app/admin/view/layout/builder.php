@@ -6,7 +6,7 @@
     <link href="/assets/admin/css/builder.css" rel="stylesheet">
 
     <script>
-        appvar.page = <?=json_encode($this->page)?>
+        appvar.page = <?=json_encode($page)?>
     </script>
 
 </head>

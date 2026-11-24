@@ -14,7 +14,7 @@
                 </div>
                 <div class="sidebar-group-content">
                     <nav id="sidebar_menu" class="sidebar-menu"
-                         data-init="@get('/admin/datasets/menus?id=<?=$this->dataset->id?>')">
+                         data-init="@get('/admin/datasets/menus?id=<?=$dataset->id?>')">
                     </nav>
 
 <!--                    <pre data-json-signals></pre>-->
@@ -43,7 +43,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-tree preview-icon"><path d="M8 5h13"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="M3 10a2 2 0 0 0 2 2h3"/><path d="M3 5v12a2 2 0 0 0 2 2h3"/></svg>
                             分类
                         </button>
-                        <button type="button" class="btn item-edit" data-url="<?="/admin/forms?dataset_id={$this->dataset->id}&item_id=10005"?>"
+                        <button type="button" class="btn item-edit" data-url="<?="/admin/forms?dataset_id={$dataset->id}&item_id=10005"?>"
                             data-init__delay.400ms="el.click()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus preview-icon"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                             添加数据
@@ -72,8 +72,7 @@
 
                 <table class="table table-lg"
                        data-signals:ids="[]"
-                       data-init="$dataset_id=<?=$dataset->id?>"
-                       data-on:replace-item="@get('/admin/datasets/replace-item?id='+evt.detail.id,{filterSignals:{exclude:/.*/}})">
+                       data-init="$dataset_id=<?=$dataset->id?>">
                     <thead class="table-header sticky top-0 z-10 bg-white">
                         <tr class="table-row *:font-bold">
                             <th class="table-head w-10">
@@ -84,14 +83,15 @@
                                             ? [...items].map(el => el.value)
                                             : Array(items.length).fill('');">
                             </th>
-                            <th class="table-head">标题</th>
+                            <th class="table-head">标题信息</th>
                             <th class="table-head w-25">发布时间</th>
                             <th class="table-head w-25">排序</th>
                             <th class="table-head w-15">状态</th>
                             <th class="table-head w-25 text-right">操作</th>
                         </tr>
                     </thead>
-                    <tbody class="table-body" id="items"></tbody>
+                    <tbody class="table-body" id="items"
+                           data-on:update-item="@get(`/admin/datasets/update-item?table=${evt.detail.table}&id=${evt.detail.id}`,{filterSignals:{exclude:/.*/}})"></tbody>
                 </table>
 
                 <div class="text-center text-gray-500 mt-10" style="display:none" data-show="$nodata">没有找到相关数据</div>
@@ -130,46 +130,3 @@
 <template id="ItemEditDialog"></template>
 
 <script src="/assets/admin/js/dataset.js"></script>
-
-<script>
-    /*let winboxs = []; // 记录打开的窗口实例
-    require(['winbox'], function () {
-        $('.dataset').click(function (e) {
-            e.preventDefault();
-            let data = $(this).data();
-            let winbox = new WinBox(data.title ?? ' ', {
-                url: this.href,
-                x: "center",
-                y: "center",
-                maxwidth: 1100,
-                minwidth: 800,
-                maxheight: "85%",
-                autosize: true,
-                border: 4,
-                background: "#374152",
-                overflow: true,
-                class: ["no-full"],
-                oncreate: function() {
-                    $(this.body).append('<div class="wb-loading">页面加载中...</div>')
-                },
-                onload: function() {
-                },
-                onclose: function(force){
-                    let winbox_id = this.id;
-                    // 关闭窗口从数组中删除实例
-                    let index = winboxs.findIndex(item => item.id === winbox_id);
-                    if (index !== -1) {
-                        winboxs.splice(index, 1);
-                    }
-                }
-            });
-            // 新打开窗口的位置应在已经打开窗口中的最后一个窗口位置下移 30 像素。
-            if (winboxs.length > 0) {
-                let last_winbox = winboxs[winboxs.length - 1];
-                winbox.move(last_winbox.x + 30, last_winbox.y + 30);
-            }
-            // 记录已打开窗口的实例
-            winboxs.push(winbox);
-        });
-    });*/
-</script>

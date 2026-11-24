@@ -235,15 +235,13 @@ class View2
      */
     private function renderFile(string $file, array $data = []): string
     {
-        if ($data) {
-            $this->data = array_merge($this->data, $data);
-        }
+        $data = $data ? array_merge($this->data, $data) : $this->data;
 
-        return $this->capture(function () use ($file) {
+        return $this->capture(function () use ($file, $data) {
             (function ($file, $data) {
                 extract($data, EXTR_SKIP);
                 include $file;
-            })($file, $this->data);
+            })($file, $data);
         });
     }
 
@@ -259,15 +257,13 @@ class View2
      */
     public function parse(string $content, array $data = []): string
     {
-        if ($data) {
-            $this->data = array_merge($this->data, $data);
-        }
+        $data = $data ? array_merge($this->data, $data) : $this->data;
 
-        return $this->capture(function () use ($content) {
+        return $this->capture(function () use ($content, $data) {
             (function ($content, $data) {
                 extract($data, EXTR_OVERWRITE);
                 eval('?>' . $content);
-            })($content, $this->data);
+            })($content, $data);
         });
     }
 

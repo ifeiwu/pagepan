@@ -3,10 +3,11 @@
 namespace app\admin\controller\datasets;
 
 use support\Request;
+use support\Response;
 
 class Index
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $dataset_id = get('id');
         if ($dataset_id) {
@@ -15,8 +16,11 @@ class Index
             $dataset = db()->table('dataset')->first();
         }
 
-        return view2()->display('datasets/index', [
+        $view = view2();
+        $view->assign([
             'dataset' => $dataset
         ]);
+
+        return $view->display('datasets/index');
     }
 }

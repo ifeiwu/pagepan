@@ -25,9 +25,12 @@ class Index
         context('site', $site);
         context('page', $page);
 
-        return view2()->display('builder/page', [
+        $view = view2();
+        $view->assign([
             'page_code' => $this->getPageCode($page_id)
         ]);
+
+        return $view->display('builder/page');
     }
 
     private function getPageCode(int|string $page_id): bool|string

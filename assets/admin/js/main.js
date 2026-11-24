@@ -5,7 +5,7 @@ document.documentElement.style.setProperty('--scrollbar-width', scrollbarWidth)
 window.addEventListener('offline', () => toast.warning('当前无法连接网络'), false)
 
 // DataStar 助手类
-const DataStarHelper = {
+window.DataStarHelper = {
     // 触发自定义事件
     // data-on:event="$isSubmit=evt.detail.isSubmit"
     event: function(selector, data = {}, event = 'event') {
@@ -215,7 +215,7 @@ require(['jquery'], function() {
     // toast.loading('Processing...')
 })*/
 
-const copyTextToClipboard = async (text) => {
+window.copyTextToClipboard = async (text) => {
     try {
         await navigator.clipboard.writeText(text);
         sp.toast.success('已复制到剪贴板');

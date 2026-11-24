@@ -34,12 +34,15 @@ class Query
             $db_block->where('category', $category);
         }
 
-        $items = $db_block->get();var_dump($items);
+        $items = $db_block->get();
         if (empty($items)) {
             $ds->signals(['pagenum' => 1, 'loadmore' => false]);
         } else {
             $ds->signals(['pagenum' => ++$pagenum, 'loadmore' => count($items) == $perpage]);
-            $html = view2()->render('builder/blocks/item-li', ['items' => $items, 'repo_path' => $repo_path]);
+            $html = view2()->render('builder/blocks/item-li', [
+                'items' => $items,
+                'repo_path' => $repo_path
+            ]);
 
             $ds->append($html, '#items');
         }

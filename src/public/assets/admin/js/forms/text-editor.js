@@ -36,7 +36,7 @@
             toolbar_mode: "sliding",
             // 'floating', 'sliding', 'scrolling', 'wrap'
             toolbar_sticky: true,
-            toolbar_sticky_offset: 0,
+            toolbar_sticky_offset: 64,
             link_default_target: "_blank",
             document_base_url: location.origin,
             object_resizing: false,

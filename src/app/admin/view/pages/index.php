@@ -3,7 +3,7 @@
 <div class="flex flex-col h-full">
     <div class="flex p-7 pb-1">
         <div>
-            <h2 class="text-[22px] font-bold">页面管理 <sup class="badge badge-secondary"><?=$this->page_count?></sup></h2>
+            <h2 class="text-[22px] font-bold">页面管理 <sup class="badge badge-secondary"><?=$page_count?></sup></h2>
         </div>
         <div class="ml-auto">
             <div class="flex gap-2">

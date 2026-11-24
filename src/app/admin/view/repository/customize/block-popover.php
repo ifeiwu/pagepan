@@ -8,7 +8,7 @@
             <div class="col-span-4">
                 <input name="category" class="input col-span-4 h-8" list="customize-block-category-list">
                 <datalist id="customize-block-category-list">
-                    <?php foreach ($this->categorys as $category): ?>
+                    <?php foreach ($categorys as $category): ?>
                     <option value="<?=$category?>">
                     <?php endforeach; ?>
                 </datalist>
