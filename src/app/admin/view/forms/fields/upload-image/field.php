@@ -1,27 +1,16 @@
 <?php
 $name = $name ?? 'image'; // 图片字段名称
 $value = $value ?? ''; // 图片字段值
-$path = $item->path ?? '';
 $option = $option ?? [];
 
-// 上传路径
-$path = $path ?: $option['path'] ?? '';
-if (!$path) {
-    $path = "files/dataset/{$dataset->id}";
-}
-$option2 = $option + ['path' => $path];
-
-$pattern = '/^(https?:\/\/|\/\/)/i';
-if (preg_match($pattern, $value)) {
-    $image = $value;
-} else {
-    $image = "/$path/$value";
+if ($value === basename($value)) {
+    $image = "{$option['path']}/$value";
 }
 ?>
 
-<div class="c-upload-image" data-option='<?= json_encode($option2) ?>'>
+<div class="c-upload-image" data-option='<?= json_encode($option) ?>'>
     <input type="hidden" name="<?= $name ?>" value="<?= $value ?>" data-field-name>
-    <input type="hidden" name="path" value="<?= $path ?>" data-field-path>
+<!--    <input type="hidden" name="path" value="--><?php //= $path ?><!--" data-field-path>-->
 
     <button type="button" class="upload relative flex flex-col gap-1 items-center justify-center size-full aspect-3/1 bg-gray-100 text-gray-600 rounded-md overflow-hidden" style="<?= !$value ?: 'display:none' ?>">
         <input type="file" class="choose" accept="<?= $option['accept'] ?? 'image/*' ?>" style="position:absolute;z-index:1;width:200%;height:200%;opacity:1;cursor:pointer;">

@@ -83,7 +83,6 @@
           const $percentage = $progressbar.find(".percentage");
           const $preview = $component.find(".preview");
           const $field_name = $component.find("[data-field-name]");
-          const $field_path = $component.find("[data-field-path]");
           const option = $component.data("option");
           const image_allowed = option.allowed || default_allowed_exts;
           const image_maxsize = option.maxsize || 10;
@@ -142,7 +141,6 @@
                       const image_url = `/${image_path}/${image_name}?${(/* @__PURE__ */ new Date()).getTime()}`;
                       $component.find(".preview>img").attr("src", image_url).removeClass("grayscale");
                       $field_name.val(image_name);
-                      $field_path.val(image_path);
                     } else {
                       alert(json.message);
                     }
@@ -171,7 +169,6 @@
       $components.on("click", ".preview>.delete", function() {
         const $component = $(this).closest(".c-upload-image");
         const $field_name = $component.find("[data-field-name]");
-        const $field_path = $component.find("[data-field-path]");
         const $input_file = $component.find('input[type="file"]');
         const dataset_id = $('input[name="dataset_id"]').val();
         const item_id = $('input[name="id"]').val();
@@ -179,8 +176,8 @@
           "id": item_id,
           "dataset_id": dataset_id,
           "field_name": $field_name.attr("name"),
-          "path": $field_path.val(),
-          "value": $field_name.val()
+          "path": $component.data("option").path,
+          "image": $field_name.val()
         };
         $.get("/admin/forms/upload/delete", data, function(res) {
           if (res.code === 0) {
@@ -190,7 +187,6 @@
             $component.find(".more").show();
             $component.find(".upload").show();
             $field_name.val("");
-            $field_path.val("");
             $input_file.val("");
           } else {
             alert(res.message);
@@ -203,7 +199,6 @@
           const $this = $(this);
           const $component = $this.closest(".c-upload-image");
           $component.find("[data-field-name]").val(image);
-          $component.find("[data-field-path]").val("");
           $component.find(".preview>img").attr("src", image);
           $component.find(".preview>.delete").show();
           $component.find(".upload").hide();

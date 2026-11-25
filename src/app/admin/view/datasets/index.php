@@ -14,7 +14,7 @@
                 </div>
                 <div class="sidebar-group-content">
                     <nav id="sidebar_menu" class="sidebar-menu"
-                         data-init="@get('/admin/datasets/menus?id=<?=$dataset->id?>')">
+                         data-init="@get('/admin/datasets/menus?id=<?= $dataset->id ?>')">
                     </nav>
 
 <!--                    <pre data-json-signals></pre>-->
@@ -26,8 +26,8 @@
         <div class="flex flex-col h-full">
             <div class="flex items-center px-5 pt-5 mb-1">
                 <div class="flex gap-2 font-bold leading-1 text-[17px]">
-                    <span class="text-gray-500">数据集</span>
-                    <span class="text-gray-500">/</span>
+                    <span class="text-gray-600">数据集</span>
+                    <span class="text-gray-400">/</span>
                     <span>首页数据</span>
                 </div>
                 <div class="ml-auto">
@@ -43,8 +43,8 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-tree preview-icon"><path d="M8 5h13"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="M3 10a2 2 0 0 0 2 2h3"/><path d="M3 5v12a2 2 0 0 0 2 2h3"/></svg>
                             分类
                         </button>
-                        <button type="button" class="btn item-edit" data-url="<?="/admin/forms?dataset_id={$dataset->id}&item_id=10005"?>"
-                            data-init__delay.400ms="el.click()">
+                        <button type="button" class="btn"
+                            data-on:click="@get('/admin/datasets/item-create')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus preview-icon"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                             添加数据
                         </button>

@@ -1,11 +1,10 @@
 let winboxs = []; // 记录打开的窗口实例
 
 require(['winbox'], function () {
-    $(document).on('click', '.item-edit', function (e) {
-        e.preventDefault();
-        let data = $(this).data();
-        let winbox = new WinBox(data.title ?? ' ', {
-            url: data.url,
+
+    window.openItemEdit = function (title, url) {
+        let winbox = new WinBox(title || ' ', {
+            url: url,
             x: "center",
             y: "center",
             maxwidth: 1100,
@@ -37,5 +36,11 @@ require(['winbox'], function () {
         }
         // 记录已打开窗口的实例
         winboxs.push(winbox);
+    }
+
+    $(document).on('click', '.item-edit', function (e) {
+        e.preventDefault();
+        const data = $(this).data();
+        openItemEdit(data.title, data.url);
     });
 });

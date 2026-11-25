@@ -19,11 +19,9 @@
     "assets/admin/js/dataset.js"() {
       var winboxs = [];
       __require(["winbox"], function() {
-        $(document).on("click", ".item-edit", function(e) {
-          e.preventDefault();
-          let data = $(this).data();
-          let winbox = new WinBox(data.title ?? " ", {
-            url: data.url,
+        window.openItemEdit = function(title, url) {
+          let winbox = new WinBox(title || " ", {
+            url,
             x: "center",
             y: "center",
             maxwidth: 1100,
@@ -52,6 +50,11 @@
             winbox.move(last_winbox.x + 30, last_winbox.y + 30);
           }
           winboxs.push(winbox);
+        };
+        $(document).on("click", ".item-edit", function(e) {
+          e.preventDefault();
+          const data = $(this).data();
+          openItemEdit(data.title, data.url);
         });
       });
     }

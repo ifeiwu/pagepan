@@ -19,7 +19,7 @@ class ItemQuery
         $dataset_id = intval($signals['dataset_id']);
 
         $dataset = $db->table('dataset')->where('id', $dataset_id)->first();
-        $dataset_item = $db->table($dataset->table)->where('dataset_id', $dataset_id)->orderByDesc('sort')->orderByDesc('updated');
+        $dataset_item = $db->table($dataset->table)->where('dataset_id', $dataset_id)->orderByDesc('sort')->orderByDesc('created');
 
         // 关键字搜索
         $kword = $signals['kword'] ?? '';

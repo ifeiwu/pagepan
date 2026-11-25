@@ -3,22 +3,39 @@
 namespace app\admin\controller\datasets;
 
 use support\Request;
+use support\Response;
 
 class ItemEdit
 {
     public function index(Request $request): void
     {
         $ds = datastar();
-//        $id = get('id');
-//        if ($id) {
-//        }
 
-        $html = view2()->display('datasets/item-edit', [
-            'item' => $item ?? []
-        ]);
-//        $ds->element($html);
-//        $ds->script('sp.dialog(document.querySelector("#ItemEditDialog")).show()');
+        $id = get('id');
+        $dataset_id = get('dataset_id');
+        $title = get('title');
+
+        $url = "/admin/datasets/item-edit/form?dataset_id=$dataset_id&id=$id";
+        $ds->script("openItemEdit('$title', '$url')");
 
         $ds->close();
+    }
+
+    public function form(): Response
+    {
+        $id = get('id');
+        $dataset_id = get('dataset_id');
+
+        $db = db();
+        $dataset = $db->table('dataset')->where('id', $dataset_id)->first();
+        $item = $db->table($dataset->table)->where('dataset_id', $dataset_id)->where('id', $id)->first();
+
+        $view = view2();
+        $view->assign([
+            'dataset' => $dataset,
+            'item' => $item
+        ]);
+
+        return $view->display("forms/$dataset->table");
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace app\admin\controller\forms;
+namespace app\admin\controller\datasets;
 
 use support\Request;
 
-class Update
+class ItemUpdate
 {
     public function index(Request $request): void
     {
@@ -18,7 +18,7 @@ class Update
 
         if ($db->table($dataset->table)->exists()) {
             if ($db->table($dataset->table)->where('id', $row['id'])->update($row)) {
-                $ds->event('save-completed', ['table' => $dataset->table, 'id' => $row['id']]);
+                $ds->event('update-completed', ['table' => $dataset->table, 'id' => $row['id']]);
                 $ds->script("sp.toast.success('已保存', { position: 'top-center' })");
             } else {
                 $ds->script("sp.toast.error('保存失败', { position: 'top-center' })");

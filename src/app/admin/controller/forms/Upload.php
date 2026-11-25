@@ -54,7 +54,7 @@ class Upload
     {
         $id = get('id');
         $path = get('path');
-        $value = get('value');
+        $image = get('image');
         $field_name = get('field_name');
         $dataset_id = get('dataset_id');
 
@@ -70,13 +70,14 @@ class Upload
             return json_error('无效数据项');
         }
 
-        $row = ["$field_name" => '', 'path' => ''];
+        $row = ["$field_name" => ''];
         if (!$table->update($row)) {
             return json_error('更新失败');
         }
 
-        if ($path) {
-            $file_path = public_path("{$path}/{$value}");
+        // 项目上传的图片只有文件名可以删除
+        if ($image === basename($image)) {
+            $file_path = public_path("{$path}/{$image}");
             if (file_exists($file_path) && !@unlink($file_path)) {
                 return json_error('删除文件失败');
             }
