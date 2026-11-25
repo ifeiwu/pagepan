@@ -37,7 +37,8 @@ foreach ($items as $item):
                     <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/>
                 </svg>
             </button>
-            <button class="btn btn-ghost btn-icon hover:text-red-600">
+            <button class="btn btn-ghost btn-icon hover:text-red-600"
+                    data-on:click="confirm('确定要删除【<?=$item->title?>】吗?') && @get('/admin/datasets/item-delete?<?= "dataset_id=$item->dataset_id&id=$id" ?>&child='+items.childElementCount)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash preview-icon">
                     <path d="M10 11v6"/>
                     <path d="M14 11v6"/>

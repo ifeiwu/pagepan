@@ -46,12 +46,9 @@ require(['FileAPI'], function (FileAPI) {
 		const $percentage = $progressbar.find('.percentage');
 		const $preview = $component.find('.preview');
 		const $field_name = $component.find('[data-field-name]');
-		// const $field_path = $component.find('[data-field-path]');
 		const option = $component.data('option');
 		const image_allowed = option.allowed || default_allowed_exts;
 		const image_maxsize = option.maxsize || 10;
-		const dataset_id = $('input[name="dataset_id"]').val();
-		const item_id = $('input[name="id"]').val();
 
 		FileAPI.filterFiles(files, function (file, info) {
 			const ext = mimeToExtMap[file.type];
@@ -66,7 +63,7 @@ require(['FileAPI'], function (FileAPI) {
 				alert(`只允许上传的图片格式：${allowed_exts.join('、')}`);
 			}
 			return false;
-		}, function (files, rejected) {
+		}, function (files) {
 			if (files.length === 0) {
 				return false;
 			}
@@ -89,25 +86,23 @@ require(['FileAPI'], function (FileAPI) {
 			});
 
 			FileAPI.upload({
-				url: '/admin/forms/upload/image', data: {
-					'item_id': item_id, 'dataset_id': dataset_id, 'field_name': $field_name.attr('name'), 'option': option
-				}, files: {
+				url: '/admin/forms/upload/image',
+				data: {'option': option},
+				files: {
 					'image': files[0]
-				}, filecomplete: function (err, xhr, file) {
+				},
+				filecomplete: function (err, xhr, file) {
 					try {
 						if (xhr.response) {
-							const json = JSON.parse(xhr.response);
-							if (json.code === 0) {
-								const image_name = json.data.name;
-								const image_path = json.data.path;
-								const image_url = `/${image_path}/${image_name}?${new Date().getTime()}`;
-								$component.find('.preview>img')
-									.attr('src', image_url)
-									.removeClass('grayscale');
+							const res = JSON.parse(xhr.response);
+							if (res.code === 0) {
+								const image_name = res.data.name;
+								const image_path = res.data.path;
+								const image_url = `${image_path}/${image_name}?${new Date().getTime()}`;
+								$component.find('.preview>img').attr('src', image_url).removeClass('grayscale');
 								$field_name.val(image_name);
-								// $field_path.val(image_path);
 							} else {
-								alert(json.message);
+								alert(res.message);
 							}
 						}
 					} catch (error) {
@@ -134,19 +129,9 @@ require(['FileAPI'], function (FileAPI) {
 $components.on('click', '.preview>.delete', function () {
 	const $component = $(this).closest('.c-upload-image');
 	const $field_name = $component.find('[data-field-name]');
-	// const $field_path = $component.find('[data-field-path]');
 	const $input_file = $component.find('input[type="file"]');
 
-	// if (!/[\\/]/.test(image)) {
-	// 	let path = $component.data('option').path;
-	// }
-
-	const dataset_id = $('input[name="dataset_id"]').val();
-	const item_id = $('input[name="id"]').val();
 	const data = {
-		'id': item_id,
-		'dataset_id': dataset_id,
-		'field_name': $field_name.attr('name'),
 		'path': $component.data('option').path,
 		'image': $field_name.val()
 	};
@@ -159,7 +144,6 @@ $components.on('click', '.preview>.delete', function () {
 			$component.find('.more').show();
 			$component.find('.upload').show();
 			$field_name.val('');
-			// $field_path.val('');
 			$input_file.val('');
 		} else {
 			alert(res.message);
@@ -173,7 +157,6 @@ $components.on('click', '.remote-image', function () {
 		const $this = $(this);
 		const $component = $this.closest('.c-upload-image');
 		$component.find('[data-field-name]').val(image);
-		// $component.find('[data-field-path]').val('');
 		$component.find('.preview>img').attr('src', image);
 		$component.find('.preview>.delete').show();
 		$component.find('.upload').hide();

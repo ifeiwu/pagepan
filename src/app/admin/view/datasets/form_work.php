@@ -15,6 +15,7 @@
     </header>
 
     <?php
+        $upload_url = '';
         $upload_path = "/files/dataset/$dataset->id/$item->id";
     ?>
 
@@ -59,10 +60,14 @@
 
 <script>
 	document.addEventListener('add-completed', (e) => {
-		// DataStarHelper.event(parent.items, e.detail, 'update-item');
 	});
 
 	document.addEventListener('update-completed', (e) => {
 		DataStarHelper.event(parent.items, e.detail, 'update-item');
+	});
+
+	document.addEventListener('delete-completed', (e) => {
+		parent.items.childElementCount
+		// DataStarHelper.event('')
 	});
 </script>

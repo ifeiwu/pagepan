@@ -2,15 +2,15 @@
 $name = $name ?? 'image'; // 图片字段名称
 $value = $value ?? ''; // 图片字段值
 $option = $option ?? [];
+$option['path'] = $option['path'] ?? '';
 
-if ($value === basename($value)) {
-    $image = "{$option['path']}/$value";
+if ($value && $value === basename($value)) {
+    $value = '/' . ltrim("{$option['path']}/$value", '/');
 }
 ?>
 
 <div class="c-upload-image" data-option='<?= json_encode($option) ?>'>
     <input type="hidden" name="<?= $name ?>" value="<?= $value ?>" data-field-name>
-<!--    <input type="hidden" name="path" value="--><?php //= $path ?><!--" data-field-path>-->
 
     <button type="button" class="upload relative flex flex-col gap-1 items-center justify-center size-full aspect-3/1 bg-gray-100 text-gray-600 rounded-md overflow-hidden" style="<?= !$value ?: 'display:none' ?>">
         <input type="file" class="choose" accept="<?= $option['accept'] ?? 'image/*' ?>" style="position:absolute;z-index:1;width:200%;height:200%;opacity:1;cursor:pointer;">
@@ -19,7 +19,7 @@ if ($value === basename($value)) {
     </button>
 
     <div class="preview relative aspect-3/1 flex items-center justify-center bg-gray-100 rounded-md" style="<?= $value ?: 'display:none' ?>">
-        <img <?= $value ? 'src="' . $image . '"' : '' ?> class="size-full object-scale-down">
+        <img <?= $value ? 'src="' . $value . '"' : '' ?> class="size-full object-scale-down">
         <button type="button" class="delete btn btn-xs btn-icon btn-destructive rounded absolute -top-2 -right-2" title="删除">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x preview-icon"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>

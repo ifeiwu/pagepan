@@ -36,6 +36,6 @@ class ItemEdit
             'item' => $item
         ]);
 
-        return $view->display("forms/$dataset->table");
+        return $view->display("datasets/form_$dataset->form");
     }
 }

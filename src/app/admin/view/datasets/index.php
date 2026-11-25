@@ -17,7 +17,7 @@
                          data-init="@get('/admin/datasets/menus?id=<?= $dataset->id ?>')">
                     </nav>
 
-<!--                    <pre data-json-signals></pre>-->
+                    <pre data-json-signals></pre>
                 </div>
             </div>
         </aside>
@@ -78,9 +78,8 @@
                             <th class="table-head w-10">
                                 <input type="checkbox" class="checkbox"
                                        data-on:change="
-                                        const items = document.querySelectorAll('tbody input[name=\'ids[]\']');
                                         $ids = evt.target.checked
-                                            ? [...items].map(el => el.value)
+                                            ? [...document.querySelectorAll('input[name=\'ids[]\']')].map(el => el.value)
                                             : Array(items.length).fill('');">
                             </th>
                             <th class="table-head">标题信息</th>
@@ -91,6 +90,7 @@
                         </tr>
                     </thead>
                     <tbody class="table-body" id="items"
+                           data-on:reload="@get('/admin/datasets/item-query')"
                            data-on:update-item="@get(`/admin/datasets/update-item?table=${evt.detail.table}&id=${evt.detail.id}`,{filterSignals:{exclude:/.*/}})"></tbody>
                 </table>
 
@@ -103,7 +103,7 @@
                     </div>
                     <div class="separator separator-vertical"></div>
                     <button class="btn btn-ghost btn-sm text-destructive hover:text-destructive"
-                            data-on:click="@get('/admin/datasets/delete-items')">
+                            data-on:click="@get('/admin/datasets/item-delete/checks')">
                         <svg class="icon-start" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         删除
                     </button>
