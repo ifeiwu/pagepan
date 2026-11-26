@@ -1,4 +1,4 @@
-<dialog id="ItemEditDialog" class="dialog" data-sp-static>
+<dialog id="ItemCategoryDialog" class="dialog" data-sp-static>
     <div class="dialog-panel max-w-xl">
         <button
             class="btn btn-ghost btn-xs btn-icon absolute top-3 right-3"

@@ -35,11 +35,8 @@ class ItemCreate
             $url = "/admin/datasets/item-edit/form?dataset_id=$dataset_id&id=$id";
             $ds->script("openItemEdit('', '$url')");
 
-            // 刷新表格数据
+            // 重新加载表格数据
             $ds->event('reload', [], '#table');
-
-            // 触发页面事件
-            $ds->event('add-completed', ['table' => $dataset->table, 'id' => $id]);
         } else {
             $ds->script("sp.toast.error('添加失败', { position: 'top-center' })");
         }

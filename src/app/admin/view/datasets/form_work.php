@@ -57,18 +57,3 @@
 </section>
 
 <script src="/assets/admin/js/forms.js"></script>
-
-<script>
-	document.addEventListener('add-completed', (e) => {
-	});
-
-	document.addEventListener('update-completed', (e) => {
-		console.log(parent.document.querySelector('#table'));
-		DataStarHelper.event(parent.document.querySelector('#table'), e.detail, 'item-replace');
-	});
-
-	document.addEventListener('delete-completed', (e) => {
-		parent.items.childElementCount
-		// DataStarHelper.event('')
-	});
-</script>

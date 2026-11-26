@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\datasets;
 
+use app\exception\DatastarAlertException;
 use support\Request;
 
 class ItemReplace
@@ -10,10 +11,16 @@ class ItemReplace
     {
         $ds = datastar();
         $db = db();
-        $id = get('id', 'int');
-        $table = get('table', 'text');
 
-        $item = $db->table($table)->where('id', $id)->first();
+        $dataset_id = $ds->getSignals('dataset_id');
+        $id = get('id', 'int');
+
+        $dataset = $db->table('dataset')->where('id', $dataset_id)->first();
+        if (!$dataset) {
+            throw new DatastarAlertException('无效数据集');
+        }
+
+        $item = $db->table($dataset->table)->where('id', $id)->first();
 
         $html = view2()->render('datasets/items', [
             'items' => [$item]

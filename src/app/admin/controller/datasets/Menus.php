@@ -6,7 +6,7 @@ use support\Request;
 
 class Menus
 {
-    public function index(Request $request)
+    public function index(Request $request): void
     {
         $dataset_id = get('id');
 
@@ -30,7 +30,7 @@ class Menus
                 </div>
             ';
         }
-        $ds->inner($html, '#sidebar_menu');
+        $ds->inner($html, '#sidebar_menus');
 
         $ds->close();
     }

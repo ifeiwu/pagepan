@@ -1,28 +1,28 @@
 <?php $this->layout('admin');?>
 
-<div class="grid grid-cols-[250px_1fr] h-full">
+<div class="grid grid-cols-[250px_1fr] h-full *:min-h-0">
     <div>
-        <aside class="sidebar-static w-full">
-            <div class="sidebar-group">
-                <span class="sidebar-group-label">数据集</span>
-                <button id="group-action" class="sidebar-group-action">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                </button>
-                <div class="dropdown" data-sp-toggle="#group-action" data-sp-placement="right-start">
-                    <a href="#" class="dropdown-item">新建</a>
-                    <a href="#" class="dropdown-item">导入</a>
-                </div>
-                <div class="sidebar-group-content">
-                    <nav id="sidebar_menu" class="sidebar-menu"
-                         data-init="@get('/admin/datasets/menus?id=<?= $dataset->id ?>')">
-                    </nav>
-
-                    <pre data-json-signals></pre>
+        <div class="flex flex-col h-full">
+            <div class="flex items-center px-4 py-2">
+                <div class="text-xs text-gray-500">数据集</div>
+                <div class="ml-auto">
+                    <button id="datasets-action" class="btn btn-ghost p-1 h-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                    </button>
+                    <div class="dropdown" data-sp-toggle="#datasets-action" data-sp-placement="right-start">
+                        <a href="#" class="dropdown-item">新建</a>
+                        <a href="#" class="dropdown-item">导入</a>
+                    </div>
                 </div>
             </div>
-        </aside>
+            <div class="scrollbar scrollbar-sm scroll-fade" style="flex:1;width:100%;min-height:0;overflow-y:auto">
+                <nav id="sidebar_menus" class="sidebar-group pt-0 pb-8"
+                     data-init="@get('/admin/datasets/menus?id=<?= $dataset->id ?>')"></nav>
+            </div>
+        </div>
+
     </div>
-    <div class="min-h-0">
+    <div>
         <div class="flex flex-col h-full">
             <div class="flex items-center px-5 pt-5 mb-1">
                 <div class="flex gap-2 font-bold leading-1 text-[17px]">
@@ -39,7 +39,8 @@
                             <a href="#" class="dropdown-item">导出</a>
                             <a href="#" class="dropdown-item">删除</a>
                         </div>
-                        <button type="button" class="btn btn-outline">
+                        <button type="button" class="btn btn-outline"
+                            data-on:click="@get('/admin/datasets/item-categorys')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-tree preview-icon"><path d="M8 5h13"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="M3 10a2 2 0 0 0 2 2h3"/><path d="M3 5v12a2 2 0 0 0 2 2h3"/></svg>
                             分类
                         </button>
@@ -71,10 +72,10 @@
             <div class="scrollbar scrollbar-sm px-5 mt-3 pb-5" style="flex:1;width:100%;min-height:0;overflow-y:auto">
 
                 <table id="table" class="table table-lg"
-                       data-signals:ids="[]"
                        data-init="$dataset_id=<?=$dataset->id?>"
+                       data-signals:ids="[]"
                        data-on:reload="@get('/admin/datasets/item-query')"
-                       data-on:item-replace="@get(`/admin/datasets/item-replace?table=${evt.detail.table}&id=${evt.detail.id}`,{filterSignals:{exclude:/.*/}})">
+                       data-on:item-replace="@get(`/admin/datasets/item-replace?id=${evt.detail.id}`)">
                     <thead class="table-header sticky top-0 z-10 bg-white">
                         <tr class="table-row *:font-bold">
                             <th class="table-head w-10">
@@ -92,7 +93,7 @@
                             <th class="table-head w-25 text-right">操作</th>
                         </tr>
                     </thead>
-                    <tbody class="table-body" id="items"></tbody>
+                    <tbody class="table-body"></tbody>
                 </table>
 
                 <div class="text-center text-gray-500 mt-10" style="display:none" data-show="$nodata">没有找到相关数据</div>
@@ -104,13 +105,13 @@
                     </div>
                     <div class="separator separator-vertical"></div>
                     <button class="btn btn-ghost btn-sm text-destructive hover:text-destructive"
-                            data-on:click="console.log($ids); @get('/admin/datasets/item-delete/checks')">
+                            data-on:click="confirm('确定要删除已选择的数据吗?') && @get('/admin/datasets/item-delete/checks')">
                         <svg class="icon-start" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         删除
                     </button>
                 </div>
             </div>
-            <div class="flex w-full items-center gap-5 p-5 pt-0">
+            <div class="flex w-full items-center gap-5 p-5">
                 <div class="flex items-center gap-3">
                     <select class="select select-sm w-18" data-bind:perpage>
                         <option value="2">2</option>
@@ -128,6 +129,6 @@
     </div>
 </div>
 
-<template id="ItemEditDialog"></template>
+<template id="ItemCategoryDialog"></template>
 
 <script src="/assets/admin/js/dataset.js"></script>

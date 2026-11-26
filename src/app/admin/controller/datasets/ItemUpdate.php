@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\datasets;
 
+use app\exception\DatastarAlertException;
 use support\Request;
 
 class ItemUpdate
@@ -15,11 +16,17 @@ class ItemUpdate
         $row['state'] = post('state', 'int', 0);
 
         $dataset = $db->table('dataset')->where('id', $row['dataset_id'])->first();
+        if (!$dataset) {
+            throw new DatastarAlertException('无效数据集');
+        }
 
         if ($db->table($dataset->table)->exists()) {
             if ($db->table($dataset->table)->where('id', $row['id'])->update($row)) {
-                $ds->event('update-completed', ['table' => $dataset->table, 'id' => $row['id']]);
-                $ds->script("sp.toast.success('已保存', { position: 'top-center' })");
+                $detail = json_encode(['id' => $row['id']]);
+                $ds->script("
+                    parent.document.querySelector('#table').dispatchEvent(new CustomEvent('item-replace',{detail:{$detail}}));
+                    sp.toast.success('已保存', { position: 'top-center' })
+                ");
             } else {
                 $ds->script("sp.toast.error('保存失败', { position: 'top-center' })");
             }
