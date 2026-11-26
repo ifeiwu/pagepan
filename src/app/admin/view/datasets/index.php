@@ -70,17 +70,20 @@
             </div>
             <div class="scrollbar scrollbar-sm px-5 mt-3 pb-5" style="flex:1;width:100%;min-height:0;overflow-y:auto">
 
-                <table class="table table-lg"
+                <table id="table" class="table table-lg"
                        data-signals:ids="[]"
-                       data-init="$dataset_id=<?=$dataset->id?>">
+                       data-init="$dataset_id=<?=$dataset->id?>"
+                       data-on:reload="@get('/admin/datasets/item-query')"
+                       data-on:item-replace="@get(`/admin/datasets/item-replace?table=${evt.detail.table}&id=${evt.detail.id}`,{filterSignals:{exclude:/.*/}})">
                     <thead class="table-header sticky top-0 z-10 bg-white">
                         <tr class="table-row *:font-bold">
                             <th class="table-head w-10">
                                 <input type="checkbox" class="checkbox"
+                                       data-bind:checkall
                                        data-on:change="
-                                        $ids = evt.target.checked
-                                            ? [...document.querySelectorAll('input[name=\'ids[]\']')].map(el => el.value)
-                                            : Array(items.length).fill('');">
+                                            $ids = $checkall ?
+                                                [...document.querySelectorAll(`input[name='ids[]']`)].map(el => el.value) :
+                                                Array($perpage).fill('')">
                             </th>
                             <th class="table-head">标题信息</th>
                             <th class="table-head w-25">发布时间</th>
@@ -89,9 +92,7 @@
                             <th class="table-head w-25 text-right">操作</th>
                         </tr>
                     </thead>
-                    <tbody class="table-body" id="items"
-                           data-on:reload="@get('/admin/datasets/item-query')"
-                           data-on:update-item="@get(`/admin/datasets/update-item?table=${evt.detail.table}&id=${evt.detail.id}`,{filterSignals:{exclude:/.*/}})"></tbody>
+                    <tbody class="table-body" id="items"></tbody>
                 </table>
 
                 <div class="text-center text-gray-500 mt-10" style="display:none" data-show="$nodata">没有找到相关数据</div>
@@ -103,7 +104,7 @@
                     </div>
                     <div class="separator separator-vertical"></div>
                     <button class="btn btn-ghost btn-sm text-destructive hover:text-destructive"
-                            data-on:click="@get('/admin/datasets/item-delete/checks')">
+                            data-on:click="console.log($ids); @get('/admin/datasets/item-delete/checks')">
                         <svg class="icon-start" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         删除
                     </button>

@@ -24,7 +24,7 @@ class ItemQuery
         // 关键字搜索
         $kword = $signals['kword'] ?? '';
         if ($kword) {
-            $dataset_item->where(function($query) use ($kword) {
+            $dataset_item->where(function ($query) use ($kword) {
                 $query->orWhere('title', 'like', '%' . $kword . '%');
             });
         }
@@ -37,18 +37,18 @@ class ItemQuery
         $paginator = $dataset_item->paginate($perpage, '*', 'page', $pagenum);
         $items = $paginator->items();
         $total = $paginator->total();
-        $pages = ceil($total/$perpage);
+        $pages = ceil($total / $perpage);
 
-        $ds->signals(['total' => $total, 'pages' => $pages]);
+        $ds->signals(['total' => $total, 'pages' => $pages, 'checkall' => false, 'ids' => []]);
 
         if ($total === 0) {
-            $ds->inner('', '#items');
+            $ds->inner('', '#table>tbody');
             $ds->inner('', '.pagination');
             $ds->signals(['nodata' => true])->close();
         }
 
         $html = view2()->render('datasets/items', ['items' => $items]);
-        $ds->inner($html, '#items');
+        $ds->replace('<tbody class="table-body">' . $html . '</tbody>', '#table>tbody');
         $ds->inner($this->getPaginatorHtml($total, $perpage, $pagenum), '.pagination');
 
         $ds->signals(['nodata' => false])->close();

@@ -4,7 +4,7 @@ namespace app\admin\controller\datasets;
 
 use support\Request;
 
-class UpdateItem
+class ItemReplace
 {
     public function index(Request $request): void
     {

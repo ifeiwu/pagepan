@@ -36,7 +36,7 @@ class ItemCreate
             $ds->script("openItemEdit('', '$url')");
 
             // 刷新表格数据
-            $ds->event('reload', [], '#items');
+            $ds->event('reload', [], '#table');
 
             // 触发页面事件
             $ds->event('add-completed', ['table' => $dataset->table, 'id' => $id]);

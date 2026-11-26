@@ -63,7 +63,8 @@
 	});
 
 	document.addEventListener('update-completed', (e) => {
-		DataStarHelper.event(parent.items, e.detail, 'update-item');
+		console.log(parent.document.querySelector('#table'));
+		DataStarHelper.event(parent.document.querySelector('#table'), e.detail, 'item-replace');
 	});
 
 	document.addEventListener('delete-completed', (e) => {
