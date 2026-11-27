@@ -1,11 +1,11 @@
 <?php
 
-namespace app\admin\controller\datasets;
+namespace app\admin\controller\datasets\items;
 
 use app\exception\DatastarAlertException;
 use support\Request;
 
-class ItemReplace
+class Replace
 {
     public function index(Request $request): void
     {
@@ -17,7 +17,7 @@ class ItemReplace
 
         $dataset = $db->table('dataset')->where('id', $dataset_id)->first();
         if (!$dataset) {
-            throw new DatastarAlertException('无效数据集');
+            throw new DatastarAlertException('无效数据源');
         }
 
         $item = $db->table($dataset->table)->where('id', $id)->first();

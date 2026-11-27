@@ -8,18 +8,28 @@ class Menus
 {
     public function index(Request $request): void
     {
+        // 获取当前选中的数据源 ID
         $dataset_id = get('id');
 
         $ds = datastar();
         $db = db();
+
+        // 获取所有数据源
         $datasets = $db->table('dataset')->get();
 
         $html = '';
         foreach ($datasets as $dataset) {
             $id = $dataset->id;
+
+            // 统计当前数据源对应的数据记录数量
             $count = $db->table($dataset->table)->where('dataset_id', $id)->count();
+
             $title = $dataset->title;
+
+            // 判断当前数据源是否处于选中状态
             $active = $id == $dataset_id ? ' active' : '';
+
+            // 生成数据源侧边栏菜单
             $html .= '
                 <div class="sidebar-menu-item">
                     <a href="/admin/datasets?id=' . $id . '" class="sidebar-menu-button' . $active . '">
@@ -30,8 +40,11 @@ class Menus
                 </div>
             ';
         }
+
+        // 更新侧边栏数据源菜单
         $ds->inner($html, '#sidebar_menus');
 
+        // 关闭 Datastar 响应
         $ds->close();
     }
 }

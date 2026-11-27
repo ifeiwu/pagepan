@@ -1,11 +1,11 @@
 <?php
 
-namespace app\admin\controller\datasets;
+namespace app\admin\controller\datasets\items;
 
 use app\exception\DatastarAlertException;
 use support\Request;
 
-class ItemUpdate
+class Update
 {
     public function index(Request $request): void
     {
@@ -14,10 +14,11 @@ class ItemUpdate
 
         $row = post();
         $row['state'] = post('state', 'int', 0);
+        $row['updated'] = date('Y-m-d H:i:s');
 
         $dataset = $db->table('dataset')->where('id', $row['dataset_id'])->first();
         if (!$dataset) {
-            throw new DatastarAlertException('无效数据集');
+            throw new DatastarAlertException('无效数据源');
         }
 
         if ($db->table($dataset->table)->exists()) {

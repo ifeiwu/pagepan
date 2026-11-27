@@ -20,7 +20,7 @@
     ?>
 
     <form id="form" class="grid grid-cols-[350px_1fr] gap-10"
-          data-on:submit="@post('/admin/datasets/item-update',{contentType:'form'})">
+          data-on:submit="@post('/admin/datasets/items/update',{contentType:'form'})">
         <input type="hidden" name="dataset_id" value="<?= $dataset->id ?>">
         <input type="hidden" name="id" value="<?= $item->id ?>">
         <?php if (isset($item->path)): ?>

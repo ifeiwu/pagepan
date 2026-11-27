@@ -1,11 +1,11 @@
 <?php
 
-namespace app\admin\controller\datasets;
+namespace app\admin\controller\datasets\items;
 
 use app\exception\DatastarAlertException;
 use support\Request;
 
-class ItemCreate
+class Create
 {
     public function index(Request $request): void
     {
@@ -15,7 +15,7 @@ class ItemCreate
         $dataset_id = $ds->getSignals('dataset_id');
         $dataset = $db->table('dataset')->where('id', $dataset_id)->first();
         if (!$dataset) {
-            throw new DatastarAlertException('无效数据集');
+            throw new DatastarAlertException('无效数据源');
         }
 
         // 获取最大排序
@@ -26,13 +26,14 @@ class ItemCreate
             'sort' => $max_sort ?: 100,
             'state' => 0,
             'title' => '重命名',
+            'updated' => date('Y-m-d H:i:s'),
             'created' => date('Y-m-d H:i:s')
         ];
 
         $id = $db->table($dataset->table)->insertGetId($row);
         if ($id) {
             // 打开编辑窗口
-            $url = "/admin/datasets/item-edit/form?dataset_id=$dataset_id&id=$id";
+            $url = "/admin/datasets/items/edit/form?dataset_id=$dataset_id&id=$id";
             $ds->script("openItemEdit('', '$url')");
 
             // 重新加载表格数据

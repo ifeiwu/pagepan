@@ -11,7 +11,7 @@ class RateLimitException extends BusinessException
     public function render(Request $request): Response
     {
         if (str_contains($request->header('accept', ''), 'text/event-stream')) {
-            datastar()->script("dialog('{$this->getMessage()}')")->close();
+            datastar()->script("alert('{$this->getMessage()}')")->close();
         } elseif ($request->expectsJson()) {
             return json(['code' => 1, 'message' => $this->getMessage()]);
         } else {

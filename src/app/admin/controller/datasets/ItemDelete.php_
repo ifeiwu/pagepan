@@ -19,7 +19,7 @@ class ItemDelete
 
         $dataset = $db->table('dataset')->where('id', $dataset_id)->first();
         if (!$dataset) {
-            throw new DatastarAlertException('无效数据集');
+            throw new DatastarAlertException('无效数据源');
         }
 
         if ($db->table($dataset->table)->delete($id)) {
@@ -49,7 +49,7 @@ class ItemDelete
 
         $dataset = $db->table('dataset')->where('id', $dataset_id)->first();
         if (!$dataset) {
-            throw new DatastarAlertException('无效数据集');
+            throw new DatastarAlertException('无效数据源');
         }
 
         if ($ids && $db->table($dataset->table)->whereIn('id', $ids)->delete()) {

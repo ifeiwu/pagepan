@@ -16,10 +16,10 @@ class Handler extends ExceptionHandler
 
     /**
      * 记录日志
-     * @param Throwable $e
-     * @return mixed
+     * @param Throwable $exception
+     * @return void
      */
-    public function report(Throwable $exception)
+    public function report(Throwable $exception): void
     {
         parent::report($exception);
     }
@@ -27,7 +27,7 @@ class Handler extends ExceptionHandler
     /**
      * 渲染返回
      * @param Request $request
-     * @param Throwable $e
+     * @param Throwable $exception
      * @return Response
      */
     public function render(Request $request, Throwable $exception): Response
@@ -35,7 +35,7 @@ class Handler extends ExceptionHandler
         $response = parent::render($request, $exception);
 
         if (str_contains($request->header('accept', ''), 'text/event-stream')) {
-            datastar()->script("dialog('{$exception->getMessage()}')")->close();
+            datastar()->script("alert('{$exception->getMessage()}')")->close();
         } elseif ($request->expectsJson()) {
             return json(['code' => 1, 'message' => $exception->getMessage()]);
         } else {

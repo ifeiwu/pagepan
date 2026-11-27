@@ -15,7 +15,7 @@ class ItemEdit
         $dataset_id = get('dataset_id');
         $title = get('title');
 
-        $url = "/admin/datasets/item-edit/form?dataset_id=$dataset_id&id=$id";
+        $url = "/admin/datasets/items/edit/form?dataset_id=$dataset_id&id=$id";
         $ds->script("openItemEdit('$title', '$url')");
 
         $ds->close();
