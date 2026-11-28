@@ -1,3 +1,10 @@
+<ul id="pages" class="grid grid-cols-4 gap-7 justify-between
+            *:relative *:flex *:flex-col *:border *:border-solid *:transition-colors *:border-gray-300 *:rounded-xl *:overflow-hidden
+           [&>li]:border-gray-200
+           [&>li:hover]:border-gray-300
+           [&>li:hover_.edit]:opacity-100
+           [&>li:hover_.more]:opacity-100
+           [&>li:has([popover]:popover-open)_.more]:opacity-100">
 <?php
 foreach ($items as $item):
     $item = (array)$item;
@@ -78,3 +85,4 @@ foreach ($items as $item):
     <div class="absolute -bottom-2 -right-2 leading-0 z-20 opacity-60"><?=$type_icon?></div>
 </li>
 <?php endforeach; ?>
+</ul>

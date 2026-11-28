@@ -37,4 +37,33 @@ class Update
 
         $ds->close();
     }
+
+    public function field(Request $request): void
+    {
+        $ds = datastar();
+        $db = db();
+
+        $id = get('id');
+        $dataset_id = get('dataset_id');
+        $name = get('name');
+        $value = get('value');
+
+        $dataset = $db->table('dataset')->where('id', $dataset_id)->first();
+        if (!$dataset) {
+            throw new DatastarAlertException('无效数据源');
+        }
+
+        $row = [
+            $name => $value,
+            'updated' => date('Y-m-d H:i:s')
+        ];
+
+        if ($db->table($dataset->table)->where('id', $id)->update($row)) {
+            $ds->event('reload', [], '#table');
+        } else {
+            $ds->script("sp.toast.error('保存失败', { position: 'top-center' })");
+        }
+
+        $ds->close();
+    }
 }

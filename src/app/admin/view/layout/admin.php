@@ -39,6 +39,9 @@ $route = request()->path();
                             <a href="/admin/files" class="navbar-link <?=str_starts_with($route, '/admin/files') ? 'active' : ''?>">
                                 文件
                             </a>
+                            <a href="/admin/site" class="navbar-link <?=str_starts_with($route, '/admin/site') ? 'active' : ''?>">
+                                站点
+                            </a>
                             <button id="navbar-app-favorites" class="navbar-link">
                                 更多
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-end"><path d="m6 9 6 6 6-6"/></svg>

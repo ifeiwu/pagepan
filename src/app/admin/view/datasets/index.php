@@ -26,10 +26,22 @@
     <div>
         <div class="flex flex-col h-full">
             <div class="flex items-center px-5 pt-5 mb-1">
-                <div class="flex gap-2 font-bold leading-1 text-[17px]">
-                    <span class="text-gray-500">数据源</span>
-                    <span class="text-gray-400">/</span>
-                    <span><?= $dataset->title ?></span>
+                <div class="flex gap-2">
+                    <div class="flex items-center gap-2"
+                         data-signals="{dataset_id:0,pagenum:1,perpage:10}"
+                         data-indicator="fetching"
+                         data-on-signal-patch-filter='{include:/^(dataset_id|kword|perpage|pagenum)$/}'
+                         data-on-signal-patch="@get('/admin/datasets/items/query',{filterSignals:{include:/^(dataset_id|kword|perpage|pagenum)$/}})">
+                        <div>
+                            <div class="input-group w-full">
+                                <input type="text" class="input" placeholder="<?= $dataset->title ?>"
+                                       data-ref:search
+                                       data-on:input__debounce.500ms="$kword=$search.value"/>
+                                <span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></span>
+                                <span class="input-group-addon input-group-addon-end text-xs gap-1"><span data-text="$total"></span>个结果</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="ml-auto">
                     <div class="flex gap-2">
@@ -39,7 +51,8 @@
                         <div class="dropdown" data-sp-toggle="#dataset-action">
                             <button type="button" class="dropdown-item"
                                     data-on:click="@get('/admin/datasets/edit?id=<?= $dataset->id ?>')">修改</button>
-                            <button type="button" class="dropdown-item text-red-600">删除</button>
+                            <button type="button" class="dropdown-item text-red-600"
+                                    data-on:click="confirm('确定要删除数据源【<?= $dataset->title ?>】吗?') && @get('/admin/datasets/delete?id=<?= $dataset->id ?>')">删除</button>
                         </div>
                         <button type="button" class="btn btn-outline"
                                 data-on:click="@get('/admin/datasets/categories')">
@@ -49,28 +62,12 @@
                         <button type="button" class="btn"
                             data-on:click="@get('/admin/datasets/items/create')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus preview-icon"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                            添加数据
+                            添加记录
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="flex items-center gap-2 px-5"
-                 data-signals="{dataset_id:0,pagenum:1,perpage:10}"
-                 data-indicator="fetching"
-                 data-on-signal-patch-filter='{include:/^(dataset_id|kword|perpage|pagenum)$/}'
-                 data-on-signal-patch="@get('/admin/datasets/items/query',{filterSignals:{include:/^(dataset_id|kword|perpage|pagenum)$/}})">
-                <div>
-                    <div class="input-group w-full">
-                        <input type="text" class="input" placeholder="搜索标题"
-                               data-ref:search
-                               data-on:input__debounce.500ms="$kword=$search.value"/>
-                        <span class="input-group-addon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></span>
-                        <span class="input-group-addon input-group-addon-end text-xs gap-1"><span data-text="$total"></span>个结果</span>
-                    </div>
-                </div>
-                <div></div>
-                <div class="ml-auto"></div>
-            </div>
+
             <div class="scrollbar scrollbar-sm px-5 mt-3 pb-5" style="flex:1;width:100%;min-height:0;overflow-y:auto">
 
                 <table id="table" class="table table-lg"
@@ -84,9 +81,9 @@
                                 <input type="checkbox" class="checkbox"
                                        data-bind:checkall
                                        data-on:change="
-                                            $ids = $checkall ?
-                                                [...document.querySelectorAll(`input[name='ids[]']`)].map(el => el.value) :
-                                                Array($perpage).fill('')">
+                                            $ids = $checkall
+                                            ? [...document.querySelectorAll(`input[name='ids[]']`)].map(el => el.value)
+                                            : Array($perpage).fill('')">
                             </th>
                             <th class="table-head">标题信息</th>
                             <th class="table-head w-25">发布时间</th>
@@ -98,7 +95,7 @@
                     <tbody class="table-body"></tbody>
                 </table>
 
-                <div class="text-center text-gray-500 mt-10" style="display:none" data-show="$nodata">没有找到相关数据</div>
+                <div class="text-center text-gray-500 mt-10" style="display:none" data-show="$nodata">没有找到相关记录</div>
 
                 <div class="action-bar"
                      data-effect="$ids.some(id=>id!=='')?sp.actionBar(el).show():sp.actionBar(el).hide()">
@@ -107,7 +104,7 @@
                     </div>
                     <div class="separator separator-vertical"></div>
                     <button class="btn btn-ghost btn-sm text-destructive hover:text-destructive"
-                            data-on:click="confirm('确定要删除已选择的数据吗?') && @get('/admin/datasets/items/delete/checks')">
+                            data-on:click="confirm('确定要删除已选择的记录吗?') && @get('/admin/datasets/items/delete/checks')">
                         <svg class="icon-start" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                         删除
                     </button>

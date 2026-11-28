@@ -98,4 +98,142 @@ a, button {
     .container-sm {
         max-width: 640px;
     }
+
+    /* ========== 工具提示 ========== */
+    [data-title] {
+        position: relative;
+        display: block;
+    }
+
+    [data-title]::before {
+        content: attr(data-title);
+        position: absolute;
+        background-color: black;
+        font-size: 12px;
+        line-height: 1;
+        color: white;
+        padding: .375rem .5rem;
+        border-radius: .5rem;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    /* ========== 默认 & 上方 ========== */
+    [data-title]:not([data-title-pos])::before,
+    [data-title-pos="top"]::before {
+        left: 50%;
+        bottom: 100%;
+        transform: translateX(-50%) translateY(-0.25rem);
+        transform-origin: center bottom;
+    }
+
+    /* 上方-起始（左对齐） */
+    [data-title-pos="top-start"]::before {
+        left: 0;
+        bottom: 100%;
+        transform: translateY(-0.25rem);
+        transform-origin: left bottom;
+    }
+
+    /* 上方-结束（右对齐） */
+    [data-title-pos="top-end"]::before {
+        left: auto;
+        right: 0;
+        bottom: 100%;
+        transform: translateY(-0.25rem);
+        transform-origin: right bottom;
+    }
+
+    /* ========== 下方 ========== */
+    [data-title-pos="bottom"]::before {
+        left: 50%;
+        top: 100%;
+        bottom: auto;
+        transform: translateX(-50%) translateY(0.25rem);
+        transform-origin: center top;
+    }
+
+    /* 下方-起始（左对齐） */
+    [data-title-pos="bottom-start"]::before {
+        left: 0;
+        top: 100%;
+        bottom: auto;
+        transform: translateY(0.25rem);
+        transform-origin: left top;
+    }
+
+    /* 下方-结束（右对齐） */
+    [data-title-pos="bottom-end"]::before {
+        left: auto;
+        right: 0;
+        top: 100%;
+        bottom: auto;
+        transform: translateY(0.25rem);
+        transform-origin: right top;
+    }
+
+    /* ========== 左侧 ========== */
+    [data-title-pos="left"]::before {
+        right: 100%;
+        top: 50%;
+        left: auto;
+        bottom: auto;
+        transform: translateY(-50%) translateX(-0.25rem);
+        transform-origin: right center;
+    }
+
+    /* 左侧-起始（上对齐） */
+    [data-title-pos="left-start"]::before {
+        right: 100%;
+        top: 0;
+        left: auto;
+        bottom: auto;
+        transform: translateX(-0.25rem);
+        transform-origin: right top;
+    }
+
+    /* 左侧-结束（下对齐） */
+    [data-title-pos="left-end"]::before {
+        right: 100%;
+        top: auto;
+        bottom: 0;
+        left: auto;
+        transform: translateX(-0.25rem);
+        transform-origin: right bottom;
+    }
+
+    /* ========== 右侧 ========== */
+    [data-title-pos="right"]::before {
+        left: 100%;
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%) translateX(0.25rem);
+        transform-origin: left center;
+    }
+
+    /* 右侧-起始（上对齐） */
+    [data-title-pos="right-start"]::before {
+        left: 100%;
+        top: 0;
+        bottom: auto;
+        transform: translateX(0.25rem);
+        transform-origin: left top;
+    }
+
+    /* 右侧-结束（下对齐） */
+    [data-title-pos="right-end"]::before {
+        left: 100%;
+        top: auto;
+        bottom: 0;
+        transform: translateX(0.25rem);
+        transform-origin: left bottom;
+    }
+
+    /* ========== 显示 ========== */
+    [data-title]:hover::before {
+        opacity: 1;
+    }
 }

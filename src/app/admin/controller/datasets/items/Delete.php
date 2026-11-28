@@ -32,7 +32,7 @@ class Delete
             // 重新加载表格数据
             $ds->event('reload', [], '#table');
         } else {
-            $ds->script("sp.toast.error('删除失败', { position: 'top-center' })");
+            $ds->script("sp.toast.error('删除记录失败', { position: 'top-center' })");
         }
 
         $ds->close();

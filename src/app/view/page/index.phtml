@@ -51,3 +51,79 @@
         </div>
     </div>
 </header>
+<?php
+$config = array (
+  'type' => 'php',
+  'path' => '',
+  'setting' => 
+  array (
+    'component.logo.image' => '/imgph/block?repo=pagepan-com/blocks&name=/logo/01-black.svg',
+    'component.logo.url' => '/',
+    'component.navbar.item' => '002',
+    'dataset.id' => '2',
+    'dataset.table' => 'dataset_navbar',
+    'repo.path' => 'pagepan-com/blocks',
+  ),
+);?>
+<section class="py-4 md:py-6" data-block="">
+    <div class="container-lg">
+        <?php $setting = $config['setting']; ?>
+        <div class="flex flex-col md:flex-row items-center">
+            <div class="mb-5 md:mb-0">
+                <a href="<?= $setting['component.logo.url'] ?? '/' ?>">
+                    <img src="<?= $setting['component.logo.image'] ?? '' ?>" class="max-h-[30px]">
+                </a>
+            </div>
+            <div class="pl-5">
+                <?php
+                $navs = db()->table($setting['dataset.table'])->where('dataset_id', $setting['dataset.id'])->where('state', 1)->whereNull('type')->get();
+                $this->component('navbar.item', $config, ['items' => $navs]);
+                ?>
+            </div>
+        </div>
+    </div>
+</section>
+<?php
+$config = array (
+  'type' => '',
+  'path' => '',
+  'setting' => 
+  array (
+    'repo.path' => 'ifeiwu/pagepan-blocks',
+    'dataset.limit' => false,
+    'component.class' => 'py-15',
+    'container.class' => 'container container-2xl',
+    'category.alias' => '009',
+    'category.class' => 'mb-18 mb-20-lg',
+    'components.gridview' => '001',
+    'pagination.alias' => '001',
+  ),
+);?>
+<section data-block="">
+    <div class="container-lg py-3">
+        <div class="grid grid-cols-2 rounded-lg bg-border shadow md:grid-cols-4">
+            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
+                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Nvidia Logo" src="https://storage.efferd.com/logo/nvidia-wordmark.svg">
+            </div>
+            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
+                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Supabase Logo" src="https://storage.efferd.com/logo/supabase-wordmark.svg"></div>
+            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
+                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="OpenAI Logo" src="https://storage.efferd.com/logo/openai-wordmark.svg">
+            </div>
+            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
+                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Turso Logo" src="https://storage.efferd.com/logo/turso-wordmark.svg">
+            </div>
+            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
+                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Vercel Logo" src="https://storage.efferd.com/logo/vercel-wordmark.svg">
+            </div>
+            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
+                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="GitHub Logo" src="https://storage.efferd.com/logo/github-wordmark.svg">
+            </div>
+            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
+                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Claude AI Logo" src="https://storage.efferd.com/logo/claude-wordmark.svg"></div>
+            <div class="flex items-center justify-center rounded-lg border border-gray-300 bg-background p-8">
+                <img class="pointer-events-none block h-4 select-none md:h-5 dark:brightness-0 dark:invert" height="auto" loading="lazy" width="auto" alt="Clerk Logo" src="https://storage.efferd.com/logo/clerk-wordmark.svg">
+            </div>
+        </div>
+    </div>
+</section>

@@ -25,9 +25,15 @@ class Save
             throw new DatastarAlertException('请选择数据源类型');
         }
 
-        // 检查数据源名称是否重复
-        if ($db->table('dataset')->where('title', $title)->count() > 0) {
-            throw new DatastarAlertException("已存在相同数据源名称：$title");
+        // 检查数据源名称是否重复，编辑时排除当前记录
+        $query = $db->table('dataset')->where('title', $title);
+
+        if ($id) {
+            $query->where('id', '<>', $id);
+        }
+
+        if ($query->count() > 0) {
+            throw new DatastarAlertException("已存在相同数据源名称：{$title}");
         }
 
         // 验证目标数据表是否存在
